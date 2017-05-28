@@ -8,4 +8,18 @@
     </parent>
     <artifactId>unicauca-elm</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.googlecode.matrix-toolkits-java</groupId>
+            <artifactId>mtj</artifactId>
+            <version>0.9.14</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.uma.jmetal</groupId>
+            <artifactId>jmetal-core</artifactId>
+            <version>5.2</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>
