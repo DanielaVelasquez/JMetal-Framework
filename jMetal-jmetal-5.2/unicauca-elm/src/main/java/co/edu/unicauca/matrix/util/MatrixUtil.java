@@ -1,4 +1,4 @@
-package co.edu.unicauca.elm.util;
+package co.edu.unicauca.matrix.util;
 
 import no.uib.cipr.matrix.DenseMatrix;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
@@ -7,7 +7,7 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 public class MatrixUtil 
 {
     /**
-     * Randomly fill a matrix with a specific size
+     * Randomly fill a matrix with a specific size, using JMetalRandom
      * @param rows Number of rows 
      * @param cols Number of columns
      * @param min_value Minimum value allowed in the matrix
