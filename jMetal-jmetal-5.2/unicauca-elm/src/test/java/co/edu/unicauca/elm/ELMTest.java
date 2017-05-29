@@ -1,28 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.edu.unicauca.elm;
 
 import co.edu.unicauca.function.impl.Sigmoid;
 import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
+import junit.framework.TestCase;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
-import no.uib.cipr.matrix.Matrices;
-import no.uib.cipr.matrix.Matrix;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/**
- *
- * @author Daniela
- */
-public class Prueba {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception {
-        ELM elm;
+public class ELMTest extends TestCase
+{
+    
+    private ELM elm;
+    
+    public ELMTest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
         int input_neuron = 2;
         int output_neuron = 2;
         int hidden_neuron = 3;
@@ -65,11 +73,38 @@ public class Prueba {
         elm.setBias_hidden_neurons(bias);
         elm.setX_training(X);
         elm.setY_training(Y);
-        
-        elm.train();
-        System.out.println("Accuracy: "+elm.getTraining_accuracy());
-
-        
     }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of train method, of class ELM.
+     */
+    @Test
+    public void testTrain() {
+        int trainig_data = 5;
+        int input_neuron = 2;
+        System.out.println("train");
+        elm.train();
+        // TODO review the generated test code and remove the default call to fail.
+        DenseMatrix T = new  DenseMatrix(input_neuron,trainig_data);
+        T.set(0,0,0.624);
+        T.set(0,1,0.986);
+        T.set(0,2,-0.001);
+        T.set(0,3,-0.274);
+        T.set(0,4,-0.336);
+        T.set(1,0,-0.624);
+        T.set(1,1,-0.986);
+        T.set(1,2,0.001);
+        T.set(1,3,0.274);
+        T.set(1,4,0.336);
+        
+        double[] r = elm.getT().getData();
+        double[] e = T.getData();
+        assertArrayEquals(e, r, 0.8);
+    }
+
     
 }
