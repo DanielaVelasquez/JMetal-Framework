@@ -3,6 +3,7 @@ package co.edu.unicauca.moore_penrose.impl;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.Matrices;
+import no.uib.cipr.matrix.Matrix;
 
 
 public class RidgeRegressionTheory extends AbstractMoorePenroseMethod
@@ -28,6 +29,8 @@ public class RidgeRegressionTheory extends AbstractMoorePenroseMethod
         double lumda = values[0];
         int n = A.numColumns();
         int m = A.numRows();
+
+        
         
         DenseMatrix At = new DenseMatrix(n, m);
         A.transpose(At);

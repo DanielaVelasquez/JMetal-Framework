@@ -6,8 +6,6 @@ import no.uib.cipr.matrix.Matrices;
 
 /**
 * A+ = A∗(AA∗)−1 Where A* A's transpose and A+ pseudoinverse of A
-* http://buzzard.ups.edu/courses/2014spring/420projects/math420-UPS-spring-2014-macausland-pseudo-inverse.pdf
-* page 4
 */
 public class MultiplicationMethod extends AbstractMoorePenroseMethod
 {
@@ -18,7 +16,11 @@ public class MultiplicationMethod extends AbstractMoorePenroseMethod
     {
         super(values);
     }
-    
+    /**
+     * MP(A) = ((A'A)^-1)A'
+     * @param A matrix 
+     * @return pseudoinverse moore penrose of A
+     */
     public DenseMatrix calculate(DenseMatrix A) 
     {
               
@@ -28,17 +30,17 @@ public class MultiplicationMethod extends AbstractMoorePenroseMethod
         DenseMatrix transpose = new  DenseMatrix(m,n);
         A.transpose(transpose);
         
-        //AA*
-        DenseMatrix moore_penrose1 = new DenseMatrix(m,m);
-        transpose.mult(A, moore_penrose1);
+        //A*A
+        DenseMatrix ATransposeA = new DenseMatrix(m,m);
+        transpose.mult(A, ATransposeA);
         
         //(AA∗)−1
         DenseMatrix I = Matrices.identity(m);
-        DenseMatrix moore_penrose2 = I.copy();
-        moore_penrose1.solve(I, moore_penrose2);
+        DenseMatrix inv = I.copy();
+        ATransposeA.solve(I, inv);
         //A∗(AA∗)−1
         DenseMatrix moore_penrose = new DenseMatrix(m,n);
-        moore_penrose2.mult(transpose,moore_penrose);
+        inv.mult(transpose,moore_penrose);
         return moore_penrose;
     }
 

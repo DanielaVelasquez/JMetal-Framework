@@ -31,7 +31,7 @@ public class RidgeRegressionTheoryTest {
     @Before
     public void setUp() {
         
-        inverse = new RidgeRegressionTheory(new double[]{0.000001});
+        inverse = new RidgeRegressionTheory(new double[]{-0.000001});
         
         A = new DenseMatrix(5,3);
         A.set(0, 0, 0.98);
@@ -86,6 +86,8 @@ public class RidgeRegressionTheoryTest {
     public void testCalculate() {
         System.out.println("calculate");
         DenseMatrix result = inverse.calculate(A);
+        
+        System.out.println("Result\n"+result.toString());
         
         double[]  r = result.getData();
         double[]  e = expResult.getData();

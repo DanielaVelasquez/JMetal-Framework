@@ -3,7 +3,6 @@ package co.edu.unicauca.elm;
 import co.edu.unicauca.matrix.util.MatrixUtil;
 import co.edu.unicauca.function.Function;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
-import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
 
@@ -480,6 +479,4 @@ public class ELM
     public double getTraining_accuracy() {
         return training_accuracy;
     }
-    
-    
 }
