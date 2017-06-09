@@ -33,23 +33,6 @@ public class ELM
         REGRESSION,
         CLASSIFICATION
     }
-    /**
-     * Activation function 
-     * Type of activation function: 
-     * - 'SIG' for Sigmoidal function 
-     * - 'SIN' for Sine function 
-     * - 'HARDLIM' for Hardlim function
-     * - 'TRIBAS' for Triangular basis function 
-     * - 'RADBAS' for Radial basis function
-     */
-    /*public enum ActivationFunction
-    {
-        SIG,
-        SIN,
-        HARDLIM,
-        TRIBAS,
-        RADBAS
-    }*/
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
@@ -59,21 +42,15 @@ public class ELM
      */
     private Function function;
     /**
-     * Time while testing (in seconds)
+     * Time while testing or training (in seconds)
+     * it contains time of the last activity performed
      */
-    private double testing_time;
+    private double time;
     /**
-     * ELM accuracy while testing
+     * ELM accuracy while training or training
+     * it contains accuracy of the last activity performed
      */
-    private double testing_accuracy;
-    /**
-     * Time while training (in seconds)
-     */
-    private double training_time;
-    /**
-     * ELM accuracy while training
-     */
-    private double training_accuracy;    
+    private double accuracy;    
     /**
      * ELM type (Regression or Classification)
      */    
@@ -162,10 +139,8 @@ public class ELM
         this.hidden_neurons = hidden_neurons;
         this.function = activation_function;
         this.output_neurons = classes;
-        this.training_time = 0;
-        this.testing_time = 0;
-        this.training_accuracy = 0;
-        this.testing_accuracy = 0;
+        this.time = 0;
+        this.accuracy = 0;
         this.num_testing_data = 0;
         this.num_training_data = 0;
         this.inverse = inverse;
@@ -199,9 +174,9 @@ public class ELM
         pinvH.mult(transT, output_weight);
         
         calculate_output(H, num_training_data);
-        training_accuracy = evaluate(tabular_training);
+        accuracy = evaluate(tabular_training);
         long end_training =  System.currentTimeMillis();
-        training_time = (end_training - start_training) * 1.0f / 1000;
+        time = (end_training - start_training) * 1.0f / 1000;
     }
     /**
      *  Calculate the matrix's output
@@ -219,40 +194,6 @@ public class ELM
      */
     private DenseMatrix calculateH(DenseMatrix X) 
     {
-        /*int numData = X.numColumns();
-        DenseMatrix H = new DenseMatrix(numData, hidden_neurons);
-        
-        for(int i = 0; i < numData; i++)
-        {
-            for(int j = 0; j < hidden_neurons; j++)
-            {
-                //Get jth row from input_weight
-                int[] row = {j};
-                //Indexes available in input_weight columns
-                int[] column = Matrices.index(0, input_weight.numColumns());
-                Matrix wTemp = Matrices.getSubMatrix(input_weight, row, column);
-                DenseMatrix w = new DenseMatrix(wTemp);
-                
-                //Get i-th column from X
-                Vector xTemp = Matrices.getColumn(X, i);
-                DenseMatrix x = new DenseMatrix(xTemp);
-                
-                //Multiply w*x
-                DenseMatrix mult = new DenseMatrix(1,1);
-                w.mult(x, mult);
-                
-                //Get value from multiplication
-                double wx = mult.get(0, 0);
-                double b = bias_hidden_neurons.get(j, 0);
-                //Apply the activation function
-                double aux = function.evaluate(wx + b);
-                H.set(i, j, aux);
-            }
-            
-        }
-        return H;
-        */
-        
         int numData = X.numColumns();
         DenseMatrix tempH = new DenseMatrix(hidden_neurons, numData );
         input_weight.mult(X, tempH);
@@ -276,27 +217,6 @@ public class ELM
         HTemp.transpose(H);
         return H;
         
-        /*int numData = X.numColumns();
-        DenseMatrix tempH = new DenseMatrix(numData,hidden_neurons);
-        input_weight.mult(X, tempH);
-        
-        DenseMatrix bias_matrix = new DenseMatrix(hidden_neurons,numData);
-        for (int i = 0; i < hidden_neurons; i++) {
-            for (int j = 0; j < numData; j++) {
-                bias_matrix.set(i, j, bias_hidden_neurons.get(i, 0));
-            }
-        }
-        
-        tempH.add(bias_matrix);
-        
-        DenseMatrix H = new DenseMatrix(hidden_neurons,numData);
-        for (int i = 0; i <hidden_neurons ; i++) {
-            for (int j = 0; j < numData; j++) {
-                H.set(i,j,function.evaluate(tempH.get(i, j)));
-            }
-        }
-        
-        return H;*/
     }
     /**
      * Contrast the output of the neural network (T) and a tabular output (Y)
@@ -464,19 +384,11 @@ public class ELM
         return T;
     }
 
-    public double getTesting_time() {
-        return testing_time;
+    public double getTime() {
+        return time;
     }
 
-    public double getTesting_accuracy() {
-        return testing_accuracy;
-    }
-
-    public double getTraining_time() {
-        return training_time;
-    }
-
-    public double getTraining_accuracy() {
-        return training_accuracy;
+    public double getAccuracy() {
+        return accuracy;
     }
 }

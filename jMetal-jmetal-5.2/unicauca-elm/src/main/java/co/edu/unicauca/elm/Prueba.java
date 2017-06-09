@@ -67,7 +67,7 @@ public class Prueba {
         elm.setY_training(Y);
         
         elm.train();
-        System.out.println("Accuracy: "+elm.getTraining_accuracy());
+        System.out.println("Accuracy: "+elm.getAccuracy());
 
         
     }
