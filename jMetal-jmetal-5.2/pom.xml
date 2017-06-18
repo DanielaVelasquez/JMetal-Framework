@@ -51,7 +51,7 @@
         <module>jmetal-algorithm</module>
         <module>jmetal-problem</module>
         <module>jmetal-exec</module>
-        <module>unicauca-elm</module>
+        <module>unicauca-ann</module>
     </modules>
 
     <properties>

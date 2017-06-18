@@ -6,7 +6,7 @@
         <artifactId>jmetal</artifactId>
         <version>5.2</version>
     </parent>
-    <artifactId>unicauca-elm</artifactId>
+    <artifactId>unicauca-ann</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -70,4 +70,5 @@
             </exclusions>
         </dependency>
     </dependencies>
+    <name>unicauca-ann</name>
 </project>
