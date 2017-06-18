@@ -6,8 +6,9 @@ import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
 
-
-
+/**
+ * Extreme Learning Machine
+ */
 public class ELM 
 {
     /**-----------------------------------------------------------------------------------------
@@ -42,11 +43,6 @@ public class ELM
      */
     private Function function;
     /**
-     * Time while testing or training (in seconds)
-     * it contains time of the last activity performed
-     */
-    private double time;
-    /**
      * ELM accuracy while training or training
      * it contains accuracy of the last activity performed
      */
@@ -68,13 +64,9 @@ public class ELM
      */
     private int output_neurons;
     /**
-     * Number of training data
+     * Number of data
      */
-    private int num_training_data;
-    /**
-     * Number of testing data
-     */
-    private int num_testing_data;
+    private int number_data;
     /**
      * Matrix bias of hidden neurons
      */
@@ -90,33 +82,22 @@ public class ELM
      */
     private DenseMatrix output_weight;
     /**
-     * Input training data, where every column is a data set row
+     * Input data, where every column is a data set row
      */
-    private DenseMatrix X_training;
+    private DenseMatrix X;
     /**
-     * Input testing data, where every column is a data set row
+     * Output training/testing data
      */
-    private DenseMatrix X_testing;
+    private DenseVector Y;
     /**
-     * Output training data
+     * Tabular output data, represt the output data as a tabular
+     * matrix with -1 and 1 values
      */
-    private DenseVector Y_training;
+    private DenseMatrix tabular;
     /**
-     * Output testing data
+     * Output vector of the network
      */
-    private DenseVector Y_testing;
-    /**
-     * Tabular output training data
-     */
-    private DenseMatrix tabular_training;
-    /**
-     * Tabular output testing data
-     */
-    private DenseMatrix tabular_testing;
-    /**
-     * Output matrix of the network
-     */
-    private DenseMatrix T;
+    private DenseVector T;
     /**
      * Method calculates moore-penrose pseudoinverse
      */
@@ -139,13 +120,15 @@ public class ELM
         this.hidden_neurons = hidden_neurons;
         this.function = activation_function;
         this.output_neurons = classes;
-        this.time = 0;
         this.accuracy = 0;
-        this.num_testing_data = 0;
-        this.num_training_data = 0;
+        this.number_data = 0;
         this.inverse = inverse;
     }
-    
+    /**
+     * Train an artificial neural network using ELM algorithm 
+     * with the input and output data given, if input weight and/or 
+     * bias are not defined in the ELM they will be randomly assigned
+     */
     public void train()
     {
         /**
@@ -161,32 +144,38 @@ public class ELM
         if(bias_hidden_neurons == null)
             bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, 1, MIN_VALUE, MAX_VALUE);
         
-        //Take current time  
-        long start_training = System.currentTimeMillis();
-        
         //Get output matrix from hidden layer
-        DenseMatrix H = calculateH(X_training);
+        DenseMatrix H = calculateH(X);
         DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
-        DenseMatrix transT = new DenseMatrix(num_training_data,output_neurons);
-        tabular_training.transpose(transT);
+        DenseMatrix transT = new DenseMatrix(number_data,output_neurons);
+        tabular.transpose(transT);
         
         output_weight = new DenseMatrix(hidden_neurons,output_neurons);
         pinvH.mult(transT, output_weight);
         
-        calculate_output(H, num_training_data);
-        accuracy = evaluate(tabular_training);
-        long end_training =  System.currentTimeMillis();
-        time = (end_training - start_training) * 1.0f / 1000;
+        DenseMatrix T = calculate_output(H, number_data);
+        accuracy = evaluate(tabular,T);
+    }
+    /**
+     * Test the artificial neural network with the input and output data given
+     */
+    public void test()
+    {
+        //Get output matrix from hidden layer
+        DenseMatrix H = calculateH(X);
+        DenseMatrix T = calculate_output(H, number_data);
+        accuracy = evaluate(tabular,T);
     }
     /**
      *  Calculate the matrix's output
      */
-    private void calculate_output(DenseMatrix H,int numData)
+    private DenseMatrix calculate_output(DenseMatrix H,int numData)
     {
         DenseMatrix TTemp = new DenseMatrix(numData,output_neurons);
         H.mult(output_weight,TTemp);
-        T = new DenseMatrix(output_neurons,numData);
+        DenseMatrix T = new DenseMatrix(output_neurons,numData);
         TTemp.transpose(T);
+        return T;
     }
     /**
      * Calculate the output matrix of the hidden layer
@@ -220,17 +209,19 @@ public class ELM
     }
     /**
      * Contrast the output of the neural network (T) and a tabular output (Y)
+     * besides creates the output network with the original format
      * @param tabular tabular matrix 
+     * @param TNetwork output from the network
      * @return ELM's accuracy
      */
-    private double evaluate(DenseMatrix tabular)
+    private double evaluate(DenseMatrix tabular, DenseMatrix TNetwork)
     {
         double accuracy = 0;
-         
         if (elm_type == ELMType.CLASSIFICATION)
         {
             int numCols = tabular.numColumns();
             int errors = 0;
+            this.T = new DenseVector(numCols);
             /**
              * Finds the index where the biggest value is in every T column 
              * and tabular column, if the indexes aren't the same, an error is
@@ -241,7 +232,7 @@ public class ELM
                 double maxY = tabular.get(0, j);
                 int indexY = 0;
 
-                double maxT = T.get(0, j);
+                double maxT = TNetwork.get(0, j);
                 int indexT = 0;
 
                 for(int i = 1; i < output_neurons; i++)
@@ -252,9 +243,9 @@ public class ELM
                         indexY = i;
                     }
 
-                    if(T.get(i, j) > maxT)
+                    if(TNetwork.get(i, j) > maxT)
                     {
-                        maxT = T.get(i, j);
+                        maxT = TNetwork.get(i, j);
                         indexT = i;
                     }
                 }
@@ -263,6 +254,8 @@ public class ELM
                 {
                     errors++;
                 }
+                //Original format for the output network
+                T.set(j,indexT);
             }
 
             accuracy = 1 - ((double) errors / (double) numCols);
@@ -273,14 +266,16 @@ public class ELM
              * Square differences between tabular and output network
              */
             int numCols = tabular.numColumns();
+            this.T = new DenseVector(numCols);
             double aux = 0;            
             
             for(int j = 0; j < numCols; j++)
             {
                 double valueY = tabular.get(0, j);
-                double valueT = T.get(0, j);
-                
+                double valueT = TNetwork.get(0, j);
                 aux += Math.pow(valueY - valueT, 2);
+                //Original format for the output network
+                this.T.set(j,valueT);
             }
 
             accuracy = Math.sqrt(aux / numCols);
@@ -324,68 +319,44 @@ public class ELM
         }
         return Y;
     }
-
-    public DenseMatrix getInput_weight() {
+    
+    public DenseMatrix getInputWeight() {
         return input_weight;
     }
 
-    public void setInput_weight(DenseMatrix input_weight) {
+    public void setInputWeight(DenseMatrix input_weight) {
         this.input_weight = input_weight;
         this.input_neurons = this.input_weight.numColumns();
     }
 
-    public DenseVector getY_training() {
-        return Y_training;
+    public void setY(DenseVector Y) {
+        this.Y = Y;
+        this.tabular = tabularOutput(Y);
     }
 
-    public void setY_training(DenseVector Y_training) {
-        this.Y_training = Y_training;
-        this.tabular_training = tabularOutput(this.Y_training);
-    }
-
-    public DenseVector getY_testing() {
-        return Y_testing;
-    }
-
-    public void setY_testing(DenseVector Y_testing) {
-        this.Y_testing = Y_testing;
-        this.tabular_testing = tabularOutput(Y_testing);
-    }
-
-    public DenseMatrix getBias_hidden_neurons() {
+    public DenseMatrix getBiasHiddenNeurons() {
         return bias_hidden_neurons;
     }
 
-    public void setBias_hidden_neurons(DenseMatrix bias_hidden_neurons) {
+    public void setBiasHiddenNeurons(DenseMatrix bias_hidden_neurons) {
         this.bias_hidden_neurons = bias_hidden_neurons;
     }
 
-    public DenseMatrix getX_training() {
-        return X_training;
+    public void setX(DenseMatrix X) {
+        this.X = X;
+        this.number_data = this.X.numColumns();
+        this.input_neurons = this.X.numRows();
     }
 
-    public void setX_training(DenseMatrix X_training) {
-        this.X_training = X_training;
-        this.num_training_data = this.X_training.numColumns();
-        this.input_neurons = this.X_training.numRows();
+    public DenseMatrix getX() {
+        return X;
     }
-
-    public DenseMatrix getX_testing() {
-        return X_testing;
-    }
-
-    public void setX_testing(DenseMatrix X_testing) {
-        this.X_testing = X_testing;
-        this.num_testing_data = this.X_testing.numColumns();
-        this.input_neurons = this.X_testing.numRows();
-    }
-
-    public DenseMatrix getT() {
+    /**
+     * Returns networks´s output
+     * @return networks´s output
+     */
+    public DenseVector getOutputNetwork() {
         return T;
-    }
-
-    public double getTime() {
-        return time;
     }
 
     public double getAccuracy() {

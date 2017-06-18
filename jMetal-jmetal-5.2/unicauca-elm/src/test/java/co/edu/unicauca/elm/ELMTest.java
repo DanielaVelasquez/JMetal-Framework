@@ -69,10 +69,10 @@ public class ELMTest extends TestCase
         Y.set(4,0);
         
         elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(),2,new MultiplicationMethod(null));
-        elm.setInput_weight(input_weight);
-        elm.setBias_hidden_neurons(bias);
-        elm.setX_training(X);
-        elm.setY_training(Y);
+        elm.setInputWeight(input_weight);
+        elm.setBiasHiddenNeurons(bias);
+        elm.setX(X);
+        elm.setY(Y);
     }
     
     @After
@@ -101,7 +101,7 @@ public class ELMTest extends TestCase
         T.set(1,3,0.274);
         T.set(1,4,0.336);
         
-        double[] r = elm.getT().getData();
+        double[] r = elm.getOutputNetwork().getData();
         double[] e = T.getData();
         assertArrayEquals(e, r, 0.8);
     }
