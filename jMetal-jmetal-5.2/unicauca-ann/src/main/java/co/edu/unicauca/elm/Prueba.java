@@ -7,6 +7,7 @@ package co.edu.unicauca.elm;
 
 import co.edu.unicauca.function.impl.Sigmoid;
 import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
+import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Matrices;
@@ -60,14 +61,23 @@ public class Prueba {
         Y.set(3,1);
         Y.set(4,0);
         
-        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(),2,new MultiplicationMethod(null));
-        elm.setInput_weight(input_weight);
-        elm.setBias_hidden_neurons(bias);
-        elm.setX_training(X);
-        elm.setY_training(Y);
+        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(),2,new RidgeRegressionTheory(new double[]{0.000001}));
+        elm.setInputWeight(input_weight);
+        elm.setBiasHiddenNeurons(bias);
+        elm.setX(X);
+        elm.setY(Y);
         
         elm.train();
         System.out.println("Accuracy: "+elm.getAccuracy());
+        elm.test();
+        System.out.println("Test Accuracy: "+elm.getAccuracy());
+        
+        System.out.println("Values\n");
+        double values[] = elm.getOutputNetwork().getData();
+        for(int i = 0; i< values.length;i++)
+        {
+            System.out.println(""+values[i]);
+        }
 
         
     }
