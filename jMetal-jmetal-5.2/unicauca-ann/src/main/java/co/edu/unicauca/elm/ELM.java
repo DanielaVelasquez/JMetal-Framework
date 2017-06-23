@@ -113,6 +113,7 @@ public class ELM
      * Sigmoidal function 'sin' for Sine function 'hardlim' for Hardlim function
      * 'tribas' for Triangular basis function 'radbas' for Radial basis function
      * @param classes number of classes
+     * @param inverse Method for calculation of moore penrose inverse
      */
     public ELM(ELMType elm_type,int hidden_neurons,Function activation_function,int classes, AbstractMoorePenroseMethod inverse)
     {
@@ -347,7 +348,7 @@ public class ELM
         this.number_data = this.X.numColumns();
         this.input_neurons = this.X.numRows();
     }
-
+    
     public DenseMatrix getX() {
         return X;
     }

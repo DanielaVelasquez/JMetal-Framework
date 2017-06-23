@@ -30,7 +30,7 @@ public class DataSet
      */
     private DenseMatrix X;
     /**
-     * Result for i-th column of instance X 
+     * Result for i-th column of instance X, it represents the class atribute
      */
     private DenseVector Y;
     /**
@@ -101,4 +101,17 @@ public class DataSet
             i++;             
         }
     }
+
+    public DenseMatrix getX() {
+        return X;
+    }
+
+    public DenseVector getY() {
+        return Y;
+    }
+
+    public int getNumber_classes() {
+        return number_classes;
+    }
+    
 }
