@@ -10,6 +10,19 @@ import org.uma.jmetal.solution.DoubleSolution;
 
 public class AbstractELMEvaluator extends AbstractDoubleProblem
 {
+     /**-----------------------------------------------------------------------------------------
+     * Enums
+     *-----------------------------------------------------------------------------------------*/
+    /**
+     * Evaluator's type
+     * TT: Training and Testing
+     * CV: CrossValidation
+     */
+    public enum EvaluatorType
+    {
+        TT,
+        CV
+    }
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
@@ -22,7 +35,14 @@ public class AbstractELMEvaluator extends AbstractDoubleProblem
      * Collection of data used for ELM
      */
     private DataSet data_set;
-    
+    /**
+     * Evaluator's type
+     */
+    private EvaluatorType type;
+    /**
+     * Evaluator's name, identify the problem that is solving
+     */
+    private String name;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -31,20 +51,24 @@ public class AbstractELMEvaluator extends AbstractDoubleProblem
      * @param hidden_neurons number of hidden neurons for ELM
      * @param data_set collection of data used for ELM
      * @param activation_function Type of activation function
-     * @param inverse 
+     * @param inverse Moore Penrose Method for using in ELM
+     * @param type Evaluator's type
+     * @param name identifies the problem it's solving
      */
-    public AbstractELMEvaluator(int hidden_neurons, DataSet data_set, Function activation_function,AbstractMoorePenroseMethod inverse)
+    public AbstractELMEvaluator(int hidden_neurons, DataSet data_set, Function activation_function,AbstractMoorePenroseMethod inverse, EvaluatorType type,String name)
     {
         this.data_set = data_set;
         this.elm = new ELM(ELMUtil.getELMType(data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
         this.elm.setX(data_set.getX());
         this.elm.setY(data_set.getY());
+        this.type = type;
+        this.name = name;
     }
 
     @Override
     public void evaluate(DoubleSolution solution) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }
