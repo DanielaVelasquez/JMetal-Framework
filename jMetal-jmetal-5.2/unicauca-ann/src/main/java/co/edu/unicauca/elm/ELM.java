@@ -68,9 +68,9 @@ public class ELM
      */
     private int number_data;
     /**
-     * Matrix bias of hidden neurons
+     * Bias of hidden neurons
      */
-    private DenseMatrix bias_hidden_neurons;
+    private DenseVector bias_hidden_neurons;
     /**
      * Matrix input weight - Weights between input layer and the hidden layer
      * w_ij is the weight between neuron i (in input layer) and neuron j (in the hidden layer)
@@ -143,7 +143,7 @@ public class ELM
          * they will be randomly assigned
          */
         if(bias_hidden_neurons == null)
-            bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, 1, MIN_VALUE, MAX_VALUE);
+            bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
         
         //Get output matrix from hidden layer
         DenseMatrix H = calculateH(X);
@@ -191,7 +191,7 @@ public class ELM
         DenseMatrix bias_matrix = new DenseMatrix( hidden_neurons,numData);
         for (int i = 0; i < hidden_neurons; i++) {
             for (int j = 0; j < numData; j++) {
-                bias_matrix.set(i, j, bias_hidden_neurons.get(i, 0));
+                bias_matrix.set(i, j, bias_hidden_neurons.get(i));
             }
         }
         
@@ -335,11 +335,11 @@ public class ELM
         this.tabular = tabularOutput(Y);
     }
 
-    public DenseMatrix getBiasHiddenNeurons() {
+    public DenseVector getBiasHiddenNeurons() {
         return bias_hidden_neurons;
     }
 
-    public void setBiasHiddenNeurons(DenseMatrix bias_hidden_neurons) {
+    public void setBiasHiddenNeurons(DenseVector bias_hidden_neurons) {
         this.bias_hidden_neurons = bias_hidden_neurons;
     }
 
@@ -363,4 +363,15 @@ public class ELM
     public double getAccuracy() {
         return accuracy;
     }
+
+    public int getInputNeurons() {
+        return input_neurons;
+    }
+
+    public int getHiddenNeurons() {
+        return hidden_neurons;
+    }
+
+   
+   
 }
