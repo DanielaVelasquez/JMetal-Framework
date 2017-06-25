@@ -28,7 +28,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
      * @param training_data_set collection of data for training
      * @param testing_data_set collection of data for testing
      * @param activation_function activation function use in ELM
-     * @param inverse Method for calculating Moore Penrose inverse
+     * @param inverse Method for calculating Moore Penrose v
      * @param name Evaluator's name
      */
     public TrainingTestingEvaluator(int hidden_neurons, DataSet training_data_set, DataSet testing_data_set, Function activation_function, AbstractMoorePenroseMethod inverse, String name) {

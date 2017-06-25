@@ -6,7 +6,7 @@
         <artifactId>jmetal</artifactId>
         <version>5.2</version>
     </parent>
-    <groupId>co.edu.unicauca</groupId>
+    
     <artifactId>unicauca-ann</artifactId>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>

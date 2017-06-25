@@ -44,10 +44,10 @@ public class ELMTest extends TestCase
         input_weight.set(2,0,0.940);
         input_weight.set(2,1,0.947);
         
-        DenseMatrix bias = new DenseMatrix(hidden_neuron,1);
-        bias.set(0,0,0.731);
-        bias.set(1,0,0.333);
-        bias.set(2,0,0.964);
+        DenseVector bias = new DenseVector(hidden_neuron);
+        bias.set(0,0.731);
+        bias.set(1,0.333);
+        bias.set(2,0.964);
         
         DenseMatrix X = new DenseMatrix(input_neuron,trainig_data);
         X.set(0,0,5);

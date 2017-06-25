@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
+import no.uib.cipr.matrix.Vector;
 
 /**
  * Collection of data, represent a single statistical data matrix
@@ -37,7 +38,10 @@ public class DataSet
      * Number of posibles results for instances
      */
     private int number_classes;
-    
+    /**
+     * Index for add a new column
+     */
+    private int index;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -66,6 +70,32 @@ public class DataSet
             throw new Exception("X's number of columns must be the same of Y's size in order they represent a data set ");
         this.X = X;
         this.Y = Y;
+    }
+
+    public DataSet(int numData, int numVariables) {
+        
+        X = new DenseMatrix(numVariables, numData);
+        Y = new DenseVector(numData);
+        index = 0;
+    }
+    
+    public void addDataColumn(Vector col)
+    {
+        int numData = X.numColumns();
+        for (int i = 0; i < numData; i++)
+        {
+            X.set(i, index, col.get(i));
+        }
+    }
+    
+    public void addValueColumn(double value)
+    {
+        Y.set(index, value);
+    }
+    
+    public void nextIndex()
+    {
+        index++;
     }
     
     private void loadInstances(int resul_index) throws FileNotFoundException, IOException

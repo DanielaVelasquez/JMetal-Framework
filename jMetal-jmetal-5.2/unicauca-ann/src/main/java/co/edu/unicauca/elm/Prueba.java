@@ -23,7 +23,7 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        ELM elm;
+        /*ELM elm;
         int input_neuron = 2;
         int output_neuron = 2;
         int hidden_neuron = 3;
@@ -78,7 +78,7 @@ public class Prueba {
         {
             System.out.println(""+values[i]);
         }
-
+*/
         
     }
     
