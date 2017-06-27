@@ -85,7 +85,7 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
         getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
-        double accuracy = this.train();
+        double accuracy = this.train(); 
         solution.setObjective(0, accuracy);
     }
     /**
@@ -138,6 +138,11 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
         setLowerLimit(lowerLimit);
         setUpperLimit(upperLimit);
     }
+
+    public ELM getElm() {
+        return elm;
+    }
+    
     /**
      * Trains an ELM using traing data set(s), with some random
      * input weight

@@ -38,7 +38,12 @@ public class IrisRunner extends AbstractAlgorithmRunner
 
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
-        double cr = 0.5 ;
+        TrainingTestingEvaluator tt = (TrainingTestingEvaluator) problem;
+        
+        System.out.println("Accuracy training: "+tt.train());
+        System.out.println("Accuracy testing: "+tt.test2());
+        
+        /**double cr = 0.5 ;
         double f = 0.5 ;
         crossover = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin") ;
 
@@ -58,14 +63,14 @@ public class IrisRunner extends AbstractAlgorithmRunner
         long computingTime = algorithmRunner.getComputingTime() ;
 
         System.out.println("Total execution time: " + computingTime + "ms");
-        double a = ((TrainingTestingEvaluator)problem).train();
+        double a = ((TrainingTestingEvaluator)problem).test(population.get(0));
         
         System.out.println("Accuracy"+a);
 
         printFinalSolutionSet(population);
         if (!referenceParetoFront.equals("")) {
           printQualityIndicators(population, referenceParetoFront) ;
-        }
+        }*/
     }
     
 }

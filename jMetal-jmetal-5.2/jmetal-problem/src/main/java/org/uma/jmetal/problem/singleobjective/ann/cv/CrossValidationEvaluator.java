@@ -47,6 +47,8 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
         super(type, name, training_data_set, testing_data_set);
         this.number_folders = number_folders;
         makeFolders();
+        
+        super.loadInitalConfiguration();
     }
     
     private void makeFolders()

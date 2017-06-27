@@ -5,6 +5,7 @@ import co.edu.unicauca.elm.ELM;
 import co.edu.unicauca.elm.util.ELMUtil;
 import co.edu.unicauca.elm_function.ELMFunction;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
+import no.uib.cipr.matrix.DenseVector;
 import org.uma.jmetal.problem.singleobjective.ann.AbstractELMEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -57,8 +58,30 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
         elm.test();
+        /*
+        DenseVector y = testing_data_set.getY();
+        int size = y.size();
+        System.out.println("Y");
+        for(int i = 0; i < size; i++)
+        {
+            System.out.println(""+y.get(i));
+        }
+        y = elm.getOutputNetwork();
+        size = y.size();
+        System.out.println("Output network");
+        for(int i = 0; i < size; i++)
+        {
+            System.out.println(""+y.get(i));
+        }*/
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
+        return elm.getAccuracy();
+    }
+    public double test2()
+    {
+        elm.setX(testing_data_set.getX());
+        elm.setY(testing_data_set.getY());
+        elm.test();
         return elm.getAccuracy();
     }
 
