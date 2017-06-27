@@ -5,7 +5,7 @@
  */
 package co.edu.unicauca.elm;
 
-import co.edu.unicauca.function.impl.Sigmoid;
+import co.edu.unicauca.elm_function.impl.Sigmoid;
 import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
 import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import no.uib.cipr.matrix.DenseMatrix;

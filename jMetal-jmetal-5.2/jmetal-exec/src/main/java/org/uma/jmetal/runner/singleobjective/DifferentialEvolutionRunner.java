@@ -44,7 +44,6 @@ public class DifferentialEvolutionRunner {
    *  Usage: java org.uma.jmetal.runner.singleobjective.DifferentialEvolutionRunner [cores]
    */
   public static void main(String[] args) throws Exception {
-      System.out.println("holaaa");
     DoubleProblem problem;
     Algorithm<DoubleSolution> algorithm;
     DifferentialEvolutionSelection selection;
