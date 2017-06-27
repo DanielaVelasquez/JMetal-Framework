@@ -6,6 +6,7 @@ import org.uma.jmetal.algorithm.multiobjective.gde3.GDE3Builder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.problem.singleobjective.ann.tt.TrainingTestingEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.JMetalLogger;
@@ -56,7 +57,10 @@ public class IrisRunner extends AbstractAlgorithmRunner
         List<DoubleSolution> population = algorithm.getResult() ;
         long computingTime = algorithmRunner.getComputingTime() ;
 
-        JMetalLogger.logger.info("Total execution time: " + computingTime + "ms");
+        System.out.println("Total execution time: " + computingTime + "ms");
+        double a = ((TrainingTestingEvaluator)problem).train();
+        
+        System.out.println("Accuracy"+a);
 
         printFinalSolutionSet(population);
         if (!referenceParetoFront.equals("")) {

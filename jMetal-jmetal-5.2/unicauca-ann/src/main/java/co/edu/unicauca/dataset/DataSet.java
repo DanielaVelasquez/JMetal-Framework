@@ -103,7 +103,7 @@ public class DataSet
         BufferedReader br = null;
         FileReader fr = null;
         
-        fr = new FileReader(path+"//"+file_name);
+        fr = new FileReader(path+"/"+file_name);
         br = new BufferedReader(fr);
         String[] firstRow = br.readLine().split(" ");
         int numRows = Integer.parseInt(firstRow[0]);
