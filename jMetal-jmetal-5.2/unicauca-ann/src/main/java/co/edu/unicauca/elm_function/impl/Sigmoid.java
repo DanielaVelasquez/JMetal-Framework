@@ -1,9 +1,9 @@
 package co.edu.unicauca.elm_function.impl;
 
-import co.edu.unicauca.elm_function.Function;
+import co.edu.unicauca.elm_function.ELMFunction;
 
 
-public class Sigmoid implements Function
+public class Sigmoid implements ELMFunction
 {
     @Override
     public double evaluate(double x) 

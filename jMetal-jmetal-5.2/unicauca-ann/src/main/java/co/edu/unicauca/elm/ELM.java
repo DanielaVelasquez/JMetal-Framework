@@ -1,10 +1,10 @@
 package co.edu.unicauca.elm;
 
 import co.edu.unicauca.matrix.util.MatrixUtil;
-import co.edu.unicauca.elm_function.Function;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
+import co.edu.unicauca.elm_function.ELMFunction;
 
 /**
  * Extreme Learning Machine
@@ -41,7 +41,7 @@ public class ELM
     /**
      *Activation Function  
      */
-    private Function function;
+    private ELMFunction function;
     /**
      * ELM accuracy while training or training
      * it contains accuracy of the last activity performed
@@ -115,7 +115,7 @@ public class ELM
      * @param classes number of classes
      * @param inverse Method for calculation of moore penrose inverse
      */
-    public ELM(ELMType elm_type,int hidden_neurons,Function activation_function,int classes, AbstractMoorePenroseMethod inverse)
+    public ELM(ELMType elm_type,int hidden_neurons,ELMFunction activation_function,int classes, AbstractMoorePenroseMethod inverse)
     {
         this.elm_type = elm_type;
         this.hidden_neurons = hidden_neurons;
