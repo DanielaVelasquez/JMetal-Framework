@@ -23,6 +23,7 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+        System.out.println("lfjdfjafladfjd");
         /*ELM elm;
         int input_neuron = 2;
         int output_neuron = 2;
