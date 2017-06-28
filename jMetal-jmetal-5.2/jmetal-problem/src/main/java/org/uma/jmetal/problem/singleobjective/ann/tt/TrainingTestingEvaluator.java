@@ -55,33 +55,12 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
         elm.train();
+        System.out.println("Training: "+elm.getAccuracy());
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
         elm.test();
-        /*
-        DenseVector y = testing_data_set.getY();
-        int size = y.size();
-        System.out.println("Y");
-        for(int i = 0; i < size; i++)
-        {
-            System.out.println(""+y.get(i));
-        }
-        y = elm.getOutputNetwork();
-        size = y.size();
-        System.out.println("Output network");
-        for(int i = 0; i < size; i++)
-        {
-            System.out.println(""+y.get(i));
-        }*/
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
-        return elm.getAccuracy();
-    }
-    public double test2()
-    {
-        elm.setX(testing_data_set.getX());
-        elm.setY(testing_data_set.getY());
-        elm.test();
         return elm.getAccuracy();
     }
 

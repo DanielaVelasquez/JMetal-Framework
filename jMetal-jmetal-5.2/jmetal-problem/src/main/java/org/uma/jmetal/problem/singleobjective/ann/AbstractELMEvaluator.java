@@ -86,7 +86,7 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
         double accuracy = this.train(); 
-        solution.setObjective(0, accuracy);
+        solution.setObjective(0,1 - accuracy);
     }
     /**
      * Obtains input weigths and bias from a solution
@@ -117,6 +117,30 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
             i++;
         }
     }
+    public void getInputWeightsBiasFrom(double[] solution)
+    {
+        int numberOfVariables = solution.length;
+        int hidden_neurons = elm.getHiddenNeurons();
+        int input_neurons = elm.getInputNeurons();
+        int row = 0;
+        int col = 0;
+        input_weights = new DenseMatrix(hidden_neurons,input_neurons);
+        bias = new DenseVector(hidden_neurons);
+        int i = 0; 
+        while(i < numberOfVariables)
+        {
+            input_weights.set(row, col, solution[i]);
+            col++;
+            if(col>=input_neurons)
+            {
+                i++;
+                bias.set(row, solution[i]);
+                col = 0;
+                row++;
+            }
+            i++;
+        }
+    }
     /**
      * Load initial configuration for an ELMEvaluator
      */
@@ -126,7 +150,6 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
         setNumberOfVariables(numberOfVariables);
         setNumberOfObjectives(1);
         setNumberOfConstraints(0);
-        setName("Abstract Split  Training-Testing");
 
         List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
         List<Double> upperLimit = new ArrayList<>(getNumberOfVariables());
