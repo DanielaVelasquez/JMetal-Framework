@@ -1,6 +1,5 @@
-package org.uma.jmetal.runner.singleobjective.ann.cv;
+package co.edu.unicauca.exec.cross_validation;
 
-import org.uma.jmetal.runner.singleobjective.ann.tt.*;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.multiobjective.gde3.GDE3Builder;
@@ -8,8 +7,8 @@ import org.uma.jmetal.algorithm.singleobjective.differentialevolution.Differenti
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
-import org.uma.jmetal.problem.singleobjective.ann.cv.CrossValidationEvaluator;
-import org.uma.jmetal.problem.singleobjective.ann.tt.TrainingTestingEvaluator;
+import co.edu.unicauca.problem.cross_validation.CrossValidationEvaluator;
+import co.edu.unicauca.problem.training_testing.TrainingTestingEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.JMetalLogger;
@@ -39,7 +38,7 @@ public class IrisRunner extends AbstractAlgorithmRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "org.uma.jmetal.problem.singleobjective.ann.cv.Iris";
+          problemName = "co.edu.unicauca.problem.cross_validation.Iris";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);

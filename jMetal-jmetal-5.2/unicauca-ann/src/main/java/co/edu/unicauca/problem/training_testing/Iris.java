@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.uma.jmetal.problem.singleobjective.ann.tt;
+package co.edu.unicauca.problem.training_testing;
 
 import co.edu.unicauca.dataset.DataSet;
 import co.edu.unicauca.elm_function.impl.Sigmoid;

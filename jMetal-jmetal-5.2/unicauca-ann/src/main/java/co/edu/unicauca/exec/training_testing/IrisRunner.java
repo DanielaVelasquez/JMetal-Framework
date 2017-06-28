@@ -1,18 +1,17 @@
-package org.uma.jmetal.runner.singleobjective.ann.tt;
+package co.edu.unicauca.exec.training_testing;
 
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.gde3.GDE3Builder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
-import org.uma.jmetal.problem.singleobjective.ann.tt.TrainingTestingEvaluator;
+import co.edu.unicauca.problem.training_testing.TrainingTestingEvaluator;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
+import org.uma.jmetal.runner.AbstractAlgorithmRunner;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.runner.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
@@ -37,7 +36,7 @@ public class IrisRunner extends AbstractAlgorithmRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "org.uma.jmetal.problem.singleobjective.ann.tt.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Iris";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);

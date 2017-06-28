@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.uma.jmetal.problem.singleobjective.ann.cv;
+package co.edu.unicauca.problem.cross_validation;
 
-import org.uma.jmetal.problem.singleobjective.ann.tt.*;
 import co.edu.unicauca.dataset.DataSet;
 import co.edu.unicauca.elm_function.impl.Sigmoid;
 import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import java.io.IOException;
-import org.uma.jmetal.problem.singleobjective.ann.AbstractELMEvaluator;
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 
 /**
  *

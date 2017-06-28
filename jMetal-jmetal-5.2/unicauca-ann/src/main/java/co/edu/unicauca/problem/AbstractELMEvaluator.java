@@ -1,4 +1,4 @@
-package org.uma.jmetal.problem.singleobjective.ann;
+package co.edu.unicauca.problem;
 
 import co.edu.unicauca.dataset.DataSet;
 import co.edu.unicauca.elm.ELM;

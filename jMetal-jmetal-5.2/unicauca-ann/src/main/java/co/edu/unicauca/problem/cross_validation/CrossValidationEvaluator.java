@@ -1,4 +1,4 @@
-package org.uma.jmetal.problem.singleobjective.ann.cv;
+package co.edu.unicauca.problem.cross_validation;
 
 import co.edu.unicauca.dataset.DataSet;
 import co.edu.unicauca.elm.ELM;
@@ -11,7 +11,7 @@ import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Matrices;
 import no.uib.cipr.matrix.Vector;
-import org.uma.jmetal.problem.singleobjective.ann.AbstractELMEvaluator;
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 
 /**
