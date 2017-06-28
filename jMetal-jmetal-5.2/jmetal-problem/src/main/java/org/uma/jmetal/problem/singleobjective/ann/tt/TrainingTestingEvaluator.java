@@ -5,7 +5,6 @@ import co.edu.unicauca.elm.ELM;
 import co.edu.unicauca.elm.util.ELMUtil;
 import co.edu.unicauca.elm_function.ELMFunction;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
-import no.uib.cipr.matrix.DenseVector;
 import org.uma.jmetal.problem.singleobjective.ann.AbstractELMEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -55,7 +54,6 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
         elm.train();
-        System.out.println("Training: "+elm.getAccuracy());
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
         elm.test();

@@ -15,13 +15,15 @@ import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.runner.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
+import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 
 public class IrisRunner extends AbstractAlgorithmRunner
 {
     
     public static void main(String[] args) throws Exception {
-        int i = 0 ;
+        JMetalRandom rnd = JMetalRandom.getInstance();
+        rnd.setSeed(1);
         DoubleProblem problem;
         Algorithm<DoubleSolution> algorithm;
         DifferentialEvolutionSelection selection;
