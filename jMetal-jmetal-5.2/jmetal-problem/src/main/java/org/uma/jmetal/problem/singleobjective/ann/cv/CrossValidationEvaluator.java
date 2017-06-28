@@ -1,6 +1,10 @@
 package org.uma.jmetal.problem.singleobjective.ann.cv;
 
 import co.edu.unicauca.dataset.DataSet;
+import co.edu.unicauca.elm.ELM;
+import co.edu.unicauca.elm.util.ELMUtil;
+import co.edu.unicauca.elm_function.ELMFunction;
+import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import java.util.ArrayList;
 import java.util.List;
 import no.uib.cipr.matrix.DenseMatrix;
@@ -43,8 +47,11 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
      * @param testing_data_set
      * @param number_folders 
      */
-    public CrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders) {
+    public CrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
         super(type, name, training_data_set, testing_data_set);
+        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
+        int input_neuron = training_data_set.getX().numRows();
+        super.elm.setInputNeurons(input_neuron);
         this.number_folders = number_folders;
         makeFolders();
         
@@ -59,6 +66,7 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
         
         int number_variables = training_data_set.getX().numRows();
         int number_data = training_data_set.getX().numColumns();
+        int number_clases = training_data_set.getNumber_classes();
         DenseMatrix x = training_data_set.getX();
         DenseVector y = training_data_set.getY();
         int aditionals = number_data % number_folders;
@@ -67,13 +75,13 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
         {
             if(i < aditionals)
             {
-                training_folders.add(new DataSet(number_folders + 1, number_variables));
-                testing_folders.add(new DataSet(number_folders + 1, number_variables));
+                training_folders.add(new DataSet(trainig_size - number_folders + 1, number_variables,number_clases));
+                testing_folders.add(new DataSet(number_folders + 1, number_variables,number_clases));
             }
             else
             {
-                training_folders.add(new DataSet(number_folders, number_variables));
-                testing_folders.add(new DataSet(number_folders, number_variables));
+                training_folders.add(new DataSet(trainig_size - number_folders, number_variables,number_clases));
+                testing_folders.add(new DataSet(number_folders, number_variables,number_clases));
             }
         }
         
@@ -81,9 +89,11 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
         {
             Vector data = Matrices.getColumn(x, i);
             double value = y.get(i);
+            int result = i % number_folders;
             for (int j = 0; j < number_folders; j++)
             {
-                if(i % j != i)
+                
+                if(result != j)
                 {
                     DataSet training = training_folders.get(j);
                     training.addDataColumn(data);

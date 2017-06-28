@@ -72,16 +72,17 @@ public class DataSet
         this.Y = Y;
     }
 
-    public DataSet(int numData, int numVariables) {
+    public DataSet(int numData, int numVariables,int number_classes) {
         
         X = new DenseMatrix(numVariables, numData);
         Y = new DenseVector(numData);
         index = 0;
+        this.number_classes = number_classes;
     }
     
     public void addDataColumn(Vector col)
     {
-        int numData = X.numColumns();
+        int numData = X.numRows();
         for (int i = 0; i < numData; i++)
         {
             X.set(i, index, col.get(i));
@@ -97,7 +98,10 @@ public class DataSet
     {
         index++;
     }
-    
+    public int getIndex()
+    {
+        return index;
+    }
     private void loadInstances(int resul_index) throws FileNotFoundException, IOException
     {
         BufferedReader br = null;
@@ -110,7 +114,7 @@ public class DataSet
         int numCols = Integer.parseInt(firstRow[1]);
         number_classes = Integer.parseInt(firstRow[2]);
 
-        X = new DenseMatrix(numCols, numRows);
+        X = new DenseMatrix(numCols - 1, numRows);
         Y = new DenseVector(numRows);
 
         String actualLine;

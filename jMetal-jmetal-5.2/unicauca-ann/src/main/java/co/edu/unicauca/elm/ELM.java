@@ -372,6 +372,11 @@ public class ELM
         return hidden_neurons;
     }
 
+    public void setInputNeurons(int input_neurons) {
+        this.input_neurons = input_neurons;
+    }
+    
+    
    
    
 }
