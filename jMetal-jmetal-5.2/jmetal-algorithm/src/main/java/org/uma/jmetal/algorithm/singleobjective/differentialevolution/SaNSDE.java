@@ -112,8 +112,9 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         double u = randomGenerator.nextDouble(0, 1);
         if(u < fp)
         {
-            
+            //randomGenerator.
         }
+        return 0;
     }
     private void updateCR()
     {
