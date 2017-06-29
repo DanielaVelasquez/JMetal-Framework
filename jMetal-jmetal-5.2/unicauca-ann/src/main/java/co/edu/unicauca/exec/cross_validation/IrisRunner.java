@@ -76,7 +76,7 @@ public class IrisRunner extends AbstractAlgorithmRunner
         System.out.println("Total execution time: " + computingTime + "ms");
         double a = ((CrossValidationEvaluator)problem).test(solution);
         
-        System.out.println("Accuracy"+a);
+        System.out.println("Accuracy "+a);
 
         /*printFinalSolutionSet(population);
         if (!referenceParetoFront.equals("")) {

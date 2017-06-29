@@ -66,12 +66,6 @@
             <artifactId>jmetal-problem</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.uma.jmetal</groupId>
-            <artifactId>unicauca-ann</artifactId>
-            <version>5.2</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
