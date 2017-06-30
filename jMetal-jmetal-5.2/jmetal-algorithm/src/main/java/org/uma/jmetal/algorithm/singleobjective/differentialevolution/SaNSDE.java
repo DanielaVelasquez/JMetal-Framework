@@ -1,5 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+import co.edu.unicauca.util.math.RandomDistribution;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,6 +44,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     private DifferentialEvolutionSelection selectionOperator2 ;
     private int evaluations;
     
+    private double CRm;
+    private List wk;
+    private List CRrec;
+    private List frec;
+    private double sum_frec;
+    
     private JMetalRandom randomGenerator ;
     
     /**-----------------------------------------------------------------------------------------
@@ -76,12 +83,18 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         this.comparator = comparator;
         randomGenerator = JMetalRandom.getInstance();
         this.cleanVariables();
+        
+        CRrec = new ArrayList();
+        wk = new ArrayList();
+        frec = new ArrayList();
+        sum_frec = 0;
     }
     
     private void cleanVariables()
     {
         this.p = 0.5;
         this.fp = 0.5;
+        this.CRm = 0.5;
         ns1 = 0;
         ns2 = 0;
         nf1 = 0;
@@ -107,18 +120,51 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         nf1 = 0;
         nf2 = 0;
     }
+    private void updateFP()
+    {
+        int num = (fp_ns1*(fp_ns2+fp_nf2));
+        int den = (fp_ns2*(fp_ns1+fp_nf1)+fp_ns1*(fp_ns2+fp_nf2));
+        if(num!=0 && den != 0)
+        {
+            fp = (double) num / (double) den;
+        }
+        
+        fp_ns1 = 0;
+        fp_ns2 = 0;
+        fp_nf1 = 0;
+        fp_nf2 = 0;
+    }
     private double calculateF()
     {
         double u = randomGenerator.nextDouble(0, 1);
+        RandomDistribution distributionRnd = RandomDistribution.getInstance();
         if(u < fp)
         {
-            //randomGenerator.
+            fp_ns1++;
+            fp_nf2++;
+            return distributionRnd.nextGaussian(0.5, 0.5);
         }
-        return 0;
+        else
+        {
+            fp_ns2++;
+            fp_nf1++;
+            return distributionRnd.nextCauchy(0, 1);
+        }
+    }
+    private double calculateCR()
+    {
+        RandomDistribution distributionRnd = RandomDistribution.getInstance();
+        return distributionRnd.nextGaussian(CRm, 0.1);
     }
     private void updateCR()
     {
-        
+        int size = CRrec.size();
+        CRm = 0;
+        for(int i = 0; i < size; i++)
+        {
+            double wk = (double) frec.get(i) /(double) sum_frec;
+            CRm += wk * (double) CRrec.get(i);
+        }
     }
     @Override
     protected void initProgress() {
@@ -158,7 +204,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> reproduction(List<DoubleSolution> matingPopulation) {
         List<DoubleSolution> offspringPopulation = new ArrayList<>();
-
+        
+        CRrec = new ArrayList();
+        wk = new ArrayList();
+        frec = new ArrayList();
+        sum_frec = 0;
+        
         for (int i = 0; i < populationSize; i++)
         {
           selectionOperator.setIndex(i);
@@ -167,9 +218,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           double u = randomGenerator.nextDouble(0, 1);
           
           List<DoubleSolution> children;
-          this.calculateF();
+          double f = this.calculateF();
+          double cr = this.calculateCR();
+          
           if(u < p)
           {
+            crossoverOperator = updateF(crossoverOperator, f, cr);
             crossoverOperator.setCurrentSolution(matingPopulation.get(i));
             children = crossoverOperator.execute(parents);
             ns1++;
@@ -178,6 +232,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           }
           else
           {
+            crossoverOperator2 = updateF(crossoverOperator2, f, cr);
             crossoverOperator2.setCurrentSolution(matingPopulation.get(i));
             children = crossoverOperator.execute(parents);
             ns2++;
@@ -185,13 +240,33 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           }
           
           offspringPopulation.add(children.get(0));
+          double frec_k = calculateSumObjetives(matingPopulation.get(i)) - calculateSumObjetives(children.get(0));
+          frec.add(frec_k);
+          sum_frec += frec_k;
+          
+          CRrec.add(cr);
         }
         this.updateP();
-        
+        this.updateFP();
         this.updateCR();
         return offspringPopulation;
     }
-
+    private double calculateSumObjetives(DoubleSolution s)
+    {
+        int size = s.getNumberOfObjectives();
+        double sum = 0;
+        for(int i = 0; i< size; i++)
+        {
+            sum += s.getObjective(i);
+        }
+        return sum;
+    }
+    private DifferentialEvolutionCrossover updateF(DifferentialEvolutionCrossover selected,double f, double cr)
+    {
+        double k = selected.getK();
+        String variant = selected.getVariant();
+        return new DifferentialEvolutionCrossover(cr, f, k, variant);
+    }
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         List<DoubleSolution> pop = new ArrayList<>();
