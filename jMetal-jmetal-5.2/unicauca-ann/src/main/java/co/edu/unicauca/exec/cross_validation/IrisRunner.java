@@ -9,11 +9,13 @@ import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import co.edu.unicauca.problem.cross_validation.CrossValidationEvaluator;
 import co.edu.unicauca.problem.training_testing.TrainingTestingEvaluator;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.runner.AbstractAlgorithmRunner;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
@@ -58,13 +60,10 @@ public class IrisRunner extends AbstractAlgorithmRunner
 
         selection = new DifferentialEvolutionSelection() ;
 
-        algorithm = new DifferentialEvolutionBuilder(problem)
-        .setCrossover(crossover)
-        .setSelection(selection)
-        .setSolutionListEvaluator(evaluator)
-        .setMaxEvaluations(250000)
-        .setPopulationSize(100)
-        .build() ;
+        algorithm = new SaNSDE(problem, 1000000, 100,
+        crossover, new DifferentialEvolutionCrossover(cr, f, "current-to-best/1/bin"), 
+        selection, evaluator,
+        new ObjectiveComparator<DoubleSolution>(0));
         
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
