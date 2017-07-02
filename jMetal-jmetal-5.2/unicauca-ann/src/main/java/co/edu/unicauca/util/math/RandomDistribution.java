@@ -1,21 +1,61 @@
 package co.edu.unicauca.util.math;
 
-import java.util.Random;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
-import org.uma.jmetal.util.pseudorandom.impl.JavaRandomGenerator;
 
 public class RandomDistribution 
 {
+    /**-----------------------------------------------------------------------------------------
+     * Atributes
+     *-----------------------------------------------------------------------------------------*/
+    /**
+     * Next gaussian value stored
+     */
     private double nextNextGaussian;
+    /**
+     * Determines if there is a next gaussian value stored
+     */
     private boolean haveNextGaussian;
     
     private static RandomDistribution instance;
     
+    /**-----------------------------------------------------------------------------------------
+     * Methods
+     *-----------------------------------------------------------------------------------------*/
+    /**
+     * Creates a new RandomDistribution
+     */
+    private RandomDistribution()
+    {
+        haveNextGaussian = false;
+    }
+    /**
+     * Obtains the unique instace object
+     * @return random distribution object
+     */
+    public static RandomDistribution getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new RandomDistribution();
+        }
+        return instance;
+    }
+    
+    /**
+     * Finds next gaussian with a given mean and standar deviation
+     * @param mean desired mean
+     * @param sd desired standar deviation 
+     * @return next gaussian
+     */
     public double nextGaussian(double mean, double sd)
     {
         return nextGaussian() * sd + mean;
         
     }
+    /**
+     * Finds next gaussian with mean 0 and standar deviation 1
+     * @return next gaussian value
+     */
     public double nextGaussian()
     {
         JMetalRandom randomGenerator = JMetalRandom.getInstance();
@@ -40,6 +80,12 @@ public class RandomDistribution
         }
         
     }
+    /**
+     * Finds cauchy value according to the given values 
+     * @param x0 location parameter, specifying the location of the peak of the distribution
+     * @param y  scale parameter which specifies the half-width at half-maximum 
+     * @return cauchy value 
+     */
     public double nextCauchy(double x0, double y)
     {
         JMetalRandom randomGenerator = JMetalRandom.getInstance();
@@ -53,17 +99,5 @@ public class RandomDistribution
         
         return y / den;
     }
-    private RandomDistribution()
-    {
-        haveNextGaussian = false;
-    }
     
-    public static RandomDistribution getInstance()
-    {
-        if(instance == null)
-        {
-            instance = new RandomDistribution();
-        }
-        return instance;
-    }
 }
