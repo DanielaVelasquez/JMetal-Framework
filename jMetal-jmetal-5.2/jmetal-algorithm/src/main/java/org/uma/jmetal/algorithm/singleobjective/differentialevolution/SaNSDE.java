@@ -39,6 +39,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * Scale parameter for cauchy distribution - it is use for calculating crossover rate value for an individual
      */
     private final static double Y_CR = 0.1;
+    
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
@@ -130,10 +131,20 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-    
+    /**
+     * Creates a new SaNSDE algorithm
+     * @param problem algorithm's problem
+     * @param maxEvaluations Maximun number of evaluations 
+     * @param populationSize Population's size
+     * @param crossoverOperator crossover operator with a crossover strategy 1
+     * @param crossoverOperator2 crossover operator with a crossover strategy 2
+     * @param selectionOperator operator for selection of individual's parent
+     * @param evaluator
+     * @param comparator Determines how a solution should be order
+     */
     public SaNSDE(DoubleProblem problem, int maxEvaluations, int populationSize,
         DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionCrossover crossoverOperator2, 
-      DifferentialEvolutionSelection selectionOperator2, SolutionListEvaluator<DoubleSolution> evaluator,
+        DifferentialEvolutionSelection selectionOperator, SolutionListEvaluator<DoubleSolution> evaluator,
       Comparator<DoubleSolution> comparator)
     {
         setProblem(problem);
@@ -146,9 +157,9 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         this.comparator = comparator;
         randomGenerator = JMetalRandom.getInstance();
         
-        CRrec = new ArrayList();
-        frec = new ArrayList();
-        sum_frec = 0;
+        this.CRrec = new ArrayList();
+        this.frec = new ArrayList();
+        this.sum_frec = 0;
         
         this.initVariables();
     }
