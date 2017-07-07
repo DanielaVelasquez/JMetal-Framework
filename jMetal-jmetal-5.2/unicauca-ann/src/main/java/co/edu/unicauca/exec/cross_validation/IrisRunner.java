@@ -1,30 +1,11 @@
 package co.edu.unicauca.exec.cross_validation;
 
-import java.util.List;
-import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.gde3.GDE3Builder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
-import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
-import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
-import org.uma.jmetal.problem.DoubleProblem;
-import co.edu.unicauca.problem.cross_validation.CrossValidationEvaluator;
-import co.edu.unicauca.problem.training_testing.TrainingTestingEvaluator;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.util.AlgorithmRunner;
-import org.uma.jmetal.util.JMetalLogger;
-import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.runner.AbstractAlgorithmRunner;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
-import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 
-public class IrisRunner extends AbstractAlgorithmRunner
+public class IrisRunner 
 {
     
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         JMetalRandom rnd = JMetalRandom.getInstance();
         rnd.setSeed(1);
         DoubleProblem problem;
@@ -54,7 +35,7 @@ public class IrisRunner extends AbstractAlgorithmRunner
         System.out.println("Accuracy training: "+tt.train());
         System.out.println("Accuracy testing: "+tt.test2());*/
         
-        double cr = 0.5 ;
+       /* double cr = 0.5 ;
         double f = 0.5 ;
         crossover = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin") ;
 
@@ -81,6 +62,6 @@ public class IrisRunner extends AbstractAlgorithmRunner
         if (!referenceParetoFront.equals("")) {
           printQualityIndicators(population, referenceParetoFront) ;
         }*/
-    }
+    //}
     
 }
