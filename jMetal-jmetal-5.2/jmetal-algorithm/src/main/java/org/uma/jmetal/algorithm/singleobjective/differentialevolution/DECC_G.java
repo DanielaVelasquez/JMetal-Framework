@@ -1,5 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+import co.edu.unicauca.problem.SubcomponentDoubleProblem;
+import co.edu.unicauca.solution.DoubleSolutionSubcomponent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +11,6 @@ import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.solution.impl.ArrayDoubleSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -41,7 +42,7 @@ public class DECC_G implements Algorithm
      */
     private DoubleProblem problem ;
     
-    private DoubleProblem subcomponent_problem;
+    private SubcomponentDoubleProblem subcomponent_problem;
     /**
      * Subcomponent dimension size
      */
@@ -152,40 +153,94 @@ public class DECC_G implements Algorithm
         
         random_inidividual = population.get(random_index);
     }
+    private List<Integer> randPerm(int n)
+    {
+        List<Integer> list = new ArrayList<>();
+        while(list.size() != n)
+        {
+            int value = randomGenerator.nextInt(LOWER_BOUND, n - 1);
+            if(!list.contains(value))
+                list.add(value);
+        }
+        return list;
+    }
+    private List<DoubleSolution> copy(List<DoubleSolution> population)
+    {
+        List<DoubleSolution> subpopulation = new ArrayList<>();
+        for(DoubleSolution s: population)
+        {
+           subpopulation.add(new DoubleSolutionSubcomponent(this.getObjectives(s), this.getVariables(s), subcomponent_problem));
+        }
+        return subpopulation;
+    }
+    private double[] getVariables(DoubleSolution s)
+    {
+        int size = s.getNumberOfVariables();
+        double[] variables = new double[size];
+        for(int i = 0; i < size; i++)
+        {
+            variables[i] = s.getVariableValue(i);
+        }
+        return variables;
+    }
+    private double[] getObjectives(DoubleSolution s)
+    {
+        int size = s.getNumberOfObjectives();
+        double[] objectives = new double[size];
+        for(int i = 0; i < size; i++)
+        {
+            objectives[i] = s.getObjective(i);
+        }
+        return objectives;
+    }
     @Override
     public void run() 
     {
+        this.population = this.createInitialPopulation();
+       this.evaluatePopulation(this.population);
        int subcomponent = this.n/this.s;
        //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
        {
-           
+           List<Integer> index = this.randPerm(this.n);
            for(int j = 0; j < subcomponent; j++)
            {
                int l = ((j+1) - 1) * this.s + 1;
                int u = j * s;
-               List<DoubleSolution> subpopulation = getSubPopulation(l, u);
-               SaNSDE sansde = new SaNSDE(problem, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
+               List<Integer> sublist = index.subList(l, u + 1);
+               subcomponent_problem = new SubcomponentDoubleProblem(sublist);
+               
+               List<DoubleSolution> subpopulation = this.copy(this.population);
+               SaNSDE sansde = new SaNSDE(subcomponent_problem, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
+               sansde.setPopulation(subpopulation);
+               
+               
                sansde.run();
                subpopulation = sansde.getPopulation();
-               w_population = randomWeight(this.w_population, j);
+               w_population = randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
                this.replaceInPopulation(subpopulation, l, u);
                this.evaluatePopulation(population);
            }
            this.findIndividuals();
+           
            DifferentialEvolution de = new DifferentialEvolution(problem, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
            de.setPopulation(w_population);
            
            
-           //NO estaria encontrando el mismo las 3 veces? No porque el random crea individiuos diferentes
            de.run();
-           population.set(best_index, de.getResult());
+           DoubleSolution ans = de.getResult();
+           if(comparator.compare(ans, best_inidvidual)>1)
+            population.set(best_index, ans);
            
            de.run();
-           population.set(random_index, de.getResult());
+           ans = de.getResult();
+           if(comparator.compare(ans, random_inidividual)>1)
+            population.set(random_index, de.getResult());
            
            de.run();
-           population.set(worst_index, de.getResult());
+           ans = de.getResult();
+           if(comparator.compare(ans, worst_inidividual)>1)
+            population.set(worst_index, de.getResult());
            
            this.evaluatePopulation(population);
        }
