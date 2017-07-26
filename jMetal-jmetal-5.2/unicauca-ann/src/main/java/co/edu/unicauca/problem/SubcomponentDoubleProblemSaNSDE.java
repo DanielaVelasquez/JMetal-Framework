@@ -1,5 +1,6 @@
 package co.edu.unicauca.problem;
 
+import co.edu.unicauca.solution.DoubleSolutionSubcomponentSaNSDE;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -54,7 +55,8 @@ public class SubcomponentDoubleProblemSaNSDE implements DoubleProblem
 
     @Override
     public void evaluate(DoubleSolution solution) {
-        this.original_problem.evaluate(solution);
+        DoubleSolutionSubcomponentSaNSDE s = (DoubleSolutionSubcomponentSaNSDE)solution;
+        this.original_problem.evaluate(s.getSolution());
     }
 
     @Override

@@ -73,7 +73,6 @@ public class SubcomponentDoubleProblemDE implements DoubleProblem
     @Override
     public void evaluate(DoubleSolution solution)
     {
-        DoubleSolutionSubcomponentDE s = (DoubleSolutionSubcomponentDE)solution;
         DoubleSolution original_solution = (DoubleSolution) this.solution.copy();
         int j = 0;
         for(Integer i:index)

@@ -21,17 +21,20 @@ public class DoubleSolutionSubcomponentDE implements DoubleSolution
         this.variables = variables;
         this.problem = problem;
     }
+
+    
     
     
     
     @Override
     public Double getLowerBound(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        return problem.getLowerBound(index);
     }
 
     @Override
     public Double getUpperBound(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return problem.getUpperBound(index);  
     }
 
     @Override
@@ -46,17 +49,17 @@ public class DoubleSolutionSubcomponentDE implements DoubleSolution
 
     @Override
     public Double getVariableValue(int index) {
-        return variables[problem.getIndex(index)];
+        return variables[index];
     }
 
     @Override
     public void setVariableValue(int index, Double value) {
-        variables[problem.getIndex(index)] = value ;
+        variables[index] = value ;
     }
 
     @Override
     public String getVariableValueString(int index) {
-        return getVariableValue(problem.getIndex(index)).toString() ;
+        return getVariableValue(index).toString() ;
     }
 
     @Override
@@ -71,7 +74,7 @@ public class DoubleSolutionSubcomponentDE implements DoubleSolution
 
     @Override
     public Solution<Double> copy() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new DoubleSolutionSubcomponentDE(objectives, variables, problem);
     }
 
     @Override

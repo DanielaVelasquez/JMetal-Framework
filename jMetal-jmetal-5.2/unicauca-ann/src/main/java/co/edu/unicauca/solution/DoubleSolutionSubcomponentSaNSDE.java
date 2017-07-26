@@ -13,46 +13,49 @@ import org.uma.jmetal.solution.Solution;
 public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 {
 
-    private double[] objectives;
-    private double[] variables;
+    private DoubleSolution solution;
     private SubcomponentDoubleProblemSaNSDE problem;
 
-    public DoubleSolutionSubcomponentSaNSDE(double[] objectives, double[] variables, SubcomponentDoubleProblemSaNSDE problem) {
-        this.objectives = objectives;
-        this.variables = variables;
+    public DoubleSolutionSubcomponentSaNSDE(DoubleSolution solution, SubcomponentDoubleProblemSaNSDE problem) {
+        this.solution = solution;
         this.problem = problem;
+    }
+
+    public DoubleSolution getSolution() {
+        return solution;
     }
     
     
     
     @Override
     public Double getLowerBound(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return solution.getLowerBound(problem.getIndex(index));
     }
 
     @Override
     public Double getUpperBound(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return solution.getUpperBound(problem.getIndex(index));
     }
 
     @Override
     public void setObjective(int index, double value) {
-       objectives[index] = value ;
+       solution.setObjective(index, value);
     }
 
     @Override
     public double getObjective(int index) {
-        return objectives[index];
+        return solution.getObjective(index);
     }
 
     @Override
     public Double getVariableValue(int index) {
-        return variables[problem.getIndex(index)];
+        return solution.getVariableValue(problem.getIndex(index));
     }
 
     @Override
     public void setVariableValue(int index, Double value) {
-        variables[problem.getIndex(index)] = value ;
+        
+        solution.setVariableValue(problem.getIndex(index), value);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 
     @Override
     public Solution<Double> copy() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new DoubleSolutionSubcomponentSaNSDE(solution, problem);
     }
 
     @Override
