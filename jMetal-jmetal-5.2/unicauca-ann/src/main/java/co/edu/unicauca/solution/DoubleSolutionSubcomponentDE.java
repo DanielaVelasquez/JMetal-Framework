@@ -5,26 +5,18 @@
  */
 package co.edu.unicauca.solution;
 
-import co.edu.unicauca.problem.SubcomponentDoubleProblem;
-import java.util.List;
-import java.util.Map;
-import org.uma.jmetal.problem.DoubleProblem;
+import co.edu.unicauca.problem.SubcomponentDoubleProblemDE;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
-/**
- *
- * @author danielavelasquezgarzon
- */
-public class DoubleSolutionSubcomponent implements DoubleSolution
-{
 
-    
+public class DoubleSolutionSubcomponentDE implements DoubleSolution
+{
     private double[] objectives;
     private double[] variables;
-    private SubcomponentDoubleProblem problem;
+    private SubcomponentDoubleProblemDE problem;
 
-    public DoubleSolutionSubcomponent(double[] objectives, double[] variables, SubcomponentDoubleProblem problem) {
+    public DoubleSolutionSubcomponentDE(double[] objectives, double[] variables, SubcomponentDoubleProblemDE problem) {
         this.objectives = objectives;
         this.variables = variables;
         this.problem = problem;

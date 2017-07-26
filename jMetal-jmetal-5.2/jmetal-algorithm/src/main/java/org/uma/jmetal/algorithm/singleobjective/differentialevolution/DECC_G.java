@@ -1,7 +1,9 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-import co.edu.unicauca.problem.SubcomponentDoubleProblem;
-import co.edu.unicauca.solution.DoubleSolutionSubcomponent;
+import co.edu.unicauca.problem.SubcomponentDoubleProblemDE;
+import co.edu.unicauca.problem.SubcomponentDoubleProblemSaNSDE;
+import co.edu.unicauca.solution.DoubleSolutionSubcomponentDE;
+import co.edu.unicauca.solution.DoubleSolutionSubcomponentSaNSDE;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,7 +44,9 @@ public class DECC_G implements Algorithm
      */
     private DoubleProblem problem ;
     
-    private SubcomponentDoubleProblem subcomponent_problem;
+    private SubcomponentDoubleProblemDE subcomponent_problem_DE;
+    
+    private SubcomponentDoubleProblemSaNSDE subcomponent_problem_SaNSDE;
     /**
      * Subcomponent dimension size
      */
@@ -88,8 +92,13 @@ public class DECC_G implements Algorithm
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-    public DECC_G()
+    public DECC_G(int s, int cycles, int FEs, int wFes)
     {
+        this.s = s;
+        this.cycles = cycles;
+        this.FE = FEs;
+        this.wFEs = wFes;
+        
         randomGenerator = JMetalRandom.getInstance();
         best_index = 0;
         worst_index = populationSize - 1;
@@ -130,19 +139,35 @@ public class DECC_G implements Algorithm
         }
         return population;
     }
-    private List<DoubleSolution> randomWeight(List<DoubleSolution> w_population, int objective)
+    private void randomWeight(List<DoubleSolution> w_population, int column)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int size = w_population.size();
+        for(int i = 0; i < size; i++)
+        {
+            DoubleSolution s = w_population.get(i);
+            double value = randomGenerator.nextDouble(s.getLowerBound(column), s.getUpperBound(column));
+            s.setVariableValue(column, value);
+        }
     } 
-    private void replaceInPopulation(List<DoubleSolution> subpopulation, int l, int u)
+    private void replaceInPopulation(List<DoubleSolution> subpopulation, int l, int u, List<Integer> index)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(int i = 0; i< populationSize; i++)
+        {
+            DoubleSolution original = population.get(i);
+            DoubleSolution other = subpopulation.get(i);
+            int k = 0;
+            for(int j = l; j <= u; j++)
+            {
+                original.setVariableValue(index.get(j), other.getVariableValue(k));
+                k++;
+            }
+        }
     }
     
     private void findIndividuals()
     {
         Collections.sort(getPopulation(), comparator) ;
-        Collections.sort(w_population, comparator) ; //REVISAR SI EL W_POPULATION SE ARREGLA IGUAL QUE EL POPULATION
+        //Collections.sort(w_population, comparator) ; //REVISAR SI EL W_POPULATION SE ARREGLA IGUAL QUE EL POPULATION
         best_inidvidual = population.get(best_index);
         worst_inidividual = population.get(worst_index);
         
@@ -169,7 +194,7 @@ public class DECC_G implements Algorithm
         List<DoubleSolution> subpopulation = new ArrayList<>();
         for(DoubleSolution s: population)
         {
-           subpopulation.add(new DoubleSolutionSubcomponent(this.getObjectives(s), this.getVariables(s), subcomponent_problem));
+           subpopulation.add(new DoubleSolutionSubcomponentSaNSDE(this.getObjectives(s), this.getVariables(s), subcomponent_problem_SaNSDE));
         }
         return subpopulation;
     }
@@ -183,6 +208,15 @@ public class DECC_G implements Algorithm
         }
         return variables;
     }
+    private void initWPopulation(List<DoubleSolution> s, int size, int variables)
+    {
+        s = new ArrayList<>();
+        for(int i = 0; i < size; i++)
+        {
+            DoubleSolutionSubcomponentDE solution = new DoubleSolutionSubcomponentDE(new double[1], new double[variables],subcomponent_problem_DE);
+            s.add(solution);
+        }
+    }
     private double[] getObjectives(DoubleSolution s)
     {
         int size = s.getNumberOfObjectives();
@@ -193,54 +227,109 @@ public class DECC_G implements Algorithm
         }
         return objectives;
     }
+    
+    private void multiply(DoubleSolution original, DoubleSolutionSubcomponentDE weight)
+    {
+        List<Integer> index = subcomponent_problem_DE.getIndex();
+        int i = 0;
+        for(Integer j:index)
+        {
+            double value = original.getVariableValue(j);
+            double newValue = weight.getVariableValue(i) * value;
+            original.setVariableValue(j, newValue);
+            i++;
+        }
+    }
+    private void chooseIndexWPopulation(int size)
+    {
+        List<Integer> index = new ArrayList<>();
+        for(int i = 0; i < size; i++)
+        {
+            int value = randomGenerator.nextInt(0, populationSize);
+            
+            while(index.contains(value))
+            {
+                value = randomGenerator.nextInt(0, populationSize);
+            }
+            index.add(value);
+              
+        }
+        subcomponent_problem_DE.setIndex(index);
+    }
     @Override
     public void run() 
     {
+       if(this.population == null)
         this.population = this.createInitialPopulation();
+       
        this.evaluatePopulation(this.population);
-       int subcomponent = this.n/this.s;
+       double subcomponent = (double)this.n/(double) this.s;
+       
+       subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
+       this.initWPopulation(w_population, populationSize, (int) Math.ceil(subcomponent));
        //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
        {
            List<Integer> index = this.randPerm(this.n);
+           
+           w_population.clear();
            for(int j = 0; j < subcomponent; j++)
            {
-               int l = ((j+1) - 1) * this.s + 1;
-               int u = j * s;
+               int l = j * this.s ;
+               int u = ((j+1) * s) - 1;
+               
+               if(u>n)
+                   u = n - 1;
+               
                List<Integer> sublist = index.subList(l, u + 1);
-               subcomponent_problem = new SubcomponentDoubleProblem(sublist);
+               subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
                
                List<DoubleSolution> subpopulation = this.copy(this.population);
-               SaNSDE sansde = new SaNSDE(subcomponent_problem, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
+               SaNSDE sansde = new SaNSDE(subcomponent_problem_SaNSDE, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
                sansde.setPopulation(subpopulation);
                
                
                sansde.run();
                subpopulation = sansde.getPopulation();
-               w_population = randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
-               this.replaceInPopulation(subpopulation, l, u);
+               randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
+               this.replaceInPopulation(subpopulation, l, u,index);
                this.evaluatePopulation(population);
            }
            this.findIndividuals();
+           this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
            
-           DifferentialEvolution de = new DifferentialEvolution(problem, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
+           DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
            de.setPopulation(w_population);
            
-           
+           subcomponent_problem_DE.setSolution(best_inidvidual);
            de.run();
            DoubleSolution ans = de.getResult();
            if(comparator.compare(ans, best_inidvidual)>1)
-            population.set(best_index, ans);
+           {
+               this.multiply(best_inidvidual, (DoubleSolutionSubcomponentDE) ans);
+               population.set(best_index, best_inidvidual);
+           }
            
+           subcomponent_problem_DE.setSolution(random_inidividual);
+           de.setEvaluations(0);
            de.run();
            ans = de.getResult();
            if(comparator.compare(ans, random_inidividual)>1)
-            population.set(random_index, de.getResult());
+           {
+               this.multiply(random_inidividual, (DoubleSolutionSubcomponentDE) ans);
+               population.set(random_index, random_inidividual);
+           }
            
+           subcomponent_problem_DE.setSolution(worst_inidividual);
+           de.setEvaluations(0);
            de.run();
+           
            ans = de.getResult();
            if(comparator.compare(ans, worst_inidividual)>1)
-            population.set(worst_index, de.getResult());
+           {
+               this.multiply(worst_inidividual, (DoubleSolutionSubcomponentDE) ans);
+               population.set(worst_index, worst_inidividual);
+           }
            
            this.evaluatePopulation(population);
        }
@@ -248,12 +337,13 @@ public class DECC_G implements Algorithm
 
     @Override
     public DoubleSolution getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collections.sort(getPopulation(), comparator) ;
+        return getPopulation().get(0);
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return "DECC-G";
     }
 
     @Override
