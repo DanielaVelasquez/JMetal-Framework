@@ -390,7 +390,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         List<DoubleSolution> pop = new ArrayList<>();
-
         for (int i = 0; i < populationSize; i++) {
           if (comparator.compare(population.get(i), offspringPopulation.get(i)) < 0) {
             pop.add(population.get(i));
@@ -399,7 +398,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           }
         }
 
-        Collections.sort(pop, comparator) ;
+        //Collections.sort(pop, comparator) ;
         return pop;
     }
 

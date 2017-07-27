@@ -151,7 +151,6 @@ public class DECC_G implements Algorithm
             
             DoubleSolution s = w_population.get(i);
             double value = randomGenerator.nextDouble(s.getLowerBound(column), s.getUpperBound(column));
-            System.out.println("i: "+i+" value: "+value);
             s.setVariableValue(column, value);
         }
     } 
@@ -235,7 +234,7 @@ public class DECC_G implements Algorithm
         return objectives;
     }
     
-    private void multiply(DoubleSolution original, DoubleSolutionSubcomponentDE weight)
+    private void multiply(DoubleSolution original, DoubleSolution weight)
     {
         List<Integer> index = subcomponent_problem_DE.getIndex();
         int i = 0;
@@ -245,6 +244,11 @@ public class DECC_G implements Algorithm
             double newValue = weight.getVariableValue(i) * value;
             original.setVariableValue(j, newValue);
             i++;
+        }
+        int objectives = weight.getNumberOfObjectives();
+        for(int j = 0; j < objectives; j++)
+        {
+            original.setObjective(j, weight.getObjective(j));
         }
     }
     private void chooseIndexWPopulation(int size)
@@ -275,7 +279,7 @@ public class DECC_G implements Algorithm
        
        
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
-       w_population = this.initWPopulation(populationSize, (int) Math.ceil(subcomponent));
+       //w_population = this.initWPopulation(populationSize, (int) Math.ceil(subcomponent));
        this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
        //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
@@ -300,23 +304,23 @@ public class DECC_G implements Algorithm
                
                
                sansde.run();
-               //subpopulation = sansde.getPopulation();
-               randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
-               //this.replaceInPopulation(subpopulation, l, u,index);
+               subpopulation = sansde.getPopulation();
+               //randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
+               this.replaceInPopulation(subpopulation, l, u,index);
                this.evaluatePopulation(population);
            }
            this.findIndividuals();
            
            
            DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
-           de.setPopulation(w_population);
+           //de.setPopulation(w_population);
            
            subcomponent_problem_DE.setSolution(best_inidvidual);
            de.run();
            DoubleSolution ans = de.getResult();
            if(comparator.compare(ans, best_inidvidual)<1)
            {
-               this.multiply(best_inidvidual, (DoubleSolutionSubcomponentDE) ans);
+               this.multiply(best_inidvidual, ans);
                population.set(best_index, best_inidvidual);
            }
            
@@ -324,9 +328,9 @@ public class DECC_G implements Algorithm
            de.setEvaluations(0);
            de.run();
            ans = de.getResult();
-           if(comparator.compare(ans, random_inidividual)>1)
+           if(comparator.compare(ans, random_inidividual)<1)
            {
-               this.multiply(random_inidividual, (DoubleSolutionSubcomponentDE) ans);
+               this.multiply(random_inidividual, ans);
                population.set(random_index, random_inidividual);
            }
            
@@ -335,9 +339,9 @@ public class DECC_G implements Algorithm
            de.run();
            
            ans = de.getResult();
-           if(comparator.compare(ans, worst_inidividual)>1)
+           if(comparator.compare(ans, worst_inidividual)<1)
            {
-               this.multiply(worst_inidividual, (DoubleSolutionSubcomponentDE) ans);
+               this.multiply(worst_inidividual,  ans);
                population.set(worst_index, worst_inidividual);
            }
            

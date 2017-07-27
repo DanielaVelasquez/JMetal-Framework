@@ -36,7 +36,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.cross_validation.Iris";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -66,6 +66,7 @@ public class IrisRunner
         long computingTime = algorithmRunner.getComputingTime() ;
 
         System.out.println("Total execution time: " + computingTime + "ms");
+        System.out.println("Objective "+solution.getObjective(0));
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);

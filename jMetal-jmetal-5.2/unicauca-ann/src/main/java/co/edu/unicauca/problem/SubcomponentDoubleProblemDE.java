@@ -4,6 +4,7 @@ import co.edu.unicauca.solution.DoubleSolutionSubcomponentDE;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 
 
 public class SubcomponentDoubleProblemDE implements DoubleProblem
@@ -83,11 +84,17 @@ public class SubcomponentDoubleProblemDE implements DoubleProblem
             j++;
         }
         this.original_problem.evaluate(original_solution);
-        this.solution.setObjective(0, original_solution.getObjective(0));
+        
+        int objectives = original_solution.getNumberOfObjectives();
+        for(int k = 0; k < objectives; k++)
+        {
+            solution.setObjective(k, original_solution.getObjective(k));
+        }
+        
     }
 
     @Override
     public DoubleSolution createSolution() {
-        return original_problem.createSolution();
+        return new DefaultDoubleSolution(this);
     }
 }
