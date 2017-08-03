@@ -1,20 +1,21 @@
 package co.edu.unicauca.problem;
 
+import co.edu.unicauca.solution.DoubleSolutionSubcomponentSaNSDE;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.solution.Solution;
 
 
-public class SubcomponentDoubleProblem implements DoubleProblem
+public class SubcomponentDoubleProblemSaNSDE implements DoubleProblem
 {
     private List<Integer> index;
     private DoubleProblem original_problem;
 
     
-    public SubcomponentDoubleProblem(List<Integer> index)
+    public SubcomponentDoubleProblemSaNSDE(List<Integer> index, DoubleProblem original_problem)
     {
         this.index = index;
+        this.original_problem = original_problem;
     }
     
     public int getIndex(int i)
@@ -54,13 +55,12 @@ public class SubcomponentDoubleProblem implements DoubleProblem
 
     @Override
     public void evaluate(DoubleSolution solution) {
-        this.original_problem.evaluate(solution);
+        DoubleSolutionSubcomponentSaNSDE s = (DoubleSolutionSubcomponentSaNSDE)solution;
+        this.original_problem.evaluate(s.getSolution());
     }
 
     @Override
     public DoubleSolution createSolution() {
         return original_problem.createSolution();
     }
-
-    
 }

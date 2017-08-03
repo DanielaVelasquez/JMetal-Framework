@@ -311,6 +311,8 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 
     @Override
     protected List<DoubleSolution> createInitialPopulation() {
+        if(this.getPopulation()!=null)
+            return this.getPopulation();
         List<DoubleSolution> population = new ArrayList<>(populationSize);
         for (int i = 0; i < populationSize; i++) {
           DoubleSolution newIndividual = getProblem().createSolution();
@@ -365,7 +367,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           {
             crossoverOperator2 = updateValuesOf(crossoverOperator2, f, cr);
             crossoverOperator2.setCurrentSolution(matingPopulation.get(i));
-            children = crossoverOperator.execute(parents);
+            children = crossoverOperator2.execute(parents);
             ns2++;
             nf1++;
           }
@@ -388,7 +390,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         List<DoubleSolution> pop = new ArrayList<>();
-
         for (int i = 0; i < populationSize; i++) {
           if (comparator.compare(population.get(i), offspringPopulation.get(i)) < 0) {
             pop.add(population.get(i));
@@ -397,7 +398,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           }
         }
 
-        Collections.sort(pop, comparator) ;
+        //Collections.sort(pop, comparator) ;
         return pop;
     }
 
