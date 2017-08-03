@@ -9,16 +9,18 @@ import no.uib.cipr.matrix.DenseVector;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
-public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
-{
-     /**-----------------------------------------------------------------------------------------
+public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
+
+    /**
+     * -----------------------------------------------------------------------------------------
      * Enums
-     *-----------------------------------------------------------------------------------------*/
+     * -----------------------------------------------------------------------------------------
+     */
     /**
      * Evaluator's type
      */
-    public enum EvaluatorType
-    {
+    public enum EvaluatorType {
+
         /**
          * Trainig and testing
          */
@@ -28,11 +30,14 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
          */
         CV
     }
-    /**-----------------------------------------------------------------------------------------
-     * Atributes
-     *-----------------------------------------------------------------------------------------*/
     /**
-     * Collection of data for training ELM, it's use when looking for best input weigths
+     * -----------------------------------------------------------------------------------------
+     * Atributes
+     * -----------------------------------------------------------------------------------------
+     */
+    /**
+     * Collection of data for training ELM, it's use when looking for best input
+     * weigths
      */
     protected DataSet training_data_set;
     /**
@@ -40,8 +45,8 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
      */
     protected DataSet testing_data_set;
     /**
-     * Extreme learning machine that will be execute to 
-     * calculate the input weights accuracy for an specific data set
+     * Extreme learning machine that will be execute to calculate the input
+     * weights accuracy for an specific data set
      */
     protected ELM elm;
     /**
@@ -60,19 +65,21 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
      * Bias values from last given solution
      */
     protected DenseVector bias;
-    
-    /**-----------------------------------------------------------------------------------------
+
+    /**
+     * -----------------------------------------------------------------------------------------
      * Methods
-     *-----------------------------------------------------------------------------------------*/
+     * -----------------------------------------------------------------------------------------
+     */
     /**
      * Creates a new ELM evaluator
+     *
      * @param type Evaluator's type
      * @param name identifies the problem it's solving
      * @param training_data_set collection of data for training ELM
      * @param testing_data_set collection of data for testing ELM
      */
-    public AbstractELMEvaluator(EvaluatorType type,String name, DataSet training_data_set, DataSet testing_data_set)
-    {
+    public AbstractELMEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set) {
         this.training_data_set = training_data_set;
         this.testing_data_set = testing_data_set;
         this.type = type;
@@ -80,35 +87,35 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
     }
 
     @Override
-    public void evaluate(DoubleSolution solution) 
-    {
+    public void evaluate(DoubleSolution solution) {
         getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
-        double accuracy = this.train(); 
-        solution.setObjective(0,1 - accuracy);
+        double accuracy = this.train();
+        solution.setObjective(0, (1 - accuracy));
+        //  System.out.println("" + (1 - accuracy));
     }
+
     /**
      * Obtains input weigths and bias from a solution
-     * @param solution Solution whic contains weight between hidden layer and input layer and finally bias for i-th hidden neuron
-     * @return 
+     *
+     * @param solution Solution whic contains weight between hidden layer and
+     * input layer and finally bias for i-th hidden neuron
+     * @return
      */
-    protected void getInputWeightsBiasFrom(DoubleSolution solution)
-    {
+    protected void getInputWeightsBiasFrom(DoubleSolution solution) {
         int numberOfVariables = getNumberOfVariables();
         int hidden_neurons = elm.getHiddenNeurons();
         int input_neurons = elm.getInputNeurons();
         int row = 0;
         int col = 0;
-        input_weights = new DenseMatrix(hidden_neurons,input_neurons);
+        input_weights = new DenseMatrix(hidden_neurons, input_neurons);
         bias = new DenseVector(hidden_neurons);
-        int i = 0; 
-        while(i < numberOfVariables)
-        {
+        int i = 0;
+        while (i < numberOfVariables) {
             input_weights.set(row, col, solution.getVariableValue(i));
             col++;
-            if(col>=input_neurons)
-            {
+            if (col >= input_neurons) {
                 i++;
                 bias.set(row, solution.getVariableValue(i));
                 col = 0;
@@ -117,22 +124,20 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
             i++;
         }
     }
-    public void getInputWeightsBiasFrom(double[] solution)
-    {
+
+    public void getInputWeightsBiasFrom(double[] solution) {
         int numberOfVariables = solution.length;
         int hidden_neurons = elm.getHiddenNeurons();
         int input_neurons = elm.getInputNeurons();
         int row = 0;
         int col = 0;
-        input_weights = new DenseMatrix(hidden_neurons,input_neurons);
+        input_weights = new DenseMatrix(hidden_neurons, input_neurons);
         bias = new DenseVector(hidden_neurons);
-        int i = 0; 
-        while(i < numberOfVariables)
-        {
+        int i = 0;
+        while (i < numberOfVariables) {
             input_weights.set(row, col, solution[i]);
             col++;
-            if(col>=input_neurons)
-            {
+            if (col >= input_neurons) {
                 i++;
                 bias.set(row, solution[i]);
                 col = 0;
@@ -141,11 +146,11 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
             i++;
         }
     }
+
     /**
      * Load initial configuration for an ELMEvaluator
      */
-    protected void loadInitalConfiguration()
-    {
+    protected void loadInitalConfiguration() {
         int numberOfVariables = elm.getHiddenNeurons() * elm.getInputNeurons() + elm.getHiddenNeurons();
         setNumberOfVariables(numberOfVariables);
         setNumberOfObjectives(1);
@@ -165,18 +170,27 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem
     public ELM getElm() {
         return elm;
     }
-    
+
+    public EvaluatorType getType() {
+        return type;
+    }
+
+    public String getProblemName() {
+        return this.name;
+    }
+
     /**
-     * Trains an ELM using traing data set(s), with some random
-     * input weight
+     * Trains an ELM using traing data set(s), with some random input weight
+     *
      * @return accuracy obtained from training
      */
     public abstract double train();
+
     /**
      * Test an ELM using testing data set(s), with best input weights found
-     * @param solution 
+     *
+     * @param solution
      */
     public abstract double test(DoubleSolution solution);
-    
-    
+
 }

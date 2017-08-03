@@ -17,16 +17,18 @@ import org.uma.jmetal.solution.DoubleSolution;
 /**
  * Elm's Evaluator using cross validation files
  */
-public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
-{
-    /**-----------------------------------------------------------------------------------------
+public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
+
+    /**
+     * -----------------------------------------------------------------------------------------
      * Atributes
-     *-----------------------------------------------------------------------------------------*/
+     * -----------------------------------------------------------------------------------------
+     */
     /**
      * Number of folders
      */
     private int number_folders;
-    
+
     /**
      * Data sets for training ELM
      */
@@ -35,88 +37,81 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
      * Data sets for testing ELM
      */
     private List<DataSet> testing_folders;
-    
-    /**-----------------------------------------------------------------------------------------
+
+    /**
+     * -----------------------------------------------------------------------------------------
      * Methods
-     *-----------------------------------------------------------------------------------------*/
+     * -----------------------------------------------------------------------------------------
+     */
     /**
      * Creates a cross validation evaluator
+     *
      * @param type
      * @param name
      * @param training_data_set
      * @param testing_data_set
-     * @param number_folders 
+     * @param number_folders
      */
     public CrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
+
         super(type, name, training_data_set, testing_data_set);
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
         this.number_folders = number_folders;
         makeFolders();
-        
+
         super.loadInitalConfiguration();
     }
-    
-    private void makeFolders()
-    {
+
+    private void makeFolders() {
         training_folders = new ArrayList<>();
         testing_folders = new ArrayList<>();
         int trainig_size = super.training_data_set.getX().numColumns();
-        
+
         int number_variables = training_data_set.getX().numRows();
         int number_data = training_data_set.getX().numColumns();
         int number_clases = training_data_set.getNumber_classes();
         DenseMatrix x = training_data_set.getX();
         DenseVector y = training_data_set.getY();
         int aditionals = number_data % number_folders;
-        
-        for (int i = 0; i < number_folders; i++)
-        {
-            if(i < aditionals)
-            {
-                training_folders.add(new DataSet(trainig_size - number_folders + 1, number_variables,number_clases));
-                testing_folders.add(new DataSet(number_folders + 1, number_variables,number_clases));
-            }
-            else
-            {
-                training_folders.add(new DataSet(trainig_size - number_folders, number_variables,number_clases));
-                testing_folders.add(new DataSet(number_folders, number_variables,number_clases));
+
+        for (int i = 0; i < number_folders; i++) {
+            if (i < aditionals) {
+                training_folders.add(new DataSet(trainig_size - number_folders + 1, number_variables, number_clases));
+                testing_folders.add(new DataSet(number_folders + 1, number_variables, number_clases));
+            } else {
+                training_folders.add(new DataSet(trainig_size - number_folders, number_variables, number_clases));
+                testing_folders.add(new DataSet(number_folders, number_variables, number_clases));
             }
         }
-        
-        for (int i = 0; i < trainig_size; i++)
-        {
+
+        for (int i = 0; i < trainig_size; i++) {
             Vector data = Matrices.getColumn(x, i);
             double value = y.get(i);
             int result = i % number_folders;
-            for (int j = 0; j < number_folders; j++)
-            {
-                
-                if(result != j)
-                {
+            for (int j = 0; j < number_folders; j++) {
+
+                if (result != j) {
                     DataSet training = training_folders.get(j);
                     training.addDataColumn(data);
                     training.addValueColumn(value);
                     training.nextIndex();
-                }
-                else
-                {
+                } else {
                     DataSet testing = testing_folders.get(j);
                     testing.addDataColumn(data);
                     testing.addValueColumn(value);
                     testing.nextIndex();
                 }
-                
+
             }
         }
     }
+
     @Override
-    public double train() 
-    {
-        double accuracy = 0;
-        for (int i = 0; i < number_folders; i++)
-        {
+    public double train() {
+        double accuracy = 0.0;
+        for (int i = 0; i < number_folders; i++) {
             DataSet training = training_folders.get(i);
             DataSet testing = testing_folders.get(i);
             elm.setX(training.getX());
@@ -129,10 +124,9 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator
         }
         return (double) (accuracy / (double) number_folders);
     }
-    
+
     @Override
-    public double test(DoubleSolution solution)
-    {
+    public double test(DoubleSolution solution) {
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);

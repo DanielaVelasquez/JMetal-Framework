@@ -3,35 +3,32 @@ package co.edu.unicauca.moore_penrose.impl;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.Matrices;
-import no.uib.cipr.matrix.Matrix;
 
+public class RidgeRegressionTheory extends AbstractMoorePenroseMethod {
 
-public class RidgeRegressionTheory extends AbstractMoorePenroseMethod
-{
-    
-    /**-----------------------------------------------------------------------------------------
+    /**
+     * -----------------------------------------------------------------------------------------
      * Methods
-     *-----------------------------------------------------------------------------------------*/
-    public RidgeRegressionTheory(double[] values)
-    {
+     *-----------------------------------------------------------------------------------------
+     */
+    public RidgeRegressionTheory(double[] values) {
         super(values);
     }
-    
-    public DenseMatrix calculate(DenseMatrix A) 
-    {
+
+    @Override
+    public DenseMatrix calculate(DenseMatrix A) {
         /*	Moore-Penrose generalized inverse maxtrix
-        * 	Theory:Ridge regression
-        *	MP(A) = inv((H'*H+lumda*I))*H'
-        */
-        
-        if(values==null || values.length == 0)
-            throw new UnsupportedOperationException("Values must contain lumda value in its first position."); 
+         * 	Theory:Ridge regression
+         *	MP(A) = inv((H'*H+lumda*I))*H'
+         */
+
+        if (values == null || values.length == 0) {
+            throw new UnsupportedOperationException("Values must contain lumda value in its first position.");
+        }
         double lumda = values[0];
         int n = A.numColumns();
         int m = A.numRows();
 
-        
-        
         DenseMatrix At = new DenseMatrix(n, m);
         A.transpose(At);
         DenseMatrix AtA = new DenseMatrix(n, n);
@@ -46,5 +43,5 @@ public class RidgeRegressionTheory extends AbstractMoorePenroseMethod
         AtAinv.mult(At, Ainv);
         return Ainv;
     }
-    
+
 }

@@ -69,5 +69,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.uma.jmetal</groupId>
+            <artifactId>unicauca-ann</artifactId>
+            <version>5.2</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>
