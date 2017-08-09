@@ -1,6 +1,6 @@
-package co.edu.unicauca.problem;
+package org.uma.jmetal.problem.impl;
 
-import co.edu.unicauca.solution.DoubleSolutionSubcomponentSaNSDE;
+import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentSaNSDE;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;

@@ -58,11 +58,6 @@
         </dependency>
         <dependency>
             <groupId>org.uma.jmetal</groupId>
-            <artifactId>unicauca-ann</artifactId>
-            <version>5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.uma.jmetal</groupId>
             <artifactId>jmetal-problem</artifactId>
         </dependency>
         <dependency>

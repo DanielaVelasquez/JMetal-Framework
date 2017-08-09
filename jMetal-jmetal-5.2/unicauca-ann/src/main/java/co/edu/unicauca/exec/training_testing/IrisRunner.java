@@ -3,7 +3,6 @@ package co.edu.unicauca.exec.training_testing;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -14,6 +13,8 @@ import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+
+
 
 
 public class IrisRunner 
@@ -36,7 +37,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.cross_validation.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Iris";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -56,7 +57,7 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
 
-        algorithm = new DECC_G(3,120,100,50,problem,10,evaluator, comparator);
+        algorithm = new DECC_G(20,30,100,100,problem,10,evaluator, comparator);
         
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -66,7 +67,7 @@ public class IrisRunner
         long computingTime = algorithmRunner.getComputingTime() ;
 
         System.out.println("Total execution time: " + computingTime + "ms");
-        System.out.println("Objective "+solution.getObjective(0));
+        System.out.println("Objective "+(1-solution.getObjective(0)));
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);

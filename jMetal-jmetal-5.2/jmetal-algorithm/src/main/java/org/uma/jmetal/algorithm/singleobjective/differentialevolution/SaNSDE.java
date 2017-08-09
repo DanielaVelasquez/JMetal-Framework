@@ -1,6 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-import co.edu.unicauca.util.math.RandomDistribution;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +12,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 
 public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>

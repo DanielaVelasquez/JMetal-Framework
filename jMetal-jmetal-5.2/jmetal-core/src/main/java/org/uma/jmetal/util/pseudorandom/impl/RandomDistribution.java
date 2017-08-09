@@ -1,4 +1,4 @@
-package co.edu.unicauca.util.math;
+package org.uma.jmetal.util.pseudorandom.impl;
 
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 

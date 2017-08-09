@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.edu.unicauca.solution;
+package org.uma.jmetal.solution.impl;
 
-import co.edu.unicauca.problem.SubcomponentDoubleProblemDE;
+
+import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemDE;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 

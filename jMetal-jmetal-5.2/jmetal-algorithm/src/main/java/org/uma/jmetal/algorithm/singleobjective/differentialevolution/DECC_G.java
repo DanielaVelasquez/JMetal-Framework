@@ -1,9 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-import co.edu.unicauca.problem.SubcomponentDoubleProblemDE;
-import co.edu.unicauca.problem.SubcomponentDoubleProblemSaNSDE;
-import co.edu.unicauca.solution.DoubleSolutionSubcomponentDE;
-import co.edu.unicauca.solution.DoubleSolutionSubcomponentSaNSDE;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,7 +9,11 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemDE;
+import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemSaNSDE;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentDE;
+import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentSaNSDE;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
