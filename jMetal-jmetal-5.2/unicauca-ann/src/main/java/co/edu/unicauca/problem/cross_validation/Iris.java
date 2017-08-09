@@ -19,7 +19,9 @@ public class Iris extends CrossValidationEvaluator{
     
     public Iris() throws IOException 
     {
-        super(AbstractELMEvaluator.EvaluatorType.CV,"Iris",new DataSet("src/resources-elm", "iris.train", 4),new DataSet("src/resources-elm", "iris.test", 4),10,20,new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}));
+
+        super(AbstractELMEvaluator.EvaluatorType.CV,"Iris",new DataSet("src/resources-elm", "iris.train", 4),new DataSet("src/resources-elm", "iris.test", 4),10,20,new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000001}));
+
     }
     
 }

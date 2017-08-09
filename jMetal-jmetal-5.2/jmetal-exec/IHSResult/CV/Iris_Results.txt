@@ -1,0 +1,41 @@
+
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:40:33 COT 2017
+IHS
+Improve Harmony search  HMCR: 0.9 PARMin: 0.01 PARMax: 0.5 BWMin: 0.01 BWMax: 0.2
+ Evaluations:  600 maxExecution 5
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.010000000000000009   Test[0]=0.92   Time : 2685
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 1019
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 710
+     Train [ 3] = 0.010000000000000009   Test[3]=0.9   Time : 740
+     Train [ 4] = 0.010000000000000009   Test[4]=0.92   Time : 1142
+ Train average: 0.010000000000000009
+ Train Standard deviation: 0.0
+ Test average: 0.9380000000000001
+ Test Standard deviation: 0.02039607805437111
+Average running time: 1260.128ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:41:02 COT 2017
+IHS
+Improve Harmony search  HMCR: 0.9 PARMin: 0.01 PARMax: 0.5 BWMin: 0.01 BWMax: 0.2
+ Evaluations:  600 maxExecution 5
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.010000000000000009   Test[0]=0.92   Time : 5344
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 835
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 1284
+     Train [ 3] = 0.010000000000000009   Test[3]=0.9   Time : 1352
+     Train [ 4] = 0.010000000000000009   Test[4]=0.92   Time : 1642
+ Train average: 0.010000000000000009
+ Train Standard deviation: 0.0
+ Test average: 0.9380000000000001
+ Test Standard deviation: 0.02039607805437111
+Average running time: 2092.328ms

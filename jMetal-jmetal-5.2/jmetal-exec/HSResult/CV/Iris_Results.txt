@@ -1,0 +1,170 @@
+
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:20:32 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 4
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 2346
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 589
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 628
+     Train [ 3] = 0.010000000000000009   Test[3]=0.96   Time : 607
+ Train average: 0.012499999999999983
+ Train Standard deviation: 0.004330127018922149
+ Test average: 0.9724999999999999
+ Test Standard deviation: 0.014142135623730963
+Average running time: 1043.46ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:21:08 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 10
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 2489
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 911
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 663
+     Train [ 3] = 0.010000000000000009   Test[3]=0.96   Time : 614
+     Train [ 4] = 0.010000000000000009   Test[4]=0.92   Time : 584
+     Train [ 5] = 0.010000000000000009   Test[5]=0.88   Time : 542
+     Train [ 6] = 0.010000000000000009   Test[6]=0.98   Time : 679
+     Train [ 7] = 0.010000000000000009   Test[7]=0.98   Time : 531
+     Train [ 8] = 0.010000000000000009   Test[8]=0.94   Time : 542
+     Train [ 9] = 0.010000000000000009   Test[9]=0.92   Time : 593
+ Train average: 0.011
+ Train Standard deviation: 0.0029999999999999697
+ Test average: 0.9570000000000001
+ Test Standard deviation: 0.031048349392520033
+Average running time: 815.746ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:21:42 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 10
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 2523
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 603
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 614
+     Train [ 3] = 0.010000000000000009   Test[3]=0.96   Time : 552
+     Train [ 4] = 0.010000000000000009   Test[4]=0.92   Time : 525
+     Train [ 5] = 0.010000000000000009   Test[5]=0.88   Time : 595
+     Train [ 6] = 0.010000000000000009   Test[6]=0.98   Time : 555
+     Train [ 7] = 0.010000000000000009   Test[7]=0.98   Time : 563
+     Train [ 8] = 0.010000000000000009   Test[8]=0.94   Time : 462
+     Train [ 9] = 0.010000000000000009   Test[9]=0.92   Time : 521
+ Train average: 0.011
+ Train Standard deviation: 0.0029999999999999697
+ Test average: 0.9570000000000001
+ Test Standard deviation: 0.031048349392520033
+Average running time: 752.246ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:23:09 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 10
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.010000000000000009   Test[0]=0.96   Time : 2324
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 642
+     Train [ 2] = 0.010000000000000009   Test[2]=0.96   Time : 603
+     Train [ 3] = 0.010000000000000009   Test[3]=0.96   Time : 569
+     Train [ 4] = 0.010000000000000009   Test[4]=0.96   Time : 559
+     Train [ 5] = 0.010000000000000009   Test[5]=0.96   Time : 548
+     Train [ 6] = 0.010000000000000009   Test[6]=0.96   Time : 546
+     Train [ 7] = 0.010000000000000009   Test[7]=0.96   Time : 566
+     Train [ 8] = 0.010000000000000009   Test[8]=0.96   Time : 506
+     Train [ 9] = 0.010000000000000009   Test[9]=0.96   Time : 546
+ Train average: 0.010000000000000009
+ Train Standard deviation: 0.0
+ Test average: 0.97
+ Test Standard deviation: 2.220446049250313E-16
+Average running time: 741.86ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:23:51 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 10
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.010000000000000009   Test[0]=0.94   Time : 2659
+     Train [ 1] = 0.010000000000000009   Test[1]=0.94   Time : 810
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 597
+     Train [ 3] = 0.010000000000000009   Test[3]=0.94   Time : 565
+     Train [ 4] = 0.010000000000000009   Test[4]=0.94   Time : 547
+     Train [ 5] = 0.010000000000000009   Test[5]=0.94   Time : 531
+     Train [ 6] = 0.010000000000000009   Test[6]=0.94   Time : 670
+     Train [ 7] = 0.010000000000000009   Test[7]=0.94   Time : 560
+     Train [ 8] = 0.010000000000000009   Test[8]=0.94   Time : 580
+     Train [ 9] = 0.010000000000000009   Test[9]=0.94   Time : 544
+ Train average: 0.010000000000000009
+ Train Standard deviation: 0.0
+ Test average: 0.9499999999999998
+ Test Standard deviation: 2.220446049250313E-16
+Average running time: 807.24ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 07:24:59 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 10
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.010000000000000009   Test[0]=0.88   Time : 2944
+     Train [ 1] = 0.010000000000000009   Test[1]=0.88   Time : 817
+     Train [ 2] = 0.010000000000000009   Test[2]=0.88   Time : 707
+     Train [ 3] = 0.010000000000000009   Test[3]=0.88   Time : 773
+     Train [ 4] = 0.010000000000000009   Test[4]=0.88   Time : 653
+     Train [ 5] = 0.010000000000000009   Test[5]=0.88   Time : 691
+     Train [ 6] = 0.010000000000000009   Test[6]=0.88   Time : 705
+     Train [ 7] = 0.010000000000000009   Test[7]=0.88   Time : 650
+     Train [ 8] = 0.010000000000000009   Test[8]=0.88   Time : 639
+     Train [ 9] = 0.010000000000000009   Test[9]=0.88   Time : 632
+ Train average: 0.010000000000000009
+ Train Standard deviation: 0.0
+ Test average: 0.89
+ Test Standard deviation: 1.1102230246251565E-16
+Average running time: 921.9799999999999ms
+
+----------------------------------------------------------------------------------------------------
+Fri Jul 21 08:24:54 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 10
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 3775
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 807
+     Train [ 2] = 0.010000000000000009   Test[2]=0.94   Time : 770
+     Train [ 3] = 0.010000000000000009   Test[3]=0.96   Time : 847
+     Train [ 4] = 0.010000000000000009   Test[4]=0.92   Time : 747
+     Train [ 5] = 0.010000000000000009   Test[5]=0.88   Time : 673
+     Train [ 6] = 0.010000000000000009   Test[6]=0.98   Time : 886
+     Train [ 7] = 0.010000000000000009   Test[7]=0.98   Time : 727
+     Train [ 8] = 0.010000000000000009   Test[8]=0.94   Time : 638
+     Train [ 9] = 0.010000000000000009   Test[9]=0.92   Time : 834
+ Train average: 0.011
+ Train Standard deviation: 0.0029999999999999697
+ Test average: 0.9570000000000001
+ Test Standard deviation: 0.031048349392520033
+Average running time: 1071.346ms
