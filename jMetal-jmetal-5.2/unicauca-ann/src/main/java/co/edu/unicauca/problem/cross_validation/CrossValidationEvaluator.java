@@ -51,9 +51,12 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
      * @param training_data_set
      * @param testing_data_set
      * @param number_folders
+     * @param hidden_neurons
+     * @param activation_function
+     * @param inverse
      */
-    public CrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
-
+        public CrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
+        /*EL contructor deberia recibir Una Red ELM abstracta y no los componentes*/
         super(type, name, training_data_set, testing_data_set);
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
         int input_neuron = training_data_set.getX().numRows();
@@ -75,16 +78,19 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
         DenseMatrix x = training_data_set.getX();
         DenseVector y = training_data_set.getY();
         int aditionals = number_data % number_folders;
+        int sizeFolder = number_data / number_folders;
 
+        /*Revizar esto parece error en cuanto a didtribucion o no lo entiendo bien*/
         for (int i = 0; i < number_folders; i++) {
-            if (i < aditionals) {
-                training_folders.add(new DataSet(trainig_size - number_folders + 1, number_variables, number_clases));
-                testing_folders.add(new DataSet(number_folders + 1, number_variables, number_clases));
+            if (1 == aditionals) {
+                training_folders.add(new DataSet((sizeFolder * (number_folders - 1)) + 1, number_variables, number_clases));
+                testing_folders.add(new DataSet(sizeFolder, number_variables, number_clases));
             } else {
-                training_folders.add(new DataSet(trainig_size - number_folders, number_variables, number_clases));
-                testing_folders.add(new DataSet(number_folders, number_variables, number_clases));
+                training_folders.add(new DataSet((sizeFolder * (number_folders - 1)), number_variables, number_clases));
+                testing_folders.add(new DataSet(sizeFolder, number_variables, number_clases));
             }
         }
+        System.out.println("Stop");
 
         for (int i = 0; i < trainig_size; i++) {
             Vector data = Matrices.getColumn(x, i);
@@ -94,14 +100,30 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
 
                 if (result != j) {
                     DataSet training = training_folders.get(j);
-                    training.addDataColumn(data);
-                    training.addValueColumn(value);
-                    training.nextIndex();
+                    if (training.getIndex() < training.getX().numColumns()) {
+                        training.addDataColumn(data);
+                        training.addValueColumn(value);
+                        training.nextIndex();
+                    } else {
+                        DataSet testing = testing_folders.get(j);
+                        testing.addDataColumn(data);
+                        testing.addValueColumn(value);
+                        testing.nextIndex();
+
+                    }
                 } else {
+
                     DataSet testing = testing_folders.get(j);
-                    testing.addDataColumn(data);
-                    testing.addValueColumn(value);
-                    testing.nextIndex();
+                    if (testing.getIndex() < testing.getX().numColumns()) {
+                        testing.addDataColumn(data);
+                        testing.addValueColumn(value);
+                        testing.nextIndex();
+                    } else {
+                        DataSet training = training_folders.get(j);
+                        training.addDataColumn(data);
+                        training.addValueColumn(value);
+                        training.nextIndex();
+                    }
                 }
 
             }
@@ -126,7 +148,7 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
     }
 
     @Override
-    public double test(DoubleSolution solution) {
+    public double test(DoubleSolution solution ) {
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);

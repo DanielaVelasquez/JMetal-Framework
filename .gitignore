@@ -1,2 +1,6 @@
 /jMetal-jmetal-5.2/unicauca-elm/nbproject/
 /jMetal-jmetal-5.2/unicauca-ann/nbproject/
+jMetal-jmetal-5.2/unicauca-ann/src/main/java/co/edu/unicauca/problem/cross_validation/Iris.java
+jMetal-jmetal-5.2/unicauca-ann/src/main/java/co/edu/unicauca/exec/training_testing/IrisRunner.java
+jMetal-jmetal-5.2/unicauca-ann/src/main/java/co/edu/unicauca/exec/training_testing/IrisRunner.java
+jMetal-jmetal-5.2/unicauca-ann/src/main/java/co/edu/unicauca/exec/training_testing/IrisRunner.java
