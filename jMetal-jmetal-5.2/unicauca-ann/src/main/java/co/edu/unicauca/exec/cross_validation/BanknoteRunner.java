@@ -1,5 +1,6 @@
 package co.edu.unicauca.exec.cross_validation;
 
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
@@ -55,7 +56,7 @@ public class BanknoteRunner
 
         selection = new DifferentialEvolutionSelection() ;
 
-        algorithm = new DECC_G(20,30,100,100,problem,10,evaluator, comparator);
+        algorithm = new DECC_G(2,7,50,50,problem,10,evaluator, comparator);
         
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -66,6 +67,9 @@ public class BanknoteRunner
 
         System.out.println("Total execution time: " + computingTime + "ms");
         System.out.println("Objective "+(1-solution.getObjective(0)));
+        
+        AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
+        System.out.println("Testing: "+p.test(solution));
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);

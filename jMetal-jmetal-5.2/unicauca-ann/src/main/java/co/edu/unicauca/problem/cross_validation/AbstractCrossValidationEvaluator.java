@@ -67,11 +67,12 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         super.loadInitalConfiguration();
     }
 
-    private void makeFolders() {
+    private void makeFolders()
+    {
         training_folders = new ArrayList<>();
         testing_folders = new ArrayList<>();
         int trainig_size = super.training_data_set.getX().numColumns();
-
+        
         int number_variables = training_data_set.getX().numRows();
         int number_data = training_data_set.getX().numColumns();
         int number_clases = training_data_set.getNumber_classes();
@@ -79,53 +80,44 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         DenseVector y = training_data_set.getY();
         int aditionals = number_data % number_folders;
         int sizeFolder = number_data / number_folders;
-
-        /*Revizar esto parece error en cuanto a didtribucion o no lo entiendo bien*/
-        for (int i = 0; i < number_folders; i++) {
-            if (1 == aditionals) {
-                training_folders.add(new DataSet((sizeFolder * (number_folders - 1)) + 1, number_variables, number_clases));
-                testing_folders.add(new DataSet(sizeFolder, number_variables, number_clases));
-            } else {
-                training_folders.add(new DataSet((sizeFolder * (number_folders - 1)), number_variables, number_clases));
-                testing_folders.add(new DataSet(sizeFolder, number_variables, number_clases));
+        
+        for (int i = 0; i < number_folders; i++)
+        {
+            if(i < aditionals)
+            {
+                training_folders.add(new DataSet((sizeFolder * (number_folders - 1)) + (aditionals - 1), number_variables,number_clases));
+                testing_folders.add(new DataSet(sizeFolder +1, number_variables,number_clases));
+            }
+            else
+            {
+                training_folders.add(new DataSet((sizeFolder * (number_folders - 1)) + aditionals, number_variables,number_clases));
+                testing_folders.add(new DataSet(sizeFolder , number_variables,number_clases));
             }
         }
-        System.out.println("Stop");
-
-        for (int i = 0; i < trainig_size; i++) {
+        
+        for (int i = 0; i < trainig_size; i++)
+        {
             Vector data = Matrices.getColumn(x, i);
             double value = y.get(i);
             int result = i % number_folders;
-            for (int j = 0; j < number_folders; j++) {
-
-                if (result != j) {
+            for (int j = 0; j < number_folders; j++)
+            {
+                
+                if(result != j)
+                {
                     DataSet training = training_folders.get(j);
-                    if (training.getIndex() < training.getX().numColumns()) {
-                        training.addDataColumn(data);
-                        training.addValueColumn(value);
-                        training.nextIndex();
-                    } else {
-                        DataSet testing = testing_folders.get(j);
-                        testing.addDataColumn(data);
-                        testing.addValueColumn(value);
-                        testing.nextIndex();
-
-                    }
-                } else {
-
-                    DataSet testing = testing_folders.get(j);
-                    if (testing.getIndex() < testing.getX().numColumns()) {
-                        testing.addDataColumn(data);
-                        testing.addValueColumn(value);
-                        testing.nextIndex();
-                    } else {
-                        DataSet training = training_folders.get(j);
-                        training.addDataColumn(data);
-                        training.addValueColumn(value);
-                        training.nextIndex();
-                    }
+                    training.addDataColumn(data);
+                    training.addValueColumn(value);
+                    training.nextIndex();
                 }
-
+                else
+                {
+                    DataSet testing = testing_folders.get(j);
+                    testing.addDataColumn(data);
+                    testing.addValueColumn(value);
+                    testing.nextIndex();
+                }
+                
             }
         }
     }
