@@ -6,9 +6,9 @@ import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.IOException;
 
-public class haberman extends CrossValidationEvaluator {
+public class Haberman extends CrossValidationEvaluator {
 
-    public haberman() throws IOException {
+    public Haberman() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "haberman", new DataSet("src/resources-elm", "haberman.train", 3), new DataSet("src/resources-elm", "haberman.test", 3), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 

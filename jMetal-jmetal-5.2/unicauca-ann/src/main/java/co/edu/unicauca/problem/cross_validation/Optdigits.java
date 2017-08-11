@@ -6,9 +6,9 @@ import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.IOException;
 
-public class optdigits extends CrossValidationEvaluator{
+public class Optdigits extends CrossValidationEvaluator{
 
-    public optdigits() throws IOException {
+    public Optdigits() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "optdigits", new DataSet("src/resources-elm", "optdigits.train", 64), new DataSet("src/resources-elm", "optdigits.test", 64), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 

@@ -7,9 +7,9 @@ import java.io.IOException;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 
 
-public class banknote extends CrossValidationEvaluator {
+public class Banknote extends CrossValidationEvaluator {
 
-    public banknote() throws IOException {
+    public Banknote() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "banknote", new DataSet("src/resources-elm", "banknote.train", 4), new DataSet("src/resources-elm", "banknote.test", 4), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 

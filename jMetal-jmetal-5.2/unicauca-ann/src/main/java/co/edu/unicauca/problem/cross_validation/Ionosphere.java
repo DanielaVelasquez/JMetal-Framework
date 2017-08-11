@@ -6,9 +6,9 @@ import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.IOException;
 
-public class ionosphere extends CrossValidationEvaluator {
+public class Ionosphere extends CrossValidationEvaluator {
 
-    public ionosphere() throws IOException {
+    public Ionosphere() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "ionosphere", new DataSet("src/resources-elm", "ionosphere.train", 34), new DataSet("src/resources-elm", "ionosphere.test", 34), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 
