@@ -15,7 +15,7 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 
-public class IrisRunner 
+public class BanknoteRunner 
 {
     public static void main(String[] args) throws Exception 
     {
@@ -35,7 +35,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.cross_validation.Iris";
+          problemName = "co.edu.unicauca.problem.cross_validation.Banknote";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);

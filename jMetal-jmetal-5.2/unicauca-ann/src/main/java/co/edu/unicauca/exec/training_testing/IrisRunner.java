@@ -14,13 +14,10 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-
-
-
 public class IrisRunner 
-{
-    
-    public static void main(String[] args) throws Exception {
+{    
+    public static void main(String[] args) throws Exception 
+    {
         JMetalRandom rnd = JMetalRandom.getInstance();
         rnd.setSeed(1);
         DoubleProblem problem;

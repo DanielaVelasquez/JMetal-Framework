@@ -72,6 +72,10 @@ public class DECC_G implements Algorithm
      * Number of cycles that the algorithm should run
      */
     private int cycles;
+    /**
+     * Number of subcomponents
+     */
+    private double subcomponent;
     
     private SolutionListEvaluator<DoubleSolution> evaluator;
     
@@ -93,9 +97,9 @@ public class DECC_G implements Algorithm
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-    public DECC_G(int s, int cycles, int FEs, int wFes, DoubleProblem p, int population_size, SolutionListEvaluator<DoubleSolution> evaluator, Comparator<DoubleSolution> comparator)
+    public DECC_G(int subcomponent, int cycles, int FEs, int wFes, DoubleProblem p, int population_size, SolutionListEvaluator<DoubleSolution> evaluator, Comparator<DoubleSolution> comparator)
     {
-        this.s = s;
+        this.subcomponent = subcomponent;
         this.cycles = cycles;
         this.FE = FEs;
         this.wFEs = wFes;
@@ -276,7 +280,8 @@ public class DECC_G implements Algorithm
        
        this.evaluatePopulation(this.population);
        this.n = population.get(0).getNumberOfVariables();
-       double subcomponent = (double)this.n/(double) this.s;
+       this.s = this.n / (int)this.subcomponent;
+       this.subcomponent = (double)this.n/(double)this.s;
        
        
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
@@ -290,7 +295,7 @@ public class DECC_G implements Algorithm
            //w_population.clear();
            for(int j = 0; j < subcomponent; j++)
            {
-               int l = j * this.s ;
+               int l = j * this.s;
                int u = ((j+1) * s) - 1;
                
                if(u>n)
