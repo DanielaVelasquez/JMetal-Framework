@@ -1,0 +1,18 @@
+
+
+----------------------------------------------------------------------------------------------------
+Wed Aug 09 07:45:02 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 44 func Null
+SPECTF Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.025000000000000022   Test[0]=0.9411764705882353   Time : 4321
+     Train [ 1] = 0.03749999999999998   Test[1]=0.9251336898395722   Time : 864
+ Train average: 0.03125
+ Train Standard deviation: 0.006249999999999978
+ Test average: 0.9644050802139037
+ Test Standard deviation: 0.008021390374331527
+Average running time: 2593.433155080214ms

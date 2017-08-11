@@ -44,6 +44,7 @@ public class HarmonySearch
      */
     public HarmonySearch(DoubleProblem problem, int maxEvaluations, int hms,
             double PAR, double BW, double HMCR, SolutionListEvaluator<DoubleSolution> evaluator) {
+
         setProblem(problem);
         setHMS(hms);
         setEvaluations(0);

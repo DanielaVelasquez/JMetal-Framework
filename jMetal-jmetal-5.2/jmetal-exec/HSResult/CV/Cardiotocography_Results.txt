@@ -1,0 +1,35 @@
+
+
+----------------------------------------------------------------------------------------------------
+Tue Aug 08 10:24:22 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 21 func Null
+Cardiotocography Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.263859649122807   Test[0]=0.7185714285714286   Time : 10775
+     Train [ 1] = 0.27087719298245605   Test[1]=0.7085714285714286   Time : 6901
+ Train average: 0.26736842105263153
+ Train Standard deviation: 0.003508771929824517
+ Test average: 0.9809398496240602
+ Test Standard deviation: 0.0050000000000000044
+Average running time: 8838.713571428572ms
+
+----------------------------------------------------------------------------------------------------
+Tue Aug 08 10:58:48 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 21 func Null
+Cardiotocography Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.263859649122807   Test[0]=0.7185714285714286   Time : 85298
+     Train [ 1] = 0.27087719298245605   Test[1]=0.7085714285714286   Time : 6749
+ Train average: 0.26736842105263153
+ Train Standard deviation: 0.003508771929824517
+ Test average: 0.9809398496240602
+ Test Standard deviation: 0.0050000000000000044
+Average running time: 46024.21357142857ms

@@ -168,3 +168,156 @@ TrainingAccuracyHistory      TestingAccuracyHistory
  Test average: 0.9570000000000001
  Test Standard deviation: 0.031048349392520033
 Average running time: 1071.346ms
+
+----------------------------------------------------------------------------------------------------
+Sat Aug 05 11:35:47 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 5450
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 609
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 3030.47ms
+
+----------------------------------------------------------------------------------------------------
+Sat Aug 05 11:38:26 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 3077
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 603
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 1840.97ms
+
+----------------------------------------------------------------------------------------------------
+Sat Aug 05 11:48:04 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 3127
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 580
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 1854.47ms
+
+----------------------------------------------------------------------------------------------------
+Sat Aug 05 13:48:19 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 5289
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 652
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 2971.47ms
+
+----------------------------------------------------------------------------------------------------
+Sat Aug 05 14:53:47 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 2654
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 702
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 1678.97ms
+
+----------------------------------------------------------------------------------------------------
+Tue Aug 08 09:31:56 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 5544
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 926
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 3235.97ms
+
+----------------------------------------------------------------------------------------------------
+Tue Aug 08 10:32:59 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 6615
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 1021
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 3818.97ms
+
+----------------------------------------------------------------------------------------------------
+Wed Aug 09 07:42:10 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 25578
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 881
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 13230.47ms
+
+----------------------------------------------------------------------------------------------------
+Wed Aug 09 07:43:05 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 3 NInputNeuros 4 func Null
+Iris Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.019999999999999907   Test[0]=0.98   Time : 2942
+     Train [ 1] = 0.010000000000000009   Test[1]=0.96   Time : 672
+ Train average: 0.014999999999999958
+ Train Standard deviation: 0.004999999999999949
+ Test average: 0.9849999999999999
+ Test Standard deviation: 0.010000000000000009
+Average running time: 1807.97ms

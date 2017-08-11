@@ -17,7 +17,7 @@ import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 {
-    /**-----------------------------------------------------------------------------------------
+    /**-------------------------------------------------------------------------z----------------
      * Constants
      *-----------------------------------------------------------------------------------------*/
     /**
