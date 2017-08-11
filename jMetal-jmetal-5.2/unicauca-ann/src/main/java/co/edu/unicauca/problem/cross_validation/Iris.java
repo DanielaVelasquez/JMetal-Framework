@@ -10,7 +10,7 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
  *
  * @author danielavelasquezgarzon
  */
-public class Iris extends CrossValidationEvaluator {
+public class Iris extends AbstractCrossValidationEvaluator {
 
     public Iris() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "Iris", new DataSet("src/resources-elm", "iris.train", 4), new DataSet("src/resources-elm", "iris.test", 4), 10, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));

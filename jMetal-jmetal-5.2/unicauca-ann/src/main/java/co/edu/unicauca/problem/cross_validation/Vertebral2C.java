@@ -6,7 +6,7 @@ import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.IOException;
 
-public class Vertebral2C extends CrossValidationEvaluator {
+public class Vertebral2C extends AbstractCrossValidationEvaluator {
 
     public Vertebral2C() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "vertebral(2c)", new DataSet("src/resources-elm", "vertebral(2c).train", 6), new DataSet("src/resources-elm", "vertebral(2c).test", 6), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));

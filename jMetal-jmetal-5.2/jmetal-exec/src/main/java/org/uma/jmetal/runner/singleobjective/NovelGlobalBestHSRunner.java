@@ -1,6 +1,6 @@
 package org.uma.jmetal.runner.singleobjective;
 
-import co.edu.unicauca.problem.cross_validation.CrossValidationEvaluator;
+import co.edu.unicauca.problem.cross_validation.AbstractCrossValidationEvaluator;
 import co.edu.unicauca.util.sumary.SumaryFile;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class NovelGlobalBestHSRunner {
                 population.add(solution);
 
                 System.out.println("Total execution time: " + computingTime + "ms");
-                double a = ((CrossValidationEvaluator) problem).test(solution);
+                double a = ((AbstractCrossValidationEvaluator) problem).test(solution);
                 executionTimeList.add(computingTime);
                 accurracyList.add((Object) a);
                 solutionList.add(solution);
@@ -79,7 +79,7 @@ public class NovelGlobalBestHSRunner {
                 System.gc();
             }
 
-            SumaryFile.SumaryHS(algorithm, null, (CrossValidationEvaluator) problem, solutionList, accurracyList, executionTimeList, problem);
+            SumaryFile.SumaryHS(algorithm, null, (AbstractCrossValidationEvaluator) problem, solutionList, accurracyList, executionTimeList, problem);
             evaluator.shutdown();
             /*Clear for next problem*/
             accurracyList.clear();

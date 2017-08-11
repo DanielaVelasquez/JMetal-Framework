@@ -6,7 +6,7 @@ import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.IOException;
 
-public class Car extends CrossValidationEvaluator {
+public class Car extends AbstractCrossValidationEvaluator {
 
     public Car() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "car", new DataSet("src/resources-elm", "car.train", 6), new DataSet("src/resources-elm", "car.test", 6), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));

@@ -17,7 +17,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 /**
  * Elm's Evaluator using cross validation files
  */
-public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
+public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvaluator {
 
     /**
      * -----------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public abstract class CrossValidationEvaluator extends AbstractELMEvaluator {
      * @param activation_function
      * @param inverse
      */
-        public CrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
+        public AbstractCrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
         /*EL contructor deberia recibir Una Red ELM abstracta y no los componentes*/
         super(type, name, training_data_set, testing_data_set);
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);

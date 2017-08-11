@@ -6,7 +6,7 @@ import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.IOException;
 
-public class Connectionist extends CrossValidationEvaluator {
+public class Connectionist extends AbstractCrossValidationEvaluator {
 
     public Connectionist() throws IOException {
         super(AbstractELMEvaluator.EvaluatorType.CV, "connectionist", new DataSet("src/resources-elm", "connectionist.train", 60), new DataSet("src/resources-elm", "connectionist.test", 60), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
