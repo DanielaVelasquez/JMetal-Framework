@@ -1,6 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-import co.edu.unicauca.util.math.RandomDistribution;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +12,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 
 public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
@@ -190,10 +191,10 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     {
         int num = (ns1*(ns2+nf2));
         int den = (ns2*(ns1+nf1)+ns1*(ns2+nf2));
-        if(num!=0 && den != 0)
-        {
-            p = (double) num / (double) den;
-        }
+        //if(num!=0 && den != 0)
+        //{
+        p = (double) num / (double) den;
+        //}
         
         ns1 = 0;
         ns2 = 0;
@@ -209,10 +210,10 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     {
         int num = (fp_ns1*(fp_ns2+fp_nf2));
         int den = (fp_ns2*(fp_ns1+fp_nf1)+fp_ns1*(fp_ns2+fp_nf2));
-        if(num!=0 && den != 0)
-        {
-            fp = (double) num / (double) den;
-        }
+        /*if(num!=0 && den != 0)
+        {*/
+        fp = (double) num / (double) den;
+        //}
         
         fp_ns1 = 0;
         fp_ns2 = 0;
