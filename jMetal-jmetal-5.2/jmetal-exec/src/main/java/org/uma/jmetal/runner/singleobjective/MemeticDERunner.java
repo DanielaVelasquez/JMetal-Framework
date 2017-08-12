@@ -43,7 +43,9 @@ public class MemeticDERunner {
         OptSimulatedAnnealing localSearch;
         SolutionListEvaluator<DoubleSolution> evaluator;
 
-        String problemName = "co.edu.unicauca.problem.cross_validation.Iris";
+       // String problemName = "co.edu.unicauca.problem.cross_validation.Iris";
+        String problemName = "co.edu.unicauca.problem.cross_validation.Banknote";
+
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution>loadProblem(problemName);
 
         evaluator = new SequentialSolutionListEvaluator<>();
@@ -76,7 +78,7 @@ public class MemeticDERunner {
 
         long computingTime = algorithmRunner.getComputingTime();
 
-        List<DoubleSolution > population = new ArrayList<>(1);
+        List<DoubleSolution> population = new ArrayList<>(1);
 
         population.add(solution);
 

@@ -1,5 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -126,8 +127,15 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     @Override
     protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-
-        return evaluator.evaluate(population, getProblem());
+        for (int i = 0; i < population.size(); i++) {//Corregir
+            try {
+                getProblem().evaluate(population.get(i));
+                updateProgress();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return population;
     }
 
     /*------------------ Overwriting method to add Local-search(Simulated Annealing), ------------*/
@@ -140,7 +148,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
         setPopulation(evaluatePopulation(getPopulation()));
         initProgress();
         while (!isStoppingConditionReached()) {
-            
+
             matingPopulation = selection(getPopulation());
             offspringPopulation = reproduction(matingPopulation);
             offspringPopulation = evaluatePopulation(offspringPopulation);
@@ -148,7 +156,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
             setPopulation(localOptimization(getPopulation()));
             generationCounter++;
         }
-        
+
     }
 
     @Override
@@ -158,7 +166,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     @Override
     protected List<DoubleSolution> reproduction(List<DoubleSolution> matingPopulation) {
-        
+
         List<DoubleSolution> offspringPopulation = new ArrayList<>();
         CRm = updateCrm(CRm, generationCounter);
         Fm = updateFm(Fm, generationCounter);
@@ -175,14 +183,14 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
                 //List<DoubleSolution> children = crossoverOperator.execute(parents);
                 DoubleSolution children = Mutation(i, parents);
-                DoubleSolution childrenvp=CruzarPadre(i, children);
-                offspringPopulation.add(childrenvp);
+                //  DoubleSolution childrenvp=CruzarPadre(i, children);
+                offspringPopulation.add(children);
                 evaluationTemp++; //Para generar todos los indivios, sino solo los que puede evaluar
             } else {
                 break;
             }
         }
-        
+
         CRlst.add(CR);
         Flst.add(F);
 
@@ -230,7 +238,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
      */
     @Override
     public DoubleSolution getResult() {
-        
+
         Collections.sort(getPopulation(), comparator);
         return getPopulation().get(0);
     }
@@ -269,25 +277,23 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
         }
         return wi;
     }
-    
-    /*=========================Crossover=========================================*/
 
+    /*=========================Crossover=========================================*/
     ////cruce con vector padre por selección de cada miembro según tasa de cruce
     protected DoubleSolution CruzarPadre(int i, DoubleSolution vPerturbado) {
-        int rndb = randomGenerator.nextInt(0,vPerturbado.getNumberOfVariables()-1 );
+        int rndb = randomGenerator.nextInt(0, vPerturbado.getNumberOfVariables() - 1);
 
-        for (int d = 0; d <vPerturbado.getNumberOfVariables(); d++) {
+        for (int d = 0; d < vPerturbado.getNumberOfVariables(); d++) {
             if ((randomGenerator.nextInt(0, 1) < CR) || (d == rndb)) {
-                vPerturbado.setVariableValue(d,vPerturbado.getVariableValue(d) ); 
+                vPerturbado.setVariableValue(d, vPerturbado.getVariableValue(d));
             } else {
                 vPerturbado.setVariableValue(d, getPopulation().get(i).getVariableValue(d));
             }
         }
-        
+
         return vPerturbado;
     }
 
-    
     /*-------------------------------Own methdos--------------------------------------*/
     public void defaultStart() {
         this.CRm = 0.9;

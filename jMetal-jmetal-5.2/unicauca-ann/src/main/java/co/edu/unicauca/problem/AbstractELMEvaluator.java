@@ -98,7 +98,6 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         elm.setBiasHiddenNeurons(bias);
         double accuracy = this.train();
         solution.setObjective(0, (1 - accuracy));
-        //  System.out.println("" + (1 - accuracy));
     }
 
     /**
