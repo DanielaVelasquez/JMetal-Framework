@@ -44,7 +44,6 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
   private int maxEvaluations;
   private SolutionListEvaluator<DoubleSolution> evaluator;
   private Comparator<DoubleSolution> comparator;
-
   private int evaluations;
 
   /**
@@ -66,7 +65,6 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
     this.crossoverOperator = crossoverOperator;
     this.selectionOperator = selectionOperator;
     this.evaluator = evaluator;
-
     comparator = new ObjectiveComparator<DoubleSolution>(0);
   }
   
@@ -79,11 +77,11 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
   }
 
   @Override protected void initProgress() {
-    evaluations = populationSize;
+    evaluations = 0;
   }
 
   @Override protected void updateProgress() {
-    evaluations += populationSize;
+    evaluations += 1;
   }
 
   @Override protected boolean isStoppingConditionReached() {

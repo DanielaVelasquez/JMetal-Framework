@@ -19,6 +19,7 @@ public class DECC_GBuilder
   private int FEs;
   private int wFes;
   private int population_size;
+  private int numCyclesSaNSDE;
 
   public DECC_GBuilder(DoubleProblem problem) {
     this.problem = problem;

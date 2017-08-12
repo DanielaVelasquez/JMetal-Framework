@@ -76,6 +76,7 @@ public class DECC_G implements Algorithm
      * Number of subcomponents
      */
     private double subcomponent;
+
     
     private SolutionListEvaluator<DoubleSolution> evaluator;
     
@@ -286,6 +287,7 @@ public class DECC_G implements Algorithm
        this.evaluatePopulation(this.population);
        this.n = population.get(0).getNumberOfVariables();
        this.s = this.n / (int)this.subcomponent;
+       //AbstractELMEvaluator p = (AbstractELMEvaluator) problem;
        //this.subcomponent = (double)this.n/(double)this.s;
        
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
@@ -308,7 +310,7 @@ public class DECC_G implements Algorithm
                subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
                
                List<DoubleSolution> subpopulation = this.copy(this.population);
-               SaNSDE sansde = new SaNSDE(subcomponent_problem_SaNSDE, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
+               SaNSDE sansde = new SaNSDE(subcomponent_problem_SaNSDE, FE, (int)(populationSize / 2), CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
                sansde.setPopulation(subpopulation);
                
                
@@ -320,7 +322,7 @@ public class DECC_G implements Algorithm
            }
            this.findIndividuals();
            
-           DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
+           DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, (int)(populationSize / 2), CROSSOVER_1,SELECTION, evaluator);
            //de.setPopulation(w_population);
            
            subcomponent_problem_DE.setSolution(best_inidvidual);

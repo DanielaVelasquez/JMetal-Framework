@@ -90,9 +90,10 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      */
     private int populationSize;
     /**
-     * Maximun number of evaluations 
+     * Maximun number of evaluations
      */
     private int maxEvaluations;
+
     /**
      * 
      */
@@ -142,6 +143,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * @param selectionOperator operator for selection of individual's parent
      * @param evaluator
      * @param comparator Determines how a solution should be order
+     * @param maxCycles Determines the maximun number of cycles to excecute
      */
     public SaNSDE(DoubleProblem problem, int maxEvaluations, int populationSize,
         DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionCrossover crossoverOperator2, 
@@ -297,12 +299,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     protected void initProgress() {
-       evaluations = populationSize;
+       evaluations = 0;
     }
 
     @Override
     protected void updateProgress() {
-        evaluations += populationSize;
+        evaluations += 1;
     }
 
     @Override
