@@ -86,7 +86,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
         //Default values
         this.P = 0.2;
-        this.C = 1.0 / 10;//Why this valie?? in MA-elm
+        this.C = 1.0 / 10;//Why this value?? in MA-elm
         this.CRm = 0.9;
         this.CRmSigma = 0.1;
         this.Fm = 0.5;
@@ -183,12 +183,16 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
                 //List<DoubleSolution> children = crossoverOperator.execute(parents);
                 DoubleSolution children = Mutation(i, parents);
-                offspringPopulation.add(children);
+                DoubleSolution childrenvp=CruzarPadre(i, children);
+                offspringPopulation.add(childrenvp);
                 evaluationTemp++; //Para generar todos los indivios, sino solo los que puede evaluar
             } else {
                 break;
             }
         }
+        
+        CRlst.add(CR);
+        Flst.add(F);
 
         return offspringPopulation;
     }
@@ -204,11 +208,9 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
                 } else {
                     pop.add(population.get(i));
-
                 }
             } else {
                 pop.add(population.get(i));
-
             }
 
         }
@@ -220,7 +222,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     public List<DoubleSolution> localOptimization(List<DoubleSolution> solutions) {
         List<DoubleSolution> pop = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            if (!isStoppingConditionReached() && (maxEvaluations - evaluations) > 70) {
+            if (!isStoppingConditionReached() && (maxEvaluations - evaluations) > 70) {//70 numero de optimizaciones locales
                 DoubleSolution S = (DoubleSolution) localSearch.execute(solutions.get(i));
                 pop.add(S);
                 evaluations += localSearch.getEvaluations();
@@ -274,7 +276,25 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
         }
         return wi;
     }
+    
+    /*=========================Crossover=========================================*/
 
+    ////cruce con vector padre por selección de cada miembro según tasa de cruce
+    protected DoubleSolution CruzarPadre(int i, DoubleSolution vPerturbado) {
+        int rndb = randomGenerator.nextInt(0,vPerturbado.getNumberOfVariables()-1 );
+
+        for (int d = 0; d <vPerturbado.getNumberOfVariables(); d++) {
+            if ((randomGenerator.nextInt(0, 1) < CR) || (d == rndb)) {
+                vPerturbado.setVariableValue(d,vPerturbado.getVariableValue(d) ); 
+            } else {
+                vPerturbado.setVariableValue(d, getPopulation().get(i).getVariableValue(d));
+            }
+        }
+        
+        return vPerturbado;
+    }
+
+    
     /*-------------------------------Own methdos--------------------------------------*/
     public void defaultStart() {
         this.CRm = 0.9;
