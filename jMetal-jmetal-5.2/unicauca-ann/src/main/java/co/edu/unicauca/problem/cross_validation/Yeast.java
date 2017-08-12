@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Yeast extends AbstractCrossValidationEvaluator {
 
     public Yeast() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "yeast", new DataSet("src/resources-elm", "yeast.train", 8), new DataSet("src/resources-elm", "yeast.test", 8), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Yeast", new DataSet("src/resources-elm", "yeast.train", 8), new DataSet("src/resources-elm", "yeast.test", 8), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 
 }

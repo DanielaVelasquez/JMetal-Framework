@@ -11,7 +11,7 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 public class Contraceptive extends AbstractCrossValidationEvaluator {
 
     public Contraceptive() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "contraceptive", new DataSet("src/resources-elm", "contraceptive.train", 9), new DataSet("src/resources-elm", "contraceptive.test", 9), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Contraceptive", new DataSet("src/resources-elm", "contraceptive.train", 9), new DataSet("src/resources-elm", "contraceptive.test", 9), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 
 }
