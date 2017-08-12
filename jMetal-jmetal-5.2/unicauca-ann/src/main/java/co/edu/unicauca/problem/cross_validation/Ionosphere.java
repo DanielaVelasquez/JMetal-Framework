@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Ionosphere extends AbstractCrossValidationEvaluator {
 
     public Ionosphere() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "ionosphere", new DataSet("src/resources-elm", "ionosphere.train", 34), new DataSet("src/resources-elm", "ionosphere.test", 34), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Ionosphere", new DataSet("src/resources-elm", "ionosphere.train", 34), new DataSet("src/resources-elm", "ionosphere.test", 34), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 
 }

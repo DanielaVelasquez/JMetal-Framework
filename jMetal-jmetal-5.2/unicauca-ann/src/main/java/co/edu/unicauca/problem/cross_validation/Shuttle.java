@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Shuttle extends AbstractCrossValidationEvaluator {
 
     public Shuttle() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "shuttle", new DataSet("src/resources-elm", "shuttle.train", 9), new DataSet("src/resources-elm", "shuttle.test", 9), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Shuttle", new DataSet("src/resources-elm", "shuttle.train", 9), new DataSet("src/resources-elm", "shuttle.test", 9), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 
 }

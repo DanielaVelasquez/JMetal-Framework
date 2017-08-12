@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Dermatology extends AbstractCrossValidationEvaluator {
 
     public Dermatology() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "dermatology", new DataSet("src/resources-elm", "dermatology.train", 34), new DataSet("src/resources-elm", "dermatology.test", 34), 10, 3, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Dermatology", new DataSet("src/resources-elm", "dermatology.train", 34), new DataSet("src/resources-elm", "dermatology.test", 34), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
     }
 
 }
