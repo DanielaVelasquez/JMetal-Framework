@@ -1,5 +1,6 @@
 package co.edu.unicauca.exec.training_testing;
 
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
@@ -54,8 +55,7 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
 
-        algorithm = new DECC_G(20,30,100,100,problem,10,evaluator, comparator);
-        
+        algorithm = new DECC_G(5,5,50,50,problem,50,evaluator, comparator);
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
           .execute() ;
@@ -65,6 +65,9 @@ public class IrisRunner
 
         System.out.println("Total execution time: " + computingTime + "ms");
         System.out.println("Objective "+(1-solution.getObjective(0)));
+        AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
+        System.out.println("Testing: "+p.test(solution));
+        System.out.println("Total evaluations: "+p.total);;
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);

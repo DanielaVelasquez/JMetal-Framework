@@ -56,10 +56,11 @@
             <groupId>org.uma.jmetal</groupId>
             <artifactId>jmetal-core</artifactId>
         </dependency>
- <dependency>
+        <dependency>
             <groupId>org.uma.jmetal</groupId>
             <artifactId>jmetal-problem</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

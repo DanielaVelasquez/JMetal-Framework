@@ -50,13 +50,8 @@ public class IrisRunner
         tt.getInputWeightsBiasFrom(result);
         System.out.println("Accuracy training: "+tt.train());*/
         
-        double cr = 0.5 ;
-        double f = 0.5 ;
-        crossover = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin") ;
-
-        selection = new DifferentialEvolutionSelection() ;
-
-        algorithm = new DECC_G(2,7,50,50,problem,10,evaluator, comparator);
+        
+        algorithm = new DECC_G(5,10,10,10,problem,50,evaluator, comparator);
         
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -70,8 +65,9 @@ public class IrisRunner
         
         AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
         System.out.println("Testing: "+p.test(solution));
-       
-
+        System.out.println("Total evaluations: "+p.total);;
+        
+        
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);

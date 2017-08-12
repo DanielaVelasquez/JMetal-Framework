@@ -39,7 +39,7 @@ public class DECC_G implements Algorithm
      /**
      * Individiuals for Diferential evolution algorithm 
      */
-    private List<DoubleSolution> w_population;
+    //private List<DoubleSolution> w_population;
     /**
      * Problem to solve
      */
@@ -281,8 +281,7 @@ public class DECC_G implements Algorithm
        this.evaluatePopulation(this.population);
        this.n = population.get(0).getNumberOfVariables();
        this.s = this.n / (int)this.subcomponent;
-       this.subcomponent = (double)this.n/(double)this.s;
-       
+       //this.subcomponent = (double)this.n/(double)this.s;
        
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
        //w_population = this.initWPopulation(populationSize, (int) Math.ceil(subcomponent));
@@ -291,7 +290,6 @@ public class DECC_G implements Algorithm
        for(int i = 0; i < this.cycles; i++)
        {
            List<Integer> index = this.randPerm(this.n);
-           
            //w_population.clear();
            for(int j = 0; j < subcomponent; j++)
            {
@@ -316,7 +314,6 @@ public class DECC_G implements Algorithm
                this.evaluatePopulation(population);
            }
            this.findIndividuals();
-           
            
            DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
            //de.setPopulation(w_population);
@@ -350,7 +347,6 @@ public class DECC_G implements Algorithm
                this.multiply(worst_inidividual,  ans);
                population.set(worst_index, worst_inidividual);
            }
-           
            this.evaluatePopulation(population);
        }
     }
