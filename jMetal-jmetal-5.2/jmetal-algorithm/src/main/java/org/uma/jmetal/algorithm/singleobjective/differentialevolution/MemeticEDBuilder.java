@@ -1,12 +1,16 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+import java.util.Comparator;
 import org.uma.jmetal.algorithm.singleobjective.LocalOptimizer.OptSimulatedAnnealing;
 import org.uma.jmetal.operator.LocalSearchOperator;
+import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
+import org.uma.jmetal.operator.impl.mutation.UniformMutation;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
@@ -23,6 +27,8 @@ public class MemeticEDBuilder {
     private DifferentialEvolutionCrossover crossoverOperator;
     private DifferentialEvolutionSelection selectionOperator;
     private SolutionListEvaluator<DoubleSolution> evaluator;
+    private Comparator<DoubleSolution> comparator;
+    private MutationOperator<DoubleSolution> mutationOperator;
     private JMetalRandom rand;
 
     //Añadir optimizador local
@@ -35,10 +41,21 @@ public class MemeticEDBuilder {
         this.crossoverOperator = new DifferentialEvolutionCrossover(0.4, 0.5, "current-to-best/1/bin");//Default
         this.selectionOperator = new DifferentialEvolutionSelection();
         this.evaluator = new SequentialSolutionListEvaluator<>();
-        this.localSearch = new OptSimulatedAnnealing(10, null, null, problem);
+        this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
+        this.localSearch = new OptSimulatedAnnealing(10, null, comparator, problem);
         this.rand = JMetalRandom.getInstance();
-        
+        //this.mutationOperator = new UniformMutation(populationSize, populationSize)
     }
+
+    public Comparator<DoubleSolution> getComparator() {
+        return comparator;
+    }
+
+    public MemeticEDBuilder setComparator(Comparator<DoubleSolution> comparator) {
+        this.comparator = comparator;
+        return this;
+    }
+    
     
     public MemeticEDBuilder setPopulationSize(int populationSize) {
         if (populationSize < 0) {
