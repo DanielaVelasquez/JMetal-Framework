@@ -53,6 +53,7 @@ public class DifferentialEvolutionSelection implements SelectionOperator<List<Do
       throw new JMetalException(
               "Index value invalid: " + solutionListIndex );
     } else if (solutionSet.size() < 4) {
+        
       throw new JMetalException(
           "The population has less than four solutions: " + solutionSet.size());
     }

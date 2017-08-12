@@ -165,12 +165,21 @@ public class DECC_G implements Algorithm
         {
             DoubleSolution original = population.get(i);
             DoubleSolution other = subpopulation.get(i);
+            this.copyObjectivesFrom(original, other);
             int k = 0;
             for(int j = l; j <= u; j++)
             {
                 original.setVariableValue(index.get(j), other.getVariableValue(k));
                 k++;
             }
+        }
+    }
+    private void copyObjectivesFrom(DoubleSolution origin,DoubleSolution destination)
+    {
+        int size = origin.getNumberOfObjectives();
+        for(int i = 0; i < size; i++)
+        {
+            destination.setObjective(i, origin.getObjective(i));
         }
     }
     
@@ -250,11 +259,7 @@ public class DECC_G implements Algorithm
             original.setVariableValue(j, newValue);
             i++;
         }
-        int objectives = weight.getNumberOfObjectives();
-        for(int j = 0; j < objectives; j++)
-        {
-            original.setObjective(j, weight.getObjective(j));
-        }
+        this.copyObjectivesFrom(original, weight);
     }
     private void chooseIndexWPopulation(int size)
     {
@@ -311,7 +316,7 @@ public class DECC_G implements Algorithm
                subpopulation = sansde.getPopulation();
                //randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
                this.replaceInPopulation(subpopulation, l, u,index);
-               this.evaluatePopulation(population);
+               //this.evaluatePopulation(population);
            }
            this.findIndividuals();
            
@@ -347,7 +352,7 @@ public class DECC_G implements Algorithm
                this.multiply(worst_inidividual,  ans);
                population.set(worst_index, worst_inidividual);
            }
-           this.evaluatePopulation(population);
+           //this.evaluatePopulation(population);
        }
     }
 

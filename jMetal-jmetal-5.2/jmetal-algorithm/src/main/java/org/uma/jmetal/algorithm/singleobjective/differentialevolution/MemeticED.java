@@ -127,17 +127,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     @Override
     protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
 
-        List<DoubleSolution> lst = new ArrayList<>();
-        for (int i = 0; i < populationSize; i++) {
-            if (!isStoppingConditionReached()) {
-                getProblem().evaluate(population.get(i));
-                updateProgress();
-                lst.add(population.get(i));
-            } else {
-                break;
-            }
-        }
-        return lst;
+        return evaluator.evaluate(population, getProblem());
     }
 
     /*------------------ Overwriting method to add Local-search(Simulated Annealing), ------------*/
@@ -145,11 +135,12 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     public void run() {
         List<DoubleSolution> offspringPopulation;
         List<DoubleSolution> matingPopulation;
-
+        this.evaluations = 0;
         setPopulation(createInitialPopulation());
         setPopulation(evaluatePopulation(getPopulation()));
         initProgress();
         while (!isStoppingConditionReached()) {
+            
             matingPopulation = selection(getPopulation());
             offspringPopulation = reproduction(matingPopulation);
             offspringPopulation = evaluatePopulation(offspringPopulation);
@@ -157,6 +148,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
             setPopulation(localOptimization(getPopulation()));
             generationCounter++;
         }
+        
     }
 
     @Override
@@ -166,7 +158,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     @Override
     protected List<DoubleSolution> reproduction(List<DoubleSolution> matingPopulation) {
-
+        
         List<DoubleSolution> offspringPopulation = new ArrayList<>();
         CRm = updateCrm(CRm, generationCounter);
         Fm = updateFm(Fm, generationCounter);
@@ -238,6 +230,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
      */
     @Override
     public DoubleSolution getResult() {
+        
         Collections.sort(getPopulation(), comparator);
         return getPopulation().get(0);
     }

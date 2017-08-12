@@ -55,7 +55,7 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
 
-        algorithm = new DECC_G(5,5,50,50,problem,50,evaluator, comparator);
+        algorithm = new DECC_G(5,5,150,150,problem,50,evaluator, comparator);
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
           .execute() ;
