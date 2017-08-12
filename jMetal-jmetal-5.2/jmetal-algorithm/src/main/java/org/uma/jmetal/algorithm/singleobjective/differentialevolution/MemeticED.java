@@ -153,7 +153,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
             offspringPopulation = reproduction(matingPopulation);
             offspringPopulation = evaluatePopulation(offspringPopulation);
             setPopulation(replacement(getPopulation(), offspringPopulation));
-            //setPopulation(localOptimization(getPopulation()));
+            setPopulation(localOptimization(getPopulation()));
             generationCounter++;
         }
 
