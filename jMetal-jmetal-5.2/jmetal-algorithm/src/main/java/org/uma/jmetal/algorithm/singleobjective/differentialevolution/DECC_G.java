@@ -162,7 +162,7 @@ public class DECC_G implements Algorithm
     } 
     private void replaceInPopulation(List<DoubleSolution> subpopulation, int l, int u, List<Integer> index)
     {
-        for(int i = 0; i< populationSize; i++)
+        for(int i = 0; i< (int)(populationSize / 2); i++)
         {
             DoubleSolution original = population.get(i);
             DoubleSolution other = subpopulation.get(i);

@@ -4,6 +4,7 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -55,7 +56,10 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm = new DECC_G(5, 5, 5, 9, problem, 20, evaluator, comparator);
+        algorithm = algorithm = new MemeticEDBuilder(problem)
+                        .setMaxEvaluations(2970)
+                        .setPopulationSize(20)
+                        .build();
 
         AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
           .execute() ;

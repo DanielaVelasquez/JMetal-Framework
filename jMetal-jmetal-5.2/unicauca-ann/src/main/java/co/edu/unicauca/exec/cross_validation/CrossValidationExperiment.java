@@ -71,8 +71,8 @@ public abstract class CrossValidationExperiment {
     List<Algorithm> algorithms = new ArrayList<>();
     
     Algorithm algorithm = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(11400)
-                        .setPopulationSize(30)
+                        .setMaxEvaluations(2975)
+                        .setPopulationSize(10)
                         .build();
                                   
                 
@@ -82,10 +82,10 @@ public abstract class CrossValidationExperiment {
       
      algorithm = new DECC_GBuilder(problem)
                         .setCycles(3)
-                        .setPopulationSize(30)
+                        .setPopulationSize(10)
                         .setSubcomponets(4)
-                        .setFEs(120)
-                        .setwFes(90)
+                        .setFEs(5)
+                        .setwFes(5)
                         .build();
 
 

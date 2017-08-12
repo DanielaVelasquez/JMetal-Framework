@@ -77,7 +77,7 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
   }
 
   @Override protected void initProgress() {
-    evaluations = 0;
+    evaluations = 1;
   }
 
   @Override protected void updateProgress() {

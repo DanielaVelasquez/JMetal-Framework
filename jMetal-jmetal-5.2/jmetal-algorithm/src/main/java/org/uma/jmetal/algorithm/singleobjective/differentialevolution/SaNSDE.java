@@ -299,7 +299,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     protected void initProgress() {
-       evaluations = 0;
+       evaluations = 1;
     }
 
     @Override
