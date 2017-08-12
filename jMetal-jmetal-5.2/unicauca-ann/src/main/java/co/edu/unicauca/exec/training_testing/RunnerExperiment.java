@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.edu.unicauca.exec.cross_validation;
+package co.edu.unicauca.exec.training_testing;
+
 
 import java.io.IOException;
 
@@ -11,15 +12,15 @@ import java.io.IOException;
  *
  * @author danielavelasquezgarzon
  */
-public class IrisExperiment extends CrossValidationExperiment{
+public class RunnerExperiment extends TrainingTestingExperiment{
     
-    public IrisExperiment() throws IOException {
-        super("co.edu.unicauca.problem.cross_validation.Iris");
+    public RunnerExperiment() throws IOException {
+        super("co.edu.unicauca.problem.training_testing.Iris");
     }
     
     public static void main(String[] args) throws Exception 
     {
-        new IrisExperiment();
+        new RunnerExperiment();
     }
     
 }
