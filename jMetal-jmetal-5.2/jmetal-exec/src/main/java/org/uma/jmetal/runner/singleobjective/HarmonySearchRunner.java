@@ -28,8 +28,8 @@ public class HarmonySearchRunner {
     public static void main(String[] args) throws Exception {
 
         List problemsNames = new ArrayList();
-       /* problemsNames.add("co.edu.unicauca.problem.cross_validation.Iris");
-        problemsNames.add("co.edu.unicauca.problem.cross_validation.Cardiotocography");
+        problemsNames.add("co.edu.unicauca.problem.cross_validation.Iris");
+       /* problemsNames.add("co.edu.unicauca.problem.cross_validation.Cardiotocography");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.SPECTF");*/
         problemsNames.add("co.edu.unicauca.problem.cross_validation.Banknote");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.blood");
