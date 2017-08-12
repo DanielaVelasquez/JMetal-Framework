@@ -1,0 +1,18 @@
+
+
+----------------------------------------------------------------------------------------------------
+Sat Aug 12 08:16:58 COT 2017
+HS
+ Harmony Search  PAR : 0.4 BW: 0.04 HMCR: 0.9
+ Evaluations 600 maxExecution 2
+ NHiddenNeurons 20 NInputNeuros 4 func Null
+Banknote Type CV
+ 
+TrainingAccuracyHistory      TestingAccuracyHistory
+     Train [ 0] = 0.0   Test[0]=1.0   Time : 16830
+     Train [ 1] = 0.0   Test[1]=1.0   Time : 17507
+ Train average: 0.0
+ Train Standard deviation: 0.0
+ Test average: 1.0
+ Test Standard deviation: 0.0
+Average running time: 17169.5ms

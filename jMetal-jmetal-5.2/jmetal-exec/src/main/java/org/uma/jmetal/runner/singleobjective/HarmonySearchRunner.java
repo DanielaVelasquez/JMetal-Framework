@@ -31,7 +31,7 @@ public class HarmonySearchRunner {
        /* problemsNames.add("co.edu.unicauca.problem.cross_validation.Iris");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.Cardiotocography");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.SPECTF");*/
-        problemsNames.add("co.edu.unicauca.problem.cross_validation.banknote");
+        problemsNames.add("co.edu.unicauca.problem.cross_validation.Banknote");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.blood");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.car");
         problemsNames.add("co.edu.unicauca.problem.cross_validation.chart");
