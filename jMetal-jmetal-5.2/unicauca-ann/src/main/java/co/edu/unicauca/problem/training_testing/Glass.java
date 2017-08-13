@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Glass extends TrainingTestingEvaluator {
 
     public Glass() throws IOException {
-        super(20, new DataSet("src/resources-elm", "glass.train", 10), new DataSet("src/resources-elm", "glass.test", 10), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Glass");
+        super(20, new DataSet("src/resources-elm", "glass.train", 9), new DataSet("src/resources-elm", "glass.test", 9), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Glass");
     }
 
 }
