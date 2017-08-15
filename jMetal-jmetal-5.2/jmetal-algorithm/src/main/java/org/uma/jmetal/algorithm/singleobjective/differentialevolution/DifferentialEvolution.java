@@ -77,11 +77,11 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
   }
 
   @Override protected void initProgress() {
-    evaluations = 1;
+    evaluations = this.populationSize;
   }
 
   @Override protected void updateProgress() {
-    evaluations += 1;
+    evaluations += this.populationSize;
   }
 
   @Override protected boolean isStoppingConditionReached() {
