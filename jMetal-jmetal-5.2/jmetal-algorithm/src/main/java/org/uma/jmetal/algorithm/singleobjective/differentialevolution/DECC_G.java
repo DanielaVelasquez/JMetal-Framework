@@ -278,6 +278,11 @@ public class DECC_G implements Algorithm
         }
         subcomponent_problem_DE.setIndex(index);
     }
+
+    public void setPopulation(List<DoubleSolution> population) {
+        this.population = population;
+    }
+    
     @Override
     public void run() 
     {
@@ -292,7 +297,7 @@ public class DECC_G implements Algorithm
        
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
        //w_population = this.initWPopulation(populationSize, (int) Math.ceil(subcomponent));
-       this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
+       
        //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
        {
@@ -324,7 +329,7 @@ public class DECC_G implements Algorithm
            
            DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, (int)(populationSize / 2), CROSSOVER_1,SELECTION, evaluator);
            //de.setPopulation(w_population);
-           
+           this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
            subcomponent_problem_DE.setSolution(best_inidvidual);
            de.run();
            DoubleSolution ans = de.getResult();

@@ -17,7 +17,6 @@ public class RunnerExperiment extends TrainingTestingExperiment{
     public RunnerExperiment() throws IOException {
         super("co.edu.unicauca.problem.training_testing.Haberman");
     }
-    
     public static void main(String[] args) throws Exception 
     {
         new RunnerExperiment();

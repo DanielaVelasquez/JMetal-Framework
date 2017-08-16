@@ -21,7 +21,7 @@ public class IrisRunner
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
-        rnd.setSeed(1);
+        //rnd.setSeed(1);
         DoubleProblem problem;
         Algorithm<DoubleSolution> algorithm;
         DifferentialEvolutionSelection selection;
@@ -60,18 +60,21 @@ public class IrisRunner
                         .setMaxEvaluations(2970)
                         .setPopulationSize(20)
                         .build();
+        for(int i = 0; i<30;i++)
+        {
+            AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
+                .execute() ;
 
-        AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
-          .execute() ;
+              DoubleSolution solution = algorithm.getResult() ;
+              long computingTime = algorithmRunner.getComputingTime() ;
 
-        DoubleSolution solution = algorithm.getResult() ;
-        long computingTime = algorithmRunner.getComputingTime() ;
-
-        System.out.println("Total execution time: " + computingTime + "ms");
-        System.out.println("Objective "+(1-solution.getObjective(0)));
-        AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-        System.out.println("Testing: "+p.test(solution));
-        System.out.println("Total evaluations: "+p.total);;
+              System.out.println("Total execution time: " + computingTime + "ms");
+              System.out.println("Objective "+(1-solution.getObjective(0)));
+              AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
+              System.out.println("Testing: "+p.test(solution));
+              System.out.println("Total evaluations: "+p.total);;
+        }
+        
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);
