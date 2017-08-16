@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Ionosphere extends TrainingTestingEvaluator {
 
     public Ionosphere() throws IOException {
-        super(20, new DataSet("src/resources-elm", "ionosphere.train", 34), new DataSet("src/resources-elm", "ionosphere.test", 34), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Ionosphere");
+        super(20, new DataSet("src/resources-elm", "ionosphere.train", 34), new DataSet("src/resources-elm", "ionosphere.test", 34), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Ionosphere", 3000);
     }
 
 }

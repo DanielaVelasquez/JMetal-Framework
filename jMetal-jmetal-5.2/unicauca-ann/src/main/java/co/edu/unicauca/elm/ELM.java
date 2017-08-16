@@ -111,6 +111,14 @@ public class ELM {
      * Method calculates moore-penrose pseudoinverse
      */
     private AbstractMoorePenroseMethod inverse;
+    /**
+     * Maximun number of evaluations
+     */
+    private int maxEvaluations;
+    /**
+     * Actual number of EFOs
+     */
+    private int EFOs;
 
     /**
      * -----------------------------------------------------------------------------------------
@@ -128,8 +136,9 @@ public class ELM {
      * 'radbas' for Radial basis function
      * @param classes number of classes
      * @param inverse Method for calculation of moore penrose inverse
+     * @param maxEvaluations Maximun number of evaluations
      */
-    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse) {
+    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
         this.elm_type = elm_type;
         this.hidden_neurons = hidden_neurons;
         this.function = activation_function;
@@ -137,40 +146,60 @@ public class ELM {
         this.accuracy = 0;
         this.number_data = 0;
         this.inverse = inverse;
+        this.maxEvaluations = maxEvaluations;
+        this.EFOs = 0;
     }
-
+    
+    /**
+     * Restart to 0 the number of actual EFOs
+     */
+    public void resetEFOS()
+    {
+        this.EFOs = 0;
+    }    
+    
     /**
      * Train an artificial neural network using ELM algorithm with the input and
      * output data given, if input weight and/or bias are not defined in the ELM
      * they will be randomly assigned
      */
     public void train() {
-        /**
-         * In case the input weights is not defined in the ELM they will be
-         * randomly assigned
-         */
-        if (input_weight == null) {
-            input_weight = MatrixUtil.randomFill(hidden_neurons, input_neurons, MIN_VALUE, MAX_VALUE);
+        
+        this.EFOs++;
+        
+        if(this.EFOs <= maxEvaluations)
+        {        
+            /**
+             * In case the input weights is not defined in the ELM they will be
+             * randomly assigned
+             */
+            if (input_weight == null) {
+                input_weight = MatrixUtil.randomFill(hidden_neurons, input_neurons, MIN_VALUE, MAX_VALUE);
+            }
+            /**
+             * In case the bias of hidden neurosn is not defined in the ELM they
+             * will be randomly assigned
+             */
+            if (bias_hidden_neurons == null) {
+                bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
+            }
+
+            //Get output matrix from hidden layer
+            DenseMatrix H = calculateH(X);
+            DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
+            DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
+            tabular.transpose(transT);
+
+            output_weight = new DenseMatrix(hidden_neurons, output_neurons);
+            pinvH.mult(transT, output_weight);
+
+            DenseMatrix T = calculate_output(H, number_data);
+            accuracy = evaluate(tabular, T);
         }
-        /**
-         * In case the bias of hidden neurosn is not defined in the ELM they
-         * will be randomly assigned
-         */
-        if (bias_hidden_neurons == null) {
-            bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
+        else            
+        {
+            accuracy = 1;
         }
-
-        //Get output matrix from hidden layer
-        DenseMatrix H = calculateH(X);
-        DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
-        DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
-        tabular.transpose(transT);
-
-        output_weight = new DenseMatrix(hidden_neurons, output_neurons);
-        pinvH.mult(transT, output_weight);
-
-        DenseMatrix T = calculate_output(H, number_data);
-        accuracy = evaluate(tabular, T);
     }
 
     /**

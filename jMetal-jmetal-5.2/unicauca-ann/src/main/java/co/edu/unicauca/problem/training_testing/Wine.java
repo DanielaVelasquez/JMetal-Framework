@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Wine extends TrainingTestingEvaluator {
 
     public Wine() throws IOException {
-        super(20, new DataSet("src/resources-elm", "wine.train", 13), new DataSet("src/resources-elm", "wine.test", 13), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Wine");
+        super(20, new DataSet("src/resources-elm", "wine.train", 13), new DataSet("src/resources-elm", "wine.test", 13), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Wine", 3000);
     }
 
 }

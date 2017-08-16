@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Wilt extends AbstractCrossValidationEvaluator {
 
     public Wilt() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Wilt", new DataSet("src/resources-elm", "wilt.train", 5), new DataSet("src/resources-elm", "wilt.test", 5), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Wilt", new DataSet("src/resources-elm", "wilt.train", 5), new DataSet("src/resources-elm", "wilt.test", 5), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

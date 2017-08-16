@@ -37,7 +37,14 @@ public class RidgeRegressionTheory extends AbstractMoorePenroseMethod {
         DenseMatrix I = Matrices.identity(n);
         AtA.add(lumda, I);
         DenseMatrix AtAinv = I.copy();
-        AtA.solve(I, AtAinv);
+        try
+        {
+            AtA.solve(I, AtAinv);
+        }
+        catch(Exception e)
+        {
+            System.out.println("-----------------------------------------");
+        }
 
         DenseMatrix Ainv = new DenseMatrix(n, m);
         AtAinv.mult(At, Ainv);

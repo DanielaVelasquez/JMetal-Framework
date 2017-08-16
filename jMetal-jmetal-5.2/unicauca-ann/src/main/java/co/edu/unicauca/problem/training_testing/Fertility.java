@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Fertility extends TrainingTestingEvaluator {
 
     public Fertility() throws IOException {
-        super(20, new DataSet("src/resources-elm", "fertility.train", 9), new DataSet("src/resources-elm", "fertility.test", 9), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Fertility");
+        super(20, new DataSet("src/resources-elm", "fertility.train", 9), new DataSet("src/resources-elm", "fertility.test", 9), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Fertility", 3000);
     
     }
 

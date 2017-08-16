@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Haberman extends TrainingTestingEvaluator {
 
     public Haberman() throws IOException {
-        super(20, new DataSet("src/resources-elm", "haberman.train", 3), new DataSet("src/resources-elm", "haberman.test", 3), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Haberman");
+        super(20, new DataSet("src/resources-elm", "haberman.train", 3), new DataSet("src/resources-elm", "haberman.test", 3), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Haberman", 3000);
     }
 
 }

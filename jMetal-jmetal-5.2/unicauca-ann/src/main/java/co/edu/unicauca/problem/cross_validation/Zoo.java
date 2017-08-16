@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Zoo extends AbstractCrossValidationEvaluator {
 
     public Zoo() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Zoo", new DataSet("src/resources-elm", "zoo.train", 16), new DataSet("src/resources-elm", "zoo.test", 16), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Zoo", new DataSet("src/resources-elm", "zoo.train", 16), new DataSet("src/resources-elm", "zoo.test", 16), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

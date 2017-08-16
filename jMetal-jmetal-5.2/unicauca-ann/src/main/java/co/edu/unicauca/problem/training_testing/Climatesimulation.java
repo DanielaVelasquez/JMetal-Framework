@@ -10,6 +10,6 @@ import java.io.IOException;
 public class Climatesimulation extends TrainingTestingEvaluator {
 
     public Climatesimulation() throws IOException {
-        super(20, new DataSet("src/resources-elm", "climatesimulation.train", 18), new DataSet("src/resources-elm", "climatesimulation.test", 18), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "ClimateSimulation");
+        super(20, new DataSet("src/resources-elm", "climatesimulation.train", 18), new DataSet("src/resources-elm", "climatesimulation.test", 18), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "ClimateSimulation", 3000);
     }
 }

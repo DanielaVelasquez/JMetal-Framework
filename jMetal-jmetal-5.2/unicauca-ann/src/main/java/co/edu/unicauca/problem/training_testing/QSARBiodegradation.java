@@ -10,7 +10,7 @@ import java.io.IOException;
 public class QSARBiodegradation extends TrainingTestingEvaluator {
 
     public QSARBiodegradation() throws IOException {
-        super(20, new DataSet("src/resources-elm", "QSARBiodegradation.train", 41), new DataSet("src/resources-elm", "QSARBiodegradation.test", 41), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "QSARBiodegradation");
+        super(20, new DataSet("src/resources-elm", "QSARBiodegradation.train", 41), new DataSet("src/resources-elm", "QSARBiodegradation.test", 41), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "QSARBiodegradation", 3000);
     }
 
 }

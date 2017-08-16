@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Chart extends TrainingTestingEvaluator {
 
     public Chart() throws IOException {
-        super(20, new DataSet("src/resources-elm", "chart.train", 60), new DataSet("src/resources-elm", "chart.test", 60), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Chart");
+        super(20, new DataSet("src/resources-elm", "chart.train", 60), new DataSet("src/resources-elm", "chart.test", 60), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Chart", 3000);
     }
 
 }

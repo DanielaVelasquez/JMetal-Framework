@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Yeast extends TrainingTestingEvaluator {
 
     public Yeast() throws IOException {
-        super(20, new DataSet("src/resources-elm", "yeast.train", 8), new DataSet("src/resources-elm", "yeast.test", 8), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Yeast");
+        super(20, new DataSet("src/resources-elm", "yeast.train", 8), new DataSet("src/resources-elm", "yeast.test", 8), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Yeast", 3000);
     }
 
 }

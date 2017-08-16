@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Glass extends AbstractCrossValidationEvaluator {
 
     public Glass() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Glass", new DataSet("src/resources-elm", "glass.train", 9), new DataSet("src/resources-elm", "glass.test", 9), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Glass", new DataSet("src/resources-elm", "glass.train", 9), new DataSet("src/resources-elm", "glass.test", 9), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

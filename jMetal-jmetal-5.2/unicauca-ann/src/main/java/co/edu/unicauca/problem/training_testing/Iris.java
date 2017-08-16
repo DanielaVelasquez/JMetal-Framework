@@ -18,7 +18,7 @@ public class Iris extends TrainingTestingEvaluator{
     
     public Iris() throws IOException 
     {
-        super(20, new DataSet("src/resources-elm", "iris.train", 4), new DataSet("src/resources-elm", "iris.test", 4), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Iris");
+        super(20, new DataSet("src/resources-elm", "iris.train", 4), new DataSet("src/resources-elm", "iris.test", 4), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Iris", 3000);
     }
     
 }

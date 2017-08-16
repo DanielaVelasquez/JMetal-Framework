@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Libras extends TrainingTestingEvaluator {
 
     public Libras() throws IOException {
-        super(20, new DataSet("src/resources-elm", "libras.train", 90), new DataSet("src/resources-elm", "libras.test", 90), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Libras");
+        super(20, new DataSet("src/resources-elm", "libras.train", 90), new DataSet("src/resources-elm", "libras.test", 90), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Libras", 3000);
     }
 
 }

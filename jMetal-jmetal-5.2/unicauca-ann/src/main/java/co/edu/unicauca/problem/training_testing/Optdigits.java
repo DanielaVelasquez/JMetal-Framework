@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Optdigits extends TrainingTestingEvaluator{
 
     public Optdigits() throws IOException {
-        super(20, new DataSet("src/resources-elm", "optdigits.train", 64), new DataSet("src/resources-elm", "optdigits.test", 64), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Opdigits");
+        super(20, new DataSet("src/resources-elm", "optdigits.train", 64), new DataSet("src/resources-elm", "optdigits.test", 64), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Opdigits", 3000);
     }
 
 }

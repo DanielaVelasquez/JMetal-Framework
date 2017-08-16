@@ -10,6 +10,6 @@ import java.io.IOException;
 public class Cardiotocography extends TrainingTestingEvaluator {
 
     public Cardiotocography() throws IOException {
-        super(20, new DataSet("src/resources-elm", "cardiotocography.train", 21), new DataSet("src/resources-elm", "cardiotocography.test", 21), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Cardiotocography");
+        super(20, new DataSet("src/resources-elm", "cardiotocography.train", 21), new DataSet("src/resources-elm", "cardiotocography.test", 21), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Cardiotocography", 3000);
     }
 }

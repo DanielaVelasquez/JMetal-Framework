@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Letter extends TrainingTestingEvaluator {
 
     public Letter() throws IOException {
-        super(20, new DataSet("src/resources-elm", "letter.train", 16), new DataSet("src/resources-elm", "letter.test", 16), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Letter");
+        super(20, new DataSet("src/resources-elm", "letter.train", 16), new DataSet("src/resources-elm", "letter.test", 16), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Letter", 3000);
     }
 
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Hayes extends AbstractCrossValidationEvaluator {
 
     public Hayes() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Hayes", new DataSet("src/resources-elm", "hayes.train", 5), new DataSet("src/resources-elm", "hayes.test", 5), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Hayes", new DataSet("src/resources-elm", "hayes.train", 5), new DataSet("src/resources-elm", "hayes.test", 5), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

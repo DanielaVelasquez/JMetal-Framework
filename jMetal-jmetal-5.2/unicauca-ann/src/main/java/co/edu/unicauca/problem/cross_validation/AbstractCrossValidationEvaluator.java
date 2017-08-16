@@ -54,11 +54,12 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
      * @param hidden_neurons
      * @param activation_function
      * @param inverse
+     * @param maxEvaluations Maximun number of evaluations for objective function
      */
-        public AbstractCrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse) {
+        public AbstractCrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
         /*EL contructor deberia recibir Una Red ELM abstracta y no los componentes*/
         super(type, name, training_data_set, testing_data_set);
-        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
+        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse, maxEvaluations);
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
         this.number_folders = number_folders;
@@ -142,6 +143,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
     @Override
     public double test(DoubleSolution solution ) {
+        elm.resetEFOS();
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
@@ -151,6 +153,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
         elm.test();
+        elm.resetEFOS();
         return elm.getAccuracy();
     }
 }

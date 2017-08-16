@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Pen extends AbstractCrossValidationEvaluator {
 
     public Pen() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Pen", new DataSet("src/resources-elm", "pen.train", 16), new DataSet("src/resources-elm", "pen.test", 16), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Pen", new DataSet("src/resources-elm", "pen.train", 16), new DataSet("src/resources-elm", "pen.test", 16), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Wilt extends TrainingTestingEvaluator {
 
     public Wilt() throws IOException {
-        super(20, new DataSet("src/resources-elm", "wilt.train", 5), new DataSet("src/resources-elm", "wilt.test", 5), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Wilt");
+        super(20, new DataSet("src/resources-elm", "wilt.train", 5), new DataSet("src/resources-elm", "wilt.test", 5), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Wilt", 3000);
     }
 
 }

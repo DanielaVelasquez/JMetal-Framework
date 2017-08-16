@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Indian extends TrainingTestingEvaluator {
 
     public Indian() throws IOException {
-        super(20, new DataSet("src/resources-elm", "indian.train", 10), new DataSet("src/resources-elm", "indian.test", 10), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Indian");
+        super(20, new DataSet("src/resources-elm", "indian.train", 10), new DataSet("src/resources-elm", "indian.test", 10), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Indian", 3000);
     }
 
 }

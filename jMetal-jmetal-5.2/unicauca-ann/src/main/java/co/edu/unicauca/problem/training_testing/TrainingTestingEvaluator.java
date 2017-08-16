@@ -30,10 +30,11 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
      * @param activation_function activation function use in ELM
      * @param inverse Method for calculating Moore Penrose v
      * @param name Evaluator's name
+     * @param maxEvaluations Maximun number of evaluations for objective function
      */
-    public TrainingTestingEvaluator(int hidden_neurons, DataSet training_data_set, DataSet testing_data_set, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, String name) {
+    public TrainingTestingEvaluator(int hidden_neurons, DataSet training_data_set, DataSet testing_data_set, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, String name, int maxEvaluations) {
         super(AbstractELMEvaluator.EvaluatorType.TT, name, training_data_set, testing_data_set);
-        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
+        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse, maxEvaluations);
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
         
@@ -50,6 +51,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
     @Override
     public double test(DoubleSolution solution)
     {
+        elm.resetEFOS();
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
@@ -59,6 +61,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
         elm.test();
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
+        elm.resetEFOS();
         return elm.getAccuracy();
     }
 

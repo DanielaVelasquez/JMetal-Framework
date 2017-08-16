@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Connectionist extends TrainingTestingEvaluator {
 
     public Connectionist() throws IOException {
-        super(20, new DataSet("src/resources-elm", "connectionist.train", 60), new DataSet("src/resources-elm", "connectionist.test", 60), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Connectionist");
+        super(20, new DataSet("src/resources-elm", "connectionist.train", 60), new DataSet("src/resources-elm", "connectionist.test", 60), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Connectionist", 3000);
     }
 
 }

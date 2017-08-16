@@ -12,7 +12,7 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 public class Contraceptive extends TrainingTestingEvaluator {
 
     public Contraceptive() throws IOException {
-        super(20, new DataSet("src/resources-elm", "contraceptive.train", 9), new DataSet("src/resources-elm", "contraceptive.test", 9), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Contraseptive");
+        super(20, new DataSet("src/resources-elm", "contraceptive.train", 9), new DataSet("src/resources-elm", "contraceptive.test", 9), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Contraseptive", 3000);
     }
 
 }

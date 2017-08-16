@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Ecoli extends TrainingTestingEvaluator {
 
     public Ecoli() throws IOException {
-        super(20, new DataSet("src/resources-elm", "ecoli.train", 7), new DataSet("src/resources-elm", "ecoli.test", 7), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Ecoli");
+        super(20, new DataSet("src/resources-elm", "ecoli.train", 7), new DataSet("src/resources-elm", "ecoli.test", 7), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Ecoli", 3000);
     }
 
 }

@@ -10,6 +10,6 @@ public class Banknote extends TrainingTestingEvaluator
 {
     public Banknote() throws IOException 
     {
-        super(20, new DataSet("src/resources-elm", "banknote.train", 4), new DataSet("src/resources-elm", "banknote.test", 4), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Banknote");
+        super(20, new DataSet("src/resources-elm", "banknote.train", 4), new DataSet("src/resources-elm", "banknote.test", 4), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Banknote", 3000);
     }
 }

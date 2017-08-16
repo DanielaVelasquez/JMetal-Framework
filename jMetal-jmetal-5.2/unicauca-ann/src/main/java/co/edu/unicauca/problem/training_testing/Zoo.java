@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Zoo extends TrainingTestingEvaluator {
 
     public Zoo() throws IOException {
-        super(20, new DataSet("src/resources-elm", "zoo.train", 16), new DataSet("src/resources-elm", "zoo.test", 16), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Zoo");
+        super(20, new DataSet("src/resources-elm", "zoo.train", 16), new DataSet("src/resources-elm", "zoo.test", 16), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Zoo", 3000);
     }
 
 }

@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Wdbc extends TrainingTestingEvaluator {
 
     public Wdbc() throws IOException {
-        super(20, new DataSet("src/resources-elm", "wdbc.train", 30), new DataSet("src/resources-elm", "wdbc.test", 30), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Wdbc");
+        super(20, new DataSet("src/resources-elm", "wdbc.train", 30), new DataSet("src/resources-elm", "wdbc.test", 30), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Wdbc", 3000);
     }
 
 }

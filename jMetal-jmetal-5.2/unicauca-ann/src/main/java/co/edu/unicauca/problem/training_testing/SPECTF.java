@@ -10,7 +10,7 @@ import java.io.IOException;
 public class SPECTF extends TrainingTestingEvaluator {
 
     public SPECTF() throws IOException {
-        super(20, new DataSet("src/resources-elm", "SPECTF.train", 44), new DataSet("src/resources-elm", "SPECTF.test", 44), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "SPECTF");
+        super(20, new DataSet("src/resources-elm", "SPECTF.train", 44), new DataSet("src/resources-elm", "SPECTF.test", 44), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "SPECTF", 3000);
     }
 
 }

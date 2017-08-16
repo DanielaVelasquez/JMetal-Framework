@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Cardiotocography extends AbstractCrossValidationEvaluator {
 
     public Cardiotocography() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Cardiotocography", new DataSet("src/resources-elm", "Cardiotocography.train", 21), new DataSet("src/resources-elm", "Cardiotocography.test", 21), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Cardiotocography", new DataSet("src/resources-elm", "Cardiotocography.train", 21), new DataSet("src/resources-elm", "Cardiotocography.test", 21), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

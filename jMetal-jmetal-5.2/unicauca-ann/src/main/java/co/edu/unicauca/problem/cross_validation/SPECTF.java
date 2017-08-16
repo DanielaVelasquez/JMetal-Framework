@@ -9,7 +9,7 @@ import java.io.IOException;
 public class SPECTF extends AbstractCrossValidationEvaluator {
 
     public SPECTF() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "SPECTF", new DataSet("src/resources-elm", "SPECTF.train", 44), new DataSet("src/resources-elm", "SPECTF.test", 44), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}));
+        super(AbstractELMEvaluator.EvaluatorType.CV, "SPECTF", new DataSet("src/resources-elm", "SPECTF.train", 44), new DataSet("src/resources-elm", "SPECTF.test", 44), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

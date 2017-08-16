@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Blood extends TrainingTestingEvaluator {
 
     public Blood() throws IOException {
-        super(20, new DataSet("src/resources-elm", "blood.train", 4), new DataSet("src/resources-elm", "blood.test", 4), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Blood");
+        super(20, new DataSet("src/resources-elm", "blood.train", 4), new DataSet("src/resources-elm", "blood.test", 4), new Sigmoid(), new RidgeRegressionTheory(new double[]{0,000000001}), "Blood", 3000);
     }
 
 }
