@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -40,13 +41,13 @@ public abstract class CrossValidationExperiment {
     
     File file = new File(problemName);
     BufferedWriter bw = new BufferedWriter(new FileWriter(problemName));
-    
+    rnd.setSeed(56);
     for(Algorithm algorithm: algorithmList)
     {
         for(int seed = 0; seed < RUNS; seed++)
         {
             rnd.setSeed(seed);
-            
+            DECC_G a = (DECC_G)algorithm;
             algorithmRunner = new AlgorithmRunner.Executor(algorithm)
             .execute() ;
 
@@ -57,6 +58,7 @@ public abstract class CrossValidationExperiment {
             String line = algorithm.getName() + " - " + computingTime + " - "+problemName +" - "+(1-solution.getObjective(0)) + " - " + p.test(solution) +" - "+seed+"\n";
             System.out.println(algorithm.getName() + " - " + computingTime + " - "+problemName +" - "+(1-solution.getObjective(0)) + " - " + p.test(solution) +" - "+seed);
             bw.write(line);
+            a.setPopulation(null);
             
         }
         
@@ -77,7 +79,7 @@ public abstract class CrossValidationExperiment {
                                   
                 
         
-    algorithms.add(algorithm);
+    //algorithms.add(algorithm);
     
       
      algorithm = new DECC_GBuilder(problem)

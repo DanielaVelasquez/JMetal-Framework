@@ -14,7 +14,7 @@ import java.io.IOException;
 public class RunnerExperiment extends CrossValidationExperiment{
     
     public RunnerExperiment() throws IOException {
-        super("co.edu.unicauca.problem.cross_validation.Iris");
+        super("co.edu.unicauca.problem.cross_validation.Ionosphere");
     }
     
     public static void main(String[] args) throws Exception 
