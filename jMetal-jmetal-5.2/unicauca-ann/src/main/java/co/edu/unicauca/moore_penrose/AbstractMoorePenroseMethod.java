@@ -32,7 +32,7 @@ public abstract class AbstractMoorePenroseMethod {
      * @param A matrix to calculate moore-penrose pseudoinverse
      * @return A's pseudoinverse
      */
-    public abstract DenseMatrix calculate(DenseMatrix A);
+    public abstract DenseMatrix calculate(DenseMatrix A) throws Exception ;
 
     public double[] getValues() {
         return values;

@@ -16,7 +16,7 @@ public class RidgeRegressionTheory extends AbstractMoorePenroseMethod {
     }
 
     @Override
-    public DenseMatrix calculate(DenseMatrix A) {
+    public DenseMatrix calculate(DenseMatrix A){
         /*	Moore-Penrose generalized inverse maxtrix
          * 	Theory:Ridge regression
          *	MP(A) = inv((H'*H+lumda*I))*H'
@@ -37,15 +37,7 @@ public class RidgeRegressionTheory extends AbstractMoorePenroseMethod {
         DenseMatrix I = Matrices.identity(n);
         AtA.add(lumda, I);
         DenseMatrix AtAinv = I.copy();
-        try
-        {
-            AtA.solve(I, AtAinv);
-        }
-        catch(Exception e)
-        {
-            System.out.println("-----------------------------------------");
-        }
-
+        AtA.solve(I, AtAinv);
         DenseMatrix Ainv = new DenseMatrix(n, m);
         AtAinv.mult(At, Ainv);
         return Ainv;

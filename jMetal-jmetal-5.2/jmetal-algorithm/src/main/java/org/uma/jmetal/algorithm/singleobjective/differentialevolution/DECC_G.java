@@ -162,7 +162,7 @@ public class DECC_G implements Algorithm
     } 
     private void replaceInPopulation(List<DoubleSolution> subpopulation, int l, int u, List<Integer> index)
     {
-        for(int i = 0; i< (int)(populationSize / 2); i++)
+        for(int i = 0; i < populationSize; i++)
         {
             DoubleSolution original = population.get(i);
             DoubleSolution other = subpopulation.get(i);
@@ -315,7 +315,7 @@ public class DECC_G implements Algorithm
                subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
                
                List<DoubleSolution> subpopulation = this.copy(this.population);
-               SaNSDE sansde = new SaNSDE(subcomponent_problem_SaNSDE, FE, (int)(populationSize / 2), CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
+               SaNSDE sansde = new SaNSDE(subcomponent_problem_SaNSDE, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
                sansde.setPopulation(subpopulation);
                
                
@@ -327,7 +327,7 @@ public class DECC_G implements Algorithm
            }
            this.findIndividuals();
            
-           DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, (int)(populationSize / 2), CROSSOVER_1,SELECTION, evaluator);
+           DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
            //de.setPopulation(w_population);
            this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
            subcomponent_problem_DE.setSolution(best_inidvidual);

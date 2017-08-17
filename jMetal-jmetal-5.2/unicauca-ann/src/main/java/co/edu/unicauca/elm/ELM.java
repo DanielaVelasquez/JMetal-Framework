@@ -165,10 +165,9 @@ public class ELM {
      */
     public void train() {
         
-        this.EFOs++;
-        
-        if(this.EFOs <= maxEvaluations)
+        if(this.EFOs < maxEvaluations)
         {        
+            this.EFOs++;
             /**
              * In case the input weights is not defined in the ELM they will be
              * randomly assigned
@@ -186,15 +185,22 @@ public class ELM {
 
             //Get output matrix from hidden layer
             DenseMatrix H = calculateH(X);
-            DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
-            DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
-            tabular.transpose(transT);
+            try
+            {
+                DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
+                DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
+                tabular.transpose(transT);
 
-            output_weight = new DenseMatrix(hidden_neurons, output_neurons);
-            pinvH.mult(transT, output_weight);
+                output_weight = new DenseMatrix(hidden_neurons, output_neurons);
+                pinvH.mult(transT, output_weight);
 
-            DenseMatrix T = calculate_output(H, number_data);
-            accuracy = evaluate(tabular, T);
+                DenseMatrix T = calculate_output(H, number_data);
+                accuracy = evaluate(tabular, T);
+            }
+            catch(Exception ex)
+            {
+                accuracy = 1;
+            }
         }
         else            
         {
@@ -413,5 +419,4 @@ public class ELM {
     public void setInputNeurons(int input_neurons) {
         this.input_neurons = input_neurons;
     }
-
 }

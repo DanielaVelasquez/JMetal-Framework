@@ -77,15 +77,15 @@ public abstract class TrainingTestingExperiment {
                                   
                 
         
-    algorithms.add(algorithm);
+    //algorithms.add(algorithm);
     
       
      algorithm = new DECC_GBuilder(problem)
-                        .setCycles(5)
-                        .setPopulationSize(20)
-                        .setSubcomponets(4)
-                        .setFEs(7)
-                        .setwFes(9)
+                        .setCycles(3)
+                        .setPopulationSize(10)
+                        .setSubcomponets(3)
+                        .setFEs(20)
+                        .setwFes(24)
                         .build();
 
 
