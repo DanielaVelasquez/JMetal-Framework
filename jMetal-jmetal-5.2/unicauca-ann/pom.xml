@@ -8,6 +8,10 @@
     </parent>
     <artifactId>unicauca-ann</artifactId>
     <packaging>jar</packaging>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.uma.jmetal</groupId>
@@ -16,6 +20,11 @@
        <dependency>
             <groupId>org.uma.jmetal</groupId>
             <artifactId>jmetal-algorithm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>6.2.1.jre8</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.matrix-toolkits-java</groupId>
