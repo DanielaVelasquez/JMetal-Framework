@@ -309,7 +309,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 
     @Override
     protected boolean isStoppingConditionReached() {
-        return evaluations >= maxEvaluations;
+        return evaluations > maxEvaluations;
     }
 
     @Override

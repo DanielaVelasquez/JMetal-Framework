@@ -207,6 +207,11 @@ public class ELM {
             accuracy = 1;
         }
     }
+    
+    public int getEFOS()
+    {
+        return this.EFOs;
+    }
 
     /**
      * Test the artificial neural network with the input and output data given

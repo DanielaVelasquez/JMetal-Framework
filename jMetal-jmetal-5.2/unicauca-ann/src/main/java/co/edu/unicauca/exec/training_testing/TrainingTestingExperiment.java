@@ -71,8 +71,8 @@ public abstract class TrainingTestingExperiment {
     List<Algorithm> algorithms = new ArrayList<>();
     
     Algorithm algorithm = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(2970)
-                        .setPopulationSize(20)
+                        .setMaxEvaluations(3000)
+                        .setPopulationSize(10)
                         .build();
                                   
                 
@@ -83,9 +83,9 @@ public abstract class TrainingTestingExperiment {
      algorithm = new DECC_GBuilder(problem)
                         .setCycles(3)
                         .setPopulationSize(10)
-                        .setSubcomponets(3)
-                        .setFEs(20)
-                        .setwFes(24)
+                        .setSubcomponets(10)
+                        .setFEs(6)
+                        .setwFes(9)
                         .build();
 
 

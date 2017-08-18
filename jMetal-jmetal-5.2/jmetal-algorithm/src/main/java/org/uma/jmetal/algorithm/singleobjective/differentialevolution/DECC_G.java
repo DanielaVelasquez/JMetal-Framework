@@ -301,10 +301,11 @@ public class DECC_G implements Algorithm
        //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
        {
+           
            List<Integer> index = this.randPerm(this.n);
            //w_population.clear();
            for(int j = 0; j < subcomponent; j++)
-           {
+           {               
                int l = j * this.s;
                int u = ((j+1) * s) - 1;
                
