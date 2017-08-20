@@ -286,8 +286,8 @@ public class DECC_G implements Algorithm
     @Override
     public void run() 
     {
-       if(this.population == null)
-        this.population = this.createInitialPopulation();
+       //if(this.population == null)
+       this.population = this.createInitialPopulation();
        
        this.evaluatePopulation(this.population);
        this.n = population.get(0).getNumberOfVariables();
@@ -311,6 +311,11 @@ public class DECC_G implements Algorithm
            {  
                l = u + 1;
                u = l + this.s - 1;
+               
+               if(u> this.n)
+               {
+                   u = this.n - 1;
+               }
                
                List<Integer> sublist = index.subList(l, u + 1);
                subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
