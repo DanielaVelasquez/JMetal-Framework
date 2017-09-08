@@ -18,7 +18,9 @@ public class MultipleTrajectorySearch implements Algorithm
      /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/
-    private int LOWER_BOUND = 0; //Este ya se usa para otra cosa diferenet que en el algoritmo
+    private int LOWER_BOUND_ROW = 0; //Este ya se usa para otra cosa diferenet que en el algoritmo
+    
+    private int LOWER_BOUND = -1;
     
     private int UPPER_BOUND = 1;
     
@@ -78,24 +80,84 @@ public class MultipleTrajectorySearch implements Algorithm
      * Number of foreground to decide how many solutions are set to true
      */
     private int number_of_foreground;
-    
+    /**
+     * Determines which individuals in population are enable
+     */
     private List<Boolean> enable;
+    /**
+     * Determines which individuals in population were improve
+     */
     private List<Boolean> improve;
+    /**
+     * Determines the search range for every individual
+     */
     private List<Double> search_range;
-    
+    /**
+     * Bonus 1 value
+     */
     private double bonus_1;
+    /**
+     * Bonus 2 value
+     */
     private double bonus_2;
+    /**
+     * Lower bound for variable a in local search 3
+     */
+    private double lower_bound_a;
+    /**
+     * Upper bound for variable a in local search 3
+     */
+    private double upper_bound_a;
+    /**
+     * Lower bound for variable b in local search 3
+     */
+    private double lower_bound_b;
+    /**
+     * Upper bound for variable b in local search 3
+     */
+    private double upper_bound_b;
+    /**
+     * Lower bound for variable c in local search 3
+     */
+    private double lower_bound_c;
+    /**
+     * Upper bound for variable c in local search 3
+     */
+    private double upper_bound_c;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
+    public MultipleTrajectorySearch(int populationSize, DoubleProblem problem, SolutionListEvaluator<DoubleSolution> evaluator, Comparator<DoubleSolution> comparator, int maxGenerations, int local_search_test, int local_search, int local_search_best, int number_of_foreground, double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, double lower_bound_b, double upper_bound_b, double lower_bound_c, double upper_bound_c)
+    {
+        this.populationSize = populationSize;
+        this.problem = problem;
+        this.evaluator = evaluator;
+        this.comparator = comparator;
+        this.maxGenerations = maxGenerations;
+        this.local_search_test = local_search_test;
+        this.local_search = local_search;
+        this.local_search_best = local_search_best;
+        this.number_of_foreground = number_of_foreground;
+        this.bonus_1 = bonus_1;
+        this.bonus_2 = bonus_2;
+        this.lower_bound_a = lower_bound_a;
+        this.upper_bound_a = upper_bound_a;
+        this.lower_bound_b = lower_bound_b;
+        this.upper_bound_b = upper_bound_b;
+        this.lower_bound_c = lower_bound_c;
+        this.upper_bound_c = upper_bound_c;
+        
+        this.n = this.problem.getNumberOfVariables();
+        this.randomGenerator = JMetalRandom.getInstance();
+    }
+
     /**
      * Builds a simulated orthogonal array SOAmxn
      * @param m number of levels of each factor
      * @param n number of factors
      * @return a simulated orthogonal array
      */
-    private int[][] buildSOA(int m, int n)
-    {
+    private int[][] buildSOA(int m, int n) {
         int[][] SOA = new int[m][n];
         this.fillWith(SOA, SOA_DEFAULT_VALUE);
         
@@ -127,7 +189,7 @@ public class MultipleTrajectorySearch implements Algorithm
         int rows = array.length;
         do
         {
-            row = randomGenerator.nextInt(LOWER_BOUND, rows);
+            row = randomGenerator.nextInt(LOWER_BOUND_ROW, rows);
         }while(array[row][col] != value);
         return row;
     }
@@ -231,22 +293,7 @@ public class MultipleTrajectorySearch implements Algorithm
         
         return this.getBestBetween(best, s) == s;
     }
-    /**
-     * Determines wether a solution who has been changed has degenerate or improved
-     * @param s solution to study
-     * @param variable_changed variable changed in solution
-     * @param variable value on the variable changed
-     * @param objective original value on its objective
-     * @return true if s has improved because of the change, false if s has not improve
-     */
-    private boolean functionValueDegenerates(DoubleSolution s, int variable_changed, double variable, double objective)
-    {
-        DoubleSolution original = (DoubleSolution) s.copy();
-        original.setObjective(0, objective);
-        original.setAttribute(variable_changed, variable);
-        
-        return this.getBestBetween(original, s) == original;
-    }
+    
     /**
      * Determines if a modified individual has a decresead evaluation compared to its orifinal
      * @param original original individual
@@ -262,6 +309,7 @@ public class MultipleTrajectorySearch implements Algorithm
         double SR = this.search_range.get(index);
         boolean improve_i = this.improve.get(index);
         DoubleSolution individual = this.population.get(index);
+        DoubleSolution copy = (DoubleSolution) individual.copy();
         
         int best_index = this.getIndexBest(this.population);
         DoubleSolution best = this.population.get(best_index);
@@ -301,7 +349,7 @@ public class MultipleTrajectorySearch implements Algorithm
             }
             else
             {
-                if(this.functionValueDegenerates(individual, i, original_value, original_objective))
+                if(this.functionValueDegenerates(copy, individual))
                 {
                    individual.setVariableValue(i, original_value + 0.5 * SR);
                    this.problem.evaluate(individual);
@@ -312,7 +360,7 @@ public class MultipleTrajectorySearch implements Algorithm
                        grade += bonus_1;
                    }
                    
-                   if(this.functionValueDegenerates(individual, i, original_value, original_objective))
+                   if(this.functionValueDegenerates(copy, individual))
                    {
                        individual.setObjective(0, original_objective);
                        individual.setAttribute(i, original_value);
@@ -437,9 +485,139 @@ public class MultipleTrajectorySearch implements Algorithm
         this.search_range.set(index, SR);
         return grade;
     }
-    private int local_search_3(int index)
+    /**
+     * Determines if a new value can be assigned to an individual
+     * @param new_value new value to assign
+     * @param index index in the solution to  change
+     * @param solution solution which is going to change
+     * @return true if the new value is between the allowed value in a specific
+     * index int the individual, false otherwise
+     */
+    private boolean isInBounds(double new_value, int index, DoubleSolution solution)
     {
-        return 0;
+        return new_value > solution.getLowerBound(index) && new_value < solution.getUpperBound(index);
+    }
+    private double local_search_3(int index)
+    {
+        double SR = this.search_range.get(index);
+        boolean improve_i = this.improve.get(index);
+        DoubleSolution individual = this.population.get(index);
+        double individual_objective = individual.getObjective(0);
+        DoubleSolution copy = (DoubleSolution) individual.copy();
+        
+        double grade = 0;
+        
+        DoubleSolution x1, y1, x2;
+        double x1_value, y1_value, x2_value;
+        double x1_new, y1_new, x2_new;
+        
+        for(int i = 0;  i < this.n; i++)
+        {
+            x1 = (DoubleSolution) individual.copy();
+            y1 = (DoubleSolution) individual.copy();
+            x2 = (DoubleSolution) individual.copy();
+            
+            x1_value = x1.getVariableValue(i);
+            y1_value = y1.getVariableValue(i);
+            x2_value = x2.getVariableValue(i);
+            
+            //TO-DO ¿ Qué pasa si no puede hacer la suma o la resta?
+            //Que tal si se sale de los límites permitidos de la variable
+            //Se pude hacer así preguntando???
+            x1_new = x1_value + 0.1;
+            y1_new = y1_value + 0.1;
+            x2_new = x2_value - 0.2;
+            
+            if(this.isInBounds(x1_new, i, x1))
+            {
+                x1.setVariableValue(i, x1_new);
+                this.problem.evaluate(x1);
+            }
+                
+            if(this.isInBounds(y1_new, i, y1))
+            {
+                y1.setVariableValue(i, y1_new);
+                this.problem.evaluate(y1);
+            }
+             
+            if(this.isInBounds(x2_new, i, x2))
+            {
+                x2.setVariableValue(i, x2_new);
+                this.problem.evaluate(x2);
+            }
+            
+            //TO-DO ¿ Se actualiza el mejor?
+            //Se cambia de la población??
+            if(this.improveBest(x1))
+            {
+                grade += bonus_1;
+                int best = this.getIndexBest(this.population);
+                this.population.set(best, x1);
+            }
+            
+            if(this.improveBest(y1))
+            {
+                grade += bonus_1;
+                int best = this.getIndexBest(this.population);
+                this.population.set(best, y1);
+            }
+            
+            if(this.improveBest(x2))
+            {
+                grade += bonus_1;
+                int best = this.getIndexBest(this.population);
+                this.population.set(best, x2);
+            }
+            
+            //TO-DO ¿solo se puede si es monobojetivo??
+            //TO-DO ¿Se puede hacer? no se debe tener en cuenta si es maximizando
+            // o si está minimizando
+            double D1 = individual_objective - x1.getObjective(0);
+            double D2 = individual_objective - y1.getObjective(0);
+            double D3 = individual_objective - x2.getObjective(0);
+            
+            
+            //X1 is better than original individual
+            if(this.getBestBetween(individual, x1)==x1)
+            {
+                grade += bonus_2;
+            }
+            //Y1 is better than original individual
+            if(this.getBestBetween(individual, y1) == y1)
+            {
+                grade += bonus_2;
+            }
+            //x2 is better than original individual
+            if(this.getBestBetween(individual, x2) == x2)
+            {
+                grade += bonus_2;
+            }
+            double a = randomGenerator.nextDouble(lower_bound_a, upper_bound_a);
+            double b = randomGenerator.nextDouble(lower_bound_b, upper_bound_b);
+            double c = randomGenerator.nextDouble(lower_bound_c, upper_bound_c);
+            
+            double xi = individual.getVariableValue(i);
+            double new_xi =  xi + a * (D1 - D2) + b * (D3 - 2 * D1 ) + c;
+            
+            if(this.isInBounds(new_xi, i, individual))
+            {
+                individual.setVariableValue(i, new_xi);
+                this.problem.evaluate(individual);
+            }
+            
+            if(this.functionValueDegenerates(copy, individual))
+            {
+                this.population.set(index, copy);
+            }
+            else
+            {
+                grade += bonus_2;
+            }
+        }
+        
+        this.improve.set(index, improve_i);
+        this.search_range.set(index, SR);
+        return grade;
     }
     /**
      * Choose the best test values
@@ -493,11 +671,20 @@ public class MultipleTrajectorySearch implements Algorithm
     @Override
     public void run() 
     {
+        //TO-DO ¿Cómo determinar automaticamente le lower bound y upper bound?
+        // Se puede hacer por cada gen de un individuo??? de modo que se vaya 
+        //Cambiando de acuerdo a las restricciones de cada uno??
         this.generations = 0;
         //TO-DO hacer que n sea del tamaño de los genes de cada individuo
-        //TO-DO ¿Cómo hacer que m sea mútiplo de n? n es el número de genes 
-        int[][]SOA = this.buildSOA(populationSize, n);
-        this.population = this.generateInitialSolutions(SOA);
+        //TO-DO ¿Cómo hacer que m sea mútiplo de n? n es el número de genes
+        //TO-DO Si está utilizando MOS, la población se la debe pasar
+        //¿así para evitar la creación de una población inicial?
+        if(this.population == null)
+        {
+            int[][]SOA = this.buildSOA(populationSize, n);
+            this.population = this.generateInitialSolutions(SOA);
+        }
+        
         this.evaluatePopulation(this.population);
         
         this.enable = new ArrayList<>();
@@ -575,6 +762,7 @@ public class MultipleTrajectorySearch implements Algorithm
                 enable.set(i, Boolean.FALSE);
             }
             //TO-DO ¿Cómo se miden los grados? demayor a menor? o viceversa?
+            //Creo que es de mayor a menor
             this.chooseSolutionsToEnable(grades, enable);
         }
         
@@ -582,7 +770,8 @@ public class MultipleTrajectorySearch implements Algorithm
 
     @Override
     public Object getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collections.sort(this.population, comparator);
+        return this.population.get(0);
     }
 
     @Override
@@ -602,5 +791,135 @@ public class MultipleTrajectorySearch implements Algorithm
     public void setProblem(DoubleProblem problem) {
         this.problem = problem;
     }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
+
+    public int getN() {
+        return n;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    public List<DoubleSolution> getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(List<DoubleSolution> population) {
+        this.population = population;
+    }
+
+    public int getMaxGenerations() {
+        return maxGenerations;
+    }
+
+    public void setMaxGenerations(int maxGenerations) {
+        this.maxGenerations = maxGenerations;
+    }
+
+    public int getLocal_search_test() {
+        return local_search_test;
+    }
+
+    public void setLocal_search_test(int local_search_test) {
+        this.local_search_test = local_search_test;
+    }
+
+    public int getLocal_search() {
+        return local_search;
+    }
+
+    public void setLocal_search(int local_search) {
+        this.local_search = local_search;
+    }
+
+    public int getLocal_search_best() {
+        return local_search_best;
+    }
+
+    public void setLocal_search_best(int local_search_best) {
+        this.local_search_best = local_search_best;
+    }
+
+    public int getNumber_of_foreground() {
+        return number_of_foreground;
+    }
+
+    public void setNumber_of_foreground(int number_of_foreground) {
+        this.number_of_foreground = number_of_foreground;
+    }
+
+    public double getBonus_1() {
+        return bonus_1;
+    }
+
+    public void setBonus_1(double bonus_1) {
+        this.bonus_1 = bonus_1;
+    }
+
+    public double getBonus_2() {
+        return bonus_2;
+    }
+
+    public void setBonus_2(double bonus_2) {
+        this.bonus_2 = bonus_2;
+    }
+
+    public double getLower_bound_a() {
+        return lower_bound_a;
+    }
+
+    public void setLower_bound_a(double lower_bound_a) {
+        this.lower_bound_a = lower_bound_a;
+    }
+
+    public double getUpper_bound_a() {
+        return upper_bound_a;
+    }
+
+    public void setUpper_bound_a(double upper_bound_a) {
+        this.upper_bound_a = upper_bound_a;
+    }
+
+    public double getLower_bound_b() {
+        return lower_bound_b;
+    }
+
+    public void setLower_bound_b(double lower_bound_b) {
+        this.lower_bound_b = lower_bound_b;
+    }
+
+    public double getUpper_bound_b() {
+        return upper_bound_b;
+    }
+
+    public void setUpper_bound_b(double upper_bound_b) {
+        this.upper_bound_b = upper_bound_b;
+    }
+
+    public double getLower_bound_c() {
+        return lower_bound_c;
+    }
+
+    public void setLower_bound_c(double lower_bound_c) {
+        this.lower_bound_c = lower_bound_c;
+    }
+
+    public double getUpper_bound_c() {
+        return upper_bound_c;
+    }
+
+    public void setUpper_bound_c(double upper_bound_c) {
+        this.upper_bound_c = upper_bound_c;
+    }
+    
+    
     
 }
