@@ -4,7 +4,9 @@ import java.util.Comparator;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
+import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
 public class MultipleTrajectorySearchBuilder
@@ -97,6 +99,8 @@ public class MultipleTrajectorySearchBuilder
         this.upper_bound_a = 0.5;
         this.lower_bound_c = 0;
         this.upper_bound_c = 1;
+        this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
+        comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
      public MultipleTrajectorySearch build()
@@ -240,7 +244,6 @@ public class MultipleTrajectorySearchBuilder
         return this;
     }
 
-
     public MultipleTrajectorySearchBuilder setBoundsB(double lower_bound_b, double upper_bound_b) {
         if(lower_bound_b > upper_bound_b)
             throw new JMetalException("Lower bound "+lower_bound_b+" is greater than upper bound " + upper_bound_b);
@@ -251,8 +254,6 @@ public class MultipleTrajectorySearchBuilder
         this.upper_bound_b = upper_bound_b;
         return this;
     }
-
-    
 
     public MultipleTrajectorySearchBuilder setBoundsC(double lower_bound_c, double upper_bound_c) {
         if(lower_bound_c > upper_bound_c)

@@ -2,9 +2,9 @@ package co.edu.unicauca.exec.training_testing;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
-import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
+import java.util.List;
+import org.uma.jmetal.algorithm.singleobjective.mos.MultipleTrajectorySearch;
+import org.uma.jmetal.algorithm.singleobjective.mos.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -21,9 +21,9 @@ public class IrisRunner
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
-        //rnd.setSeed(1);
+        rnd.setSeed(13);
         DoubleProblem problem;
-        Algorithm<DoubleSolution> algorithm;
+        MultipleTrajectorySearch algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -36,7 +36,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Zoo";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -56,16 +56,13 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm = algorithm = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(2970)
-                        .setPopulationSize(20)
-                        .build();
-        for(int i = 0; i<30;i++)
+        algorithm =  new  MultipleTrajectorySearchBuilder(problem).setMaxGenerations(20).build();
+        for(int i = 0; i<1;i++)
         {
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
 
-              DoubleSolution solution = algorithm.getResult() ;
+              DoubleSolution solution = (DoubleSolution) algorithm.getResult();
               long computingTime = algorithmRunner.getComputingTime() ;
 
               System.out.println("Total execution time: " + computingTime + "ms");
@@ -74,7 +71,8 @@ public class IrisRunner
               System.out.println("Testing: "+p.test(solution));
               System.out.println("Total evaluations: "+p.total);;
         }
-        
+        /*System.out.println("--------------------------------");
+        print(algorithm.getPopulation());
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);
         
         System.out.println("Accuracy "+a);
@@ -83,6 +81,13 @@ public class IrisRunner
         if (!referenceParetoFront.equals("")) {
           printQualityIndicators(population, referenceParetoFront) ;
         }*/
+    }
+    private static void print(List<DoubleSolution> p)
+    {
+        for(DoubleSolution i: p)
+        {
+            System.out.println(""+i.getObjective(0));
+        }
     }
     
 }
