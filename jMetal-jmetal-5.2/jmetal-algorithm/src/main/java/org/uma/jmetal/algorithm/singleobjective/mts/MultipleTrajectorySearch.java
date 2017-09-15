@@ -3,12 +3,10 @@ package org.uma.jmetal.algorithm.singleobjective.mts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -277,7 +275,7 @@ public class MultipleTrajectorySearch implements Algorithm
     private void updateProgress() {
         iteration += 1;
     }
-    private DoubleSolution getBestBetween(DoubleSolution s1, DoubleSolution s2)
+    private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
         List<DoubleSolution> aux = new ArrayList<>();
         aux.add(s1);
@@ -297,7 +295,7 @@ public class MultipleTrajectorySearch implements Algorithm
         //TO-DO Si s es el mejor se puede decir que no lo mejoro?
         if(s==best)
             return false;
-        return this.getBestBetween(best, s) == s;
+        return this.getBest(best, s) == s;
     }
     
     /**
@@ -308,7 +306,7 @@ public class MultipleTrajectorySearch implements Algorithm
      */
     private boolean functionValueDegenerates(DoubleSolution original, DoubleSolution modified)
     {
-        return this.getBestBetween(original, modified )== original;
+        return this.getBest(original, modified )== original;
     }
     /**
      * Determines if a new value can be assigned to an individual
@@ -603,17 +601,17 @@ public class MultipleTrajectorySearch implements Algorithm
             
             
             //X1 is better than original individual
-            if(this.getBestBetween(individual, x1)==x1)
+            if(this.getBest(individual, x1)==x1)
             {
                 grade += bonus_2;
             }
             //Y1 is better than original individual
-            if(this.getBestBetween(individual, y1) == y1)
+            if(this.getBest(individual, y1) == y1)
             {
                 grade += bonus_2;
             }
             //x2 is better than original individual
-            if(this.getBestBetween(individual, x2) == x2)
+            if(this.getBest(individual, x2) == x2)
             {
                 grade += bonus_2;
             }
