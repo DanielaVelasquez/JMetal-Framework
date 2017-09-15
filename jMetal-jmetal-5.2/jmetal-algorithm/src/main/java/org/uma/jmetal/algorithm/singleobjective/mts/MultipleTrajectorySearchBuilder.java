@@ -1,5 +1,6 @@
-package org.uma.jmetal.algorithm.singleobjective.mos;
+package org.uma.jmetal.algorithm.singleobjective.mts;
 
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import java.util.Comparator;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;

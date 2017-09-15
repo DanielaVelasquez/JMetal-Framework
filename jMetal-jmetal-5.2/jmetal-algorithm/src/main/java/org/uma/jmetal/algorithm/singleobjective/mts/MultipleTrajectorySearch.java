@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.singleobjective.mos;
+package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -530,11 +530,13 @@ public class MultipleTrajectorySearch implements Algorithm
         double x1_value, y1_value, x2_value;
         double x1_new, y1_new, x2_new;
         
+        individual = this.population.get(index);
+        original = (DoubleSolution) individual.copy();
+        
         for(int i = 0;  i < this.n; i++)
         {
             individual = this.population.get(index);
             individual_objective = individual.getObjective(0);
-            original = (DoubleSolution) individual.copy();
             
             x1 = (DoubleSolution) individual.copy();
             y1 = (DoubleSolution) individual.copy();
@@ -627,7 +629,7 @@ public class MultipleTrajectorySearch implements Algorithm
                 individual.setVariableValue(i, new_xi);
                 this.problem.evaluate(individual);
             }
-            
+            //TO-DO es del original o del original de la itreacion anterior
             if(this.functionValueDegenerates(original, individual))
             {
                 this.population.set(index, original);
@@ -636,6 +638,15 @@ public class MultipleTrajectorySearch implements Algorithm
             {
                 grade += bonus_2;
             }
+        }
+        
+        if(this.functionValueDegenerates(original, individual))
+        {
+            this.population.set(index, original);
+        }
+        else
+        {
+            grade += bonus_2;
         }
         
         this.improve.set(index, improve_i);
@@ -695,13 +706,12 @@ public class MultipleTrajectorySearch implements Algorithm
     public void run() 
     {
         //TO-DO ¿Cómo determinar automaticamente le lower bound y upper bound?
-        // Se puede hacer por cada gen de un individuo??? de modo que se vaya 
-        //Cambiando de acuerdo a las restricciones de cada uno??
         this.iteration = 0;
         //TO-DO hacer que n sea del tamaño de los genes de cada individuo
         //TO-DO ¿Cómo hacer que m sea mútiplo de n? n es el número de genes
         //TO-DO Si está utilizando MOS, la población se la debe pasar
         //¿así para evitar la creación de una población inicial?
+        this.n = this.problem.getNumberOfVariables();
         if(this.population == null)
         {
             //TO-DO ¿ Está bien construido SOA?

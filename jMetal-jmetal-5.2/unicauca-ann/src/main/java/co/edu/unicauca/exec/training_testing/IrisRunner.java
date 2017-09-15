@@ -3,8 +3,10 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.mos.MultipleTrajectorySearch;
-import org.uma.jmetal.algorithm.singleobjective.mos.MultipleTrajectorySearchBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -23,7 +25,7 @@ public class IrisRunner
         JMetalRandom rnd = JMetalRandom.getInstance();
         rnd.setSeed(13);
         DoubleProblem problem;
-        MultipleTrajectorySearch algorithm;
+        SaNSDE algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -36,7 +38,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Zoo";
+          problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -56,7 +58,10 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm =  new  MultipleTrajectorySearchBuilder(problem).setMaxGenerations(20).build();
+        algorithm =  new  SaNSDEBuilder(problem).
+                           setMaxEvaluations(20).
+                           setPopulationSize(5).
+                           build();
         for(int i = 0; i<1;i++)
         {
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

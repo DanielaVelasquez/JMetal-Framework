@@ -5,7 +5,7 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
-public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implements Algorithm<R>
+public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implements Algorithm<S>
 {
     /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -41,9 +41,17 @@ public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implement
      */
     private List participation_ratio;
     /**
-     * Quality value asociated to each offspring subpopulation
+     * Quality meausure asociated to each offspring subpopulation
      */
-    private List quality_values;
+    private List quality_measures;
+    /**
+     * Population size
+     */
+    private int populationSize;
+    /**
+     * Function evaluation for every tecnique in current generation
+     */
+    private List FE;
     
      /**-----------------------------------------------------------------------------------------
      * Methods
@@ -52,21 +60,24 @@ public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implement
     @Override
     public void run() 
     {
+        this.i = 0;
         this.population = createInitialPopulation();
+        evaluatePopulation(this.population);
+        this.FE = this.initializeSteps();
         this.participation_ratio = distributeParticipationTecniques();
-        this.population = evaluatePopulation(this.population);
+        
         
         while(isStoppingConditionReached())
         {
-            this.quality_values = this.updateQualityOf(this.tecniques);
-            this.participation_ratio = this.updateParticipationRatios(this.quality_values);
+            this.i++;
+            
+            this.quality_measures = this.updateQualityOf(this.tecniques);
+            this.participation_ratio = this.updateParticipationRatios(this.quality_measures);
+            this.FE = this.updateSteps();
             int j = 0;
             for(Algorithm tecnique: tecniques)
             {
-                while(this.isTecniqueStoppingConditionReached(j))
-                {
-                    this.offspring_subpopulation.addAll(this.evolve(tecnique, j));
-                }
+                this.evolve(tecnique, j);
                 j++;
             }
             this.population = this.combine(this.population, this.offspring_subpopulation);
@@ -74,14 +85,23 @@ public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implement
     }
 
     @Override
-    public abstract R getResult();
+    public abstract S getResult();
     
     @Override
     public abstract String getName() ;
 
     @Override
     public abstract String getDescription();
-    
+    /**
+     * Initialize  the Funcionts evaluations for every technique
+     * @return function evaluations for every technique
+     */
+    protected abstract List initializeSteps();
+    /**
+     * Update  the Function evaluations for every technique
+     * @return function evaluations for every technique
+     */
+    protected abstract List updateSteps();
     /**
      * Creates initial population
      * @return initial population
@@ -108,7 +128,7 @@ public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implement
      * @param population population to evaluate
      * @return population evaluated
      */
-    protected abstract List<S> evaluatePopulation(List<S> population);
+    protected abstract void evaluatePopulation(List<S> population);
     /**
      * Updte quality of every tecnique 
      * @param tecniques algorithms to evaluate their quality
@@ -124,10 +144,10 @@ public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implement
     /**
      * Run j-th tecnique
      * @param tecnique algorithm to run
-     * @param j sunindex tecnique
+     * @param FE function evalution for techique
      * @return population found by algorithm
      */
-    protected abstract List evolve(Algorithm tecnique, int j);
+    protected abstract List evolve(Algorithm tecnique, int FE);
     /**
      * Combine population and offspring population according to a pre-established criterion to generate next generation
      * @param population current population

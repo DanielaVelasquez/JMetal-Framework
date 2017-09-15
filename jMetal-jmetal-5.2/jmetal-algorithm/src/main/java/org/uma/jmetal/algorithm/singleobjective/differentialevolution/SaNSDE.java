@@ -95,7 +95,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     private int maxEvaluations;
 
     /**
-     * 
+     * Problem's evaluator
      */
     private SolutionListEvaluator<DoubleSolution> evaluator;
     /**
