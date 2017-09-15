@@ -194,6 +194,12 @@ public class MultipleTrajectorySearchBuilder
         this.maxGenerations = maxGenerations;
         return this;
     }
+    public MultipleTrajectorySearchBuilder setPopulationSize(int populationSize) {
+        if(populationSize <= 0)
+            throw new JMetalException("Max generations is negative or cero: " + populationSize);
+        this.populationSize = populationSize;
+        return this;
+    }
 
     public MultipleTrajectorySearchBuilder setLocalSearchTest(int local_search_test) {
         this.local_search_test = local_search_test;

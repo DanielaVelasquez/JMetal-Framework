@@ -1,12 +1,11 @@
 package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.util.SearchRange;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -25,23 +24,23 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     /**
      * Number of solutions/Number of levels of each factor
      */
-    private int populationSize;
+    protected int populationSize;
     /**
      * Number of factors
      */
-    private int n;
+    protected int n;
     /**
      * Random generator
      */
-    private JMetalRandom randomGenerator ;
+    protected JMetalRandom randomGenerator ;
     /**
      * Individiuals on population
      */
-    private List<S> population;
+    protected List<S> population;
      /**
      * Problem to solve
      */
-    private P problem ;
+    protected P problem ;
     /**
      * Determines how a solution should be order
      */
@@ -73,51 +72,51 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     /**
      * Determines which individuals in population are enable
      */
-    private List<Boolean> enable;
+    protected List<Boolean> enable;
     /**
      * Determines which individuals in population were improve
      */
-    private List<Boolean> improve;
+    protected List<Boolean> improve;
     /**
      * Determines the search range for every individual
      */
-    private List<Double> search_range;
+    protected List<SearchRange> search_range;
     /**
      * Bonus 1 value
      */
-    private double bonus_1;
+    protected double bonus_1;
     /**
      * Bonus 2 value
      */
-    private double bonus_2;
+    protected double bonus_2;
     /**
      * Lower bound for variable a in local search 3
      */
-    private double lower_bound_a;
+    protected double lower_bound_a;
     /**
      * Upper bound for variable a in local search 3
      */
-    private double upper_bound_a;
+    protected double upper_bound_a;
     /**
      * Lower bound for variable b in local search 3
      */
-    private double lower_bound_b;
+    protected double lower_bound_b;
     /**
      * Upper bound for variable b in local search 3
      */
-    private double upper_bound_b;
+    protected double upper_bound_b;
     /**
      * Lower bound for variable c in local search 3
      */
-    private double lower_bound_c;
+    protected double lower_bound_c;
     /**
      * Upper bound for variable c in local search 3
      */
-    private double upper_bound_c;
+    protected double upper_bound_c;
     /**
      * Best individual on population
      */
-    private S best;
+    protected S best;
     
     
     /**-----------------------------------------------------------------------------------------
@@ -153,9 +152,104 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
 
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.evaluations = 0;
+        
+        //TO-DO ¿Cómo hacer que m sea mútiplo de n? n es el número de genes
+        //TO-DO Si está utilizando MOS, la población se la debe pasar
+        //¿así para evitar la creación de una población inicial?
+        this.n = this.problem.getNumberOfVariables();
+        if(this.population == null)
+        {
+            //TO-DO ¿ Está bien construido SOA?
+            //TO-DO todos los valores de los individuos son 1,-1,0.5 y -0.5
+            int[][]SOA = this.buildSOA(populationSize, n);
+            this.population = this.generateInitialSolutions(SOA);
+        }
+        
+        this.evaluatePopulation(this.population);
+        this.best = getBest(this.population);
+        this.enable = new ArrayList<>();
+        this.improve = new ArrayList<>();
+        this.search_range = new ArrayList<>();
+        
+        for(int i = 0; i < populationSize; i++)
+        {
+            enable.add(Boolean.TRUE);
+            improve.add(Boolean.TRUE);
+            search_range.add(this.buildSearchRange(this.population.get(i)));
+        }
+        while(!isStoppingConditionReached())
+        {
+            
+            List<Double> grades = new ArrayList<>();
+            for(int i = 0; i < populationSize; i++)
+            {
+                S xi = this.population.get(i);
+                boolean improve_i = improve.get(i);
+                //TO-DO puedo ponerlo por defecto en -1???
+                double grade_xi = -1;
+                if(enable.get(i))
+                {
+                    grade_xi = 0;
+                    double LS1_test_grade = 0;
+                    double LS2_test_grade = 0;
+                    double LS3_test_grade = 0;
+                    //TO-Do local search test se entrega al algoritmo
+                    for(int j = 0 ; j < local_search_test; j++)
+                    {
+                        //TO-DO ¿ls 2 se corre con la mejora de ls1 y así?¿se debe hacer así?
+                        //Seria mejor hacer una copia de la población y después de la busqueda de prueba si dejarlos modificar
+                        //Un vez termina la prueba que haga la copia de los individuos originales
+                        
+                        LS1_test_grade += this.local_search_1((S) xi.copy(), i, true);
+                        LS2_test_grade += this.local_search_2((S) xi.copy(), i, true);
+                        LS3_test_grade += this.local_search_3((S) xi.copy(), i, true);
+                    }
+                    List<Double> test_grades = new ArrayList<>();
+                    test_grades.add(LS1_test_grade);
+                    test_grades.add(LS2_test_grade);
+                    test_grades.add(LS3_test_grade);
+                    
+                    //TO-DO cómo se determina cual es el mejor?
+                    int best_local_search = chooseBestLocalSearch(test_grades);
+                    
+                    for(int j = 0; j < local_search; j++)
+                    {
+                        switch(best_local_search)
+                        {
+                            case 1:
+                                grade_xi += local_search_1(xi,i,false);
+                            case 2:
+                                grade_xi += local_search_2(xi,i,false);
+                                break;
+                            case 3:
+                                grade_xi += local_search_3(xi,i,false);
+                                break;
+                        }
+                    }
+                }
+                //
+                grades.add(grade_xi);
+            }
+            //Find the best solution
+            //TO-DO ¿Qué pasa si el mejor no está en la población?? se da en el caso de que el mejor se encontrara en el testeo
+            int best_index = this.getBestIndex();
+            //DoubleSolution best_individual = this.population.get(best_index);
+            //int best_search_range = search_range.get(best_index);
+            for(int i = 0; i < local_search_best; i++)
+            {
+                this.local_search_1(best,best_index,false);
+            }
+            
+            for(int i = 0; i < populationSize; i++)
+            {
+                enable.set(i, Boolean.FALSE);
+            }
+            this.chooseSolutionsToEnable(grades, enable);
+        }
+        
     }
-    
+
     /**
      * Builds a simulated orthogonal array SOAmxn
      * @param m number of levels of each factor
@@ -304,8 +398,93 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     {
         return this.getBest(original, modified ) == original;
     }
+    /**
+     * Choose the best test values
+     * @param values values of local searches grades, they must be order by localsearch
+     * @return index of best local search
+     */
+    private int chooseBestLocalSearch(List<Double> values)
+    {
+        int best_index = 0;
+        double best = values.get(best_index);
+        int size = values.size();
+        for(int i = 1; i< size; i++)
+        {
+            double value = values.get(i);
+            if(value>best)
+            {
+                best = value;
+                best_index = i;
+            }
+        }
+        return best_index + 1;
+    }
+    /**
+     * Choose number of foregorund individuals whose grade are best among
+     * the population and set their corresponding enable to true
+     * @param grades individual's grade
+     * @param enable indivual's enable
+     */
+    private void chooseSolutionsToEnable(List<Double> grades, List<Boolean> enable)
+    {
+        
+        List<Integer> index = new ArrayList<>();
+        while(index.size()<number_of_foreground)
+        {
+            double value_best = -1;
+            int best_index = -1;
+            for(int i = 0; i< populationSize; i++)
+            {
+                double value = grades.get(i);
+                if(!index.contains(value))
+                {
+                    value_best = value;
+                    best_index = i;
+                    break;
+                }
+            }
+            for(int j = 0; j < populationSize; j++)
+            {
+                double value = grades.get(j);
+                if(!index.contains(value) && value >= value_best)
+                {
+                    value_best = value;
+                    best_index = j;
+                    break;
+                }
+            }
+            index.add(best_index);
+        }
+        for(Integer i : index)
+        {
+            enable.set(i, Boolean.TRUE);
+        }
+    }
+    protected S getBest(List<S> population)
+    {
+        S best = population.get(0);
+        for(int i = 1; i < populationSize; i++)
+        {
+            S next = population.get(i);
+            int comparison = this.comparator.compare(best, next);
+            if(comparison<0)
+            {
+                best = next;
+            }
+        }
+        return best;
+    }
+    /**
+     * Returns index on population where best is located
+     * @return index of best individual at population
+     */
+    protected int getBestIndex()
+    {
+        return this.population.indexOf(best);
+    }
     @Override
     public S getResult() {
+        //TO_DO Aplicar operacion de B si la tiene el problema
         return best;
     }
     /**
@@ -321,14 +500,39 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected abstract List<S> generateInitialSolutions(int[][]SOA);
     /**
      * Local search 1 
+     * @param xi inidividual to make local search on 
+     * @param index index to make local search
+     * @param testing determins if the local search is testing or not
+     * @return grade, how good was the local search
+     */
+    protected abstract double local_search_1(S xi, int index, boolean testing);
+    /**
+     * Local search 2 
      * @param population population 
      * @param enable determines which individuals in population are enable
      * @param improve determines which individuals in population were improved
-     * @param search_range
-     * @param k
-     * @return 
+     * @param search_range search range for every indiviuals in population
+     * @param k index to make local search
+     * @return grade, how good was the local search
      */
-    protected abstract double local_search_1(List<S> population, List<Boolean> enable, List<Boolean> improve, List<Double> search_range, int k);
+    protected abstract double local_search_2(S xi, int index, boolean testing);
+    /**
+     * Local search 3
+     * @param population population 
+     * @param enable determines which individuals in population are enable
+     * @param improve determines which individuals in population were improved
+     * @param search_range search range for every indiviuals in population
+     * @param k index to make local search
+     * @return grade, how good was the local search
+     */
+    protected abstract double local_search_3(S xi, int index, boolean testing);
+    /**
+     * Build the search range for solution and return it
+     * @param solution solution to create search range
+     * @return search range to solution
+     */
+    protected abstract SearchRange buildSearchRange(S solution);
+    
     @Override
     public abstract String getName();
 

@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm.util;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -25,12 +26,34 @@ public class DoubleSearchRange extends SearchRange<DoubleSolution, DoubleProblem
     @Override
     public void update(DoubleSolution solution)
     {
-        this.search_range.clear();
+        this.divide();
         for(int i = 0; i < this.n; i++)
         {
-            double value = (solution.getUpperBound(i) - solution.getLowerBound(i))*0.4;
-            search_range.add(value);
+            double value = (double)search_range.get(i);
+            if(value < Math.pow(10, -15))
+            {
+                value = (solution.getUpperBound(i) - solution.getLowerBound(i))*0.4;
+                search_range.set(i, value);
+            }
+                
         }
+    }
+
+    @Override
+    protected void divide() {
+        for(int i = 0; i < this.n; i++)
+        {
+            double value = (double)search_range.get(i)/(double)2;
+            search_range.set(i, value);
+        }
+    }
+
+    @Override
+    public SearchRange copy() {
+        DoubleSearchRange sr = new DoubleSearchRange(problem);
+        List<Double> ranges = new ArrayList<>();
+        ranges.addAll(search_range);
+        return sr;
     }
     
 }

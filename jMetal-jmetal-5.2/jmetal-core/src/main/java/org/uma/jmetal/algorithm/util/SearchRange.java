@@ -28,12 +28,23 @@ public abstract class SearchRange< S extends Solution<?>,P extends Problem<S>>
      */
     public abstract void create(S solution);
     /**
-     * Updatessearch range for every variable of solution
+     * Updates search range for every variable of solution
      * @param solution 
      */
-    public abstract void update(S solution );
-
+    public abstract void update(S solution);
+    /**
+     * Divide all search values to half its value
+     */
+    protected abstract void divide();
+        
+    public abstract SearchRange copy();
+    
+    protected void setSearchRange(List search_range)
+    {
+        this.search_range = search_range;
+    }
     public List getSearchRange() {
         return search_range;
     }
+
 }
