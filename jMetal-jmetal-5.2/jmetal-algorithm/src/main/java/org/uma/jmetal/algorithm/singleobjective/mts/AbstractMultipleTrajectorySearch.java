@@ -9,6 +9,8 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
+//ISSUES
+//Todos los individuos son iguales al principo
 
 public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P extends Problem<S>>  implements Algorithm<S>
 {
@@ -184,7 +186,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             for(int i = 0; i < populationSize; i++)
             {
                 S xi = this.population.get(i);
-                boolean improve_i = improve.get(i);
                 //TO-DO puedo ponerlo por defecto en -1???
                 double grade_xi = -1;
                 if(enable.get(i))

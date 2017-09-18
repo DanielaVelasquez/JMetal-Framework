@@ -25,7 +25,7 @@ public class IrisRunner
         JMetalRandom rnd = JMetalRandom.getInstance();
         rnd.setSeed(13);
         DoubleProblem problem;
-        SaNSDE algorithm;
+        MultipleTrajectorySearch algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -38,7 +38,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
+          problemName = "co.edu.unicauca.problem.training_testing.Iris";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -58,11 +58,9 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm =  new  SaNSDEBuilder(problem).
-                           setMaxEvaluations(20).
-                           setPopulationSize(5).
-                           build();
-        for(int i = 0; i<1;i++)
+        algorithm =  new  MultipleTrajectorySearchBuilder(problem)
+                .build();
+        for(int i = 0; i < 1;i++)
         {
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

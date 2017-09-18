@@ -53,6 +53,7 @@ public class DoubleSearchRange extends SearchRange<DoubleSolution, DoubleProblem
         DoubleSearchRange sr = new DoubleSearchRange(problem);
         List<Double> ranges = new ArrayList<>();
         ranges.addAll(search_range);
+        sr.setSearchRange(ranges);
         return sr;
     }
     
