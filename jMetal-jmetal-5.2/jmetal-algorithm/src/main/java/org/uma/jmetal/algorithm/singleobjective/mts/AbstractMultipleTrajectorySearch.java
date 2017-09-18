@@ -124,15 +124,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      *-----------------------------------------------------------------------------------------*/
     
     
-    public AbstractMultipleTrajectorySearch(int populationSize, int n, P problem, Comparator<S> comparator, 
-            int cycles, int local_search_test, int local_search, int local_search_best, int number_of_foreground, 
+    public AbstractMultipleTrajectorySearch(int populationSize,  P problem, Comparator<S> comparator, 
+            int FE, int local_search_test, int local_search, int local_search_best, int number_of_foreground, 
             double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, double lower_bound_b, 
             double upper_bound_b, double lower_bound_c, double upper_bound_c) {
         this.populationSize = populationSize;
-        this.n = n;
         this.problem = problem;
         this.comparator = comparator;
-        this.FE = cycles;
+        this.FE = FE;
         this.local_search_test = local_search_test;
         this.local_search = local_search;
         this.local_search_best = local_search_best;
@@ -481,6 +480,21 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected int getBestIndex()
     {
         return this.population.indexOf(best);
+    }
+    /**
+     * Determines if an individual is already in a population, in other words
+     * if there is another individual with the same values
+     * @param population collection of individuals
+     * @param individual one indivual
+     * @return true if here is another individual with the same values, false otherwise
+     */
+    protected boolean inPopulation(List<S> population, S individual)
+    {
+        for(S s:population){
+            if(this.comparator.compare(s, individual)== 0 && s!=individual)
+                return true;
+        }
+        return false;
     }
     @Override
     public S getResult() {

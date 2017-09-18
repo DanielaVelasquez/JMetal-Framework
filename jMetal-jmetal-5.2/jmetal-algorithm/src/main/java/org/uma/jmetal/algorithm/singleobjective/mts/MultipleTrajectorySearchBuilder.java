@@ -32,7 +32,7 @@ public class MultipleTrajectorySearchBuilder
     /**
      * Maximun number of generations
      */
-    private int maxGenerations;
+    private int FE;
      /**
      * Number of local searh test
      */
@@ -100,13 +100,14 @@ public class MultipleTrajectorySearchBuilder
         this.upper_bound_a = 0.5;
         this.lower_bound_c = 0;
         this.upper_bound_c = 1;
-        this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
-        comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
+        this.FE = 1000;
+        this.evaluator = new SequentialSolutionListEvaluator<>() ;
+        comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
      public MultipleTrajectorySearch build()
      {
-         return new MultipleTrajectorySearch(populationSize, problem, evaluator, comparator, maxGenerations, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
+         return new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
      }
 
     public DoubleProblem getProblem() {
@@ -121,8 +122,8 @@ public class MultipleTrajectorySearchBuilder
         return comparator;
     }
 
-    public int getMaxGenerations() {
-        return maxGenerations;
+    public int getFE() {
+        return FE;
     }
 
     public int getLocalSearchTest() {
@@ -188,10 +189,10 @@ public class MultipleTrajectorySearchBuilder
         return this;
     }
 
-    public MultipleTrajectorySearchBuilder setMaxGenerations(int maxGenerations) {
-        if(maxGenerations < 0)
-            throw new JMetalException("Max generations is negative: " + maxGenerations);
-        this.maxGenerations = maxGenerations;
+    public MultipleTrajectorySearchBuilder setFE(int FE) {
+        if(FE <= 0)
+            throw new JMetalException("Function evaluations is negative or cero: " + FE);
+        this.FE = FE;
         return this;
     }
     public MultipleTrajectorySearchBuilder setPopulationSize(int populationSize) {

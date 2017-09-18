@@ -15,12 +15,12 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-    public MultipleTrajectorySearch(int populationSize, int n, DoubleProblem problem, 
-            Comparator<DoubleSolution> comparator, int cycles, int local_search_test, 
+    public MultipleTrajectorySearch(int populationSize, DoubleProblem problem, 
+            Comparator<DoubleSolution> comparator, int FE, int local_search_test, 
             int local_search, int local_search_best, int number_of_foreground, 
             double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, 
             double lower_bound_b, double upper_bound_b, double lower_bound_c, double upper_bound_c) {
-        super(populationSize, n, problem, comparator, cycles, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
+        super(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
     }
 
     @Override
@@ -103,9 +103,9 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             double new_objective = xi.getObjective(0);
             //Individual improve best
             //TO-DO ¿Se busca que sea mejor que el mejor de la poblacion o que se mejor que lo que estaba?
-            if(this.improveBest(xi))
+            if(this.improveBest(xi) && !this.inPopulation(population, xi))
             {
-                best =  (DoubleSolution) xi.copy();
+                best =  (DoubleSolution) xi.copy();  
                 grade = grade + bonus_1;
             }
             
@@ -119,19 +119,19 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             }
             else
             {
-                if(this.functionValueDegenerates(copy, xi))
+                if(this.functionValueDegenerates(copy, xi) || this.inPopulation(population, xi))
                 {
                    xi.setVariableValue(i, original_value + 0.5 * SRList.get(i));
                    this.problem.evaluate(xi);
                    //new_objective = individual.getObjective(0);
                    
-                   if(this.improveBest(xi))
+                   if(this.improveBest(xi)  && !this.inPopulation(population, xi))
                    {
                        best =  (DoubleSolution) xi.copy();
                        grade += bonus_1;
                    }
                    
-                   if(this.functionValueDegenerates(copy, xi))
+                   if(this.functionValueDegenerates(copy, xi)  || this.inPopulation(population, xi))
                    {
                       if(testing)
                         xi = copy;
@@ -210,7 +210,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             double new_objective = xi.getObjective(0);
             
             
-            if(this.improveBest(xi))
+            if(this.improveBest(xi) && !this.inPopulation(population, xi))
             {
                 best =  (DoubleSolution) xi.copy();
                 grade += bonus_1;
@@ -225,7 +225,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             }
             else
             {
-                if(this.functionValueDegenerates(copy,xi))
+                if(this.functionValueDegenerates(copy,xi) || this.inPopulation(population, xi))
                 {
                     xi = (DoubleSolution) copy.copy();
                     for(int i = 0; i < n; i++)
@@ -241,13 +241,13 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                     this.problem.evaluate(xi);
                     new_objective = xi.getObjective(0);
                     
-                    if(this.improveBest(xi))
+                    if(this.improveBest(xi) && !this.inPopulation(population, xi))
                     {
                         best =  (DoubleSolution) xi.copy();
                         grade += bonus_1;
                     }
                     
-                    if(this.functionValueDegenerates(copy, xi))
+                    if(this.functionValueDegenerates(copy, xi) || this.inPopulation(population, xi))
                     {
                         if(testing)
                             xi = copy;
@@ -343,25 +343,35 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             if(this.improveBest(x1))
             {
                 grade += bonus_1;
-                int best = this.getBestIndex();
-                this.population.set(best, x1);
                 this.best = (DoubleSolution) x1.copy();
+                if(!testing  && !this.inPopulation(population, x1))
+                {
+                    int best = this.getBestIndex();
+                    this.population.set(best, x1);
+                }
             }
             
-            if(this.improveBest(y1))
+            if(this.improveBest(y1) )
             {
                 grade += bonus_1;
-                int best = this.getBestIndex();
-                this.population.set(best, y1);
-                this.best = (DoubleSolution) y1.copy();
+                this.best = (DoubleSolution) x1.copy();
+                if(!testing && !this.inPopulation(population, y1))
+                {
+                    int best = this.getBestIndex();
+                    this.population.set(best, x1);
+                }
+            
             }
             
             if(this.improveBest(x2))
             {
                 grade += bonus_1;
-                int best = this.getBestIndex();
-                this.population.set(best, x2);
-                this.best = (DoubleSolution) x2.copy();
+                this.best = (DoubleSolution) x1.copy();
+                if(!testing  && !this.inPopulation(population, x2))
+                {
+                    int best = this.getBestIndex();
+                    this.population.set(best, x1);
+                }
             }
             
             //TO-DO ¿solo se puede si es monobojetivo??
@@ -410,7 +420,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             }
         }
         
-        if(this.functionValueDegenerates(original, xi))
+        if(this.functionValueDegenerates(original, xi)  || this.inPopulation(population, xi))
         {
             if(!testing)
                 this.population.set(index, original);
