@@ -96,7 +96,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             if(this.inBounds(new_value, i, xi))
             {
                 xi.setVariableValue(i, new_value);
-                this.problem.evaluate(xi);
+                this.evaluate(xi);
             }
             
             
@@ -122,7 +122,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                 if(this.functionValueDegenerates(copy, xi) || this.inPopulation(population, xi))
                 {
                    xi.setVariableValue(i, original_value + 0.5 * SRList.get(i));
-                   this.problem.evaluate(xi);
+                   this.evaluate(xi);
                    //new_objective = individual.getObjective(0);
                    
                    if(this.improveBest(xi)  && !this.inPopulation(population, xi))
@@ -206,7 +206,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                 }
             }
             
-            this.problem.evaluate(xi);
+            this.evaluate(xi);
             double new_objective = xi.getObjective(0);
             
             
@@ -238,7 +238,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                         }
                     }
                     
-                    this.problem.evaluate(xi);
+                    this.evaluate(xi);
                     new_objective = xi.getObjective(0);
                     
                     if(this.improveBest(xi) && !this.inPopulation(population, xi))
@@ -323,19 +323,19 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             if(this.inBounds(x1_new, i, x1))
             {
                 x1.setVariableValue(i, x1_new);
-                this.problem.evaluate(x1);
+                this.evaluate(x1);
             }
                 
             if(this.inBounds(y1_new, i, y1))
             {
                 y1.setVariableValue(i, y1_new);
-                this.problem.evaluate(y1);
+                this.evaluate(y1);
             }
              
             if(this.inBounds(x2_new, i, x2))
             {
                 x2.setVariableValue(i, x2_new);
-                this.problem.evaluate(x2);
+                this.evaluate(x2);
             }
             
             //TO-DO ¿ Se actualiza el mejor?
@@ -344,34 +344,18 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             {
                 grade += bonus_1;
                 this.best = (DoubleSolution) x1.copy();
-                if(!testing  && !this.inPopulation(population, x1))
-                {
-                    int best = this.getBestIndex();
-                    this.population.set(best, x1);
-                }
             }
             
             if(this.improveBest(y1) )
             {
                 grade += bonus_1;
                 this.best = (DoubleSolution) x1.copy();
-                if(!testing && !this.inPopulation(population, y1))
-                {
-                    int best = this.getBestIndex();
-                    this.population.set(best, x1);
-                }
-            
             }
             
             if(this.improveBest(x2))
             {
                 grade += bonus_1;
                 this.best = (DoubleSolution) x1.copy();
-                if(!testing  && !this.inPopulation(population, x2))
-                {
-                    int best = this.getBestIndex();
-                    this.population.set(best, x1);
-                }
             }
             
             //TO-DO ¿solo se puede si es monobojetivo??
@@ -407,7 +391,7 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             if(this.inBounds(new_xi, i, xi))
             {
                 xi.setVariableValue(i, new_xi);
-                this.problem.evaluate(xi);
+                this.evaluate(xi);
             }
             //TO-DO es del original o del original de la itreacion anterior
             if(this.functionValueDegenerates(copy, xi))

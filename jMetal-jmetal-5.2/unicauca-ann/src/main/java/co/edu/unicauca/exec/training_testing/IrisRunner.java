@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
@@ -25,7 +27,7 @@ public class IrisRunner
         JMetalRandom rnd = JMetalRandom.getInstance();
         rnd.setSeed(13);
         DoubleProblem problem;
-        MultipleTrajectorySearch algorithm;
+        SolisAndWets algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -38,7 +40,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Zoo";
         }
         evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -58,7 +60,7 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm =  new  MultipleTrajectorySearchBuilder(problem)
+        algorithm =  new   SolisAndWetsBuilder(problem)
                 .build();
         for(int i = 0; i < 1;i++)
         {

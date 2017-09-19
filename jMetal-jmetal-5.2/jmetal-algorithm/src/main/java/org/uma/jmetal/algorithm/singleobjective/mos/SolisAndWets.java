@@ -79,7 +79,7 @@ public class SolisAndWets implements Algorithm
         this.rho = rho;
         this.sizeNeighborhood = sizeNeighborhood;
         neighborhood = new ArrayList<>();
-        deviationNeighborhood = new ArrayList<>();        
+        deviationNeighborhood = new ArrayList<>();      
     }
     
     /**
@@ -96,6 +96,8 @@ public class SolisAndWets implements Algorithm
      */
     private void generateNeighborhood()
     {
+        neighborhood.clear();
+        deviationNeighborhood.clear();
         for(int i = 0; i < sizeNeighborhood; i = i + 2)
         {
             generateTwoNeighbors(i);
@@ -119,10 +121,10 @@ public class SolisAndWets implements Algorithm
             individual2.setVariableValue(i, (best.getVariableValue(i) - bias[i] - newDeviation[i]));
         }
         
-        neighborhood.set(index, individual1);
-        neighborhood.set(index + 1, individual2);
-        deviationNeighborhood.set(index, newDeviation);
-        deviationNeighborhood.set(index + 1, newDeviation);
+        neighborhood.add(individual1);
+        neighborhood.add(individual2);
+        deviationNeighborhood.add(newDeviation);
+        deviationNeighborhood.add(newDeviation);
     }
     
     /**
@@ -150,12 +152,35 @@ public class SolisAndWets implements Algorithm
     private void findBestIndividual()
     {
         bestIndex = 0;
+        DoubleSolution bestPopulation = neighborhood.get(bestIndex);
         
         for(int i = 0; i < neighborhood.size(); i++)
         {
-            if(comparator.compare(neighborhood.get(bestIndex), neighborhood.get(i)) < 1)
+            DoubleSolution ind = neighborhood.get(i);
+            int comparison = comparator.compare(bestPopulation, ind);
+            
+            if(comparison < 0)
             {
                 bestIndex = i;
+                bestPopulation = ind;
+            }
+            else if (comparison == 0)
+            {
+                try
+                {
+                    double B = (double) bestPopulation.getAttribute("B");
+                    double BI = (double) ind.getAttribute("B");
+                    
+                    if(BI < B)
+                    {
+                        bestIndex = i;
+                        bestPopulation = ind;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    
+                }
             }
         }
     }
@@ -187,9 +212,23 @@ public class SolisAndWets implements Algorithm
         }
     }    
     
+    /**
+     * Fills an array with an specific value
+     * @param array array to fill
+     * @param value value to set
+     */
+    protected void fillWith(double[] array, double value)
+    {
+        int rows = array.length;
+        for(int i = 0; i < rows;i++)
+            array[i] = value;
+    }
+    
     @Override
     public void run() 
     {
+        bias = new double[problem.getNumberOfVariables()];
+        fillWith(bias, 0);
         best = createInitialIndividual();
         hit = 0;
         fail = 0;
@@ -198,8 +237,9 @@ public class SolisAndWets implements Algorithm
         {
             generateNeighborhood();
             findBestIndividual();
-
-            if(comparator.compare(neighborhood.get(bestIndex), best) < 1)
+            DoubleSolution ind = neighborhood.get(bestIndex);
+            
+            if(improveBest(ind))
             {
                 if(bestIndex % 2 == 0)
                 {   
@@ -210,7 +250,7 @@ public class SolisAndWets implements Algorithm
                     updateBias(2);
                 }
 
-                best = neighborhood.get(bestIndex);
+                best = ind;
                 hit++;
                 fail = 0;
             }
@@ -236,6 +276,34 @@ public class SolisAndWets implements Algorithm
                 fail = 0;
             }
         }
+    }
+    
+    private boolean improveBest(DoubleSolution ind)
+    {
+        int comparison = comparator.compare(best, ind);
+
+        if(comparison < 0)
+        {
+            return false;
+        }
+        else if (comparison == 0)
+        {
+            try
+            {
+                double B = (double) best.getAttribute("B");
+                double BI = (double) ind.getAttribute("B");
+
+                if(BI < B)
+                {
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                
+            }
+        }
+        return true;
     }
 
     @Override

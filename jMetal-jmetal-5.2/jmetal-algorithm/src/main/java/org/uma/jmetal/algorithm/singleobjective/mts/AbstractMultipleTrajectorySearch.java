@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -194,13 +195,8 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     double LS1_test_grade = 0;
                     double LS2_test_grade = 0;
                     double LS3_test_grade = 0;
-                    //TO-Do local search test se entrega al algoritmo
                     for(int j = 0 ; j < local_search_test; j++)
                     {
-                        //TO-DO ¿ls 2 se corre con la mejora de ls1 y así?¿se debe hacer así?
-                        //Seria mejor hacer una copia de la población y después de la busqueda de prueba si dejarlos modificar
-                        //Un vez termina la prueba que haga la copia de los individuos originales
-                        
                         LS1_test_grade += this.local_search_1((S) xi.copy(), i, true);
                         LS2_test_grade += this.local_search_2((S) xi.copy(), i, true);
                         LS3_test_grade += this.local_search_3((S) xi.copy(), i, true);
@@ -209,6 +205,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     test_grades.add(LS1_test_grade);
                     test_grades.add(LS2_test_grade);
                     test_grades.add(LS3_test_grade);
+                    
                     
                     //TO-DO cómo se determina cual es el mejor?
                     int best_local_search = chooseBestLocalSearch(test_grades);
@@ -226,6 +223,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                                 grade_xi += local_search_3(xi,i,false);
                                 break;
                         }
+                        this.review_best();
                     }
                 }
                 //
@@ -233,12 +231,13 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             }
             //Find the best solution
             //TO-DO ¿Qué pasa si el mejor no está en la población?? se da en el caso de que el mejor se encontrara en el testeo
-            int best_index = this.getBestIndex();
+            int best_index = this.getBestIndex(population);
             //DoubleSolution best_individual = this.population.get(best_index);
             //int best_search_range = search_range.get(best_index);
             for(int i = 0; i < local_search_best; i++)
             {
                 this.local_search_1(best,best_index,false);
+                this.review_best();
             }
             
             for(int i = 0; i < populationSize; i++)
@@ -249,7 +248,11 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         }
         
     }
-
+    protected void review_best()
+    {
+        S best_population = this.getBest(population);
+        this.best = this.getBest(best, best_population);
+    }
     /**
      * Builds a simulated orthogonal array SOAmxn
      * @param m number of levels of each factor
@@ -375,7 +378,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected S getBest(S s1, S s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison > 0 || comparison == 0)
+        if(comparison < 1)
             return s1;
         return s2;
     }
@@ -471,17 +474,48 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             {
                 best = next;
             }
+            else if(comparison == 0)
+            {
+                try
+                {
+                    double B = (double) best.getAttribute("B");
+                    double BI = (double) next.getAttribute("B");
+                    if(BI < B)
+                    {
+                        best = next;
+                    }
+                }catch(Exception e){}
+            }
         }
         return best;
     }
-    /**
-     * Returns index on population where best is located
-     * @return index of best individual at population
-     */
-    protected int getBestIndex()
+    protected int getBestIndex(List<S> population)
     {
+        S best = population.get(0);
+        for(int i = 1; i < populationSize; i++)
+        {
+            S next = population.get(i);
+            int comparison = this.comparator.compare(best, next);
+            if(comparison<0)
+            {
+                best = next;
+            }
+            else if(comparison == 0)
+            {
+                try
+                {
+                    double B = (double) best.getAttribute("B");
+                    double BI = (double) next.getAttribute("B");
+                    if(BI < B)
+                    {
+                        best = next;
+                    }
+                }catch(Exception e){}
+            }
+        }
         return this.population.indexOf(best);
     }
+
     /**
      * Determines if an individual is already in a population, in other words
      * if there is another individual with the same values
@@ -499,8 +533,30 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     }
     @Override
     public S getResult() {
-        //TO_DO Aplicar operacion de B si la tiene el problema
+        try
+        {
+            double b = (double) best.getAttribute("B");
+            for(S s: population)
+            {
+                if(s.getObjective(0) == best.getObjective(0))
+                {
+                    double b_s = (double) s.getAttribute("B");
+                    if(b_s < b)
+                    {
+                        best = s;
+                        b = b_s;
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            
+        }
         return best;
+        /*Collections.sort(this.population, comparator);
+        return this.population.get(4);*/
+        //return best;
     }
     /**
      * Creates an initial random population
