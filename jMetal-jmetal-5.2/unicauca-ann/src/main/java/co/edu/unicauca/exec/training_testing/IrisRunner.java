@@ -25,7 +25,7 @@ public class IrisRunner
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
-        rnd.setSeed(13);
+        rnd.setSeed(45);
         DoubleProblem problem;
         MultipleTrajectorySearch algorithm;
         DifferentialEvolutionSelection selection;
@@ -61,6 +61,7 @@ public class IrisRunner
         selection = new DifferentialEvolutionSelection() ;
         
         algorithm =  new   MultipleTrajectorySearchBuilder(problem)
+                            //.setFE(1000)
                             .build();
         for(int i = 0; i < 1;i++)
         {

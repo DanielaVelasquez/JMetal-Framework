@@ -366,7 +366,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * @return true if stopping condition was reached, false otherwise
      */
     private boolean isStoppingConditionReached() {
-        return evaluations > FE;
+        return evaluations >= FE;
     }
     /**
      * Gets the best individual between two individuals, if they are equals
@@ -384,7 +384,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             {
                 double b_s1 = (double) s1.getAttribute("B");
                 double b_s2 = (double) s2.getAttribute("B");
-                if(b_s1 < b_s2)
+                if(b_s1 <= b_s2)
                     return s1;
                 else
                     return s2;
@@ -486,23 +486,8 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         for(int i = 1; i < populationSize; i++)
         {
             S next = population.get(i);
-            int comparison = this.comparator.compare(best, next);
-            if(comparison<0)
-            {
-                best = next;
-            }
-            else if(comparison == 0)
-            {
-                try
-                {
-                    double B = (double) best.getAttribute("B");
-                    double BI = (double) next.getAttribute("B");
-                    if(BI < B)
-                    {
-                        best = next;
-                    }
-                }catch(Exception e){}
-            }
+            best = this.getBest(best, next);
+            
         }
         return best;
     }
@@ -513,7 +498,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         {
             S next = population.get(i);
             int comparison = this.comparator.compare(best, next);
-            if(comparison<0)
+            if(comparison < 0)
             {
                 best = next;
             }
@@ -521,12 +506,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             {
                 try
                 {
-                    double B = (double) best.getAttribute("B");
-                    double BI = (double) next.getAttribute("B");
-                    if(BI < B)
-                    {
-                        best = next;
-                    }
+                    best = this.getBest(best, next);
                 }catch(Exception e){}
             }
         }
@@ -538,17 +518,11 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     public S getResult() {
         try
         {
-            double b = (double) best.getAttribute("B");
             for(S s: population)
             {
-                if(s.getObjective(0) == best.getObjective(0))
+                if(best!=s)
                 {
-                    double b_s = (double) s.getAttribute("B");
-                    if(b_s < b)
-                    {
-                        best = s;
-                        b = b_s;
-                    }
+                    best = this.getBest(best, s);
                 }
             }
         }
