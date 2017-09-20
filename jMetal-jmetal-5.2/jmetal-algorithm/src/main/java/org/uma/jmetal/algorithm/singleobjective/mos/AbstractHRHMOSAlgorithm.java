@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
@@ -13,8 +14,9 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     
     /**
      * Algorithms to execute inside a MOS algorithm
+     * wrapped in its own executer
      */
-    private List<Algorithm> tecniques;
+    private List<MOSTecniqueExec> tecniques;
     /**
      * Problem to solve
      */
@@ -75,9 +77,9 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
             this.participation_ratio = this.updateParticipationRatios(this.quality_measures);
             this.FE = this.updateSteps();
             int j = 0;
-            for(Algorithm tecnique: tecniques)
+            for(MOSTecniqueExec tecnique: tecniques)
             {
-                this.evolve(tecnique, j);
+                this.offspring_subpopulation = tecnique.evolve((int) this.participation_ratio.get(j), population, problem);
                 j++;
             }
             this.population = this.combine(this.population, this.offspring_subpopulation);

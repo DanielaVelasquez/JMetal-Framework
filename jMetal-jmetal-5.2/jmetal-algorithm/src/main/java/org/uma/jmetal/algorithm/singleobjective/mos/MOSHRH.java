@@ -5,7 +5,7 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.solution.DoubleSolution;
 
 
-public class MOS extends AbstractHRHMOSAlgorithm<DoubleSolution>
+public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
 {
     /**-----------------------------------------------------------------------------------------
      * Atributes

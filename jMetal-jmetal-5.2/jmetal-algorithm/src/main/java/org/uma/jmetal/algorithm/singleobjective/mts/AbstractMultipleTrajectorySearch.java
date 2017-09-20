@@ -168,6 +168,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             this.population = this.generateInitialSolutions(SOA);
         }
         
+        
         this.evaluatePopulation(this.population);
         this.best = getBest(this.population);
         this.enable = new ArrayList<>();
@@ -722,6 +723,15 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
 
     public void setUpper_bound_c(double upper_bound_c) {
         this.upper_bound_c = upper_bound_c;
+    }
+
+    public void setPopulation(List<S> population) {
+        this.population = population;
+        this.populationSize = this.population.size();
+    }
+
+    public List<S> getPopulation() {
+        return population;
     }
     
     
