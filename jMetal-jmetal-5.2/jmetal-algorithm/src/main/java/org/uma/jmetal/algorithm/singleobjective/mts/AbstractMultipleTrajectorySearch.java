@@ -378,9 +378,26 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected S getBest(S s1, S s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison < 1)
+        if(comparison == 0)
+        {
+            try
+            {
+                double b_s1 = (double) s1.getAttribute("B");
+                double b_s2 = (double) s2.getAttribute("B");
+                if(b_s1 < b_s2)
+                    return s1;
+                else
+                    return s2;
+            }
+            catch(Exception e)
+            {
+                return s1;
+            }
+        }
+        else if(comparison < 1)
             return s1;
-        return s2;
+        else
+            return s2;
     }
     /**
      * Determines if a solution improve the best solution in population
@@ -516,21 +533,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         return this.population.indexOf(best);
     }
 
-    /**
-     * Determines if an individual is already in a population, in other words
-     * if there is another individual with the same values
-     * @param population collection of individuals
-     * @param individual one indivual
-     * @return true if here is another individual with the same values, false otherwise
-     */
-    protected boolean inPopulation(List<S> population, S individual)
-    {
-        for(S s:population){
-            if(this.comparator.compare(s, individual)== 0 && s!=individual)
-                return true;
-        }
-        return false;
-    }
+
     @Override
     public S getResult() {
         try
@@ -558,6 +561,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         return this.population.get(4);*/
         //return best;
     }
+        /**
+     * Determines if an individual is already in a population, in other words
+     * if there is another individual with the same values
+     * @param population collection of individuals
+     * @param individual one indivual
+     * @return true if here is another individual with the same values, false otherwise
+     */
+    protected abstract boolean inPopulation(List<S> population, S individual);
     /**
      * Creates an initial random population
      * @return initial population with random values

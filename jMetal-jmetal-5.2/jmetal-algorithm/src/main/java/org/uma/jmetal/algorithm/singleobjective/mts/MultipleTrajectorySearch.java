@@ -433,4 +433,27 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
     {
         return new_value >= solution.getLowerBound(index) && new_value <= solution.getUpperBound(index);
     }
+
+    @Override
+    protected boolean inPopulation(List<DoubleSolution> population, DoubleSolution individual)
+    {
+        for(DoubleSolution s: population)
+        {
+            if(s!=individual)
+            {
+                for(int i = 0; i < n; i++)
+                {
+                    if(s.getVariableValue(i) == individual.getVariableValue(i))
+                    {
+                        if(i== n-1)
+                            return true;
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+
 }
