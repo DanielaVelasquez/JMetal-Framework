@@ -121,28 +121,38 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             {
                 if(this.functionValueDegenerates(copy, xi) || this.inPopulation(population, xi))
                 {
-                   xi.setVariableValue(i, original_value + 0.5 * SRList.get(i));
-                   this.evaluate(xi);
-                   //new_objective = individual.getObjective(0);
-                   
-                   if(this.improveBest(xi)  && !this.inPopulation(population, xi))
+                   new_value = original_value + 0.5 * SRList.get(i);
+                   if(this.inBounds(new_value, i, xi))
                    {
-                       best =  (DoubleSolution) xi.copy();
-                       grade += bonus_1;
-                   }
-                   
-                   if(this.functionValueDegenerates(copy, xi)  || this.inPopulation(population, xi))
-                   {
-                      if(testing)
-                        xi = copy;
-                      else
-                        this.population.set(index, copy);
+                        xi.setVariableValue(i, new_value);
+                        this.evaluate(xi);
+                        if(this.improveBest(xi)  && !this.inPopulation(population, xi))
+                        {
+                            best =  (DoubleSolution) xi.copy();
+                            grade += bonus_1;
+                        }
+
+                        if(this.functionValueDegenerates(copy, xi)  || this.inPopulation(population, xi))
+                        {
+                           if(testing)
+                             xi = copy;
+                           else
+                             this.population.set(index, copy);
+                        }
+                        else
+                        {
+                            grade += bonus_2;
+                            improve_i = true;
+                        }
                    }
                    else
                    {
-                       grade += bonus_2;
-                       improve_i = true;
+                       if(testing)
+                        xi = copy;
+                       else
+                        this.population.set(index, copy);
                    }
+                   
                 }
                 else
                 {
@@ -230,11 +240,11 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                     xi = (DoubleSolution) copy.copy();
                     for(int i = 0; i < n; i++)
                     {
-                        if(r[i]==0)
+                        if(r[i]<=0.25)
                         {
                             double value = xi.getVariableValue(i) + 0.5 * SRList.get(i) * D[i];
                             if(this.inBounds(value, i, xi))
-                               xi.setAttribute(i, value );
+                               xi.setVariableValue(i, value );
                         }
                     }
                     
@@ -317,8 +327,8 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             //Que tal si se sale de los límites permitidos de la variable
             //Se pude hacer así preguntando???
             x1_new = x1_value + 0.1;
-            y1_new = y1_value + 0.1;
-            x2_new = x2_value - 0.2;
+            y1_new = y1_value - 0.1;
+            x2_new = x2_value + 0.2;
             
             if(this.inBounds(x1_new, i, x1))
             {
@@ -392,16 +402,18 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             {
                 xi.setVariableValue(i, new_xi);
                 this.evaluate(xi);
+                //TO-DO es del original o del original de la itreacion anterior
+                if(this.functionValueDegenerates(copy, xi))
+                {
+                    if(!testing)
+                        this.population.set(index, original);
+                }
+                else
+                {
+                    grade += bonus_2;
+                }
             }
-            //TO-DO es del original o del original de la itreacion anterior
-            if(this.functionValueDegenerates(copy, xi))
-            {
-                this.population.set(index, original);
-            }
-            else
-            {
-                grade += bonus_2;
-            }
+            
         }
         
         if(this.functionValueDegenerates(original, xi)  || this.inPopulation(population, xi))
@@ -433,4 +445,27 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
     {
         return new_value >= solution.getLowerBound(index) && new_value <= solution.getUpperBound(index);
     }
+
+    @Override
+    protected boolean inPopulation(List<DoubleSolution> population, DoubleSolution individual)
+    {
+        for(DoubleSolution s: population)
+        {
+            if(s!=individual)
+            {
+                for(int i = 0; i < n; i++)
+                {
+                    if(s.getVariableValue(i) == individual.getVariableValue(i))
+                    {
+                        if(i== n-1)
+                            return true;
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+
 }

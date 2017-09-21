@@ -25,9 +25,9 @@ public class IrisRunner
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
-        rnd.setSeed(13);
+        rnd.setSeed(45);
         DoubleProblem problem;
-        SolisAndWets algorithm;
+        MultipleTrajectorySearch algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -60,8 +60,9 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm =  new   SolisAndWetsBuilder(problem)
-                .build();
+        algorithm =  new   MultipleTrajectorySearchBuilder(problem)
+                            //.setFE(1000)
+                            .build();
         for(int i = 0; i < 1;i++)
         {
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

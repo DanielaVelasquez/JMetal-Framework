@@ -168,6 +168,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             this.population = this.generateInitialSolutions(SOA);
         }
         
+        
         this.evaluatePopulation(this.population);
         this.best = getBest(this.population);
         this.enable = new ArrayList<>();
@@ -366,7 +367,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * @return true if stopping condition was reached, false otherwise
      */
     private boolean isStoppingConditionReached() {
-        return evaluations > FE;
+        return evaluations >= FE;
     }
     /**
      * Gets the best individual between two individuals, if they are equals
@@ -378,9 +379,26 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected S getBest(S s1, S s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison < 1)
+        if(comparison == 0)
+        {
+            try
+            {
+                double b_s1 = (double) s1.getAttribute("B");
+                double b_s2 = (double) s2.getAttribute("B");
+                if(b_s1 <= b_s2)
+                    return s1;
+                else
+                    return s2;
+            }
+            catch(Exception e)
+            {
+                return s1;
+            }
+        }
+        else if(comparison < 1)
             return s1;
-        return s2;
+        else
+            return s2;
     }
     /**
      * Determines if a solution improve the best solution in population
@@ -469,23 +487,8 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         for(int i = 1; i < populationSize; i++)
         {
             S next = population.get(i);
-            int comparison = this.comparator.compare(best, next);
-            if(comparison<0)
-            {
-                best = next;
-            }
-            else if(comparison == 0)
-            {
-                try
-                {
-                    double B = (double) best.getAttribute("B");
-                    double BI = (double) next.getAttribute("B");
-                    if(BI < B)
-                    {
-                        best = next;
-                    }
-                }catch(Exception e){}
-            }
+            best = this.getBest(best, next);
+            
         }
         return best;
     }
@@ -496,7 +499,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         {
             S next = population.get(i);
             int comparison = this.comparator.compare(best, next);
-            if(comparison<0)
+            if(comparison < 0)
             {
                 best = next;
             }
@@ -504,48 +507,23 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             {
                 try
                 {
-                    double B = (double) best.getAttribute("B");
-                    double BI = (double) next.getAttribute("B");
-                    if(BI < B)
-                    {
-                        best = next;
-                    }
+                    best = this.getBest(best, next);
                 }catch(Exception e){}
             }
         }
         return this.population.indexOf(best);
     }
 
-    /**
-     * Determines if an individual is already in a population, in other words
-     * if there is another individual with the same values
-     * @param population collection of individuals
-     * @param individual one indivual
-     * @return true if here is another individual with the same values, false otherwise
-     */
-    protected boolean inPopulation(List<S> population, S individual)
-    {
-        for(S s:population){
-            if(this.comparator.compare(s, individual)== 0 && s!=individual)
-                return true;
-        }
-        return false;
-    }
+
     @Override
     public S getResult() {
         try
         {
-            double b = (double) best.getAttribute("B");
             for(S s: population)
             {
-                if(s.getObjective(0) == best.getObjective(0))
+                if(best!=s)
                 {
-                    double b_s = (double) s.getAttribute("B");
-                    if(b_s < b)
-                    {
-                        best = s;
-                        b = b_s;
-                    }
+                    best = this.getBest(best, s);
                 }
             }
         }
@@ -558,6 +536,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         return this.population.get(4);*/
         //return best;
     }
+        /**
+     * Determines if an individual is already in a population, in other words
+     * if there is another individual with the same values
+     * @param population collection of individuals
+     * @param individual one indivual
+     * @return true if here is another individual with the same values, false otherwise
+     */
+    protected abstract boolean inPopulation(List<S> population, S individual);
     /**
      * Creates an initial random population
      * @return initial population with random values
@@ -737,6 +723,15 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
 
     public void setUpper_bound_c(double upper_bound_c) {
         this.upper_bound_c = upper_bound_c;
+    }
+
+    public void setPopulation(List<S> population) {
+        this.population = population;
+        this.populationSize = this.population.size();
+    }
+
+    public List<S> getPopulation() {
+        return population;
     }
     
     

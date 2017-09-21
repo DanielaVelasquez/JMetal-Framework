@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import java.util.Comparator;
+import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
@@ -81,6 +82,10 @@ public class MultipleTrajectorySearchBuilder
      * Upper bound for variable c in local search 3
      */
     private double upper_bound_c;
+    /**
+     * Default population to evolve on the algorithm
+     */
+    private List<DoubleSolution> defalult_population;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -107,7 +112,10 @@ public class MultipleTrajectorySearchBuilder
     }
      public MultipleTrajectorySearch build()
      {
-         return new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
+        MultipleTrajectorySearch mts = new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
+        if(this.defalult_population != null)
+            mts.setPopulation(defalult_population);
+        return mts;
      }
 
     public DoubleProblem getProblem() {
@@ -273,5 +281,11 @@ public class MultipleTrajectorySearchBuilder
         this.upper_bound_c = upper_bound_c;
         return this;
     }
+
+    public MultipleTrajectorySearchBuilder setDefalultPopulation(List<DoubleSolution> defalult_population) {
+        this.defalult_population = defalult_population;
+        return this;
+    }
+    
     
 }
