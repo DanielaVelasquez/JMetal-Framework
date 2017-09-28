@@ -3,6 +3,8 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
@@ -27,7 +29,7 @@ public class IrisRunner
         JMetalRandom rnd = JMetalRandom.getInstance();
         rnd.setSeed(45);
         DoubleProblem problem;
-        MultipleTrajectorySearch algorithm;
+        DECC_G algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -40,11 +42,9 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Zoo";
+          problemName = "co.edu.unicauca.problem.training_testing.Glass";
         }
-        evaluator = new SequentialSolutionListEvaluator<DoubleSolution>() ;
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
-        comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
        
         /*double result[] = new double[]{-0.8644811116014093,0.482980034535944,-1.0,-1.0,0.9693794184155992,-0.6966032329569359,0.29491871745966697,0.5174827338123161,-0.915489247034809,-0.7829404115403313,0.21532418070938986,0.6453706265910443,-0.9656326548227394,-1.0,-1.0,-0.8573846664773566,-1.0,-0.9743262421676628};
         
@@ -60,7 +60,7 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm =  new   MultipleTrajectorySearchBuilder(problem)
+        algorithm =  new   DECC_GBuilder(problem)
                             //.setFE(1000)
                             .build();
         for(int i = 0; i < 1;i++)

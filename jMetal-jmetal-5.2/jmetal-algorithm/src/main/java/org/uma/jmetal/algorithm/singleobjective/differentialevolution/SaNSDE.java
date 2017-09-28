@@ -92,7 +92,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Maximun number of evaluations
      */
-    private int maxEvaluations;
+    private int cycles;
 
     /**
      * Problem's evaluator
@@ -109,7 +109,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Actual number of evaluations
      */
-    private int evaluations;
+    private int iteration;
     /**
      * Crossover rate self adaption
      */
@@ -151,7 +151,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
       Comparator<DoubleSolution> comparator)
     {
         setProblem(problem);
-        this.maxEvaluations = maxEvaluations;
+        this.cycles = maxEvaluations;
         this.populationSize = populationSize;
         this.crossoverOperator = crossoverOperator;
         this.selectionOperator = selectionOperator;
@@ -299,17 +299,17 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     protected void initProgress() {
-       evaluations = 1;
+       iteration = 1;
     }
 
     @Override
     protected void updateProgress() {
-        evaluations += 1;
+        iteration += 1;
     }
 
     @Override
     protected boolean isStoppingConditionReached() {
-        return evaluations > maxEvaluations;
+        return iteration > cycles;
     }
 
     @Override
@@ -393,22 +393,95 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         List<DoubleSolution> pop = new ArrayList<>();
-        for (int i = 0; i < populationSize; i++) {
-          if (comparator.compare(population.get(i), offspringPopulation.get(i)) < 0) {
-            pop.add(population.get(i));
-          } else {
-            pop.add(offspringPopulation.get(i));
+        for (int i = 0; i < populationSize; i++)
+        {
+          DoubleSolution p = population.get(i);
+          DoubleSolution o = offspringPopulation.get(i);
+          DoubleSolution s = this.getBest(p, o);
+          if(!this.inPopulation(pop, s))
+            pop.add(s);
+          else
+          {
+              if(s==o)
+                  pop.add(p);
+              else
+                  pop.add(o);
           }
         }
-
-        //Collections.sort(pop, comparator) ;
         return pop;
     }
-
+    /**
+     * Determines if an individual with the same values already exists on a
+     * population
+     * @param population population to search
+     * @param individual individual to compare with individuals in population
+     * @return 
+     */
+    private boolean inPopulation(List<DoubleSolution> population, DoubleSolution individual)
+    {
+        for(DoubleSolution s: population)
+        {
+            if(s!=individual)
+            {
+                int n = this.getProblem().getNumberOfVariables();
+                for(int i = 0; i < n; i++)
+                {
+                    if(s.getVariableValue(i) == individual.getVariableValue(i))
+                    {
+                        if(i== n-1)
+                            return true;
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * Gets the best individual between two individuals, if they are equals
+     * the firts indiviudal is return by default
+     * @param s1 first individual
+     * @param s2 seconde individual
+     * @return best individual between s1 and s2
+     */
+    private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
+    {
+        int comparison = comparator.compare(s1, s2);
+        if(comparison == 0)
+        {
+            try
+            {
+                double b_s1 = (double) s1.getAttribute("B");
+                double b_s2 = (double) s2.getAttribute("B");
+                if(b_s1 <= b_s2)
+                    return s1;
+                else
+                    return s2;
+            }
+            catch(Exception e)
+            {
+                return s1;
+            }
+        }
+        else if(comparison < 0)
+            return s1;
+        else
+            return s2;
+    }
     @Override
     public DoubleSolution getResult() {
         Collections.sort(getPopulation(), comparator) ;
-        return getPopulation().get(0);
+        DoubleSolution best =  getPopulation().get(0);
+        for(int i = 1; i < populationSize; i++)
+        {
+            DoubleSolution s = this.getPopulation().get(i);
+            if(s.getObjective(0) == best.getObjective(0))
+            {
+                best = this.getBest(best, s);
+            }
+        }
+        return best;
     }
 
     @Override

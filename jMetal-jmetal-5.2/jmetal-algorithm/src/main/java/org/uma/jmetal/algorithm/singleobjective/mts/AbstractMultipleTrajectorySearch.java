@@ -120,6 +120,10 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Best individual on population
      */
     protected S best;
+    /**
+     * Best xi found on testing
+     */
+    protected S best_xi;
     
     
     /**-----------------------------------------------------------------------------------------
@@ -193,6 +197,9 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                 if(enable.get(i))
                 {
                     grade_xi = 0;
+                    
+                    this.best_xi = xi;
+                    
                     double LS1_test_grade = 0;
                     double LS2_test_grade = 0;
                     double LS3_test_grade = 0;
@@ -207,6 +214,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     test_grades.add(LS2_test_grade);
                     test_grades.add(LS3_test_grade);
                     
+                    //PONER EL MEJOR DE LOS TEST, REVISAR QUE NO ESTE EN LA POBLACION
                     
                     //TO-DO cómo se determina cual es el mejor?
                     int best_local_search = chooseBestLocalSearch(test_grades);
@@ -227,7 +235,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                         this.review_best();
                     }
                 }
-                //
+                //los grados se estan guardando de acuerdo a los individuos habilitados
                 grades.add(grade_xi);
             }
             //Find the best solution

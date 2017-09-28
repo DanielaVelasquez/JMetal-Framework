@@ -1,9 +1,11 @@
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
+import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implements Algorithm<S>
@@ -16,19 +18,15 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      * Algorithms to execute inside a MOS algorithm
      * wrapped in its own executer
      */
-    private List<MOSTecniqueExec> tecniques;
+    protected List<MOSTecniqueExec> tecniques;
     /**
      * Problem to solve
      */
-    private Problem<S> problem ;
+    protected Problem<S> problem ;
     /**
      * Overall shared population in current generation
      */
     private List<S> population;
-    /**
-     * Offspring subpopulation produced by j-th tecnique at generation i
-     */
-    private List<S> offspring_subpopulation;
     /**
      * Current generation
      */
@@ -36,12 +34,12 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     /**
      * Number of tecniques
      */
-    private int n;
+    protected int n;
     /**
      * Participation ratio (Percentage of individuals of the overall shared population)
      * that tecnique j can produce at generation i
      */
-    private List participation_ratio;
+    protected List participation_ratio;
     /**
      * Quality meausure asociated to each offspring subpopulation
      */
@@ -49,11 +47,15 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     /**
      * Population size
      */
-    private int populationSize;
+    protected int populationSize;
     /**
      * Function evaluation for every tecnique in current generation
      */
     private List FE;
+    /**
+     * Determines how a solution should be order
+     */
+    protected Comparator<DoubleSolution> comparator;
     
      /**-----------------------------------------------------------------------------------------
      * Methods
@@ -63,11 +65,14 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     public void run() 
     {
         this.i = 0;
+        this.n = this.tecniques.size();
         this.population = createInitialPopulation();
         evaluatePopulation(this.population);
         this.FE = this.initializeSteps();
         this.participation_ratio = distributeParticipationTecniques();
         
+        //TO-DO ¿Cómo se inializa la población? si cada 
+        this.population = this.createInitialPopulation();
         
         while(isStoppingConditionReached())
         {
@@ -79,13 +84,13 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
             int j = 0;
             for(MOSTecniqueExec tecnique: tecniques)
             {
-                this.offspring_subpopulation = tecnique.evolve((int) this.participation_ratio.get(j), population, problem);
+                tecnique.evolve((int) this.FE.get(j), population, problem,comparator);
                 j++;
             }
             this.population = this.combine(this.population, this.offspring_subpopulation);
         }
     }
-
+    
     @Override
     public abstract S getResult();
     
@@ -94,6 +99,8 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
 
     @Override
     public abstract String getDescription();
+    
+
     /**
      * Initialize  the Funcionts evaluations for every technique
      * @return function evaluations for every technique
@@ -105,7 +112,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      */
     protected abstract List updateSteps();
     /**
-     * Creates initial population
+     * Each tecnique produces a subset of individuals according to its participation ratio
      * @return initial population
      */
     protected abstract  List<S> createInitialPopulation() ;

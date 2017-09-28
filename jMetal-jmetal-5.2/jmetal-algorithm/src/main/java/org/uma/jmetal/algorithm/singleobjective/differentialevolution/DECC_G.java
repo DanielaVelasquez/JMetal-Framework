@@ -1,6 +1,5 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -286,19 +285,15 @@ public class DECC_G implements Algorithm
     @Override
     public void run() 
     {
-       //if(this.population == null)
        this.population = this.createInitialPopulation();
        
        this.evaluatePopulation(this.population);
        this.n = population.get(0).getNumberOfVariables();
        this.s = this.n / (int)this.subcomponent;
-       //AbstractELMEvaluator p = (AbstractELMEvaluator) problem;
-       //this.subcomponent = (double)this.n/(double)this.s;
+       
        int missing_genes = (int) (this.n - (this.s * this.subcomponent));
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
-       //w_population = this.initWPopulation(populationSize, (int) Math.ceil(subcomponent));
        
-       //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
        {
            
@@ -326,11 +321,6 @@ public class DECC_G implements Algorithm
                
                
                sansde.run();
-               subpopulation = sansde.getPopulation();
-               //randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
-               this.replaceInPopulation(subpopulation, l, u,index);
-               //this.evaluatePopulation(population);
-               
                if(!load_missing_genes && missing_genes>0 && (j+1)==missing_genes)
                {
                    this.s = this.s + 1;
@@ -345,7 +335,7 @@ public class DECC_G implements Algorithm
            subcomponent_problem_DE.setSolution(best_inidvidual);
            de.run();
            DoubleSolution ans = de.getResult();
-           if(comparator.compare(ans, best_inidvidual)<1)
+           if(this.getBest(best_inidvidual, ans)==ans)
            {
                this.multiply(best_inidvidual, ans);
                population.set(best_index, best_inidvidual);
@@ -355,7 +345,7 @@ public class DECC_G implements Algorithm
            de.setEvaluations(0);
            de.run();
            ans = de.getResult();
-           if(comparator.compare(ans, random_inidividual)<1)
+           if(this.getBest(random_inidividual, ans)==ans)
            {
                this.multiply(random_inidividual, ans);
                population.set(random_index, random_inidividual);
@@ -366,7 +356,7 @@ public class DECC_G implements Algorithm
            de.run();
            
            ans = de.getResult();
-           if(comparator.compare(ans, worst_inidividual)<1)
+           if(this.getBest(worst_inidividual, ans)==ans)
            {
                this.multiply(worst_inidividual,  ans);
                population.set(worst_index, worst_inidividual);
@@ -374,13 +364,79 @@ public class DECC_G implements Algorithm
            //this.evaluatePopulation(population);
        }
     }
-
+    /**
+     * Gets the best individual between two individuals, if they are equals
+     * the firts indiviudal is return by default
+     * @param s1 first individual
+     * @param s2 seconde individual
+     * @return best individual between s1 and s2
+     */
+    private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
+    {
+        int comparison = comparator.compare(s1, s2);
+        if(comparison == 0)
+        {
+            try
+            {
+                double b_s1 = (double) s1.getAttribute("B");
+                double b_s2 = (double) s2.getAttribute("B");
+                if(b_s1 <= b_s2)
+                    return s1;
+                else
+                    return s2;
+            }
+            catch(Exception e)
+            {
+                return s1;
+            }
+        }
+        else if(comparison < 0)
+            return s1;
+        else
+            return s2;
+    }
     @Override
     public DoubleSolution getResult() {
         Collections.sort(getPopulation(), comparator) ;
-        return getPopulation().get(0);
+        DoubleSolution best =  getPopulation().get(0);
+        for(int i = 1; i < populationSize; i++)
+        {
+            DoubleSolution s = this.getPopulation().get(i);
+            if(s.getObjective(0) == best.getObjective(0))
+            {
+                best = this.getBest(best, s);
+            }
+        }
+        return best;
     }
-
+    /**
+     * Determines if an individual with the same values already exists on a
+     * population
+     * @param population population to search
+     * @param individual individual to compare with individuals in population
+     * @return 
+     */
+    private boolean inPopulation(List<DoubleSolution> population, DoubleSolution individual)
+    {
+        for(DoubleSolution s: population)
+        {
+            if(s!=individual)
+            {
+                int n = this.getProblem().getNumberOfVariables();
+                for(int i = 0; i < n; i++)
+                {
+                    if(s.getVariableValue(i) == individual.getVariableValue(i))
+                    {
+                        if(i== n-1)
+                            return true;
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     public String getName() {
        return "DECC-G";

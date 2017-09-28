@@ -23,10 +23,6 @@ public class MultipleTrajectorySearchBuilder
      */
     private DoubleProblem problem;
     /**
-     * Algorithm's Evaluator 
-     */
-    private SolutionListEvaluator<DoubleSolution> evaluator;
-    /**
      * Algorithm's comparator
      */
     private Comparator<DoubleSolution> comparator ;
@@ -106,7 +102,6 @@ public class MultipleTrajectorySearchBuilder
         this.lower_bound_c = 0;
         this.upper_bound_c = 1;
         this.FE = 1000;
-        this.evaluator = new SequentialSolutionListEvaluator<>() ;
         comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
@@ -122,9 +117,6 @@ public class MultipleTrajectorySearchBuilder
         return problem;
     }
 
-    public SolutionListEvaluator<DoubleSolution> getEvaluator() {
-        return evaluator;
-    }
 
     public Comparator<DoubleSolution> getComparator() {
         return comparator;
@@ -184,11 +176,6 @@ public class MultipleTrajectorySearchBuilder
 
     public MultipleTrajectorySearchBuilder setProblem(DoubleProblem problem) {
         this.problem = problem;
-        return this;
-    }
-
-    public MultipleTrajectorySearchBuilder setEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-        this.evaluator = evaluator;
         return this;
     }
 
