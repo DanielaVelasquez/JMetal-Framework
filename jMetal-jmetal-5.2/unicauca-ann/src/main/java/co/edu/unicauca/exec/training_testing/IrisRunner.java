@@ -27,9 +27,9 @@ public class IrisRunner
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
-        rnd.setSeed(45);
+        
         DoubleProblem problem;
-        DECC_G algorithm;
+        MultipleTrajectorySearch algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -42,7 +42,7 @@ public class IrisRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Glass";
+          problemName = "co.edu.unicauca.problem.training_testing.Iris";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -60,11 +60,14 @@ public class IrisRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
-        algorithm =  new   DECC_GBuilder(problem)
-                            //.setFE(1000)
-                            .build();
-        for(int i = 0; i < 1;i++)
+        
+        for(int i = 0; i < 30;i++)
         {
+            algorithm =  new   MultipleTrajectorySearchBuilder(problem)
+                            .setFE(3000)
+                            .build();
+            rnd.setSeed(i);
+            System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
 

@@ -125,6 +125,8 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      */
     protected S best_xi;
     
+    protected double penalize_value;
+    
     
     /**-----------------------------------------------------------------------------------------
      * Methods
@@ -134,7 +136,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     public AbstractMultipleTrajectorySearch(int populationSize,  P problem, Comparator<S> comparator, 
             int FE, int local_search_test, int local_search, int local_search_best, int number_of_foreground, 
             double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, double lower_bound_b, 
-            double upper_bound_b, double lower_bound_c, double upper_bound_c) {
+            double upper_bound_b, double lower_bound_c, double upper_bound_c, double penalize_value) {
         this.populationSize = populationSize;
         this.problem = problem;
         this.comparator = comparator;
@@ -151,6 +153,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         this.upper_bound_b = upper_bound_b;
         this.lower_bound_c = lower_bound_c;
         this.upper_bound_c = upper_bound_c;
+        this.penalize_value = penalize_value;
         
         this.n = this.problem.getNumberOfVariables();
         this.randomGenerator = JMetalRandom.getInstance();
@@ -178,17 +181,18 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         this.enable = new ArrayList<>();
         this.improve = new ArrayList<>();
         this.search_range = new ArrayList<>();
-        
+        List<Double> grades = new ArrayList<>();
         for(int i = 0; i < populationSize; i++)
         {
             enable.add(Boolean.TRUE);
             improve.add(Boolean.TRUE);
             search_range.add(this.buildSearchRange(this.population.get(i)));
+            grades.add((double)0);
         }
         while(!isStoppingConditionReached())
         {
             
-            List<Double> grades = new ArrayList<>();
+            
             for(int i = 0; i < populationSize; i++)
             {
                 S xi = this.population.get(i);
@@ -209,6 +213,10 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                         LS2_test_grade += this.local_search_2((S) xi.copy(), i, true);
                         LS3_test_grade += this.local_search_3((S) xi.copy(), i, true);
                     }
+                    
+                    xi = (S) best_xi.copy();
+                    this.population.set(i, xi);
+                    
                     List<Double> test_grades = new ArrayList<>();
                     test_grades.add(LS1_test_grade);
                     test_grades.add(LS2_test_grade);
@@ -221,10 +229,12 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     
                     for(int j = 0; j < local_search; j++)
                     {
+                        xi = this.population.get(i);
                         switch(best_local_search)
                         {
                             case 1:
                                 grade_xi += local_search_1(xi,i,false);
+                                break;
                             case 2:
                                 grade_xi += local_search_2(xi,i,false);
                                 break;
@@ -236,7 +246,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     }
                 }
                 //los grados se estan guardando de acuerdo a los individuos habilitados
-                grades.add(grade_xi);
+                grades.set(i,grade_xi);
             }
             //Find the best solution
             //TO-DO ¿Qué pasa si el mejor no está en la población?? se da en el caso de que el mejor se encontrara en el testeo
@@ -349,8 +359,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             i++;
             this.updateProgress();
         }
+        for(int j = i; j < populationSize; j++)
+        {
+            S solution = this.population.get(i);
+            this.penalize(solution);
+        }
         //TO-DO ¿Que hago con el resto de la población que no alcance a evaluar?
     }
+    
     /**
      * Evaluates an individual
      * @param solution 
@@ -362,6 +378,11 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             this.problem.evaluate(solution);
             this.updateProgress();
         }
+        else{
+            this.penalize(solution);
+        }
+        
+        
         //TO-DO ¿Que hago si no lo puede evaluar?
     }
     /**
@@ -544,6 +565,36 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         return this.population.get(4);*/
         //return best;
     }
+    /**
+     * Determines if first individual is better than second individual
+     * @param original original inidividual
+     * @param modified modified individual
+     * @return if original inididivual is better than modified individual
+     */
+    protected boolean isBetterOriginal(S original, S modified)
+    {
+        int comparison = comparator.compare(original, modified);
+        if(comparison == 0)
+        {
+            try
+            {
+                double b_s1 = (double) original.getAttribute("B");
+                double b_s2 = (double) modified.getAttribute("B");
+                if(b_s1 <= b_s2)
+                    return true;
+                else
+                    return false;
+            }
+            catch(Exception e)
+            {
+                return true;
+            }
+        }
+        else if(comparison < 1)
+            return true;
+        else
+            return false;
+    }
         /**
      * Determines if an individual is already in a population, in other words
      * if there is another individual with the same values
@@ -598,6 +649,9 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      */
     protected abstract SearchRange buildSearchRange(S solution);
     
+    protected void penalize(S solution){
+        solution.setObjective(0, this.penalize_value);
+    }
     @Override
     public abstract String getName();
 

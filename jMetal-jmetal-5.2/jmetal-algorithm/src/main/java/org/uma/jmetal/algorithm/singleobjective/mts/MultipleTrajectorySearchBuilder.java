@@ -82,6 +82,8 @@ public class MultipleTrajectorySearchBuilder
      * Default population to evolve on the algorithm
      */
     private List<DoubleSolution> defalult_population;
+    
+    private double penalize_value;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -102,16 +104,24 @@ public class MultipleTrajectorySearchBuilder
         this.lower_bound_c = 0;
         this.upper_bound_c = 1;
         this.FE = 1000;
+        this.penalize_value = 1;
         comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
      public MultipleTrajectorySearch build()
      {
-        MultipleTrajectorySearch mts = new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c);
+        MultipleTrajectorySearch mts = new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c,penalize_value);
         if(this.defalult_population != null)
             mts.setPopulation(defalult_population);
         return mts;
      }
+
+    public double getPenalizeValue() {
+        return penalize_value;
+    }
+
+     
+     
 
     public DoubleProblem getProblem() {
         return problem;
@@ -275,4 +285,8 @@ public class MultipleTrajectorySearchBuilder
     }
     
     
+    public MultipleTrajectorySearchBuilder setPenalizeValue(double penalize_value) {
+        this.penalize_value = penalize_value;
+        return this;
+    }
 }
