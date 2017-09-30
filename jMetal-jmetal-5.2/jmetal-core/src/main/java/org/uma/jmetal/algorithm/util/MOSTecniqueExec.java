@@ -22,10 +22,6 @@ public abstract class MOSTecniqueExec
      * Offspring sub-population produced by the tecnique
      */
     protected List offspring_population;
-    /**
-     * Output populationof the tecnique
-     */
-    protected List output_population;
 
     public MOSTecniqueExec(HashMap<String, Object> atributes) {
         this.atributes = atributes;
@@ -51,10 +47,7 @@ public abstract class MOSTecniqueExec
     {
         return this.offspring_population.size();
     }
-
-    public List getOutputPopulation() {
-        return output_population;
-    }
+    
     /**
      * Average fitness of the offspring population
      * @return average with fitness of all solution produce with algorithm

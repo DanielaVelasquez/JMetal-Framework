@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -62,24 +63,37 @@ public class SolisAndWets implements Algorithm
      */
     private double rho;
     /**
-     * Number of execution cycles
+     * Number of evaluations
      */
-    private int numCycles;
+    private int EFOs;
+    /**
+     * List of individual generated
+     */
+    private List<DoubleSolution> offspring_population;
+    /**
+     * Number of actual evaluations
+     */
+    private int evaluations;
+    /**
+     * Default value for objective in solution when evaluations >= EFOs
+     */
+    private double penalize_value;
     
     
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
     
-    public SolisAndWets(DoubleProblem problem, Comparator<DoubleSolution> comparator, int numCycles, double rho, int sizeNeighborhood)
+    public SolisAndWets(DoubleProblem problem, Comparator<DoubleSolution> comparator, int EFOs, double rho, int sizeNeighborhood, DoubleSolution initialSolution, double penalize_value)
     {
         this.problem = problem;
         this.comparator = comparator;
-        this.numCycles = numCycles;
+        this.EFOs = EFOs;
         this.rho = rho;
         this.sizeNeighborhood = sizeNeighborhood;
         neighborhood = new ArrayList<>();
-        deviationNeighborhood = new ArrayList<>();      
+        deviationNeighborhood = new ArrayList<>();
+        this.best = initialSolution;
     }
     
     /**
@@ -100,15 +114,14 @@ public class SolisAndWets implements Algorithm
         deviationNeighborhood.clear();
         for(int i = 0; i < sizeNeighborhood; i = i + 2)
         {
-            generateTwoNeighbors(i);
+            generateTwoNeighbors();
         }
     }
     
     /**
      * Creates two neighbors based in best individual
-     * @param index where the individual will be saved
      */
-    private void generateTwoNeighbors(int index)
+    private void generateTwoNeighbors()
     {
         double[] newDeviation = calculateNewDeviation();
         int sizeSolution = best.getNumberOfVariables();
@@ -116,16 +129,63 @@ public class SolisAndWets implements Algorithm
         DoubleSolution individual2 = getProblem().createSolution();
         
         for(int i = 0; i < sizeSolution; i++)
-        {
+        {   
+            //TODO verificar si el nuevo valor cumple con los parametros
             individual1.setVariableValue(i, (best.getVariableValue(i) + bias[i] + newDeviation[i]));
             individual2.setVariableValue(i, (best.getVariableValue(i) - bias[i] - newDeviation[i]));
         }
         
+        this.evaluate(individual1);
+        this.evaluate(individual2);        
         neighborhood.add(individual1);
         neighborhood.add(individual2);
         deviationNeighborhood.add(newDeviation);
         deviationNeighborhood.add(newDeviation);
+        offspring_population.add(individual1);
+        offspring_population.add(individual2);
     }
+    
+    /**
+    * Evaluates an individual
+    * @param solution 
+    */
+    protected void evaluate(DoubleSolution solution)
+    {
+        if(!isStoppingConditionReached())
+        {
+            this.problem.evaluate(solution);
+            this.updateProgress();
+        }
+        else
+        {
+            this.penalize(solution);
+        }
+    }
+    
+    /**
+    * Increments the number of generations evaluated
+    */
+    protected void updateProgress() {
+        evaluations += 1;
+    }
+    
+    /**
+     * Penalize a solution with the worst value
+     * @param s the solution to penalize
+     */
+    private void penalize(DoubleSolution s)
+    {
+        s.setObjective(0, this.penalize_value);
+    }
+    
+    /**
+     * Determines if the stopping was reached
+     * @return true if stopping condition was reached, false otherwise
+     */
+    private boolean isStoppingConditionReached()
+    {
+        return evaluations >= EFOs;
+    }    
     
     /**
      * Calculate a new deviation array
@@ -152,9 +212,9 @@ public class SolisAndWets implements Algorithm
     private void findBestIndividual()
     {
         bestIndex = 0;
-        DoubleSolution bestPopulation = neighborhood.get(bestIndex);
+        DoubleSolution bestPopulation = neighborhood.get(0);
         
-        for(int i = 0; i < neighborhood.size(); i++)
+        for(int i = 1; i < neighborhood.size(); i++)
         {
             DoubleSolution ind = neighborhood.get(i);
             int comparison = comparator.compare(bestPopulation, ind);
@@ -227,13 +287,22 @@ public class SolisAndWets implements Algorithm
     @Override
     public void run() 
     {
+        this.offspring_population = new ArrayList<>();
         bias = new double[problem.getNumberOfVariables()];
         fillWith(bias, 0);
-        best = createInitialIndividual();
+        
+        if(best == null)
+        {
+            best = createInitialIndividual();
+        }
+        
+        this.evaluate(best);
+        
+        offspring_population.add(best);
         hit = 0;
         fail = 0;
         
-        for(int i = 0; i < numCycles; i++)
+        while(!isStoppingConditionReached())
         {
             generateNeighborhood();
             findBestIndividual();
@@ -304,6 +373,11 @@ public class SolisAndWets implements Algorithm
             }
         }
         return true;
+    }
+    
+    public List getPopulation()
+    {
+        return this.offspring_population;
     }
 
     @Override

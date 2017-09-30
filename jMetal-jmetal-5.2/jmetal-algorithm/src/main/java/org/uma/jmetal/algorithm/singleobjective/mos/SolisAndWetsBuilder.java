@@ -11,7 +11,9 @@ public class SolisAndWetsBuilder
     private Comparator<DoubleSolution> comparator;
     private int sizeNeighborhood;
     private double rho;
-    private int numCycles;
+    private int numEFOs;
+    private DoubleSolution initialSolution;
+    private double penalize_value;
     
     public SolisAndWetsBuilder(DoubleProblem problem, Comparator c)
     {
@@ -19,7 +21,8 @@ public class SolisAndWetsBuilder
         this.comparator = c;
         this.sizeNeighborhood = 20;
         this.rho = 0.5;
-        this.numCycles = 5;
+        this.numEFOs = 5;    
+        this.penalize_value = 0;
     }
     
     public SolisAndWetsBuilder setPopulationSizeNeighborhoodSize(int populationSizeNeighborhood)
@@ -37,14 +40,20 @@ public class SolisAndWetsBuilder
         return this;
     }
     
-    public SolisAndWetsBuilder setNumCycles(int numCycles)
+    public SolisAndWetsBuilder setNumEFOs(int numEFOs)
     {
-        if(numCycles < 0)
+        if(numEFOs < 0)
         {
-            throw new JMetalException("Cycles is negative: " + numCycles);
+            throw new JMetalException("Evaluations is negative: " + numEFOs);
         }
         
-        this.numCycles = numCycles;
+        this.numEFOs = numEFOs;
+        return this;
+    }
+    
+    public SolisAndWetsBuilder setInitialSolution(DoubleSolution initialSolution)
+    {
+        this.initialSolution = initialSolution;        
         return this;
     }
     
@@ -60,8 +69,14 @@ public class SolisAndWetsBuilder
         return this;
     }
     
+    public SolisAndWetsBuilder setPenalizeValue(double penalize_value)
+    {
+        this.penalize_value = penalize_value;
+        return this;
+    }
+    
     public SolisAndWets build()
     {
-        return new SolisAndWets(problem, comparator, numCycles, rho, sizeNeighborhood);
+        return new SolisAndWets(problem, comparator, numEFOs, rho, sizeNeighborhood, initialSolution, penalize_value);
     }
 }
