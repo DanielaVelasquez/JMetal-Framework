@@ -100,7 +100,6 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             {
                 xi.setVariableValue(i, new_value);
                 this.evaluate(xi);
-                this.offspring_population.add((DoubleSolution) xi.copy());
                 this.best_xi = this.getBest(best_xi, xi);
             }
             
@@ -131,7 +130,6 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                    if(this.inBounds(new_value, i, xi))
                    {
                         xi.setVariableValue(i, new_value);
-                        this.offspring_population.add((DoubleSolution) xi.copy());
                         this.evaluate(xi);
                         this.best_xi = this.getBest(best_xi, xi);
                         if(this.improveBest(xi)  && !this.inPopulation(population, xi))
@@ -142,10 +140,11 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
 
                         if(this.functionValueDegenerates(copy, xi)  || this.inPopulation(population, xi))
                         {
-                           if(testing)
-                             xi = copy;
-                           else
-                             this.population.set(index, copy);
+                           if(!testing)
+                            {
+                                this.population.set(index, copy);
+                            }
+                            xi = copy;
                         }
                         else
                         {
@@ -155,10 +154,11 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                    }
                    else
                    {
-                       if(testing)
-                         xi = copy;
-                       else
-                         this.population.set(index, copy);
+                       if(!testing)
+                        {
+                            this.population.set(index, copy);
+                        }
+                        xi = copy;
                    }
                    
                 }
@@ -225,7 +225,6 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             }
             
             this.evaluate(xi);
-            this.offspring_population.add((DoubleSolution) xi.copy());
             this.best_xi = this.getBest(best_xi, xi);
             double new_objective = xi.getObjective(0);
             
@@ -260,7 +259,6 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
                     }
                     
                     this.evaluate(xi);
-                    this.offspring_population.add((DoubleSolution) xi.copy());
                     this.best_xi = this.getBest(best_xi, xi);
                     new_objective = xi.getObjective(0);
                     
@@ -350,21 +348,18 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             {
                 x1.setVariableValue(i, x1_new);
                 this.evaluate(x1);
-                this.offspring_population.add((DoubleSolution) x1.copy());
             }
                 
             if(this.inBounds(y1_new, i, y1))
             {
                 y1.setVariableValue(i, y1_new);
                 this.evaluate(y1);
-                this.offspring_population.add((DoubleSolution) y1.copy());
             }
              
             if(this.inBounds(x2_new, i, x2))
             {
                 x2.setVariableValue(i, x2_new);
                 this.evaluate(x2);
-                this.offspring_population.add((DoubleSolution) x2.copy());
             }
             
             this.best_xi = this.getBest(best_xi, x1);
@@ -425,7 +420,6 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
             {
                 xi.setVariableValue(i, new_xi);
                 this.evaluate(xi);
-                this.offspring_population.add((DoubleSolution) xi.copy());
                 this.best_xi = this.getBest(best_xi, xi);
                 //TO-DO es del original o del original de la itreacion anterior
                 if(this.functionValueDegenerates(copy, xi))
