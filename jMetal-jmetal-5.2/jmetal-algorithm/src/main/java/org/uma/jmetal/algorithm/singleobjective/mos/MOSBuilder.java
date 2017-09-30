@@ -56,7 +56,6 @@ public class MOSBuilder
         this.comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         this.maxEvaluations = 3000;
         this.FE = 100;
-        //CUAL VALORPOR DEFECTO???
         this.E = 0.05;
         this.penalize_value = 1;
         this.tecniques = new ArrayList<>();
@@ -68,7 +67,7 @@ public class MOSBuilder
         {
             return new MOSHRH(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
         }
-        throw new JMetalException("Tecniques should be at least two");
+        throw new JMetalException("Should be at least 2 tecniques");
     }
 
     public List<MOSTecniqueExec> getTecniques() {
@@ -111,23 +110,34 @@ public class MOSBuilder
         return this;
     }
 
-    public void setMaxEvaluations(int maxEvaluations) {
+    public MOSBuilder setMaxEvaluations(int maxEvaluations) {
         if(maxEvaluations < 1)
             throw new JMetalException("Problem can't be null");
         this.maxEvaluations = maxEvaluations;
+        return this;
     }
 
-    public void setFE(double FE) {
+    public MOSBuilder setFE(double FE) {
+        if(FE <= 0)
+            throw new JMetalException("Function evalutions is 0 or less: "+FE);
         this.FE = FE;
+        return this;
     }
 
-    public void setE(double E) {
+    public MOSBuilder setE(double E) {
         this.E = E;
+        return this;
     }
 
-    public void setPenalize_value(double penalize_value) {
+    public MOSBuilder setPenalize_value(double penalize_value) {
         this.penalize_value = penalize_value;
+        return this;
     }
     
+    public MOSBuilder addTecnique(MOSTecniqueExec t)
+    {
+        tecniques.add(t);
+        return this;
+    }
     
 }

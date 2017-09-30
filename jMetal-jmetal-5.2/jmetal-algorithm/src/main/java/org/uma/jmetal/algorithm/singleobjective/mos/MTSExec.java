@@ -22,10 +22,7 @@ public class MTSExec extends MOSTecniqueExec
 
     @Override
     public Solution evolve(int FE, Solution best, Problem p, Comparator c) {
-        //TO-DO ¿ Construirlo siempre o construirlo  antes? el problema de anes
-        // es que no se tiene el problema
-        
-        //FALTA LA CANTIDAD DE INDIVIDUOS!!!!!!!!!!
+
         MultipleTrajectorySearch mts;
         if(best !=null)
         {
@@ -34,7 +31,7 @@ public class MTSExec extends MOSTecniqueExec
             mts = new MultipleTrajectorySearchBuilder((DoubleProblem) p)
                                            .setFE(FE)
                                            .setDefaultPopulation(population)
-                                           .setPopulationSize(10)
+                                           .setPopulationSize((int)this.atributes.get("population_size"))
                                            .setLocalSearchTest((int)this.atributes.get("local_search_test"))
                                            .setLocalSearch((int)this.atributes.get("local_search"))
                                            .setLocalSearchBest((int)this.atributes.get("local_search_best"))
@@ -50,7 +47,7 @@ public class MTSExec extends MOSTecniqueExec
         {
             mts = new MultipleTrajectorySearchBuilder((DoubleProblem) p)
                                            .setFE(FE)
-                                           .setPopulationSize(10)
+                                           .setPopulationSize((int)this.atributes.get("population_size"))
                                            .setLocalSearchTest((int)this.atributes.get("local_search_test"))
                                            .setLocalSearch((int)this.atributes.get("local_search"))
                                            .setLocalSearchBest((int)this.atributes.get("local_search_best"))
