@@ -287,11 +287,11 @@ public class SolisAndWets implements Algorithm
     @Override
     public void run() 
     {
-        offspring_population.clear();
+        this.offspring_population = new ArrayList<>();
         bias = new double[problem.getNumberOfVariables()];
         fillWith(bias, 0);
         
-        if(best != null)
+        if(best == null)
         {
             best = createInitialIndividual();
         }
