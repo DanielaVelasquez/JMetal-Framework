@@ -141,8 +141,6 @@ public class SolisAndWets implements Algorithm
         neighborhood.add(individual2);
         deviationNeighborhood.add(newDeviation);
         deviationNeighborhood.add(newDeviation);
-        offspring_population.add(individual1);
-        offspring_population.add(individual2);
     }
     
     /**
@@ -154,6 +152,7 @@ public class SolisAndWets implements Algorithm
         if(!isStoppingConditionReached())
         {
             this.problem.evaluate(solution);
+            this.offspring_population.add((DoubleSolution) solution.copy());
             this.updateProgress();
         }
         else
@@ -296,9 +295,7 @@ public class SolisAndWets implements Algorithm
             best = createInitialIndividual();
         }
         
-        this.evaluate(best);
-        
-        offspring_population.add(best);
+        this.evaluate(best);        
         hit = 0;
         fail = 0;
         
