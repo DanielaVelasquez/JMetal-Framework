@@ -19,6 +19,8 @@ import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 public class SolisAndWetsExec extends MOSTecniqueExec
 {
+    private List offspring_population;
+    
     public SolisAndWetsExec(HashMap<String, Object> atributes) {
         super(atributes);
     }
@@ -34,14 +36,20 @@ public class SolisAndWetsExec extends MOSTecniqueExec
         {
             saw = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
                     .setNumEFOs(FE)
+                    .setInitialSolution(null)
+                    .setPenalizeValue(1)
                     .build();
         }
         else
         {
             saw = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
                     .setNumEFOs(FE)
-                    .setInitialSolution(best)
+                    .setInitialSolution((DoubleSolution) best)
+                    .setPenalizeValue(1)
                     .build();
         }
+        
+        offspring_population = saw.getPopulation();
+        return saw.getResult();
     }
 }

@@ -66,7 +66,6 @@ public class MTSExec extends MOSTecniqueExec
         
         
         mts.run();
-        this.output_population = mts.getPopulation(); 
         this.offspring_population = mts.getOffspringPopulation();
         return  mts.getResult();
     }
