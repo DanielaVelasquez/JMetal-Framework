@@ -56,7 +56,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     /**
      * Function evaluation for every cycle
      */
-    protected double FE;
+    protected int FE;
     /**
      * Determines how a solution should be order
      */
@@ -84,7 +84,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     
     
     
-    public AbstractHRHMOSAlgorithm(List<MOSTecniqueExec> tecniques, Problem<S> problem, int maxEvaluations, double FE, Comparator<S> comparator, double E, double penalize_value) 
+    public AbstractHRHMOSAlgorithm(List<MOSTecniqueExec> tecniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
     {
         this.tecniques = tecniques;
         this.problem = problem;
@@ -110,11 +110,17 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
             this.quality_measures = this.updateQualityOf(this.tecniques);
             this.participation_ratio = this.updateParticipationRatios(this.quality_measures);
             int j = 0;
+            int total_evaluations = 0;
             for(MOSTecniqueExec tecnique: tecniques)
             {
                 int eval = (int)((double) this.participation_ratio.get(j) * FE);
+                
+                if(j== this.n - 1)
+                    eval = FE - total_evaluations;
                 //Remplazo la población?? 
                 individual = (S) tecnique.evolve(eval, individual, problem,comparator);
+                total_evaluations +=eval;
+                this.updateProgress(eval);
                 j++;
             }
             //this.population = this.combine(this.population, this.offspring_subpopulation);
