@@ -185,7 +185,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                 int[][]SOA = this.buildSOA(populationSize, n);
                 this.population = this.generateInitialSolutions(SOA, populationSize); 
             }
-            this.offspring_population.addAll(this.population);
         }
         
         this.best = getBest(this.population);
@@ -367,6 +366,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         {
             S solution = population.get(i);
             this.problem.evaluate(solution);
+            this.offspring_population.add((S) solution.copy());
             i++;
             this.updateProgress();
         }
@@ -387,6 +387,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         if(!isStoppingConditionReached())
         {
             this.problem.evaluate(solution);
+            this.offspring_population.add((S)solution.copy());
             this.updateProgress();
         }
         else
@@ -791,7 +792,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
 
     public void setPopulation(List<S> population) {
         this.population = population;
-        this.populationSize = this.population.size();
     }
 
     public List<S> getPopulation() {
