@@ -1,14 +1,16 @@
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
+import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 
 
 public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
 {
+
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
@@ -16,6 +18,11 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
+    
+    
+    public MOSHRH(List<MOSTecniqueExec> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, double FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
+        super(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
+    }
     @Override
     public String getName() {
         return "MOS HRH";
@@ -27,94 +34,105 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
     }
 
     @Override
-    protected List initializeSteps() {
-        List<Double> FE = new ArrayList<>();
-        for(int i = 0; i < this.n; i++)
-            FE.add((double)0);
-        return FE;
-    }
-
-    @Override
-    protected List updateSteps() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    protected List<DoubleSolution> createInitialPopulation() {
-        //TO_DO si se hace así podría hacerse que la participación dependa
-        //de la cantidad que cada uno genere
+    protected DoubleSolution createInitialPopulation() {
         List<DoubleSolution> population = new ArrayList<>();
-        
-        int size = this.populationSize / this.n;
-        int missing = this.populationSize % this.n;
-        boolean done = false;
-        
         int i = 0;
+        DoubleSolution pop = null;
         for(MOSTecniqueExec tecnique: tecniques)
         {
-            List<DoubleSolution> p = tecnique.evolve(size, null, this.problem, this.comparator);
-            //AQUí YA SE CUANTOS HIZO CADA TECNICA, ALGUNA HACEN UNA MAS QUE OTRA
-            //DE AQUI SE PUEDE SACAR EL PARTICIPATION RATIO
-            population.addAll(p);
+            int evaluations_j = (int) (FE * (double)this.participation_ratio.get(i));
+            pop = (DoubleSolution) tecnique.evolve(evaluations_j, pop, this.problem, this.comparator);
+            this.updateProgress(evaluations);
             i++;
-            if(!done && this.n - i == missing)
-            {
-                size++;
-                done = true;
-            }
         }
-        return population;
+        return pop;
     }
 
     @Override
-    protected List distributeParticipationTecniques() {
-        List<Double> participation_ratio = new ArrayList<>();
-        for(int i = 0; i < this.n;i++)
+    protected List distributeParticipationTecniques() 
+    {
+        List<Double> pr = new ArrayList<>();
+        for(int j = 0; j < this.n;j++)
         {
-            participation_ratio.add((double)1/(double)n);
+            pr.add((double)1/(double)n);
         }
-        return participation_ratio;
+        return pr;
     }
 
     @Override
     protected boolean isStoppingConditionReached() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return evaluations>maxEvaluations;
+    }
+
+
+    @Override
+    protected List updateQualityOf(List<MOSTecniqueExec> tecniques) 
+    {
+        List<Double> quality = new ArrayList<>();
+        for(MOSTecniqueExec tecnique: tecniques)
+        {
+            quality.add(tecnique.calculateAverageFitnessOffspringPopulationSize());
+        }
+        return quality;
     }
 
     @Override
-    protected boolean isTecniqueStoppingConditionReached(int j) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected List updateParticipationRatios(List quality_values) 
+    {
+        List<Double> pr = new ArrayList<>();
+        this.findBestQualityTecniques();
+        double etha = this.calculateEtha();
+        for(int k = 0; k < n; k++)
+        {
+            double actual_pr = (double) this.participation_ratio.get(k);
+            if(this.best_tecniques_qualities.contains(k))
+            {
+                pr.add(actual_pr + etha);
+            }
+            else
+            {
+                pr.add(actual_pr - this.calculateDeltha(k));
+            }
+        }
+        return pr;
     }
 
     @Override
-    protected void evaluatePopulation(List<DoubleSolution> population) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public DoubleSolution getResult() 
+    {
+        return this.individual;
     }
-
-    @Override
-    protected List updateQualityOf(List tecniques) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Represents the decrease in participation for a tecnique
+     * @param tecnique tecnique 
+     * @return the decrease in participation for a tecnique or null if the tecnique was selected as one of the best because of its quality
+     */
+    private Double calculateDeltha(int tecnique)
+    {
+        if(!this.best_tecniques_qualities.contains(tecnique))
+        {
+            double quality = (double) this.quality_measures.get(tecnique);
+            double participation = (double) this.participation_ratio.get(tecnique);
+            return this.E * ((this.quality_max - quality)/(this.quality_max)) * participation;
+        }
+        return null;
     }
-
-    @Override
-    protected List updateParticipationRatios(List quality_values) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    protected List evolve(Algorithm tecnique, int FE) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private double calculateEtha()
+    {
+        double sum = 0;
+        int size = this.best_tecniques_qualities.size();
+        for(int k = 0; k < n; k++)
+        {
+            if(!this.best_tecniques_qualities.contains(k))
+            {
+                sum += this.calculateDeltha(k);
+            }
+        }
+        return sum/size;
     }
 
     @Override
     protected List combine(List<DoubleSolution> population, List<DoubleSolution> offspring_population) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public DoubleSolution getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
 }

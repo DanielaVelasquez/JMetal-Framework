@@ -1,11 +1,11 @@
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implements Algorithm<S>
@@ -26,11 +26,19 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     /**
      * Overall shared population in current generation
      */
-    private List<S> population;
+    protected S individual;
     /**
      * Current generation
      */
-    private int i;
+    protected int i;
+    /**
+     * Number of evaluation perfomed
+     */
+    protected int evaluations;
+    /**
+     * Maximun number of generations
+     */
+    protected int maxEvaluations;
     /**
      * Number of tecniques
      */
@@ -43,54 +51,166 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     /**
      * Quality meausure asociated to each offspring subpopulation
      */
-    private List quality_measures;
+    protected List quality_measures;
+
     /**
-     * Population size
+     * Function evaluation for every cycle
      */
-    protected int populationSize;
-    /**
-     * Function evaluation for every tecnique in current generation
-     */
-    private List FE;
+    protected double FE;
     /**
      * Determines how a solution should be order
      */
-    protected Comparator<DoubleSolution> comparator;
-    
+    protected Comparator<S> comparator;
+    /**
+     * Contains index of tecniques with best quality value
+     */
+    protected List<Integer> best_tecniques_qualities;
+    /**
+     * Maximun qualitiy value
+     */
+    protected double quality_max;
+    /**
+     * Reduction factor
+     */
+    protected double E;
+    /**
+     * Value to penalize a solution in case evaluations are over
+     */
+    protected double penalize_value;
      /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
 
-    @Override
-    public void run() 
+    
+    
+    
+    public AbstractHRHMOSAlgorithm(List<MOSTecniqueExec> tecniques, Problem<S> problem, int maxEvaluations, double FE, Comparator<S> comparator, double E, double penalize_value) 
     {
+        this.tecniques = tecniques;
+        this.problem = problem;
+        this.maxEvaluations = maxEvaluations;
+        this.FE = FE;
+        this.comparator = comparator;
+        this.E = E;
+        this.penalize_value = penalize_value;
+    }
+
+    @Override
+    public void run() {
         this.i = 0;
         this.n = this.tecniques.size();
-        this.population = createInitialPopulation();
-        evaluatePopulation(this.population);
-        this.FE = this.initializeSteps();
+        
         this.participation_ratio = distributeParticipationTecniques();
+        this.individual = createInitialPopulation();
         
-        //TO-DO ¿Cómo se inializa la población? si cada 
-        this.population = this.createInitialPopulation();
         
-        while(isStoppingConditionReached())
+        
+        while(!isStoppingConditionReached())
         {
-            this.i++;
-            
             this.quality_measures = this.updateQualityOf(this.tecniques);
             this.participation_ratio = this.updateParticipationRatios(this.quality_measures);
-            this.FE = this.updateSteps();
             int j = 0;
             for(MOSTecniqueExec tecnique: tecniques)
             {
-                tecnique.evolve((int) this.FE.get(j), population, problem,comparator);
+                int eval = (int)((double) this.participation_ratio.get(j) * FE);
+                //Remplazo la población?? 
+                individual = (S) tecnique.evolve(eval, individual, problem,comparator);
                 j++;
             }
-            this.population = this.combine(this.population, this.offspring_subpopulation);
+            //this.population = this.combine(this.population, this.offspring_subpopulation);
+            
+            this.i++;
         }
     }
+    /**
+     * Update number of evaluations performed
+     */
+    protected void updateProgress(int evaluations)
+    {
+        this.evaluations += evaluations;
+    }
+    /**
+     * Get tecniques with best quality value and store their
+     * indexes in best_tecniques_qualities list and assign
+     * the maximun quality value found
+     */
+    protected void findBestQualityTecniques()
+    {
+        best_tecniques_qualities = new ArrayList<>();
+        best_tecniques_qualities.add(0);
+        quality_max = (double) this.quality_measures.get(0);
+        for(int k = 0; k < n; k++)
+        {
+            double value = (double) this.quality_measures.get(k);
+            if(value > quality_max)
+            {
+                best_tecniques_qualities.clear();
+                best_tecniques_qualities.add(k);
+                quality_max = value;
+            }
+            else if(value == quality_max)
+            {
+                best_tecniques_qualities.add(k);
+            }
+        }
+    }
+
+    /**
+     * Gets the best individual between two individuals, if they are equals
+     * the firts indiviudal is return by default
+     * @param s1 first individual
+     * @param s2 seconde individual
+     * @return best individual between s1 and s2
+     */
+    protected  S getBest(S s1, S s2)
+    {
+        int comparison = comparator.compare(s1, s2);
+        if(comparison == 0)
+        {
+            try
+            {
+                double b_s1 = (double) s1.getAttribute("B");
+                double b_s2 = (double) s2.getAttribute("B");
+                if(b_s1 <= b_s2)
+                    return s1;
+                else
+                    return s2;
+            }
+            catch(Exception e)
+            {
+                return s1;
+            }
+        }
+        else if(comparison < 1)
+            return s1;
+        else
+            return s2;
+    }
     
+    /**
+     * Evaluates a population as maximun FE has not been reached
+     * @param population 
+     */
+    protected void evaluatePopulation(List<S> population) {
+        int i = 0;
+        int populationSize = population.size();
+        while(!isStoppingConditionReached() && i < populationSize)
+        {
+            S solution = population.get(i);
+            this.problem.evaluate(solution);
+            i++;
+            this.updateProgress(1);
+        }
+        for(int j = i; j < populationSize; j++)
+        {
+            S solution = population.get(i);
+            this.penalize(solution);
+        }
+        //TO-DO ¿Que hago con el resto de la población que no alcance a evaluar?
+    }
+    protected void penalize(S solution){
+        solution.setObjective(0, this.penalize_value);
+    }
     @Override
     public abstract S getResult();
     
@@ -99,23 +219,13 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
 
     @Override
     public abstract String getDescription();
-    
 
-    /**
-     * Initialize  the Funcionts evaluations for every technique
-     * @return function evaluations for every technique
-     */
-    protected abstract List initializeSteps();
-    /**
-     * Update  the Function evaluations for every technique
-     * @return function evaluations for every technique
-     */
-    protected abstract List updateSteps();
+    
     /**
      * Each tecnique produces a subset of individuals according to its participation ratio
      * @return initial population
      */
-    protected abstract  List<S> createInitialPopulation() ;
+    protected abstract  S createInitialPopulation() ;
     /**
      * Uniformily distribute participation among tecniques
      * @return 
@@ -126,37 +236,20 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      * @return true if stopping condition was reache, false otherwise
      */
     protected abstract boolean isStoppingConditionReached();
-    /**
-     * Determines if stopping condition was reached when j-th tecnique is evaluated
-     * @param j j-th tecnique position
-     * @return true if stopping condition was reache, false otherwise
-     */
-    protected abstract boolean isTecniqueStoppingConditionReached(int j);
-    /**
-     * Evaluate a population
-     * @param population population to evaluate
-     * @return population evaluated
-     */
-    protected abstract void evaluatePopulation(List<S> population);
+
     /**
      * Updte quality of every tecnique 
      * @param tecniques algorithms to evaluate their quality
      * @return quality value for every tecnique
      */
-    protected abstract List updateQualityOf(List tecniques);
+    protected abstract List updateQualityOf(List<MOSTecniqueExec> tecniques);
     /**
      * Update participation ratios from quality values computed before
      * @param quality_values quality values computed before
      * @return participation ratios updated
      */
     protected abstract List updateParticipationRatios(List quality_values);
-    /**
-     * Run j-th tecnique
-     * @param tecnique algorithm to run
-     * @param FE function evalution for techique
-     * @return population found by algorithm
-     */
-    protected abstract List evolve(Algorithm tecnique, int FE);
+
     /**
      * Combine population and offspring population according to a pre-established criterion to generate next generation
      * @param population current population

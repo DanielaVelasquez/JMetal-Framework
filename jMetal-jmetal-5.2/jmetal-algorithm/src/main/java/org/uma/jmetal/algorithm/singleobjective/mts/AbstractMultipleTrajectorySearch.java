@@ -40,6 +40,10 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Individiuals on population
      */
     protected List<S> population;
+    /**
+     * Individiuals produced on algorithm
+     */
+    protected List<S> offspring_population;
      /**
      * Problem to solve
      */
@@ -162,21 +166,22 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     @Override
     public void run() {
         this.evaluations = 0;
-        
+        this.offspring_population = new ArrayList<S>();
         //TO-DO ¿Cómo hacer que m sea mútiplo de n? n es el número de genes
         //TO-DO Si está utilizando MOS, la población se la debe pasar
         //¿así para evitar la creación de una población inicial?
         this.n = this.problem.getNumberOfVariables();
-        if(this.population == null)
+        if(this.population == null || this.population.size() < this.populationSize)
         {
-            //TO-DO ¿ Está bien construido SOA?
-            //TO-DO todos los valores de los individuos son 1,-1,0.5 y -0.5
-            int[][]SOA = this.buildSOA(populationSize, n);
-            this.population = this.generateInitialSolutions(SOA);
+            int size = this.populationSize - this.population.size();
+            int[][]SOA = this.buildSOA(size, n);
+            if(population == null || population.isEmpty())
+                this.population = this.generateInitialSolutions(SOA, size);
+            else
+                this.population.addAll(this.generateInitialSolutions(SOA, size));
+            this.offspring_population.addAll(this.population);
         }
         
-        
-        this.evaluatePopulation(this.population);
         this.best = getBest(this.population);
         this.enable = new ArrayList<>();
         this.improve = new ArrayList<>();
@@ -607,13 +612,13 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Creates an initial random population
      * @return initial population with random values
      */
-    protected abstract List<S> createInitialPopulation();
+    protected abstract List<S> createInitialPopulation(int size);
     /**
      * Generates an initial solution
      * @param SOA simulated orthogonal array to build the population
      * @return population build from SOA
      */
-    protected abstract List<S> generateInitialSolutions(int[][]SOA);
+    protected abstract List<S> generateInitialSolutions(int[][]SOA, int populationSize);
     /**
      * Local search 1 
      * @param xi inidividual to make local search on 
@@ -794,6 +799,10 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
 
     public List<S> getPopulation() {
         return population;
+    }
+
+    public List<S> getOffspringPopulation() {
+        return offspring_population;
     }
     
     

@@ -19,7 +19,7 @@ public class MultipleTrajectorySearchBuilder
     private int populationSize;
     
     /**
-     * Algorithm problem
+     * Algorithm's problem
      */
     private DoubleProblem problem;
     /**
@@ -81,7 +81,7 @@ public class MultipleTrajectorySearchBuilder
     /**
      * Default population to evolve on the algorithm
      */
-    private List<DoubleSolution> defalult_population;
+    private List<DoubleSolution> default_population;
     
     private double penalize_value;
     /**-----------------------------------------------------------------------------------------
@@ -111,8 +111,8 @@ public class MultipleTrajectorySearchBuilder
      public MultipleTrajectorySearch build()
      {
         MultipleTrajectorySearch mts = new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c,penalize_value);
-        if(this.defalult_population != null)
-            mts.setPopulation(defalult_population);
+        if(this.default_population != null)
+            mts.setPopulation(default_population);
         return mts;
      }
 
@@ -279,8 +279,8 @@ public class MultipleTrajectorySearchBuilder
         return this;
     }
 
-    public MultipleTrajectorySearchBuilder setDefalultPopulation(List<DoubleSolution> defalult_population) {
-        this.defalult_population = defalult_population;
+    public MultipleTrajectorySearchBuilder setDefaultPopulation(List<DoubleSolution> defalult_population) {
+        this.default_population = defalult_population;
         return this;
     }
     

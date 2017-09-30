@@ -14,10 +14,10 @@ public class SolisAndWetsBuilder
     private double rho;
     private int numCycles;
     
-    public SolisAndWetsBuilder(DoubleProblem problem)
+    public SolisAndWetsBuilder(DoubleProblem problem, Comparator c)
     {
         this.problem = problem;
-        this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
+        this.comparator = c;
         this.sizeNeighborhood = 20;
         this.rho = 0.5;
         this.numCycles = 5;
@@ -46,6 +46,12 @@ public class SolisAndWetsBuilder
         }
         
         this.numCycles = numCycles;
+        return this;
+    }
+    
+    public SolisAndWetsBuilder setComparator(Comparator c)
+    {
+        this.comparator = c;
         return this;
     }
     
