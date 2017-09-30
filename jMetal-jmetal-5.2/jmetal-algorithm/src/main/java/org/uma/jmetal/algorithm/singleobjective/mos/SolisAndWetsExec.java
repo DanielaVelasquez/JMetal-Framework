@@ -14,7 +14,7 @@ import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 public class SolisAndWetsExec extends MOSTecniqueExec
 {
-    private List offspring_population;
+
     
     public SolisAndWetsExec(HashMap<String, Object> atributes) {
         super(atributes);
@@ -43,7 +43,7 @@ public class SolisAndWetsExec extends MOSTecniqueExec
                     .setPenalizeValue(1)
                     .build();
         }
-        
+        saw.run();
         offspring_population = saw.getPopulation();
         return saw.getResult();
     }

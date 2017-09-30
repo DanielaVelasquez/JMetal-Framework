@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSExec;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsExec;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -30,11 +31,13 @@ public class MOSRunner
                                                 .getConfiguration();
                 
         MTSExec mts_exec = new MTSExec(mts_atributes);
+        SolisAndWetsExec sw_exec = new SolisAndWetsExec(null);
         
         for(int i = 0; i < EXECUTIONS;i++)
         {
             algorithm =  new   MOSBuilder(problem)
                             .addTecnique(mts_exec)
+                            .addTecnique(sw_exec)
                             .setFE(300)
                             .setMaxEvaluations(3000)
                             .build();
