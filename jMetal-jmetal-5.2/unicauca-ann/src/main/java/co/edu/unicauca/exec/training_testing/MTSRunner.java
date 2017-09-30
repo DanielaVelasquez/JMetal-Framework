@@ -22,7 +22,7 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-public class IrisRunner 
+public class MTSRunner 
 {    
     public static void main(String[] args) throws Exception 
     {

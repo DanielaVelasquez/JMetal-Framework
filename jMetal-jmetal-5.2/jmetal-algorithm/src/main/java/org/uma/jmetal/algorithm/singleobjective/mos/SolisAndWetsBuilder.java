@@ -4,7 +4,6 @@ import java.util.Comparator;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 public class SolisAndWetsBuilder 
 {

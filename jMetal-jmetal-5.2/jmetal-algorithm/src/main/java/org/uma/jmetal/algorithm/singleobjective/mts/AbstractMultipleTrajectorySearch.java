@@ -1,7 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -173,12 +172,19 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         this.n = this.problem.getNumberOfVariables();
         if(this.population == null || this.population.size() < this.populationSize)
         {
-            int size = this.populationSize - this.population.size();
-            int[][]SOA = this.buildSOA(size, n);
-            if(population == null || population.isEmpty())
-                this.population = this.generateInitialSolutions(SOA, size);
-            else
+            
+            if(population != null &&  !population.isEmpty())
+            {
+                int size = this.populationSize - this.population.size();
+                int[][]SOA = this.buildSOA(size, n);
                 this.population.addAll(this.generateInitialSolutions(SOA, size));
+                
+            }
+            else
+            {
+                int[][]SOA = this.buildSOA(populationSize, n);
+                this.population = this.generateInitialSolutions(SOA, populationSize); 
+            }
             this.offspring_population.addAll(this.population);
         }
         
@@ -359,14 +365,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         int i = 0;
         while(!isStoppingConditionReached() && i < populationSize)
         {
-            S solution = this.population.get(i);
+            S solution = population.get(i);
             this.problem.evaluate(solution);
             i++;
             this.updateProgress();
         }
         for(int j = i; j < populationSize; j++)
         {
-            S solution = this.population.get(i);
+            S solution = population.get(i);
             this.penalize(solution);
         }
         //TO-DO ¿Que hago con el resto de la población que no alcance a evaluar?
@@ -383,7 +389,8 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             this.problem.evaluate(solution);
             this.updateProgress();
         }
-        else{
+        else
+        {
             this.penalize(solution);
         }
         
@@ -491,23 +498,13 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             for(int i = 0; i< populationSize; i++)
             {
                 double value = grades.get(i);
-                if(!index.contains(value))
+                if(!index.contains(i) && value>value_best)
                 {
                     value_best = value;
                     best_index = i;
-                    break;
                 }
             }
-            for(int j = 0; j < populationSize; j++)
-            {
-                double value = grades.get(j);
-                if(!index.contains(value) && value >= value_best)
-                {
-                    value_best = value;
-                    best_index = j;
-                    break;
-                }
-            }
+            
             index.add(best_index);
         }
         for(Integer i : index)

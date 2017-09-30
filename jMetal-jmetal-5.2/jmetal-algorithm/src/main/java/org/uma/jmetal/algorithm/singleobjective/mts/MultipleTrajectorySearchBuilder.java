@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -288,5 +289,25 @@ public class MultipleTrajectorySearchBuilder
     public MultipleTrajectorySearchBuilder setPenalizeValue(double penalize_value) {
         this.penalize_value = penalize_value;
         return this;
+    }
+    
+    public HashMap<String, Object> getConfiguration()
+    {
+        HashMap<String, Object> atributes = new HashMap<>();
+        atributes.put("population_size", populationSize);
+        atributes.put("local_search_test", local_search_test);
+        atributes.put("local_search_best", local_search_best);
+        atributes.put("bonus_2", bonus_2);
+        atributes.put("lower_bound_b", lower_bound_b);
+        atributes.put("upper_bound_b", upper_bound_b);
+        atributes.put("number_of_foreground", number_of_foreground);
+        atributes.put("local_search", local_search);
+        atributes.put("bonus_1", bonus_1);
+        atributes.put("lower_bound_a", lower_bound_a);
+        atributes.put("upper_bound_a", upper_bound_a);
+        atributes.put("lower_bound_c", lower_bound_c);
+        atributes.put("upper_bound_c", upper_bound_c);
+        atributes.put("penalize_value", penalize_value);
+        return atributes;
     }
 }
