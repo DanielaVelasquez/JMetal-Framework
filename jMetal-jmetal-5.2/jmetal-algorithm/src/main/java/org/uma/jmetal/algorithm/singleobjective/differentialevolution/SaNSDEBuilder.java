@@ -21,12 +21,12 @@ public class SaNSDEBuilder {
   private SolutionListEvaluator<DoubleSolution> evaluator;
   private Comparator<DoubleSolution> comparator ;
 
-  public SaNSDEBuilder(DoubleProblem problem, double cr, double f) {
+  public SaNSDEBuilder(DoubleProblem problem, double cr1,double cr2, double f1,double f2) {
     this.problem = problem;
     this.populationSize = 100;
     this.maxEvaluations = 25000;
-    this.crossoverOperator = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin");
-    this.crossoverOperator2 = new DifferentialEvolutionCrossover(cr, f, "current-to-best/1/bin");
+    this.crossoverOperator = new DifferentialEvolutionCrossover(cr1, f1, "rand/1/bin");
+    this.crossoverOperator2 = new DifferentialEvolutionCrossover(cr2, f2, "current-to-best/1/bin");
     this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
     this.selectionOperator = new DifferentialEvolutionSelection();
     this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>();
