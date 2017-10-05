@@ -86,7 +86,7 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        SaNSDEParametersAdjust parameters = new SaNSDEParametersAdjust(5, 4, 5);
+        SaNSDEParametersAdjust parameters = new SaNSDEParametersAdjust(5, 4, 10);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/SaNSDE-params");
         parameters.getCovering_array().load("src/resources-params/SaNSDE-ca");

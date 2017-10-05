@@ -93,7 +93,7 @@ public class MTS_LS1ParametersAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        MTS_LS1ParametersAdjust parameters = new MTS_LS1ParametersAdjust(3, 5, 5);
+        MTS_LS1ParametersAdjust parameters = new MTS_LS1ParametersAdjust(3, 5, 10);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/mts-params");
         parameters.getCovering_array().load("src/resources-params/mts-ca");
