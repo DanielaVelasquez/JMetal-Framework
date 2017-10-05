@@ -493,7 +493,8 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     {
         
         List<Integer> index = new ArrayList<>();
-        while(index.size()<number_of_foreground)
+        boolean full = false;
+        while(index.size()<number_of_foreground || !full)
         {
             double value_best = -1;
             int best_index = -1;
@@ -506,8 +507,10 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     best_index = i;
                 }
             }
-            
-            index.add(best_index);
+            if(best_index != -1)
+                index.add(best_index);
+            else
+                full = true;
         }
         for(Integer i : index)
         {
