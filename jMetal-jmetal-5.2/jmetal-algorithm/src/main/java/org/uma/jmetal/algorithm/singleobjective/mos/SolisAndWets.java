@@ -293,9 +293,9 @@ public class SolisAndWets implements Algorithm
         if(best == null)
         {
             best = createInitialIndividual();
+            this.evaluate(best);
         }
         
-        this.evaluate(best);        
         hit = 0;
         fail = 0;
         
