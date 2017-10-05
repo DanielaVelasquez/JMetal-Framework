@@ -362,6 +362,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      */
     protected void evaluatePopulation(List<S> population) {
         int i = 0;
+        int populationSize = population.size();
         while(!isStoppingConditionReached() && i < populationSize)
         {
             S solution = population.get(i);

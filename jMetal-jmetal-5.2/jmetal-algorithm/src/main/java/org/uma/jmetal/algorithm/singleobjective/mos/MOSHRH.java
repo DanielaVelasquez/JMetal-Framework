@@ -20,7 +20,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
      *-----------------------------------------------------------------------------------------*/
     
     
-    public MOSHRH(List<MOSTecniqueExec> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, double FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
+    public MOSHRH(List<MOSTecniqueExec> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
         super(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
     }
     @Override
@@ -38,11 +38,16 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
         List<DoubleSolution> population = new ArrayList<>();
         int i = 0;
         DoubleSolution pop = null;
+        int total_evaluations = 0;
         for(MOSTecniqueExec tecnique: tecniques)
         {
             int evaluations_j = (int) (FE * (double)this.participation_ratio.get(i));
+            
+            if(i == this.n - 1)
+                evaluations_j = FE - total_evaluations; 
             pop = (DoubleSolution) tecnique.evolve(evaluations_j, pop, this.problem, this.comparator);
-            this.updateProgress(evaluations);
+            this.updateProgress(evaluations_j);
+            total_evaluations +=evaluations_j;
             i++;
         }
         return pop;
@@ -61,7 +66,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
 
     @Override
     protected boolean isStoppingConditionReached() {
-        return evaluations>maxEvaluations;
+        return evaluations>=maxEvaluations;
     }
 
 

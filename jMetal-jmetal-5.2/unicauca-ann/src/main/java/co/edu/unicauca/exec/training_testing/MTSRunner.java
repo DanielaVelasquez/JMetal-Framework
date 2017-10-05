@@ -3,12 +3,6 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
@@ -17,9 +11,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class MTSRunner 
@@ -42,7 +34,7 @@ public class MTSRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.cross_validation.Seeds";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -60,11 +52,19 @@ public class MTSRunner
 
         selection = new DifferentialEvolutionSelection() ;
         
+        double train = -1.0;
+        double test = -1.0;
+        double train_best = -1.0;
+        double test_best = -1.0;
         
         for(int i = 0; i < 30;i++)
         {
             algorithm =  new   MultipleTrajectorySearchBuilder(problem)
-                            .setFE(3000)
+                            .setFE(600)
+                    .setLocalSearch(50)
+                    .setLocalSearchBest(100)
+                    .setNumberOfForeground(5)
+                    .setLocalSearchTest(1)
                             .build();
             rnd.setSeed(i);
             System.out.println("------------------------------");
@@ -75,11 +75,22 @@ public class MTSRunner
               long computingTime = algorithmRunner.getComputingTime() ;
 
               System.out.println("Total execution time: " + computingTime + "ms");
-              System.out.println("Objective "+(1-solution.getObjective(0)));
+              train = (1-solution.getObjective(0));
+              System.out.println("Objective "+train);
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-              System.out.println("Testing: "+p.test(solution));
+              test = p.test(solution);
+              System.out.println("Testing: "+test);
               System.out.println("Total evaluations: "+p.total);;
+              
+              if(test > test_best)
+              {
+                  test_best = test;
+                  train_best = train;
+              }
         }
+        System.out.println("Best train: "+train_best);
+        System.out.println("Best test: "+test_best);
+        
         /*System.out.println("--------------------------------");
         print(algorithm.getPopulation());
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);

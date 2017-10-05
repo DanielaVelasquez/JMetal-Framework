@@ -36,7 +36,7 @@ public class MOSBuilder
     /**
      * Function evaluation for every cycle
      */
-    protected double FE;
+    protected int FE;
     /**
      * Reduction factor
      */
@@ -117,7 +117,7 @@ public class MOSBuilder
         return this;
     }
 
-    public MOSBuilder setFE(double FE) {
+    public MOSBuilder setFE(int FE) {
         if(FE <= 0)
             throw new JMetalException("Function evalutions is 0 or less: "+FE);
         this.FE = FE;

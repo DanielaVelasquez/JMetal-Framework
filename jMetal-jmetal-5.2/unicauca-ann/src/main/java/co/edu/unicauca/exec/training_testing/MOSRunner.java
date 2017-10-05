@@ -15,7 +15,7 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class MOSRunner 
 {    
-    private static int EXECUTIONS = 1;
+    private static int EXECUTIONS = 30;
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
@@ -24,7 +24,7 @@ public class MOSRunner
         MOSHRH algorithm;
         String problemName ;
         
-        problemName = "co.edu.unicauca.problem.training_testing.Iris";
+        problemName = "co.edu.unicauca.problem.cross_validation.Haberman";
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
         HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)

@@ -27,7 +27,7 @@ public class SolisAndWetsExec extends MOSTecniqueExec
         List<DoubleSolution> population = new ArrayList<DoubleSolution>();
         population.add((DoubleSolution)best);
         
-        if(best != null)
+        if(best == null)
         {
             saw = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
                     .setNumEFOs(FE)

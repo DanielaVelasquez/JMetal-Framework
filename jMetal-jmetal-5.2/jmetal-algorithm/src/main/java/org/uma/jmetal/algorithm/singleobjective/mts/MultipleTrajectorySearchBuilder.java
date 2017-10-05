@@ -1,6 +1,5 @@
 package org.uma.jmetal.algorithm.singleobjective.mts;
 
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +7,6 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
 public class MultipleTrajectorySearchBuilder
