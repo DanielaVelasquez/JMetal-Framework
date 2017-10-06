@@ -69,7 +69,7 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
                     }
 
                    line += (" "+(train/this.total_iterations));    
-
+ 
                 }
                 line +=(" " +(total_sum/(this.data_sets.size()*this.total_iterations)));
                 line += "\n";

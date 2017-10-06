@@ -406,7 +406,10 @@ public class ELM {
     }
 
     public double getOuputWightNorm() {
-        return output_weight.norm(Matrix.Norm.One);
+        if(output_weight != null)
+            return output_weight.norm(Matrix.Norm.One);
+        else
+            return Double.MAX_VALUE;
     }
 
     public double getAccuracy() {
