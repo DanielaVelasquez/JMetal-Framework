@@ -19,7 +19,7 @@ public class SolisAndWetsBuilder
     {
         this.problem = problem;
         this.comparator = c;
-        this.sizeNeighborhood = 20;
+        this.sizeNeighborhood = 5;
         this.rho = 0.5;
         this.numEFOs = 5;    
         this.penalize_value = 0;
