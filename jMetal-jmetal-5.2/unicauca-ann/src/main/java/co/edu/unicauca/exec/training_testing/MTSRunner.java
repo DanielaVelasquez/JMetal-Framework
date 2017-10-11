@@ -34,7 +34,7 @@ public class MTSRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.cross_validation.Seeds";
+          problemName = "co.edu.unicauca.problem.training_testing.Iris";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -57,10 +57,10 @@ public class MTSRunner
         double train_best = -1.0;
         double test_best = -1.0;
         
-        for(int i = 0; i < 30;i++)
+        for(int i = 0; i < 1;i++)
         {
             algorithm =  new   MultipleTrajectorySearchBuilder(problem)
-                            .setFE(600)
+                            .setFE(3000)
                     .setLocalSearch(50)
                     .setLocalSearchBest(100)
                     .setNumberOfForeground(5)

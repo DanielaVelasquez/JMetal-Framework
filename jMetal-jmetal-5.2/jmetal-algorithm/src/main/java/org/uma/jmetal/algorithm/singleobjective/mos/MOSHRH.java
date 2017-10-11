@@ -34,10 +34,8 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
     }
 
     @Override
-    protected DoubleSolution createInitialPopulation() {
-        List<DoubleSolution> population = new ArrayList<>();
+    protected DoubleSolution executeTecniques() {
         int i = 0;
-        DoubleSolution pop = null;
         int total_evaluations = 0;
         for(MOSTecniqueExec tecnique: tecniques)
         {
@@ -45,12 +43,12 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
             
             if(i == this.n - 1)
                 evaluations_j = FE - total_evaluations; 
-            pop = (DoubleSolution) tecnique.evolve(evaluations_j, pop, this.problem, this.comparator);
+            individual = (DoubleSolution) tecnique.evolve(evaluations_j, individual, this.problem, this.comparator);
             this.updateProgress(evaluations_j);
             total_evaluations +=evaluations_j;
             i++;
         }
-        return pop;
+        return individual;
     }
 
     @Override
@@ -82,7 +80,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
     }
 
     @Override
-    protected List updateParticipationRatios(List quality_values) 
+    protected List updateParticipationRatios() 
     {
         List<Double> pr = new ArrayList<>();
         this.findBestQualityTecniques();
@@ -135,9 +133,5 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
         }
         return sum/size;
     }
-
-    @Override
-    protected List combine(List<DoubleSolution> population, List<DoubleSolution> offspring_population) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

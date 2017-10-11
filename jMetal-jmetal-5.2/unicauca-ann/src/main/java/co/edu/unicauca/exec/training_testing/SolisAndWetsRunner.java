@@ -3,14 +3,8 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -19,7 +13,6 @@ import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class SolisAndWetsRunner 
@@ -59,7 +52,7 @@ public class SolisAndWetsRunner
         selection = new DifferentialEvolutionSelection() ;
         
         
-        for(int i = 0; i < 30;i++)
+        for(int i = 0; i < 1;i++)
         {
             algorithm = new SolisAndWetsBuilder(problem, comparator)
                             .setNumEFOs(3000)

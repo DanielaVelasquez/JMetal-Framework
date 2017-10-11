@@ -101,29 +101,16 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
         this.n = this.tecniques.size();
         
         this.participation_ratio = distributeParticipationTecniques();
-        this.individual = createInitialPopulation();
+        this.individual = executeTecniques();
         
         
         
         while(!isStoppingConditionReached())
         {
             this.quality_measures = this.updateQualityOf(this.tecniques);
-            this.participation_ratio = this.updateParticipationRatios(this.quality_measures);
+            this.participation_ratio = this.updateParticipationRatios();
             int j = 0;
-            int total_evaluations = 0;
-            for(MOSTecniqueExec tecnique: tecniques)
-            {
-                int eval = (int)((double) this.participation_ratio.get(j) * FE);
-                
-                if(j== this.n - 1)
-                    eval = FE - total_evaluations;
-                //Remplazo la población?? 
-                individual = (S) tecnique.evolve(eval, individual, problem,comparator);
-                total_evaluations +=eval;
-                this.updateProgress(eval);
-                j++;
-            }
-            //this.population = this.combine(this.population, this.offspring_subpopulation);
+            this.individual = this.executeTecniques();
             
             this.i++;
         }
@@ -145,7 +132,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
         best_tecniques_qualities = new ArrayList<>();
         best_tecniques_qualities.add(0);
         quality_max = (double) this.quality_measures.get(0);
-        for(int k = 0; k < n; k++)
+        for(int k = 1; k < n; k++)
         {
             double value = (double) this.quality_measures.get(k);
             if(value > quality_max)
@@ -231,7 +218,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      * Each tecnique produces a subset of individuals according to its participation ratio
      * @return initial population
      */
-    protected abstract  S createInitialPopulation() ;
+    protected abstract  S executeTecniques() ;
     /**
      * Uniformily distribute participation among tecniques
      * @return 
@@ -251,16 +238,8 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     protected abstract List updateQualityOf(List<MOSTecniqueExec> tecniques);
     /**
      * Update participation ratios from quality values computed before
-     * @param quality_values quality values computed before
      * @return participation ratios updated
      */
-    protected abstract List updateParticipationRatios(List quality_values);
+    protected abstract List updateParticipationRatios();
 
-    /**
-     * Combine population and offspring population according to a pre-established criterion to generate next generation
-     * @param population current population
-     * @param offspring_population subpopulatin produces by tecniques
-     * @return population which it is a combination between previos population and a subpopulation
-     */
-    protected abstract List combine(List<S> population, List<S> offspring_population);
 }
