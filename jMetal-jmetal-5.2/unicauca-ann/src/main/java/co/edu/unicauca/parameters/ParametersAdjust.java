@@ -1,5 +1,7 @@
 package co.edu.unicauca.parameters;
 
+import co.edu.unicauca.elm.ELM;
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -34,6 +36,8 @@ public abstract class ParametersAdjust
      * Combinations to be made
      */
     protected CoveringArray covering_array;
+    
+    protected AbstractELMEvaluator elm;
     
     protected  int total_iterations;
 

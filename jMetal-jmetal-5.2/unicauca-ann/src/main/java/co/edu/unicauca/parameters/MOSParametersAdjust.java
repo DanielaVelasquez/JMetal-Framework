@@ -1,16 +1,14 @@
 package co.edu.unicauca.parameters;
 
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSExec;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsExec;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -53,7 +51,7 @@ public class MOSParametersAdjust extends ParametersAdjust
                     String problemName =  "co.edu.unicauca.problem.training_testing."+ds;
                     DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
                     
-                    
+                    elm = (AbstractELMEvaluator)problem;
                     
                     double train = 0;
 
@@ -80,8 +78,9 @@ public class MOSParametersAdjust extends ParametersAdjust
                         .execute() ;
 
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
-                        train += (1-solution.getObjective(0));
-                        total_sum += (1-solution.getObjective(0));
+                        double evaluation = elm.test(solution);;
+                        train += evaluation;
+                        total_sum += evaluation;
                     }
 
                    line += (" "+(train/this.total_iterations));    

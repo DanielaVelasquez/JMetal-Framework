@@ -1,10 +1,9 @@
 package co.edu.unicauca.parameters;
 
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -48,7 +47,7 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
                 {
                     String problemName = "co.edu.unicauca.problem.training_testing." + ds;
                     DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
-
+                    elm = (AbstractELMEvaluator)problem;
                     double train = 0;
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
@@ -60,9 +59,10 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
                                                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
-                        DoubleSolution solution = (DoubleSolution)algorithm.getResult();
-                        train += (1 - solution.getObjective(0));
-                        total_sum += (1 - solution.getObjective(0));
+                        DoubleSolution solution = (DoubleSolution) algorithm.getResult();
+                        double evaluation = elm.test(solution);;
+                        train += evaluation;
+                        total_sum += evaluation;
                     }
 
                    line += (" " + (train / this.total_iterations));

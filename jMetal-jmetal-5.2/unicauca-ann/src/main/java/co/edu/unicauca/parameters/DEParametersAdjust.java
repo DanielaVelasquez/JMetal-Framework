@@ -1,5 +1,6 @@
 package co.edu.unicauca.parameters;
 
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -50,7 +51,7 @@ public class DEParametersAdjust extends ParametersAdjust
                 {
                     String problemName =  "co.edu.unicauca.problem.training_testing."+ds;
                     DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
-
+                    elm = (AbstractELMEvaluator)problem;
                     double train = 0;
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
@@ -65,8 +66,9 @@ public class DEParametersAdjust extends ParametersAdjust
                         .execute() ;
 
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
-                        train += (1-solution.getObjective(0));
-                        total_sum += (1-solution.getObjective(0));
+                        double evaluation = elm.test(solution);;
+                        train += evaluation;
+                        total_sum += evaluation;
                     }
 
                    line += (" "+(train/this.total_iterations));    
