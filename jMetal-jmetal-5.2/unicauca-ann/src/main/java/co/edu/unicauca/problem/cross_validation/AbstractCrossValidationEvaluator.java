@@ -143,8 +143,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
     @Override
     public double test(DoubleSolution solution ) {
-        System.out.println(""+elm.getEFOS());
-        elm.resetEFOS();
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
@@ -154,7 +152,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
         elm.test();
-        elm.resetEFOS();
         return elm.getAccuracy();
     }
 }

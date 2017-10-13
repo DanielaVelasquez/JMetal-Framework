@@ -34,7 +34,7 @@ public class MTSRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -61,10 +61,10 @@ public class MTSRunner
         {
             algorithm =  new   MultipleTrajectorySearchBuilder(problem)
                             .setFE(3000)
-                    .setLocalSearch(50)
-                    .setLocalSearchBest(100)
-                    .setNumberOfForeground(5)
-                    .setLocalSearchTest(1)
+                            .setLocalSearch(50)
+                            .setLocalSearchBest(100)
+                            .setNumberOfForeground(5)
+                            .setLocalSearchTest(1)
                             .build();
             rnd.setSeed(i);
             System.out.println("------------------------------");

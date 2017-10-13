@@ -74,7 +74,7 @@ public class MOSParametersAdjust extends ParametersAdjust
                                                                     .setE(E)
                                                                     .setMaxEvaluations(3000)
                                                                     .build();
-                        new AlgorithmRunner.Executor(algorithm)
+                         new AlgorithmRunner.Executor(algorithm)
                         .execute() ;
 
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
@@ -102,7 +102,7 @@ public class MOSParametersAdjust extends ParametersAdjust
     
     
     public static void main(String[] args) throws Exception{
-        MOSParametersAdjust parameters = new MOSParametersAdjust(5, 2, 3);
+        MOSParametersAdjust parameters = new MOSParametersAdjust(5, 2, 10);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/MOS-params");
         parameters.getCovering_array().load("src/resources-"

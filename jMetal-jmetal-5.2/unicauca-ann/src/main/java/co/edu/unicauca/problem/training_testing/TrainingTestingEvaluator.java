@@ -51,8 +51,6 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
     @Override
     public double test(DoubleSolution solution)
     {
-        System.out.println(""+elm.getEFOS());
-        elm.resetEFOS();
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
@@ -62,7 +60,6 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
         elm.test();
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
-        elm.resetEFOS();
         return elm.getAccuracy();
     }
 
