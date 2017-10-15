@@ -321,7 +321,7 @@ public class ELM {
      * @param y output vector
      * @return tabular matrix (fill with 1 and -1)
      */
-    private DenseMatrix tabularOutput(DenseVector y) {
+    private DenseMatrix getTabularOutput(DenseVector y) {
         DenseMatrix Y;
         if (elm_type == ELMType.CLASSIFICATION) {
             int n = y.size();
@@ -357,7 +357,7 @@ public class ELM {
 
     public void setY(DenseVector Y) {
         this.Y = Y;
-        this.tabular = tabularOutput(Y);
+        this.tabular = getTabularOutput(Y);
     }
 
     public DenseVector getBiasHiddenNeurons() {
