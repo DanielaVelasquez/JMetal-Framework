@@ -24,7 +24,7 @@ public class MOSRunner
         MOSHRH algorithm;
         String problemName ;
         
-        problemName = "co.edu.unicauca.problem.training_testing.Iris";
+        problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
         HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
@@ -41,7 +41,7 @@ public class MOSRunner
                             .setFE(300)
                             .setMaxEvaluations(3000)
                             .build();
-            rnd.setSeed(i);
+            rnd.setSeed(4);
             System.out.println("-------------------------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

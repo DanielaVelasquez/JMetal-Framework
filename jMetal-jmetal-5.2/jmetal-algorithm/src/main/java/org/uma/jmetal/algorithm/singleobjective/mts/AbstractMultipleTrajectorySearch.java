@@ -129,6 +129,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected S best_xi;
     
     protected double penalize_value;
+
     
     
     /**-----------------------------------------------------------------------------------------
@@ -275,7 +276,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             }
             this.chooseSolutionsToEnable(grades, enable);
         }
-        
     }
     protected void review_best()
     {
@@ -395,8 +395,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         {
             this.penalize(solution);
         }
-        
-        
         //TO-DO ¿Que hago si no lo puede evaluar?
     }
     /**

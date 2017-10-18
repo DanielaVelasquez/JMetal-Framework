@@ -77,6 +77,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      * Value to penalize a solution in case evaluations are over
      */
     protected double penalize_value;
+    
      /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -109,9 +110,8 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
         {
             this.quality_measures = this.updateQualityOf(this.tecniques);
             this.participation_ratio = this.updateParticipationRatios();
-            int j = 0;
             this.individual = this.executeTecniques();
-            
+        
             this.i++;
         }
     }

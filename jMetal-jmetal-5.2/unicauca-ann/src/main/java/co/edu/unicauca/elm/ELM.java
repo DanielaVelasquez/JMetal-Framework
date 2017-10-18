@@ -111,14 +111,7 @@ public class ELM {
      * Method calculates moore-penrose pseudoinverse
      */
     private AbstractMoorePenroseMethod inverse;
-    /**
-     * Maximun number of evaluations
-     */
-    private int maxEvaluations;
-    /**
-     * Actual number of EFOs
-     */
-    private int EFOs;
+
 
     /**
      * -----------------------------------------------------------------------------------------
@@ -138,7 +131,7 @@ public class ELM {
      * @param inverse Method for calculation of moore penrose inverse
      * @param maxEvaluations Maximun number of evaluations
      */
-    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
+    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse) {
         this.elm_type = elm_type;
         this.hidden_neurons = hidden_neurons;
         this.function = activation_function;
@@ -146,17 +139,9 @@ public class ELM {
         this.accuracy = 0;
         this.number_data = 0;
         this.inverse = inverse;
-        this.maxEvaluations = maxEvaluations;
-        this.EFOs = 0;
     }
     
-    /**
-     * Restart to 0 the number of actual EFOs
-     */
-    public void resetEFOS()
-    {
-        this.EFOs = 0;
-    }    
+   
     
     /**
      * Train an artificial neural network using ELM algorithm with the input and
@@ -165,9 +150,7 @@ public class ELM {
      */
     public void train() {
         
-        if(this.EFOs < maxEvaluations)
-        {        
-            this.EFOs++;
+       
             /**
              * In case the input weights is not defined in the ELM they will be
              * randomly assigned
@@ -199,18 +182,9 @@ public class ELM {
             }
             catch(Exception ex)
             {
-                accuracy = 1;
+                accuracy = 0;
             }
-        }
-        else            
-        {
-            accuracy = 1;
-        }
-    }
-    
-    public int getEFOS()
-    {
-        return this.EFOs;
+        
     }
 
     /**
