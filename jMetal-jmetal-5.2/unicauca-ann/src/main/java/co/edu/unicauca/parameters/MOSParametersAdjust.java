@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
-import org.uma.jmetal.algorithm.singleobjective.mos.MTSExec;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsExec;
+import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -65,8 +65,8 @@ public class MOSParametersAdjust extends ParametersAdjust
                                                 .setLocalSearchBest(100)
                                                 .getConfiguration();
                 
-                        MTSExec mts_exec = new MTSExec(mts_atributes);
-                        SolisAndWetsExec sw_exec = new SolisAndWetsExec(null);
+                        MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
+                        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(null);
                         MOSHRH algorithm = new   MOSBuilder(problem)
                                                                     .addTecnique(mts_exec)
                                                                     .addTecnique(sw_exec)

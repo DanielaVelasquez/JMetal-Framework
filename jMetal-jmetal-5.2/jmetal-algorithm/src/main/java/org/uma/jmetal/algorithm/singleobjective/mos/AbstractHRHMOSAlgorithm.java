@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
+import org.uma.jmetal.algorithm.util.Tecnique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
@@ -18,7 +18,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      * Algorithms to execute inside a MOS algorithm
      * wrapped in its own executer
      */
-    protected List<MOSTecniqueExec> tecniques;
+    protected List<Tecnique> tecniques;
     /**
      * Problem to solve
      */
@@ -85,7 +85,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     
     
     
-    public AbstractHRHMOSAlgorithm(List<MOSTecniqueExec> tecniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
+    public AbstractHRHMOSAlgorithm(List<Tecnique> tecniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
     {
         this.tecniques = tecniques;
         this.problem = problem;
@@ -235,7 +235,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
      * @param tecniques algorithms to evaluate their quality
      * @return quality value for every tecnique
      */
-    protected abstract List updateQualityOf(List<MOSTecniqueExec> tecniques);
+    protected abstract List updateQualityOf(List<Tecnique> tecniques);
     /**
      * Update participation ratios from quality values computed before
      * @return participation ratios updated

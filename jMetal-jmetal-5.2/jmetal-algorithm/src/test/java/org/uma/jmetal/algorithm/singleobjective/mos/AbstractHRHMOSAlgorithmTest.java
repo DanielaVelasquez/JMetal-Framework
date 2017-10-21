@@ -29,8 +29,8 @@ public class AbstractHRHMOSAlgorithmTest {
         DoubleProblem problem = null;
         HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
                                                 .getConfiguration();
-        MTSExec mts_exec = new MTSExec(mts_atributes);
-        SolisAndWetsExec sw_exec = new SolisAndWetsExec(null);
+        MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
+        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(null);
         instance  =  new   MOSBuilder(problem)
                             .addTecnique(mts_exec)
                             .addTecnique(sw_exec)

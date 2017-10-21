@@ -3,7 +3,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
+import org.uma.jmetal.algorithm.util.Tecnique;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
@@ -18,7 +18,7 @@ public class MOSBuilder
      * Algorithms to execute inside a MOS algorithm
      * wrapped in its own executer
      */
-    protected List<MOSTecniqueExec> tecniques;
+    protected List<Tecnique> tecniques;
     /**
      * Algorithm's problem
      */
@@ -70,7 +70,7 @@ public class MOSBuilder
         throw new JMetalException("Should be at least 2 tecniques");
     }
 
-    public List<MOSTecniqueExec> getTecniques() {
+    public List<Tecnique> getTecniques() {
         return tecniques;
     }
 
@@ -134,7 +134,7 @@ public class MOSBuilder
         return this;
     }
     
-    public MOSBuilder addTecnique(MOSTecniqueExec t)
+    public MOSBuilder addTecnique(Tecnique t)
     {
         tecniques.add(t);
         return this;

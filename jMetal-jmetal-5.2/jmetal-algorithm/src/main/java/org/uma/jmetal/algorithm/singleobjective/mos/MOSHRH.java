@@ -3,7 +3,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
+import org.uma.jmetal.algorithm.util.Tecnique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -20,7 +20,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
      *-----------------------------------------------------------------------------------------*/
     
     
-    public MOSHRH(List<MOSTecniqueExec> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
+    public MOSHRH(List<Tecnique> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
         super(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
     }
     @Override
@@ -37,7 +37,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
     protected DoubleSolution executeTecniques() {
         int i = 0;
         int total_evaluations = 0;
-        for(MOSTecniqueExec tecnique: tecniques)
+        for(Tecnique tecnique: tecniques)
         {
             int evaluations_j = (int) (FE * (double)this.participation_ratio.get(i));
             
@@ -69,10 +69,10 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
 
 
     @Override
-    protected List updateQualityOf(List<MOSTecniqueExec> tecniques) 
+    protected List updateQualityOf(List<Tecnique> tecniques) 
     {
         List<Double> quality = new ArrayList<>();
-        for(MOSTecniqueExec tecnique: tecniques)
+        for(Tecnique tecnique: tecniques)
         {
             quality.add(tecnique.calculateAverageFitnessOffspringPopulationSize());
         }
