@@ -131,7 +131,7 @@ public class ELM {
      * @param inverse Method for calculation of moore penrose inverse
      * @param maxEvaluations Maximun number of evaluations
      */
-    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
+    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse) {
         this.elm_type = elm_type;
         this.hidden_neurons = hidden_neurons;
         this.function = activation_function;
@@ -140,7 +140,6 @@ public class ELM {
         this.number_data = 0;
         this.inverse = inverse;
     }
-    
 
     
     /**
@@ -149,10 +148,7 @@ public class ELM {
      * they will be randomly assigned
      */
     public void train() {
-        
-        //if(this.EFOs < maxEvaluations)
-        //{        
-            //this.EFOs++;
+
             /**
              * In case the input weights is not defined in the ELM they will be
              * randomly assigned
@@ -186,13 +182,9 @@ public class ELM {
             {
                 accuracy = 0;
             }
-        /*}
-        else            
-        {
-            accuracy = 1;
-        }*/
+
+        
     }
-    
 
 
     /**

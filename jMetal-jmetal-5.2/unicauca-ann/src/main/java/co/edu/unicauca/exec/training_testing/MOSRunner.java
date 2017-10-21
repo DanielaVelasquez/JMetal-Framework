@@ -4,8 +4,8 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
-import org.uma.jmetal.algorithm.singleobjective.mos.MTSExec;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsExec;
+import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -24,14 +24,14 @@ public class MOSRunner
         MOSHRH algorithm;
         String problemName ;
         
-        problemName = "co.edu.unicauca.problem.training_testing.Iris";
+        problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
         HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
                                                 .getConfiguration();
                 
-        MTSExec mts_exec = new MTSExec(mts_atributes);
-        SolisAndWetsExec sw_exec = new SolisAndWetsExec(null);
+        MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
+        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(null);
         
         for(int i = 0; i < EXECUTIONS;i++)
         {
@@ -41,7 +41,7 @@ public class MOSRunner
                             .setFE(300)
                             .setMaxEvaluations(3000)
                             .build();
-            rnd.setSeed(i);
+            rnd.setSeed(4);
             System.out.println("-------------------------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

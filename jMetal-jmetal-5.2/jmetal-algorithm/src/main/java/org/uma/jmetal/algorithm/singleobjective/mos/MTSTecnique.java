@@ -7,15 +7,15 @@ import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearch;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
-import org.uma.jmetal.algorithm.util.MOSTecniqueExec;
+import org.uma.jmetal.algorithm.util.Tecnique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 
-public class MTSExec extends MOSTecniqueExec
+public class MTSTecnique extends Tecnique
 {
-    public MTSExec(HashMap<String, Object> atributes) {
+    public MTSTecnique(HashMap<String, Object> atributes) {
         super(atributes);
     }
     
@@ -23,12 +23,12 @@ public class MTSExec extends MOSTecniqueExec
     @Override
     public Solution evolve(int FE, Solution best, Problem p, Comparator c) {
 
-        MultipleTrajectorySearch mts;
+        
         if(best !=null)
         {
             List<DoubleSolution> population = new ArrayList<DoubleSolution>();
             population.add((DoubleSolution)best);
-            mts = new MultipleTrajectorySearchBuilder((DoubleProblem) p)
+            algorithm = new MultipleTrajectorySearchBuilder((DoubleProblem) p)
                                            .setFE(FE)
                                            .setDefaultPopulation(population)
                                            .setPopulationSize((int)this.atributes.get("population_size"))
@@ -45,7 +45,7 @@ public class MTSExec extends MOSTecniqueExec
         }
         else
         {
-            mts = new MultipleTrajectorySearchBuilder((DoubleProblem) p)
+            algorithm = new MultipleTrajectorySearchBuilder((DoubleProblem) p)
                                            .setFE(FE)
                                            .setPopulationSize((int)this.atributes.get("population_size"))
                                            .setLocalSearchTest((int)this.atributes.get("local_search_test"))
@@ -62,8 +62,8 @@ public class MTSExec extends MOSTecniqueExec
         
         
         
-        mts.run();
-        this.offspring_population = mts.getOffspringPopulation();
-        return  mts.getResult();
+        algorithm.run();
+        this.offspring_population = ((MultipleTrajectorySearch)algorithm).getOffspringPopulation();
+        return  (Solution) algorithm.getResult();
     }
 }

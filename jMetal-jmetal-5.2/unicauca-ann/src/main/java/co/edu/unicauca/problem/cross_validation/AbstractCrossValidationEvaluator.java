@@ -59,7 +59,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         public AbstractCrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
         /*EL contructor deberia recibir Una Red ELM abstracta y no los componentes*/
         super(type, name, training_data_set, testing_data_set);
-        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse, maxEvaluations);
+        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, hidden_neurons, inverse);
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
         this.number_folders = number_folders;

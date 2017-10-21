@@ -66,7 +66,7 @@ public class MTSRunner
                             .setNumberOfForeground(5)
                             .setLocalSearchTest(1)
                             .build();
-            rnd.setSeed(i);
+            rnd.setSeed(1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

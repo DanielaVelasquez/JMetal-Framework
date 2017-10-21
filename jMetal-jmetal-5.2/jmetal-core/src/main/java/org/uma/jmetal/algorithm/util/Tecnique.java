@@ -3,6 +3,7 @@ package org.uma.jmetal.algorithm.util;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
@@ -12,7 +13,7 @@ import org.uma.jmetal.solution.Solution;
  * @author Daniela Velásquez Garzón
  * @author David Fernando Sotelo
  */
-public abstract class MOSTecniqueExec 
+public abstract class Tecnique 
 {
     /**
      * Atributes needed in order to for the algorithm to run
@@ -22,8 +23,12 @@ public abstract class MOSTecniqueExec
      * Offspring sub-population produced by the tecnique
      */
     protected List offspring_population;
+    /**
+     * Algorithm to execute
+     */
+    protected Algorithm algorithm;
 
-    public MOSTecniqueExec(HashMap<String, Object> atributes) {
+    public Tecnique(HashMap<String, Object> atributes) {
         this.atributes = atributes;
     }
     
