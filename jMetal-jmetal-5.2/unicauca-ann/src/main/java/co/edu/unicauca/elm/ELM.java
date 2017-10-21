@@ -140,8 +140,7 @@ public class ELM {
         this.number_data = 0;
         this.inverse = inverse;
     }
-    
-   
+
     
     /**
      * Train an artificial neural network using ELM algorithm with the input and
@@ -149,8 +148,7 @@ public class ELM {
      * they will be randomly assigned
      */
     public void train() {
-        
-       
+
             /**
              * In case the input weights is not defined in the ELM they will be
              * randomly assigned
@@ -184,8 +182,10 @@ public class ELM {
             {
                 accuracy = 0;
             }
+
         
     }
+
 
     /**
      * Test the artificial neural network with the input and output data given

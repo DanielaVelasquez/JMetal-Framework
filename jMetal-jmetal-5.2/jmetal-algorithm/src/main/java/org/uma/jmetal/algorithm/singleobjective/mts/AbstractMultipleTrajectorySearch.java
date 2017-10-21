@@ -366,7 +366,9 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         while(!isStoppingConditionReached() && i < populationSize)
         {
             S solution = population.get(i);
+            //long initTime = System.currentTimeMillis();
             this.problem.evaluate(solution);
+            //System.out.println("Time: "+(System.currentTimeMillis() - initTime));
             this.offspring_population.add((S) solution.copy());
             i++;
             this.updateProgress();
