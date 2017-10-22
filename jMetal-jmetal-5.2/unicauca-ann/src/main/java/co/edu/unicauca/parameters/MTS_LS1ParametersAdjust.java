@@ -61,6 +61,9 @@ public class MTS_LS1ParametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
+                        System.out.println("----------------------------------------------");
+                        System.out.println("Problem: "+problemName+ "i: "+iterations);
+                        
                         MultipleTrajectorySearch algorithm = new   MultipleTrajectorySearchBuilder(problem)
                                                             .setFE(3000)
                                                             .setPopulationSize(population_size)

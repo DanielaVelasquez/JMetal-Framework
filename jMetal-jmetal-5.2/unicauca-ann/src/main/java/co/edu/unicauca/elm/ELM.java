@@ -163,7 +163,7 @@ public class ELM {
             if (bias_hidden_neurons == null) {
                 bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
             }
-
+            
             //Get output matrix from hidden layer
             DenseMatrix H = calculateH(X);
             try

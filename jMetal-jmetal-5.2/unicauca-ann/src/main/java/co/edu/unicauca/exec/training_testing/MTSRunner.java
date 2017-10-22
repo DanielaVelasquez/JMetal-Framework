@@ -34,7 +34,7 @@ public class MTSRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
+          problemName = "co.edu.unicauca.problem.training_testing.Iris";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -57,7 +57,9 @@ public class MTSRunner
         double train_best = -1.0;
         double test_best = -1.0;
         
-        for(int i = 0; i < 1;i++)
+        long initTime = System.currentTimeMillis();
+        
+        for(int i = 0; i < 5;i++)
         {
             algorithm =  new   MultipleTrajectorySearchBuilder(problem)
                             .setFE(3000)
@@ -81,16 +83,10 @@ public class MTSRunner
               test = p.test(solution);
               System.out.println("Testing: "+test);
               System.out.println("Total evaluations: "+p.total);;
-              
-              if(test > test_best)
-              {
-                  test_best = test;
-                  train_best = train;
-              }
+             
         }
-        System.out.println("Best train: "+train_best);
-        System.out.println("Best test: "+test_best);
         
+        System.out.println("Total time: "+(System.currentTimeMillis() - initTime));
         /*System.out.println("--------------------------------");
         print(algorithm.getPopulation());
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);

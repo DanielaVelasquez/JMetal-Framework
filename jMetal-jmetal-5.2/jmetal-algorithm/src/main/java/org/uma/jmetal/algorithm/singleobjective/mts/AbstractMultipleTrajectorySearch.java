@@ -161,6 +161,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         
         this.n = this.problem.getNumberOfVariables();
         this.randomGenerator = JMetalRandom.getInstance();
+        
     }
 
     @Override
@@ -204,7 +205,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         {
             
             
-            for(int i = 0; i < populationSize; i++)
+            for(int i = 0; i < populationSize && !isStoppingConditionReached(); i++)
             {
                 S xi = this.population.get(i);
                 //TO-DO puedo ponerlo por defecto en -1???
@@ -218,7 +219,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     double LS1_test_grade = 0;
                     double LS2_test_grade = 0;
                     double LS3_test_grade = 0;
-                    for(int j = 0 ; j < local_search_test; j++)
+                    for(int j = 0 ; j < local_search_test && !isStoppingConditionReached(); j++)
                     {
                         LS1_test_grade += this.local_search_1((S) xi.copy(), i, true);
                         LS2_test_grade += this.local_search_2((S) xi.copy(), i, true);
@@ -238,7 +239,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
                     //TO-DO cómo se determina cual es el mejor?
                     int best_local_search = chooseBestLocalSearch(test_grades);
                     
-                    for(int j = 0; j < local_search; j++)
+                    for(int j = 0; j < local_search && !isStoppingConditionReached(); j++)
                     {
                         xi = this.population.get(i);
                         switch(best_local_search)
@@ -264,13 +265,13 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             int best_index = this.getBestIndex(population);
             //DoubleSolution best_individual = this.population.get(best_index);
             //int best_search_range = search_range.get(best_index);
-            for(int i = 0; i < local_search_best; i++)
+            for(int i = 0; i < local_search_best && !isStoppingConditionReached(); i++)
             {
                 this.local_search_1(best,best_index,false);
                 this.review_best();
             }
             
-            for(int i = 0; i < populationSize; i++)
+            for(int i = 0; i < populationSize && !isStoppingConditionReached(); i++)
             {
                 enable.set(i, Boolean.FALSE);
             }
@@ -378,7 +379,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
             S solution = population.get(i);
             this.penalize(solution);
         }
-        //TO-DO ¿Que hago con el resto de la población que no alcance a evaluar?
     }
     
     /**
@@ -397,7 +397,6 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         {
             this.penalize(solution);
         }
-        //TO-DO ¿Que hago si no lo puede evaluar?
     }
     /**
      * Increments the number of generations evaluated
@@ -410,6 +409,9 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * @return true if stopping condition was reached, false otherwise
      */
     private boolean isStoppingConditionReached() {
+        System.out.println("evaluations: "+evaluations);
+        System.out.println("FE: "+FE);
+        System.out.println("Rta: "+(evaluations >= FE));
         return evaluations >= FE;
     }
     /**
@@ -494,7 +496,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         
         List<Integer> index = new ArrayList<>();
         boolean full = false;
-        while(index.size()<number_of_foreground || !full)
+        while(index.size()<number_of_foreground && !full)
         {
             double value_best = -1;
             int best_index = -1;
