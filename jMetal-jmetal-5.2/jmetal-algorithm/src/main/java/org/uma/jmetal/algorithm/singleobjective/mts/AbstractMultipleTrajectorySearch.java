@@ -408,10 +408,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Determines if the stopping was reached
      * @return true if stopping condition was reached, false otherwise
      */
-    private boolean isStoppingConditionReached() {
-        System.out.println("evaluations: "+evaluations);
-        System.out.println("FE: "+FE);
-        System.out.println("Rta: "+(evaluations >= FE));
+        private boolean isStoppingConditionReached() {
         return evaluations >= FE;
     }
     /**
