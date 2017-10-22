@@ -127,7 +127,9 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Best xi found on testing
      */
     protected S best_xi;
-    
+    /**
+     * Value to set to solutions when evaluations are over
+     */
     protected double penalize_value;
 
     
@@ -654,7 +656,11 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * @return search range to solution
      */
     protected abstract SearchRange buildSearchRange(S solution);
-    
+    /**
+     * Sets an individual function value to a penalization value given by 
+     * the user
+     * @param solution solution to penalize with a bad function value
+     */
     protected void penalize(S solution){
         solution.setObjective(0, this.penalize_value);
     }
