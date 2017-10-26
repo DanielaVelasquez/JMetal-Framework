@@ -335,11 +335,12 @@ public class SolisAndWets implements Algorithm
             if(fail > 1)
             {
                 rho = rho / 2;
+                fail = 0;
+                
                 if(rho < 1)
                 {
                     rho = 1;
                 }
-                fail = 0;
             }
         }
     }
