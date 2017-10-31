@@ -2,7 +2,11 @@ package co.edu.unicauca.exec.training_testing;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
@@ -19,6 +23,21 @@ public class SolisAndWetsRunner
 {    
     public static void main(String[] args) throws Exception 
     {
+//        HashMap<Integer, Double> t = new HashMap<Integer, Double>();
+//        t.put(0, 0.99);
+//        t.put(1, 0.55);
+////        List ordered_t = t.entrySet().stream()
+////        .sorted(Map.Entry.comparingByValue())
+////        .collect(Collectors.toList());
+//        List ordered_t = t.entrySet().stream()
+//        .sorted(Map.Entry.comparingByValue())
+//                .map(e -> new Integer(e.getKey()))
+//                .collect(Collectors.toList());
+//        
+//        for(int i = 0; i< ordered_t.size(); i++)
+//        {
+//            System.out.println("->"+ordered_t.get(i).getClass());
+//        }
         JMetalRandom rnd = JMetalRandom.getInstance();
         
         DoubleProblem problem;
