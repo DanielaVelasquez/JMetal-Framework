@@ -146,6 +146,18 @@ public class LBFGSB implements Algorithm<DoubleSolution>
             this.c = new DenseMatrix(this.m * 2, 1);
             
             this.getGeneralizedCauchyPoint(this.x, x_old, gradient);
+            this.subspaceMin(x, x_old, Matrices.getColumn(gradient, 0));
+            
+            double alpha = 1;
+            
+            if(line_searchflag)
+            {
+                DenseMatrix p = new DenseMatrix(xBar);
+                DenseMatrix x_1 = new DenseMatrix(x_old);
+                x_1.scale(-1);
+                p.add(x_1);
+                
+            }
             
             
         }
@@ -636,6 +648,38 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         }
         
         return alphaStart;
+    }
+    
+    private void strongWolf(DoubleSolution s, DenseMatrix x, DenseMatrix g, DenseMatrix p)
+    {
+        double c_1 = 1.e-4;
+        double c_2 = 0.9;
+        double alphaMax = 2.5;
+        double alphaIml = 0;
+        double alphaI = 1;
+        double fIml = s.getObjective(0);
+        
+        //transposeG = transpose(g)
+        DenseMatrix transposeG = new DenseMatrix(g);
+        transposeG.transpose();
+        
+        //dphi0 = transpose(g) * p
+        DenseMatrix dphi0 = new DenseMatrix(transposeG.numRows(), p.numColumns());
+        transposeG.mult(p, dphi0);
+        
+        int i = 0;
+        int maxIters = 20;
+        
+      --------
+        
+        
+        while(true)
+        {
+            
+        }
+        
+        
+        
     }
             
 }
