@@ -552,8 +552,90 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         DenseMatrix n = new DenseMatrix(invThethaWtz.numRows(), wtzTranspose.numColumns());
         invThethaWtz.mult(wtzTranspose, n);
         
+        //mn = M * n
+        DenseMatrix mn = new DenseMatrix(M.numRows(), n.numColumns());
+        M.mult(n, mn);        
+        mn.scale(-1);
         
+        //n = identity(size(n)) - M * n
+        DenseMatrix i = Matrices.identity(n.numColumns());
+        i.add(mn);        
+        n = i;
         
+        DenseMatrix identity = Matrices.identity(n.numRows());
         
+        //invN = inverse(n)
+        DenseMatrix invN = new DenseMatrix(n.numRows(), n.numColumns());
+        n.solve(identity, invN);
+        
+        //nv = inverse(n) * v
+        DenseVector nv = new DenseVector(v.size());
+        invN.mult(v, nv);
+        
+        //v = inverse(n) * v
+        v = nv;
+        
+        //transposeWtz = transpose(wtz)
+        DenseMatrix transposeWtz  = new DenseMatrix(wtz);
+        transposeWtz.transpose();
+        
+        //wtz_t_v = transpose(wtz) * v
+        DenseVector wtz_t_v = new DenseVector(v.size());
+        transposeWtz.mult(v, wtz_t_v);
+        
+        //wtz_t_v = - (1/theta)^2 * transpose(wtz) * v
+        wtz_t_v.scale(-(inv_theta * inv_theta));
+        
+        //invThetaR = - (1/theta) * r
+        DenseVector invThetaR = new DenseVector(r);
+        invThetaR.scale(-inv_theta);
+        
+        //du = - (1/theta) * r - (1/theta)^2 * transpose(wtz) * v
+        DenseVector du = new DenseVector(invThetaR);
+        du.add(wtz_t_v);
+        
+        double alphaStar = findAlpha(s, du, freeVarsIdx);
+        DenseVector dStart = new DenseVector(du);
+        dStart.scale(alphaStar);
+        xBar = xCauchy.copy();
+        
+        for(int k = 0; k < freeVarsSize; k++)
+        {
+            int idx = freeVarsIdx.get(k);
+            xBar.set(idx, 0, (xBar.get(idx, 0) + dStart.get(idx)));
+        }        
     }
+    
+    
+    /**
+     * Calculate the positive scaling parameter
+     * @param s is the current solution
+     * @param du is the solution of unconstrained minimization
+     * @param freeVarsIdx is free variables
+     * @return the positive scaling parameter
+     */
+    private double findAlpha (DoubleSolution s, DenseVector du, List<Integer> freeVarsIdx)
+    {
+        double alphaStart = 1;
+        int freeVarIdxSize = freeVarsIdx.size();
+        
+        for(int i = 0; i < freeVarIdxSize; i++)
+        {
+            int idx = freeVarsIdx.get(i);            
+            double duValue = du.get(i);
+            double cauchyValue = xCauchy.get(i, 0);
+            
+            if(duValue > 0)
+            {
+                alphaStart = Math.min(alphaStart, (s.getUpperBound(idx) - cauchyValue) / duValue);
+            }
+            else
+            {
+                alphaStart = Math.min(alphaStart, (s.getLowerBound(idx) - cauchyValue) / duValue);
+            }
+        }
+        
+        return alphaStart;
+    }
+            
 }
