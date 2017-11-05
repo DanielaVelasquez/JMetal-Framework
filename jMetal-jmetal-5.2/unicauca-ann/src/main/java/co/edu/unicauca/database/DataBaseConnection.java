@@ -1,18 +1,17 @@
-package co.edu.unicauca.azure;
+package co.edu.unicauca.database;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
 
-public class ConectaBD 
+public class DataBaseConnection 
 {
     private Connection connection;
-    private static ConectaBD instancia;
+    private static DataBaseConnection instancia;
     
     //constructor privado se hace uso del patron singleton
-    private ConectaBD()
+    private DataBaseConnection()
     {
         
     }
@@ -59,11 +58,11 @@ public class ConectaBD
     }
     
     //Metodo que obtiene la unica instancia creada del objeto, se declara estatica
-    public static ConectaBD getInstancia() throws Exception
+    public static DataBaseConnection getInstancia() throws Exception
     {
         if (instancia == null)
         {
-            instancia = new ConectaBD();
+            instancia = new DataBaseConnection();
             
             try
             {
