@@ -53,7 +53,6 @@ public class MOSRunner
             System.out.println("Objective "+(1-solution.getObjective(0)));
             AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
             System.out.println("Testing: "+p.test(solution));
-            System.out.println("Total evaluations: "+p.total);
         }
     }
 }

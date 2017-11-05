@@ -55,7 +55,6 @@ public class RandomSearchRunner
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               double test = p.test(solution);
               System.out.println("Testing: "+test);
-              System.out.println("Total evaluations: "+p.total);;
              
         }
         

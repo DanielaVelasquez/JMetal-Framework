@@ -82,7 +82,6 @@ public class MTSRunner
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               test = p.test(solution);
               System.out.println("Testing: "+test);
-              System.out.println("Total evaluations: "+p.total);;
              
         }
         
