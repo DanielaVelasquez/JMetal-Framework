@@ -2,11 +2,7 @@ package co.edu.unicauca.exec.training_testing;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;

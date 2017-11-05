@@ -9,6 +9,6 @@ import java.io.IOException;
 public class Climatesimulation extends AbstractCrossValidationEvaluator {
 
     public Climatesimulation() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "ClimateSimulation", new DataSet("src/resources-elm", "climatesimulation.train", 18), new DataSet("src/resources-elm", "climatesimulation.test", 18), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "ClimateSimulation", new DataSet("src/resources-elm", "climatesimulation.train", 18), new DataSet("src/resources-elm", "climatesimulation.test", 18), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Wdbc extends AbstractCrossValidationEvaluator {
 
     public Wdbc() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Wdbc", new DataSet("src/resources-elm", "wdbc.train", 30), new DataSet("src/resources-elm", "wdbc.test", 30), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Wdbc", new DataSet("src/resources-elm", "wdbc.train", 30), new DataSet("src/resources-elm", "wdbc.test", 30), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

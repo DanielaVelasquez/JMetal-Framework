@@ -13,7 +13,7 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 public class WineWhite extends AbstractCrossValidationEvaluator {
 
     public WineWhite() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Wine(White)", new DataSet("src/resources-elm", "wine(white).train", 11), new DataSet("src/resources-elm", "wine(white).test", 11), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Wine(White)", new DataSet("src/resources-elm", "wine(white).train", 11), new DataSet("src/resources-elm", "wine(white).test", 11), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }
