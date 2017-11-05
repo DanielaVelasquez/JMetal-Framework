@@ -1,5 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.lbfgsb;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,7 +9,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.DenseVector;
+import no.uib.cipr.matrix.LowerTriangDenseMatrix;
 import no.uib.cipr.matrix.Matrices;
+import no.uib.cipr.matrix.UpperTriangDenseMatrix;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -62,13 +65,13 @@ public class LBFGSB implements Algorithm<DoubleSolution>
      */
     private int n;
     /**
-     * Movement on individual
+     * Movement on individual [n, m]
      */
-    private DenseMatrix S;
+    private List<DenseVector> S;
     /**
-     * Movement on individual's gradient
+     * Movement on individual's gradient [n, m]
      */
-    private DenseMatrix Y;
+    private List<DenseVector> Y;
     /**
      * Generalized Cauchy point [n, 1]
      */
@@ -97,6 +100,10 @@ public class LBFGSB implements Algorithm<DoubleSolution>
      * [n, 1]
      */
     private DenseMatrix xBar;
+    /**
+     * Quasi Newton iterations
+     */
+    private int k;
     
     private double theta;
 
@@ -107,21 +114,24 @@ public class LBFGSB implements Algorithm<DoubleSolution>
     
     
     
-    public LBFGSB()
+    
+    public LBFGSB(DoubleProblem problem, Comparator<DoubleSolution> comparator, int FE, double penalize_value, int m, double eps)
     {
+        this.problem = problem;
+        this.comparator = comparator;
+        this.FE = FE;
+        this.penalize_value = penalize_value;
+        this.m = m;
+        this.eps = eps;
         theta = 1;
     }
 
+
     @Override
     public void run() {
-        //Obtain gradient
-        try
-        {
-            this.gradient = (DenseMatrix) this.x.getAttribute("g");
-        }catch(Exception e)
-        {
-            throw new JMetalException("Solution doesn't have a gradient assign on its attributes");
-        }
+        k = 0;
+
+        this.offspring_population = new ArrayList<>();
         
         //Create initial solution if necessary
         this.n = this.problem.getNumberOfVariables();
@@ -130,20 +140,25 @@ public class LBFGSB implements Algorithm<DoubleSolution>
             this.x = problem.createSolution();
             this.evaluate(x);
         }
+                //Obtain gradient
+        try
+        {
+            this.gradient = (DenseMatrix) this.x.getAttribute("g");
+        }catch(Exception e)
+        {
+            throw new JMetalException("Solution doesn't have a gradient assign on its attributes");
+        }
         
-        this.S = new DenseMatrix(n,m);
-        this.Y = new DenseMatrix(n,m);
-        this.W = new DenseMatrix(n, 2 * m);
-        this.M = new DenseMatrix(2 * m, 2 * m);
+        this.S = new ArrayList<>();
+        this.Y = new ArrayList<>();
+        this.W = new DenseMatrix(n, 1);
+        this.M = new DenseMatrix(1, 1);
 
         while(!isStoppingConditionReached())
         {
             double f_old = this.x.getObjective(0);
             DenseMatrix x_old = this.getMatrixFrom(this.x);
             DenseMatrix g_old = this.gradient.copy();
-            
-            this.xCauchy = new DenseMatrix(this.n, 1);
-            this.c = new DenseMatrix(this.m * 2, 1);
             
             this.getGeneralizedCauchyPoint(this.x, x_old, gradient);
             this.subspaceMin(x, x_old, Matrices.getColumn(gradient, 0));
@@ -155,17 +170,115 @@ public class LBFGSB implements Algorithm<DoubleSolution>
                 DenseMatrix p = new DenseMatrix(xBar);
                 DenseMatrix x_1 = new DenseMatrix(x_old);
                 x_1.scale(-1);
-                p.add(x_1);
-                
+                p.add(x_1);                
+                alpha = strongWolfe(x, gradient, p);
             }
             
+            for (int j = 0; j < n; j++)
+            {
+                x.setVariableValue(j, x.getVariableValue(j) + alpha * (xBar.get(j, 0) - x.getVariableValue(j)));
+            }
             
+            this.evaluate(x);
+            
+            DenseMatrix xMatrix = this.getMatrixFrom(x);
+            
+            //Obtain gradient
+            try
+            {
+                this.gradient = (DenseMatrix) this.x.getAttribute("g");
+            }
+            catch(Exception e)
+            {
+                throw new JMetalException("Solution doesn't have a gradient assign on its attributes");
+            }
+            
+            //y = grandient - g_old
+            g_old.scale(-1);
+            DenseMatrix yMatrix = new DenseMatrix(gradient);
+            yMatrix.add(g_old);
+            DenseVector y = Matrices.getColumn(yMatrix, 0);
+            
+            //s = xMatrix - x_old
+            x_old.scale(-1);
+            DenseMatrix sMatrix = new DenseMatrix(xMatrix);
+            sMatrix.add(x_old);
+            DenseVector s = Matrices.getColumn(sMatrix, 0);
+            
+            double curv = Math.abs(s.dot(y));
+            
+            if(curv < eps)
+            {
+                k++;
+                continue;
+            }
+            
+            if (k < m)
+            {
+                Y.add(y);
+                S.add(s);
+            }
+            else
+            {
+                Y.remove(0);
+                Y.add(y);
+                S.remove(0);
+                S.add(s);
+            }
+            
+            theta = (double) y.dot(y) / (double) y.dot(s);
+            yMatrix = this.getMatrixFrom(Y);
+            sMatrix = this.getMatrixFrom(S);
+            
+            DenseMatrix sMatrixTheta = new DenseMatrix(sMatrix);
+            sMatrixTheta.scale(theta);
+            
+            W = new DenseMatrix(n, 2 * ((k > m)? m : k + 1));
+            this.mergeMatrixesColumns(yMatrix, sMatrixTheta, W);
+            
+            DenseMatrix transposeSMatrix = new DenseMatrix(sMatrix.numColumns(), sMatrix.numRows());
+            sMatrix.transpose(transposeSMatrix);
+            
+            //A = transpose(sMatrix) * yMatrix
+            DenseMatrix A = new DenseMatrix(transposeSMatrix.numRows(), yMatrix.numColumns());
+            transposeSMatrix.mult(yMatrix, A);
+            
+            DenseMatrix L = this.trill(A);
+            
+            DenseMatrix D = new DenseMatrix(new LowerTriangDenseMatrix(new UpperTriangDenseMatrix(A.copy())));
+            D.scale(-1);
+            
+            DenseMatrix transposeL = new DenseMatrix(L);
+            transposeL.transpose();
+            
+            DenseMatrix up = new DenseMatrix(D.numRows(), D.numColumns() + L.numColumns());
+            this.mergeMatrixesColumns(D, transposeL, up);
+            
+            DenseMatrix transposeS = new DenseMatrix(sMatrix.numColumns(),sMatrix.numRows());
+            sMatrix.transpose(transposeS);
+            
+            //transposeSS = theta * transpose(sMatrix) * sMatrix
+            DenseMatrix transposeSS = new DenseMatrix(transposeS.numRows(), sMatrix.numColumns());
+            transposeS.mult(sMatrix, transposeSS);
+            transposeSS.scale(theta);            
+            
+            DenseMatrix down = new DenseMatrix(L.numRows(), L.numColumns() + transposeSS.numColumns());
+            this.mergeMatrixesColumns(L, transposeSS, down);            
+            
+            DenseMatrix MM = new DenseMatrix(2 * ((k > m)? m : k + 1), 2 * ((k > m)? m : k + 1));
+            this.mergeMatrixesRows(up, down, MM);
+            
+            M = new DenseMatrix(MM.numRows(), MM.numColumns());
+            DenseMatrix I = Matrices.identity(MM.numColumns());
+            MM.solve(I, M);
+            
+            k++;
         }
     }
 
     @Override
     public DoubleSolution getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return x;
     }
 
     @Override
@@ -295,15 +408,15 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         W.transpose(WTranspose);
         
         
-        // p = W^T * d
+        // p = transpose(W) * d
         DenseVector p = new DenseVector(W.numColumns());
         WTranspose.mult(d, p);
  
         //c = 0
-        c = new DenseMatrix(2 * m, 1);
+        c = new DenseMatrix(W.numColumns(), 1);
         this.fillMatrixWith(c, 0);
         
-        //f' = gT = -dTd
+        //f' = gT = -transpose(d) * d
         DenseVector d_1 = new DenseVector(d);
         d_1.scale(-1);
         double f_prime = d.dot(d_1);
@@ -344,10 +457,10 @@ public class LBFGSB implements Algorithm<DoubleSolution>
             
             //c = c + deltha_t * p
             DenseMatrix matrix_p = this.makeMatrixFrom(p);
-            c = (DenseMatrix) c.add(matrix_p.scale(deltha_t));
+            c.add(matrix_p.scale(deltha_t));
             
             //b-th row of the marix W
-            DenseVector wbt = Matrices.getColumn(W, b);
+            DenseVector wbt = this.getRow(W, b);//Matrices.getColumn(W, b);
             
             //b-th row of the marix -> W[b] * g^2
             DenseVector wbtG2 = wbt.copy();
@@ -371,7 +484,7 @@ public class LBFGSB implements Algorithm<DoubleSolution>
             //wbt is b-th row of the marix -> W[b] * g
             
             //mwb = M * (W[b])^T
-            DenseVector mwb = Matrices.getColumn(W, b);
+            DenseVector mwb = this.getRow(W, b);//Matrices.getColumn(W, b);
             
             //This operation transpose mwb and matrixMwb contains in one column
             //the values of mwb
@@ -386,7 +499,7 @@ public class LBFGSB implements Algorithm<DoubleSolution>
             f_doubleprime = Math.max(eps * fpp0, f_doubleprime);
             
             //p = p + g * W[b]
-            DenseVector wb = Matrices.getColumn(W, b);
+            DenseVector wb = this.getRow(W, b);//Matrices.getColumn(W, b);
             p = (DenseVector) p.add(wb.scale(gradient));
             
             //d[b] = 0
@@ -430,7 +543,7 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         {
             for(int j = 0; j < cols; j++)
             {
-                m.set(rows, cols, value);
+                m.set(i, j, value);
             }
         }
     }
@@ -546,15 +659,15 @@ public class LBFGSB implements Algorithm<DoubleSolution>
          */        
         
         //wtzr = wtz * r
-        DenseVector wtzr = new DenseVector(r.size());
+        DenseVector wtzr = new DenseVector(wtz.numRows());
         wtz.mult(r, wtzr);
         
         //v = M * (wtz * r) 
         DenseVector v = new DenseVector(wtzr.size());
         M.mult(wtzr, v);
         
-        DenseMatrix wtzTranspose = new DenseMatrix(wtz);
-        wtzTranspose.transpose();
+        DenseMatrix wtzTranspose = new DenseMatrix(wtz.numColumns(), wtz.numRows());
+        wtz.transpose(wtzTranspose);
         
         //invThethaWtz = int_theta * wtz
         DenseMatrix invThethaWtz = new DenseMatrix(wtz);
@@ -588,11 +701,11 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         v = nv;
         
         //transposeWtz = transpose(wtz)
-        DenseMatrix transposeWtz  = new DenseMatrix(wtz);
-        transposeWtz.transpose();
+        DenseMatrix transposeWtz  = new DenseMatrix(wtz.numColumns(), wtz.numRows());
+        wtz.transpose(transposeWtz);
         
         //wtz_t_v = transpose(wtz) * v
-        DenseVector wtz_t_v = new DenseVector(v.size());
+        DenseVector wtz_t_v = new DenseVector(transposeWtz.numRows());
         transposeWtz.mult(v, wtz_t_v);
         
         //wtz_t_v = - (1/theta)^2 * transpose(wtz) * v
@@ -614,7 +727,7 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         for(int k = 0; k < freeVarsSize; k++)
         {
             int idx = freeVarsIdx.get(k);
-            xBar.set(idx, 0, (xBar.get(idx, 0) + dStart.get(idx)));
+            xBar.set(idx, 0, (xBar.get(idx, 0) + dStart.get(k)));
         }        
     }
     
@@ -650,36 +763,334 @@ public class LBFGSB implements Algorithm<DoubleSolution>
         return alphaStart;
     }
     
-    private void strongWolf(DoubleSolution s, DenseMatrix x, DenseMatrix g, DenseMatrix p)
+    private double strongWolfe(DoubleSolution x0, DenseMatrix g, DenseMatrix p)
     {
         double c_1 = 1.e-4;
         double c_2 = 0.9;
         double alphaMax = 2.5;
         double alphaIml = 0;
         double alphaI = 1;
-        double fIml = s.getObjective(0);
+        double fIml = x0.getObjective(0);
+        double f0 = x0.getObjective(0);
         
         //transposeG = transpose(g)
-        DenseMatrix transposeG = new DenseMatrix(g);
-        transposeG.transpose();
+        DenseMatrix transposeG = new DenseMatrix(g.numColumns(), g.numRows());
+        g.transpose(transposeG);
         
         //dphi0 = transpose(g) * p
-        DenseMatrix dphi0 = new DenseMatrix(transposeG.numRows(), p.numColumns());
-        transposeG.mult(p, dphi0);
+        DenseMatrix dphi0Matrix = new DenseMatrix(transposeG.numRows(), p.numColumns());
+        transposeG.mult(p, dphi0Matrix);
+        double dphi0 = dphi0Matrix.get(0, 0);
         
         int i = 0;
         int maxIters = 20;
         
-      --------
+        DenseMatrix alphaIp = new DenseMatrix(p);
+        alphaIp.scale(alphaI);
+        double alpha = -1;
+                
+        while(true)
+        {
+            DoubleSolution x = (DoubleSolution) x0.copy();
+            
+            for(int j = 0; j < n; j++)
+            {
+                x.setVariableValue(i, x.getVariableValue(i) + alphaIp.get(j, 0));                
+            }
+            
+            this.evaluate(x);
+            
+            DenseMatrix gi;
+            
+            try
+            {
+                gi = (DenseMatrix) x.getAttribute("g");
+            }
+            catch(Exception e)
+            {
+                throw new JMetalException("Solution doesn't have a gradient assign on its attributes");
+            }
+            
+            double fi = x.getObjective(0);
+            
+            
+            if((fi > (f0 + c_1 * dphi0)) || (i > 1) && (fi >= fIml))
+            {
+                alpha = alphaSum(x0, f0, g, p, alphaIml, alphaI);
+                break;
+            }
+            DenseMatrix giCopy = new DenseMatrix(gi);
+            gi = new DenseMatrix(giCopy.numColumns(), giCopy.numRows());
+            giCopy.transpose(gi);
+            
+            DenseMatrix gip = new DenseMatrix(gi.numRows(), p.numColumns());
+            gi.mult(p, gip);
+            double dphi = gip.get(0, 0);
+            
+            if(Math.abs(dphi) <= (-c_2 * dphi0))
+            {
+                alpha = alphaI;
+            }
+            
+            if(dphi >= 0)
+            {
+                alpha = alphaSum(x0, f0, g, p, alphaI, alphaIml);
+                break;
+            }
+            
+            alphaIml = alphaI;
+            fIml = fi;
+            alphaI = alphaI + 0.8 * (alphaMax - alphaI);
+            
+            if(i > maxIters)
+            {
+                alpha = alphaI;
+                break;
+            }
+
+            i++;
+        }
         
+        return alpha;
+    }
+    
+    
+    private double alphaSum(DoubleSolution s, double f0, DenseMatrix g0, DenseMatrix p, double alphaLo, double alphaHigh)
+    {
+        double c_1 = 1.e-4;
+        double c_2 = 0.9;
+        int i = 0;
+        int maxIters = 20;
+        
+        //transposeG0 = transpose(g0)
+        DenseMatrix transposeG0 = new DenseMatrix(g0.numColumns(), g0.numRows());
+        g0.transpose(transposeG0);
+        
+        //dphi0 = transpose(g0) * p
+        DenseMatrix dphi0Matrix = new DenseMatrix(transposeG0.numRows(), p.numColumns());
+        transposeG0.mult(p, dphi0Matrix);
+        double dphi0 = dphi0Matrix.get(0, 0);        
+        double alpha = -1;
         
         while(true)
         {
+            double alphaI = 0.5 * (alphaLo + alphaHigh);
+            alpha = alphaI;
             
+            DenseMatrix alphaIp = new DenseMatrix(p);
+            alphaIp.scale(alphaI);
+            
+            DoubleSolution x = (DoubleSolution) s.copy();
+            
+            for(int j = 0; j < n; j++)
+            {
+                x.setVariableValue(i, x.getVariableValue(i) + alphaIp.get(j, 0));                
+            }
+            
+            this.evaluate(x);
+            
+            DenseMatrix gi;
+            
+            try
+            {
+                gi = (DenseMatrix) x.getAttribute("g");
+            } 
+            catch(Exception e)
+            {
+                throw new JMetalException("Solution doesn't have a gradient assign on its attributes");
+            }
+            
+            double fi = x.getObjective(0);
+            
+            DenseMatrix alphaLoP = new DenseMatrix(p);
+            alphaLoP.scale(alphaLo);
+            
+            DoubleSolution xLo = (DoubleSolution) s.copy();
+            
+            for(int j = 0; j < n; j++)
+            {
+                xLo.setVariableValue(i, xLo.getVariableValue(i) + alphaLoP.get(j, 0));
+            }
+            
+            this.evaluate(xLo);            
+            double fLo = xLo.getObjective(0);
+            
+            if(fi > (f0 + c_1 * alphaI * dphi0) || (fi >= fLo))
+            {
+                alphaHigh = alphaI;
+            }
+            else
+            {
+                gi.transpose();
+                DenseMatrix gis = new DenseMatrix(gi.numRows(), p.numColumns());
+                gi.mult(p, gis);
+                
+                double dphi = gis.get(0, 0);
+                
+                if (Math.abs(dphi) <= (-c_2 * dphi0))
+                {
+                    alpha = alphaI;
+                    break;
+                }
+                
+                if (dphi * (alphaHigh - alphaLo) >= 0)
+                {
+                    alphaHigh = alphaLo;
+                }
+                
+                alphaLo = alphaI;
+            }
+            
+            i++;
+            
+            if (i > maxIters)
+            {
+                alpha = alphaI;
+                break;
+            }
         }
         
-        
-        
+        return alpha;
     }
+    
+    /**
+     * Create a matrix from a column vectors list
+     * @param columnVectors list of column vectors
+     * @return matrix with columns from the list
+     */
+    private DenseMatrix getMatrixFrom(List<DenseVector> columnVectors)
+    {
+        int columns = columnVectors.size();        
+        DenseVector first = columnVectors.get(0);
+        int rows = first.size();
+        DenseMatrix m = new DenseMatrix(rows, columns);
+        
+        
+        for(int j = 0; j < columns; j++)
+        {
+            DenseVector v = columnVectors.get(j);
+            
+            for(int i = 0; i < rows; i++)
+            {
+                m.set(i, j, v.get(i));
+            }
+        }
+        
+        return m;                
+    }
+    
+    /**
+     * Put in matrix to = [A B], merge two matrixes in one
+     * @param A first matrix
+     * @param B second matrix
+     * @param to matrix where A and B are going to be placed
+     */
+    private void mergeMatrixesColumns(DenseMatrix A, DenseMatrix B, DenseMatrix to)
+    {
+        int rowsA = A.numRows();
+        int rowsB = B.numRows();
+        int rowsTo = to.numRows();
+        int colsA = A.numColumns();
+        int colsB = B.numColumns();
+        int colsTo = to.numColumns();
+        int sumColsAColsB = colsA + colsB;
+        
+        if ((rowsA != rowsB) ||  (rowsA != rowsTo))          
+        {
+            throw new JMetalException("Number of rows must be equals between all the matrixes");
+        }
+        
+        if ((colsA + colsB) > colsTo)
+        {
+            throw new JMetalException("Number of columns of matrix A and B can't be greater than the columns of to matrix");
+        }
+        
+        for (int i = 0; i < rowsA; i++)
+        {
+            for (int j = 0; j < colsA; j++)
+            {
+                to.set(i, j, A.get(i, j));                
+            }
+            
+            for (int j = colsA; j < sumColsAColsB; j++)
+            {
+                to.set(i, j, B.get(i, j - colsA));
+            }
+        }
+    }    
+    
+    /**
+     * Put in matrix to = [A;B], merge two matrixes in one
+     * @param A first matrix
+     * @param B second matrix
+     * @param to matrix where A and B are going to be placed
+     */
+    private void mergeMatrixesRows(DenseMatrix A, DenseMatrix B, DenseMatrix to)
+    {
+        int rowsA = A.numRows();
+        int rowsB = B.numRows();
+        int rowsTo = to.numRows();
+        int colsA = A.numColumns();
+        int colsB = B.numColumns();
+        int colsTo = to.numColumns();
+        int sumRowsARowsB = rowsA + rowsB;
+        
+        if ((colsA != colsB) || (colsA != colsTo))          
+        {
+            throw new JMetalException("Number of columns must be equals between all the matrixes");
+        }
+        
+        if ((rowsA + rowsB) > rowsTo)
+        {
+            throw new JMetalException("Number of rows of matrix A and B can't be greater than the rows of to matrix");
+        }
+        
+        for (int j = 0; j < colsA; j++)
+        {
+            for (int i = 0; i < rowsA; i++)
+            {
+                to.set(i, j, A.get(i, j));                
+            }
+            
+            for (int i = rowsA; i < sumRowsARowsB; i++)
+            {
+                to.set(i, j, B.get(i - rowsA, j ));
+            }
+        }
+    }
+    
+    /**
+     * return the elements on and below the -1 diagonal of d
+     * @param d matrix to get the diagonal
+     * @return a matrix with elements below the -1 diagonal
+     */
+    private DenseMatrix trill(DenseMatrix d)
+    {
+        LowerTriangDenseMatrix L = new LowerTriangDenseMatrix(d);
+        
+        for(int i = 0; i < d.numColumns(); i++)
+        {
+            L.set(i, i, 0);
+        }
+        
+        return new DenseMatrix(L);
+    }
+
+    public void setX(DoubleSolution x) {
+        this.x = x;
+    }
+    
+    public DenseVector getRow(DenseMatrix A, int row)
+    {
+        int size = A.numColumns();
+        DenseVector v = new DenseVector(size);
+        
+        for(int i = 0; i < size; i++)
+        {
+            v.add(i, A.get(row, i));
+        }
+        return v;
+    }
+
             
 }

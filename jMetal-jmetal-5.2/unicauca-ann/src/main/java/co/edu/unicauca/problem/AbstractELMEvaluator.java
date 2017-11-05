@@ -98,7 +98,31 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         elm.setBiasHiddenNeurons(bias);
         double accuracy = this.train();
         solution.setAttribute("B", elm.getOuputWightNorm());
+        solution.setAttribute("g", this.getGradient(solution));
         solution.setObjective(0, (1 - accuracy));
+    }
+    
+    private DenseMatrix getGradient(DoubleSolution solution)
+    {
+        double delta = 0.05;
+        
+        DoubleSolution first = (DoubleSolution) solution.copy();
+        DoubleSolution second = (DoubleSolution) solution.copy();
+        
+        int n = solution.getNumberOfVariables();
+        
+        for(int i = 0; i < n; i++)
+        {
+            first.setVariableValue(i, first.getVariableValue(i) + delta);
+            second.setVariableValue(i, second.getVariableValue(i) - delta);
+        }
+        
+        DenseMatrix gradient = new DenseMatrix(n, 1);
+        for(int i = 0; i < n; i++)
+        {
+            gradient.set(i, 0, (first.getVariableValue(i) - second.getVariableValue(i))/(2 * delta));
+        }
+        return gradient;
     }
 
     /**
