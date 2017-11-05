@@ -65,7 +65,6 @@ public class IrisRunner
         
         AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
         System.out.println("Testing: "+p.test(solution));
-        System.out.println("Total evaluations: "+p.total);;
         
         
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);

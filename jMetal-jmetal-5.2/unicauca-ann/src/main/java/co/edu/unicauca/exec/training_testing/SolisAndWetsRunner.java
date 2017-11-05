@@ -19,6 +19,21 @@ public class SolisAndWetsRunner
 {    
     public static void main(String[] args) throws Exception 
     {
+//        HashMap<Integer, Double> t = new HashMap<Integer, Double>();
+//        t.put(0, 0.99);
+//        t.put(1, 0.55);
+////        List ordered_t = t.entrySet().stream()
+////        .sorted(Map.Entry.comparingByValue())
+////        .collect(Collectors.toList());
+//        List ordered_t = t.entrySet().stream()
+//        .sorted(Map.Entry.comparingByValue())
+//                .map(e -> new Integer(e.getKey()))
+//                .collect(Collectors.toList());
+//        
+//        for(int i = 0; i< ordered_t.size(); i++)
+//        {
+//            System.out.println("->"+ordered_t.get(i).getClass());
+//        }
         JMetalRandom rnd = JMetalRandom.getInstance();
         
         DoubleProblem problem;
@@ -73,7 +88,6 @@ public class SolisAndWetsRunner
               System.out.println("Objective "+(1-solution.getObjective(0)));
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               System.out.println("Testing: "+p.test(solution));
-              System.out.println("Total evaluations: "+p.total);;
         }
         /*System.out.println("--------------------------------");
         print(algorithm.getPopulation());

@@ -54,7 +54,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     /**
      * Maximun number of function evaluations
      */
-    private int FE;
+    private int maxEvaluations;
     /**
      * Number of evaluations made
      */
@@ -146,7 +146,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         this.populationSize = populationSize;
         this.problem = problem;
         this.comparator = comparator;
-        this.FE = FE;
+        this.maxEvaluations = FE;
         this.local_search_test = local_search_test;
         this.local_search = local_search;
         this.local_search_best = local_search_best;
@@ -411,7 +411,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * @return true if stopping condition was reached, false otherwise
      */
         private boolean isStoppingConditionReached() {
-        return evaluations >= FE;
+        return evaluations >= maxEvaluations;
     }
     /**
      * Gets the best individual between two individuals, if they are equals
@@ -696,11 +696,11 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     }
 
     public int getCycles() {
-        return FE;
+        return maxEvaluations;
     }
 
     public void setCycles(int cycles) {
-        this.FE = cycles;
+        this.maxEvaluations = cycles;
     }
 
     public int getLocal_search_test() {

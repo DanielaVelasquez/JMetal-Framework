@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Ecoli extends AbstractCrossValidationEvaluator {
 
     public Ecoli() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Ecoli", new DataSet("src/resources-elm", "ecoli.train", 7), new DataSet("src/resources-elm", "ecoli.test", 7), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Ecoli", new DataSet("src/resources-elm", "ecoli.train", 7), new DataSet("src/resources-elm", "ecoli.test", 7), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

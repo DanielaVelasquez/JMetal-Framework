@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Connectionist extends AbstractCrossValidationEvaluator {
 
     public Connectionist() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Connectionist", new DataSet("src/resources-elm", "connectionist.train", 60), new DataSet("src/resources-elm", "connectionist.test", 60), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Connectionist", new DataSet("src/resources-elm", "connectionist.train", 60), new DataSet("src/resources-elm", "connectionist.test", 60), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }
