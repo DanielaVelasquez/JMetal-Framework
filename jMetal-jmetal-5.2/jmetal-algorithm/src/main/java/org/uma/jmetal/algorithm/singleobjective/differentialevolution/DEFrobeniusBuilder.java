@@ -53,18 +53,24 @@ public class DEFrobeniusBuilder
   }
 
   public DEFrobeniusBuilder setCrossover(DifferentialEvolutionCrossover crossover) {
+    if(crossover == null)
+      throw new JMetalException("crossover can't be null");
     this.crossoverOperator = crossover;
 
     return this;
   }
 
   public DEFrobeniusBuilder setSelection(DifferentialEvolutionSelection selection) {
+    if(selection == null)
+      throw new JMetalException("selection can't be null");
     this.selectionOperator = selection;
 
     return this;
   }
 
   public DEFrobeniusBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
+    if(evaluator == null)
+      throw new JMetalException("evaluator can't be null");
     this.evaluator = evaluator;
 
     return this;
@@ -76,7 +82,6 @@ public class DEFrobeniusBuilder
     return this;
   }
 
-  /* Getters */
   public DoubleProblem getProblem() {
     return problem;
   }
