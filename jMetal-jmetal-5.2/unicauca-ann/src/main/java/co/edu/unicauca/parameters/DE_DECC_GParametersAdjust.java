@@ -4,20 +4,18 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolution;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionDECC_G;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionDECC_GBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
 
-public class DEParametersAdjust extends ParametersAdjust
+public class DE_DECC_GParametersAdjust extends ParametersAdjust
 {
 
-    public DEParametersAdjust(int v, int k, int total_iterations) {
+    public DE_DECC_GParametersAdjust(int v, int k, int total_iterations) {
         super(v, k, total_iterations);
     }
 
@@ -57,7 +55,7 @@ public class DEParametersAdjust extends ParametersAdjust
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
                         DifferentialEvolutionCrossover crossoverOperator = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin");
-                        DifferentialEvolution algorithm = new   DifferentialEvolutionBuilder(problem)
+                        DifferentialEvolutionDECC_G algorithm = new   DifferentialEvolutionDECC_GBuilder(problem)
                                                             .setPopulationSize(50)
                                                             .setMaxEvaluations(60)
                                                             .setCrossover(crossoverOperator)
@@ -89,7 +87,7 @@ public class DEParametersAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        DEParametersAdjust parameters = new DEParametersAdjust(5, 4, 10);
+        DE_DECC_GParametersAdjust parameters = new DE_DECC_GParametersAdjust(5, 4, 10);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/de-params");
         parameters.getCovering_array().load("src/resources-params/de-ca");
