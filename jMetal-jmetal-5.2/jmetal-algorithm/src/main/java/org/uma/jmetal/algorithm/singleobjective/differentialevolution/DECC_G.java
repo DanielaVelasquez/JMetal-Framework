@@ -85,19 +85,37 @@ public class DECC_G implements Algorithm
     private Comparator<DoubleSolution> comparator;
     
     private JMetalRandom randomGenerator ;
-    
+    /**
+     * Best individual when needed
+     */
     private DoubleSolution best_inidvidual;
+    /**
+     * Index in population of the best individual when asked
+     */
     private int best_index;
-    
+    /**
+     * A random individual when asked
+     */
     private DoubleSolution random_inidividual;
+    /**
+     * Index in population from a random individual when asked
+     */
     private int random_index;
-    
+    /**
+     * Worst individual found when asked
+     */
     private DoubleSolution worst_inidividual;
+    /**
+     * Index in population from worst indiviual when  asked
+     */
     private int worst_index;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-    public DECC_G(int subcomponent, int cycles, int FEs, int wFes, DoubleProblem p, int population_size, SolutionListEvaluator<DoubleSolution> evaluator, Comparator<DoubleSolution> comparator)
+    public DECC_G(int subcomponent, int cycles, int FEs, int wFes, 
+            DoubleProblem p, int population_size, 
+            SolutionListEvaluator<DoubleSolution> evaluator, 
+            Comparator<DoubleSolution> comparator)
     {
         this.subcomponent = subcomponent;
         this.cycles = cycles;
