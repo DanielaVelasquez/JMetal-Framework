@@ -6,6 +6,7 @@ import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 
 /**
  * Wraps an algorithm and define it is going to be execute
@@ -18,7 +19,7 @@ public abstract class Tecnique
     /**
      * Atributes needed in order to for the algorithm to run
      */
-    protected  HashMap<String, Object> atributes;
+    protected  AlgorithmBuilder builder;
     /**
      * Offspring sub-population produced by the tecnique
      */
@@ -28,8 +29,8 @@ public abstract class Tecnique
      */
     protected Algorithm algorithm;
 
-    public Tecnique(HashMap<String, Object> atributes) {
-        this.atributes = atributes;
+    public Tecnique(AlgorithmBuilder builder) {
+        this.builder = builder;
     }
     
     

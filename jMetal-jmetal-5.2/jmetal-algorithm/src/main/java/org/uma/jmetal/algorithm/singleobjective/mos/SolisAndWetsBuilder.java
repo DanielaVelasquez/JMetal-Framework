@@ -1,12 +1,13 @@
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
-public class SolisAndWetsBuilder 
+public class SolisAndWetsBuilder implements AlgorithmBuilder<SolisAndWets>
 {
     private DoubleProblem problem;
     private Comparator<DoubleSolution> comparator;
@@ -16,10 +17,10 @@ public class SolisAndWetsBuilder
     private DoubleSolution initialSolution;
     private double penalize_value;
     
-    public SolisAndWetsBuilder(DoubleProblem problem, Comparator c)
+    public SolisAndWetsBuilder(DoubleProblem problem)
     {
         this.problem = problem;
-        this.comparator = c;
+        comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         this.sizeNeighborhood = 12;
         this.rho = 0.5;
         this.numEFOs = 3000;    
@@ -106,15 +107,10 @@ public class SolisAndWetsBuilder
     
     
     
+    @Override
     public SolisAndWets build()
     {
         return new SolisAndWets(problem, comparator, numEFOs, rho, sizeNeighborhood, initialSolution, penalize_value);
     }
-    public HashMap<String, Object> getConfiguration()
-    {
-        HashMap<String, Object> atributes = new HashMap<>();
-        atributes.put("sizeNeighborhood", sizeNeighborhood);
-        atributes.put("rho", rho);
-        return atributes;
-    }
+
 }

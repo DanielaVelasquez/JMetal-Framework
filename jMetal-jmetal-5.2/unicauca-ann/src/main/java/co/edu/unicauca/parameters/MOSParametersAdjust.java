@@ -58,19 +58,10 @@ public class MOSParametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
-                                                .setLocalSearchTest(3)
-                                                .setLocalSearch(75)
-                                                .setNumberOfForeground(5)
-                                                .setPopulationSize(5)
-                                                .setLocalSearchBest(100)
-                                                .getConfiguration();
                         
-                        HashMap<String, Object> saw_atributes =new SolisAndWetsBuilder(problem, null)
-                                                               .getConfiguration();
-                
-                        MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
-                        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(saw_atributes);
+                        
+                        MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem));
+                        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem));
                         MOSHRH algorithm = new   MOSBuilder(problem)
                                                                     .addTecnique(mts_exec)
                                                                     .addTecnique(sw_exec)

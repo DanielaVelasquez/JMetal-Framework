@@ -52,7 +52,7 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        SolisAndWets algorithm = new SolisAndWetsBuilder(problem, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
+                        SolisAndWets algorithm = new SolisAndWetsBuilder(problem)
                                                             .setSizeNeighborhood(sizeNeighborhood)
                                                             .setRho(rho)
                                                             .setNumEFOs(3000)
