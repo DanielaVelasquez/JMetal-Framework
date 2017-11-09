@@ -6,6 +6,14 @@ import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
+import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -105,10 +113,13 @@ public class Experiment
                     break;
                 case "MemeticED":
                     algAux = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(3000)
+                        .setMaxEvaluations(600)
                         .setPopulationSize(10)
                         .build();
                     break;
+                    
+                    //NO PONER 3000 sino 600
+               
             }
         }
         else
@@ -129,6 +140,62 @@ public class Experiment
                         .setMaxEvaluations(3000)
                         .setPopulationSize(10)
                         .build();
+                    break;
+                 case "MOS":
+                    MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem)
+                                                           .setLocalSearchTest(3)
+                                                           .setLocalSearch(75)
+                                                           .setNumberOfForeground(5)
+                                                           .setPopulationSize(5)
+                                                           .setLocalSearchBest(100)
+                                                           .setBonus1(10)
+                                                           .setBonus2(1));
+                    SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)
+                                                                            .setRho(0.5)
+                                                                            .setSizeNeighborhood(12));
+                    algAux =  new   MOSBuilder(problem)
+                            .addTecnique(mts_exec)
+                            .addTecnique(sw_exec)
+                            .setFE(300)
+                            .setE(0.01)
+                            .setMaxEvaluations(3000)
+                            .build();
+                    break;
+                case "SolisAndWets":
+                    algAux = new SolisAndWetsBuilder(problem)
+                                .setRho(0.5)
+                                .setSizeNeighborhood(12)
+                                .setMaxEvaluations(3000)
+                                .build();
+                    break;
+                case "MTSLS1":
+                    algAux = new MTS_LS1Builder(problem)
+                                  .setBonus1(10)
+                                  .setBonus2(1)
+                                  .setPenalizeValue(1)
+                                  .setMaxEvaluations(3000)
+                                  .build();
+                    break;
+                case "DE":
+                    //algAux = --------------------------------------------------------
+                    break;
+                case "SaNSDE":
+                    algAux = new SaNSDEBuilder(problem)
+                                   .setMaxEvaluations(3000)
+                                   .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
+                                   .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin"))
+                                   .build();
+                case "MTS":
+                    algAux = new MultipleTrajectorySearchBuilder(problem)
+                                .setLocalSearchTest(3)
+                                .setLocalSearch(75)
+                                .setNumberOfForeground(5)
+                                .setPopulationSize(5)
+                                .setLocalSearchBest(100)
+                                .setMaxEvaluations(3000)
+                                .setBonus1(10)
+                                .setBonus2(1)
+                                .build();
                     break;
             }
         }

@@ -65,7 +65,7 @@ public class SolisAndWets implements Algorithm<DoubleSolution>
     /**
      * Number of evaluations
      */
-    private int EFOs;
+    private int maxEvaluations;
     /**
      * List of individual generated
      */
@@ -75,7 +75,7 @@ public class SolisAndWets implements Algorithm<DoubleSolution>
      */
     private int evaluations;
     /**
-     * Default value for objective in solution when evaluations >= EFOs
+     * Default value for objective in solution when evaluations >= maxEvaluations
      */
     private double penalize_value;
     
@@ -84,11 +84,11 @@ public class SolisAndWets implements Algorithm<DoubleSolution>
      * Methods
      *-----------------------------------------------------------------------------------------*/
     
-    public SolisAndWets(DoubleProblem problem, Comparator<DoubleSolution> comparator, int EFOs, double rho, int sizeNeighborhood, DoubleSolution initialSolution, double penalize_value)
+    public SolisAndWets(DoubleProblem problem, Comparator<DoubleSolution> comparator, int maxEvaluations, double rho, int sizeNeighborhood, DoubleSolution initialSolution, double penalize_value)
     {
         this.problem = problem;
         this.comparator = comparator;
-        this.EFOs = EFOs;
+        this.maxEvaluations = maxEvaluations;
         this.rho = rho;
         this.sizeNeighborhood = sizeNeighborhood;
         neighborhood = new ArrayList<>();
@@ -183,7 +183,7 @@ public class SolisAndWets implements Algorithm<DoubleSolution>
      */
     private boolean isStoppingConditionReached()
     {
-        return evaluations >= EFOs;
+        return evaluations >= maxEvaluations;
     }    
     
     /**

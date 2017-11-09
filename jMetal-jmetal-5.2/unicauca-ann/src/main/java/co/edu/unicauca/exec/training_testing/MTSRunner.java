@@ -62,7 +62,7 @@ public class MTSRunner
         for(int i = 0; i < 5;i++)
         {
             algorithm =  new   MultipleTrajectorySearchBuilder(problem)
-                            .setFE(3000)
+                            .setMaxEvaluations(3000)
                             .setLocalSearch(50)
                             .setLocalSearchBest(100)
                             .setNumberOfForeground(5)

@@ -27,7 +27,7 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
     /**
      * Maximun number of generations
      */
-    private int FE;
+    private int maxEvaluations;
     
     /**
      * Bonus 1 value
@@ -53,14 +53,14 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
         this.populationSize = 5;
         this.bonus_2 = 1;
         this.bonus_1 = 10;
-        this.FE = 1000;
+        this.maxEvaluations = 1000;
         this.penalize_value = 1;
         comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
      public MTS_LS1 Build()
      {
-        MTS_LS1 mts = new MTS_LS1(populationSize, problem, comparator, FE, penalize_value, bonus_1, bonus_2);
+        MTS_LS1 mts = new MTS_LS1(populationSize, problem, comparator, maxEvaluations, penalize_value, bonus_1, bonus_2);
         if(this.default_population != null)
             mts.setPopulation(default_population);
         return mts;
@@ -82,8 +82,8 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
         return comparator;
     }
 
-    public int getFE() {
-        return FE;
+    public int getMaxEvaluations() {
+        return maxEvaluations;
     }
 
     
@@ -107,10 +107,10 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
         return this;
     }
 
-    public MTS_LS1Builder setFE(int FE) {
+    public MTS_LS1Builder setMaxEvaluations(int FE) {
         if(FE <= 0)
             throw new JMetalException("Function evaluations is negative or cero: " + FE);
-        this.FE = FE;
+        this.maxEvaluations = FE;
         return this;
     }
     public MTS_LS1Builder setPopulationSize(int populationSize) {
@@ -149,7 +149,7 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
 
     @Override
     public MTS_LS1 build() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new MTS_LS1(populationSize, problem, comparator, populationSize, penalize_value, bonus_1, bonus_2);
     }
 
 }

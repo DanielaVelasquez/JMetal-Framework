@@ -73,7 +73,7 @@ public class SolisAndWetsRunner
         {
             algorithm = new SolisAndWetsBuilder(problem)
                             .setComparator(comparator)
-                            .setNumEFOs(3000)
+                            .setMaxEvaluations(3000)
                             .setInitialSolution(null)
                             .setPenalizeValue(1)
                             .build();

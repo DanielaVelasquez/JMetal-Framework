@@ -140,13 +140,13 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     
     
     public AbstractMultipleTrajectorySearch(int populationSize,  P problem, Comparator<S> comparator, 
-            int FE, int local_search_test, int local_search, int local_search_best, int number_of_foreground, 
+            int maxEvaluations, int local_search_test, int local_search, int local_search_best, int number_of_foreground, 
             double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, double lower_bound_b, 
             double upper_bound_b, double lower_bound_c, double upper_bound_c, double penalize_value) {
         this.populationSize = populationSize;
         this.problem = problem;
         this.comparator = comparator;
-        this.maxEvaluations = FE;
+        this.maxEvaluations = maxEvaluations;
         this.local_search_test = local_search_test;
         this.local_search = local_search;
         this.local_search_best = local_search_best;
