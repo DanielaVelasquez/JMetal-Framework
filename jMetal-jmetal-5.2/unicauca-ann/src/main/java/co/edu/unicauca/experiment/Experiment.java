@@ -80,7 +80,8 @@ public class Experiment
                     ResultSet result = connection.seleccion(consulta);
                     if(!result.next())
                     {
-                        String insertResultado = "INSERT INTO results VALUES(" + runId + ", " + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ")";
+                        String insertResultado = "INSERT INTO results VALUES(" + runId + ", " + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ");"
+                                               + "UPDATE run SET run_status = 2 WHERE run_id = " + runId + ";";
                         connection.modificacion(insertResultado);
                     }
                 }
