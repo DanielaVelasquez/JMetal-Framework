@@ -1,10 +1,10 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import org.uma.jmetal.algorithm.impl.AbstractDifferentialEvolution;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
@@ -128,7 +128,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      */
     private double sum_frec;
     
-    private JMetalRandom randomGenerator ;
+    private final JMetalRandom randomGenerator ;
     
     /**-----------------------------------------------------------------------------------------
      * Methods
@@ -143,7 +143,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * @param selectionOperator operator for selection of individual's parent
      * @param evaluator
      * @param comparator Determines how a solution should be order
-     * @param maxCycles Determines the maximun number of cycles to excecute
      */
     public SaNSDE(DoubleProblem problem, int maxEvaluations, int populationSize,
         DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionCrossover crossoverOperator2, 
@@ -426,7 +425,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                 int n = this.getProblem().getNumberOfVariables();
                 for(int i = 0; i < n; i++)
                 {
-                    if(s.getVariableValue(i) == individual.getVariableValue(i))
+                    if(Objects.equals(s.getVariableValue(i), individual.getVariableValue(i)))
                     {
                         if(i== n-1)
                             return true;
@@ -479,7 +478,8 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
     }
     @Override
-    public DoubleSolution getResult() {
+    public DoubleSolution getResult() 
+    {
         Collections.sort(getPopulation(), comparator) ;
         DoubleSolution best =  getPopulation().get(0);
         for(int i = 1; i < populationSize; i++)
