@@ -13,6 +13,7 @@ import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
+import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -180,6 +181,8 @@ public class Experiment
                 case "SaNSDE":
                     algAux = new SaNSDEBuilder(problem)
                                    .setMaxEvaluations(3000)
+                                   .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
+                                   .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin"))
                                    .build();
                 case "MTS":
                     algAux = new MultipleTrajectorySearchBuilder(problem)
