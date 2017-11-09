@@ -103,6 +103,13 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
     this.crossoverOperator2 = crossoverOperator2;
     return this;
   }
+  
+  public SaNSDEBuilder setProblem(DoubleProblem problem) {
+    if(problem == null)
+        throw new JMetalException("problem can't be null");
+    this.problem = problem;
+    return this;
+  }
 
   public DoubleProblem getProblem() {
     return problem;

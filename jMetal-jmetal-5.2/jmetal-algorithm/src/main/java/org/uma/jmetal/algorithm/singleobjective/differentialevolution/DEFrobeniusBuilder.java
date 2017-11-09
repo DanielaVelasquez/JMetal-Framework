@@ -9,7 +9,8 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
-public class DEFrobeniusBuilder {
+public class DEFrobeniusBuilder 
+{
   private DoubleProblem problem;
   private int populationSize;
   private int maxEvaluations;
@@ -25,6 +26,11 @@ public class DEFrobeniusBuilder {
     this.selectionOperator = new DifferentialEvolutionSelection();
     this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>();
   }
+  
+  public DEFrobenius build() {
+    return new DEFrobenius(problem, maxEvaluations, populationSize, crossoverOperator,
+        selectionOperator, evaluator);
+  }
 
   public DEFrobeniusBuilder setPopulationSize(int populationSize) {
     if (populationSize < 0) {
@@ -37,8 +43,8 @@ public class DEFrobeniusBuilder {
   }
 
   public DEFrobeniusBuilder setMaxEvaluations(int maxEvaluations) {
-    if (maxEvaluations < 0) {
-      throw new JMetalException("MaxEvaluations is negative: " + maxEvaluations);
+    if (maxEvaluations <= 0) {
+      throw new JMetalException("MaxEvaluations is negative or zero: " + maxEvaluations);
     }
 
     this.maxEvaluations = maxEvaluations;
@@ -63,10 +69,11 @@ public class DEFrobeniusBuilder {
 
     return this;
   }
-
-  public DEFrobenius build() {
-    return new DEFrobenius(problem, maxEvaluations, populationSize, crossoverOperator,
-        selectionOperator, evaluator);
+  public DEFrobeniusBuilder setProblem(DoubleProblem problem) {
+    if(problem == null)
+        throw new JMetalException("problem can't be null");
+    this.problem = problem;
+    return this;
   }
 
   /* Getters */

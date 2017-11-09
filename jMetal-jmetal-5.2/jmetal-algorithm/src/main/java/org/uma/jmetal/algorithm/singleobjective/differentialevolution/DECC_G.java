@@ -22,11 +22,6 @@ public class DECC_G implements Algorithm
     /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/
-    private static double CR = 0.5 ;
-    private static double F = 0.5 ;
-    private static DifferentialEvolutionCrossover CROSSOVER_1 = new DifferentialEvolutionCrossover(CR, F, "rand/1/bin");
-    private static DifferentialEvolutionCrossover CROSSOVER_2 = new DifferentialEvolutionCrossover(CR, F, "current-to-best/1/bin");
-    DifferentialEvolutionSelection SELECTION = new DifferentialEvolutionSelection();
     private int LOWER_BOUND = 0;
     /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -109,13 +104,23 @@ public class DECC_G implements Algorithm
      * Index in population from worst indiviual when  asked
      */
     private int worst_index;
+    /**
+     * Builder to create sansde algorithm, with params arranged
+     */
+    private SaNSDEBuilder sansdeBuilder;
+    /**
+     * Builder to create DE algorithm with params arrenged
+     */
+    private DEFrobeniusBuilder deFrobeniusBuilder;
+
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
     public DECC_G(int subcomponent, int cycles, int FEs, int wFes, 
             DoubleProblem p, int population_size, 
             SolutionListEvaluator<DoubleSolution> evaluator, 
-            Comparator<DoubleSolution> comparator)
+            Comparator<DoubleSolution> comparator, SaNSDEBuilder sansdeBuilder,
+            DEFrobeniusBuilder deFrobeniusBuilder)
     {
         this.subcomponent = subcomponent;
         this.cycles = cycles;
@@ -125,6 +130,8 @@ public class DECC_G implements Algorithm
         this.populationSize = population_size;
         this.evaluator = evaluator;
         this.comparator = comparator;
+        this.sansdeBuilder = sansdeBuilder;
+        this.deFrobeniusBuilder = deFrobeniusBuilder;
         
         randomGenerator = JMetalRandom.getInstance();
         best_index = 0;
@@ -334,7 +341,12 @@ public class DECC_G implements Algorithm
                subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
                
                List<DoubleSolution> subpopulation = this.copy(this.population);
-               SaNSDE sansde = new SaNSDE(subcomponent_problem_SaNSDE, FE, populationSize, CROSSOVER_1, CROSSOVER_2, SELECTION, evaluator, comparator);
+               SaNSDE sansde = sansdeBuilder
+                               .setMaxEvaluations(FE)
+                               .setProblem(subcomponent_problem_SaNSDE)
+                               .setPopulationSize(populationSize)
+                               .setComparator(comparator)
+                               .build();
                sansde.setPopulation(subpopulation);
                
                
@@ -347,7 +359,11 @@ public class DECC_G implements Algorithm
            }
            this.findIndividuals();
            
-           DifferentialEvolution de = new DifferentialEvolution(subcomponent_problem_DE, wFEs, populationSize, CROSSOVER_1,SELECTION, evaluator);
+           DEFrobenius de = deFrobeniusBuilder
+                                      .setMaxEvaluations(wFEs)
+                                      .setProblem(subcomponent_problem_DE)
+                                      .setPopulationSize(populationSize)
+                                      .build();
            //de.setPopulation(w_population);
            this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
            subcomponent_problem_DE.setSolution(best_inidvidual);
