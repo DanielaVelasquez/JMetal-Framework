@@ -12,14 +12,14 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 //ISSUES
 //Todos los individuos son iguales al principo
 
-public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P extends Problem<S>>  implements Algorithm<S>
+public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S>>  implements Algorithm<S>
 {
     /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/
-    private static final int LOWER_BOUND_ROW = 0;
+    private final int LOWER_BOUND_ROW = 0;
     
-    private static final int SOA_DEFAULT_VALUE = -1;
+    private final int SOA_DEFAULT_VALUE = -1;
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
@@ -59,25 +59,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Number of evaluations made
      */
     private int evaluations;
-    /**
-     * Number of local searh test
-     */
-    private int local_search_test;
-    /**
-     * Number of local search
-     */
-    private int local_search;
-    /**
-     * Number of local search for the best
-     */
-    private int local_search_best;
-    /**
-     * Number of foreground to decide how many solutions are set to true
-     */
-    private int number_of_foreground;
-    /**
-     * Determines which individuals in population are enable
-     */
+    
     protected List<Boolean> enable;
     /**
      * Determines which individuals in population were improve
@@ -87,6 +69,17 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Determines the search range for every individual
      */
     protected List<SearchRange> search_range;
+    
+    /**
+     * Best individual on population
+     */
+    protected S best;
+    
+    /**
+     * Value to set to solutions when evaluations are over
+     */
+    protected double penalize_value;
+
     /**
      * Bonus 1 value
      */
@@ -95,76 +88,27 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Bonus 2 value
      */
     protected double bonus_2;
-    /**
-     * Lower bound for variable a in local search 3
-     */
-    protected double lower_bound_a;
-    /**
-     * Upper bound for variable a in local search 3
-     */
-    protected double upper_bound_a;
-    /**
-     * Lower bound for variable b in local search 3
-     */
-    protected double lower_bound_b;
-    /**
-     * Upper bound for variable b in local search 3
-     */
-    protected double upper_bound_b;
-    /**
-     * Lower bound for variable c in local search 3
-     */
-    protected double lower_bound_c;
-    /**
-     * Upper bound for variable c in local search 3
-     */
-    protected double upper_bound_c;
-    /**
-     * Best individual on population
-     */
-    protected S best;
-    /**
-     * Best xi found on testing
-     */
-    protected S best_xi;
-    /**
-     * Value to set to solutions when evaluations are over
-     */
-    protected double penalize_value;
-
-    
     
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
     
-    
-    public AbstractMultipleTrajectorySearch(int populationSize,  P problem, Comparator<S> comparator, 
-            int FE, int local_search_test, int local_search, int local_search_best, int number_of_foreground, 
-            double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, double lower_bound_b, 
-            double upper_bound_b, double lower_bound_c, double upper_bound_c, double penalize_value) {
+    public AbstractMTS_LS1(int populationSize,  P problem,
+            Comparator<S> comparator,int FE,   double penalize_value,
+            double bonus_1, double bonus_2) {
         this.populationSize = populationSize;
         this.problem = problem;
         this.comparator = comparator;
         this.maxEvaluations = FE;
-        this.local_search_test = local_search_test;
-        this.local_search = local_search;
-        this.local_search_best = local_search_best;
-        this.number_of_foreground = number_of_foreground;
+        this.penalize_value = penalize_value;
         this.bonus_1 = bonus_1;
         this.bonus_2 = bonus_2;
-        this.lower_bound_a = lower_bound_a;
-        this.upper_bound_a = upper_bound_a;
-        this.lower_bound_b = lower_bound_b;
-        this.upper_bound_b = upper_bound_b;
-        this.lower_bound_c = lower_bound_c;
-        this.upper_bound_c = upper_bound_c;
-        this.penalize_value = penalize_value;
-        
         this.n = this.problem.getNumberOfVariables();
         this.randomGenerator = JMetalRandom.getInstance();
         
     }
+
+
 
     @Override
     public void run() {
@@ -205,92 +149,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         }
         while(!isStoppingConditionReached())
         {
-            
-            
             for(int i = 0; i < populationSize && !isStoppingConditionReached(); i++)
             {
                 S xi = this.population.get(i);
-                //TO-DO puedo ponerlo por defecto en -1???
-                double grade_xi = -1;
-                if(enable.get(i))
-                {
-                    grade_xi = 0;
-                    
-                    this.best_xi = xi;
-                    
-                    double LS1_test_grade = 0;
-                    double LS2_test_grade = 0;
-                    double LS3_test_grade = 0;
-                    for(int j = 0 ; j < local_search_test && !isStoppingConditionReached(); j++)
-                    {
-                        LS1_test_grade += this.local_search_1((S) xi.copy(), i, true);
-                        LS2_test_grade += this.local_search_2((S) xi.copy(), i, true);
-                        LS3_test_grade += this.local_search_3((S) xi.copy(), i, true);
-                    }
-                    
-                    xi = (S) best_xi.copy();
-                    this.population.set(i, xi);
-                    
-                    List<Double> test_grades = new ArrayList<>();
-                    test_grades.add(LS1_test_grade);
-                    test_grades.add(LS2_test_grade);
-                    test_grades.add(LS3_test_grade);
-                    
-                    //PONER EL MEJOR DE LOS TEST, REVISAR QUE NO ESTE EN LA POBLACION
-                    
-                    //TO-DO cómo se determina cual es el mejor?
-                    int best_local_search = chooseBestLocalSearch(test_grades);
-                    
-                    for(int j = 0; j < local_search && !isStoppingConditionReached(); j++)
-                    {
-                        xi = this.population.get(i);
-                        switch(best_local_search)
-                        {
-                            case 1:
-                                grade_xi += local_search_1(xi,i,false);
-                                break;
-                            case 2:
-                                grade_xi += local_search_2(xi,i,false);
-                                break;
-                            case 3:
-                                grade_xi += local_search_3(xi,i,false);
-                                break;
-                        }
-                        this.review_best();
-                    }
-                }
-                //los grados se estan guardando de acuerdo a los individuos habilitados
-                grades.set(i,grade_xi);
+                local_search_1(xi,i,false);
             }
-            //Find the best solution
-            //TO-DO ¿Qué pasa si el mejor no está en la población?? se da en el caso de que el mejor se encontrara en el testeo
-            int best_index = this.getBestIndex(population);
-            //DoubleSolution best_individual = this.population.get(best_index);
-            //int best_search_range = search_range.get(best_index);
-            for(int i = 0; i < local_search_best && !isStoppingConditionReached(); i++)
-            {
-                this.local_search_1(best,best_index,false);
-                this.review_best();
-            }
-            
-            for(int i = 0; i < populationSize && !isStoppingConditionReached(); i++)
-            {
-                enable.set(i, Boolean.FALSE);
-            }
-            this.chooseSolutionsToEnable(grades, enable);
         }
     }
-    protected void review_best()
-    {
-        S best_population = this.getBest(population);
-        this.best = this.getBest(best, best_population);
-    }
-    /**
-     * Builds a simulated orthogonal array SOAmxn
-     * @param m number of levels of each factor
-     * @param n number of factors
-     * @return a simulated orthogonal array
-     */
+   
     protected int[][] buildSOA(int m, int n) {
         int[][] SOA = new int[m][n];
         this.fillWith(SOA, SOA_DEFAULT_VALUE);
@@ -463,61 +329,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     {
         return this.getBest(original, modified ) == original;
     }
-    /**
-     * Choose the best test values
-     * @param values values of local searches grades, they must be order by localsearch
-     * @return index of best local search
-     */
-    private int chooseBestLocalSearch(List<Double> values)
-    {
-        int best_index = 0;
-        double best = values.get(best_index);
-        int size = values.size();
-        for(int i = 1; i< size; i++)
-        {
-            double value = values.get(i);
-            if(value>best)
-            {
-                best = value;
-                best_index = i;
-            }
-        }
-        return best_index + 1;
-    }
-    /**
-     * Choose number of foregorund individuals whose grade are best among
-     * the population and set their corresponding enable to true
-     * @param grades individual's grade
-     * @param enable indivual's enable
-     */
-    private void chooseSolutionsToEnable(List<Double> grades, List<Boolean> enable)
-    {
-        
-        List<Integer> index = new ArrayList<>();
-        boolean full = false;
-        while(index.size()<number_of_foreground && !full)
-        {
-            double value_best = -1;
-            int best_index = -1;
-            for(int i = 0; i< populationSize; i++)
-            {
-                double value = grades.get(i);
-                if(!index.contains(i) && value>value_best)
-                {
-                    value_best = value;
-                    best_index = i;
-                }
-            }
-            if(best_index != -1)
-                index.add(best_index);
-            else
-                full = true;
-        }
-        for(Integer i : index)
-        {
-            enable.set(i, Boolean.TRUE);
-        }
-    }
+    
     protected S getBest(List<S> population)
     {
         S best = population.get(0);
@@ -529,28 +341,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         }
         return best;
     }
-    protected int getBestIndex(List<S> population)
-    {
-        S best = population.get(0);
-        for(int i = 1; i < populationSize; i++)
-        {
-            S next = population.get(i);
-            int comparison = this.comparator.compare(best, next);
-            if(comparison < 0)
-            {
-                best = next;
-            }
-            else if(comparison == 0)
-            {
-                try
-                {
-                    best = this.getBest(best, next);
-                }catch(Exception e){}
-            }
-        }
-        return this.population.indexOf(best);
-    }
-
+    
 
     @Override
     public S getResult() {
@@ -603,14 +394,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         else
             return false;
     }
-    /**
-     * Determines if an individual is already in a population, in other words
-     * if there is another individual with the same values
-     * @param population collection of individuals
-     * @param individual one indivual
-     * @return true if here is another individual with the same values, false otherwise
-     */
-    protected abstract boolean inPopulation(List<S> population, S individual);
+    
     /**
      * Creates an initial random population
      * @return initial population with random values
@@ -630,26 +414,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * @return grade, how good was the local search
      */
     protected abstract double local_search_1(S xi, int index, boolean testing);
-    /**
-     * Local search 2 
-     * @param population population 
-     * @param enable determines which individuals in population are enable
-     * @param improve determines which individuals in population were improved
-     * @param search_range search range for every indiviuals in population
-     * @param k index to make local search
-     * @return grade, how good was the local search
-     */
-    protected abstract double local_search_2(S xi, int index, boolean testing);
-    /**
-     * Local search 3
-     * @param population population 
-     * @param enable determines which individuals in population are enable
-     * @param improve determines which individuals in population were improved
-     * @param search_range search range for every indiviuals in population
-     * @param k index to make local search
-     * @return grade, how good was the local search
-     */
-    protected abstract double local_search_3(S xi, int index, boolean testing);
+   
     /**
      * Build the search range for solution and return it
      * @param solution solution to create search range
@@ -664,6 +429,14 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
     protected void penalize(S solution){
         solution.setObjective(0, this.penalize_value);
     }
+    /**
+     * Determines if an individual is already in a population, in other words
+     * if there is another individual with the same values
+     * @param population collection of individuals
+     * @param individual one indivual
+     * @return true if here is another individual with the same values, false otherwise
+     */
+    protected abstract boolean inPopulation(List<S> population, S individual);
     @Override
     public abstract String getName();
 
@@ -703,101 +476,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         this.maxEvaluations = cycles;
     }
 
-    public int getLocal_search_test() {
-        return local_search_test;
-    }
-
-    public void setLocal_search_test(int local_search_test) {
-        this.local_search_test = local_search_test;
-    }
-
-    public int getLocal_search() {
-        return local_search;
-    }
-
-    public void setLocal_search(int local_search) {
-        this.local_search = local_search;
-    }
-
-    public int getLocal_search_best() {
-        return local_search_best;
-    }
-
-    public void setLocal_search_best(int local_search_best) {
-        this.local_search_best = local_search_best;
-    }
-
-    public int getNumber_of_foreground() {
-        return number_of_foreground;
-    }
-
-    public void setNumber_of_foreground(int number_of_foreground) {
-        this.number_of_foreground = number_of_foreground;
-    }
-
-    public double getBonus_1() {
-        return bonus_1;
-    }
-
-    public void setBonus_1(double bonus_1) {
-        this.bonus_1 = bonus_1;
-    }
-
-    public double getBonus_2() {
-        return bonus_2;
-    }
-
-    public void setBonus_2(double bonus_2) {
-        this.bonus_2 = bonus_2;
-    }
-
-    public double getLower_bound_a() {
-        return lower_bound_a;
-    }
-
-    public void setLower_bound_a(double lower_bound_a) {
-        this.lower_bound_a = lower_bound_a;
-    }
-
-    public double getUpper_bound_a() {
-        return upper_bound_a;
-    }
-
-    public void setUpper_bound_a(double upper_bound_a) {
-        this.upper_bound_a = upper_bound_a;
-    }
-
-    public double getLower_bound_b() {
-        return lower_bound_b;
-    }
-
-    public void setLower_bound_b(double lower_bound_b) {
-        this.lower_bound_b = lower_bound_b;
-    }
-
-    public double getUpper_bound_b() {
-        return upper_bound_b;
-    }
-
-    public void setUpper_bound_b(double upper_bound_b) {
-        this.upper_bound_b = upper_bound_b;
-    }
-
-    public double getLower_bound_c() {
-        return lower_bound_c;
-    }
-
-    public void setLower_bound_c(double lower_bound_c) {
-        this.lower_bound_c = lower_bound_c;
-    }
-
-    public double getUpper_bound_c() {
-        return upper_bound_c;
-    }
-
-    public void setUpper_bound_c(double upper_bound_c) {
-        this.upper_bound_c = upper_bound_c;
-    }
+    
 
     public void setPopulation(List<S> population) {
         this.population = population;
