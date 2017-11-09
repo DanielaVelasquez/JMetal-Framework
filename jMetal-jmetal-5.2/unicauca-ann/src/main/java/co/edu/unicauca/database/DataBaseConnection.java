@@ -20,18 +20,17 @@ public class DataBaseConnection
     //Retorna un objeto de tipo Connection y lanza una exception si no logra conectarse
     public void conectar() 
     {
-
         // Connect to database
-        String hostName = "elm-experiment.database.windows.net";
+        String hostName = "localhost";
         String dbName = "elm-experiment";
         String user = "elm";
-        String password = "e42-6yh-upd-prs";
-        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
-        
+        String password = "elm";
+        String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
+        //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
 
         try {
                 connection = DriverManager.getConnection(url);
-                String schema = connection.getSchema();
+                //String schema = connection.getSchema();
                 /*System.out.println("Successful connection - Schema: " + schema);
 
                 System.out.println("Query data example:");
