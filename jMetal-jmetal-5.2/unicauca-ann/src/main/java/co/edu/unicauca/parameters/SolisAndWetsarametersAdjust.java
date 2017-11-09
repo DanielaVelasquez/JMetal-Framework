@@ -60,7 +60,7 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
-                        double evaluation = elm.test(solution);;
+                        double evaluation = elm.test(solution);
                         train += evaluation;
                         total_sum += evaluation;
                     }

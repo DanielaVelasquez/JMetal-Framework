@@ -82,7 +82,7 @@ public class MOSParametersAdjust extends ParametersAdjust
                         .execute() ;
 
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
-                        double evaluation = elm.test(solution);;
+                        double evaluation = elm.test(solution);
                         train += evaluation;
                         total_sum += evaluation;
                     }

@@ -83,6 +83,7 @@ public class Experiment
             }
         }
     } 
+
     
     public Algorithm retornarAlgoritmo(String nombreAlgoritmo, String tipo, DoubleProblem problem)
     {

@@ -76,7 +76,7 @@ public class MTS_LS1ParametersAdjust extends ParametersAdjust
                         .execute() ;
 
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
-                        double evaluation = elm.test(solution);;
+                        double evaluation = elm.test(solution);
                         train += evaluation;
                         total_sum += evaluation;
                     }
