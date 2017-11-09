@@ -29,11 +29,12 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
     this.maxEvaluations = 3000;
     this.crossoverOperator =  new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin");
     this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin");
-    this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
+    this.comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
     this.selectionOperator = new DifferentialEvolutionSelection();
-    this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>();
+    this.evaluator = new SequentialSolutionListEvaluator<>();
   }
   
+  @Override
   public SaNSDE build() {
     return new SaNSDE(problem, maxEvaluations, populationSize, crossoverOperator, crossoverOperator2, selectionOperator, evaluator, comparator);
   }

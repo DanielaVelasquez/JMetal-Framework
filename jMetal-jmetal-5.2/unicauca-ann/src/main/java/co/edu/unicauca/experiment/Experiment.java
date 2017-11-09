@@ -184,6 +184,8 @@ public class Experiment
                                    .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
                                    .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin"))
                                    .build();
+                                   
+                                   
                 case "MTS":
                     algAux = new MultipleTrajectorySearchBuilder(problem)
                                 .setLocalSearchTest(3)
