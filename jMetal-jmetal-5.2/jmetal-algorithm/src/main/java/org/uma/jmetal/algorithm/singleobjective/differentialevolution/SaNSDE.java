@@ -448,6 +448,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
         int comparison = comparator.compare(s1, s2);
+        
         if(comparison == 0)
         {
             try
@@ -455,9 +456,13 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                 double b_s1 = (double) s1.getAttribute("B");
                 double b_s2 = (double) s2.getAttribute("B");
                 if(b_s1 <= b_s2)
+                {
                     return s1;
+                }
                 else
+                {
                     return s2;
+                }
             }
             catch(Exception e)
             {
@@ -465,9 +470,13 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             }
         }
         else if(comparison < 0)
+        {
             return s1;
+        }
         else
+        {
             return s2;
+        }
     }
     @Override
     public DoubleSolution getResult() {
