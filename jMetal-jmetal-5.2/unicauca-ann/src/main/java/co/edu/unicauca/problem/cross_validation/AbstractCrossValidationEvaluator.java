@@ -125,6 +125,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
     @Override
     public double train() {
+        total += number_folders;
         double accuracy = 0.0;
         for (int i = 0; i < number_folders; i++) {
             DataSet training = training_folders.get(i);

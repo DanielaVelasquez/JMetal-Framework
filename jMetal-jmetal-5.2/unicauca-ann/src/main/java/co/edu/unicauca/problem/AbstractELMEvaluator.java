@@ -65,6 +65,8 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
      * Bias values from last given solution
      */
     protected DenseVector bias;
+    
+    public int total = 0;
 
 
     /**
@@ -86,10 +88,13 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         this.type = type;
         this.name = name;
         
+        total = 0;
+        
     }
 
     @Override
     public void evaluate(DoubleSolution solution) {
+        
         getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);

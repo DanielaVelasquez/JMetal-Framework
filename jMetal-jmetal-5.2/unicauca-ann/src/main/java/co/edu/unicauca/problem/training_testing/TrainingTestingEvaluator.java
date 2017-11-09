@@ -44,6 +44,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator
     @Override
     public double train() 
     {
+        total += 1;
         super.elm.train();
         return elm.getAccuracy();
     }
