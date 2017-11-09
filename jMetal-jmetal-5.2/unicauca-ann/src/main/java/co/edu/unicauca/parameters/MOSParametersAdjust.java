@@ -8,6 +8,7 @@ import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -58,15 +59,18 @@ public class MOSParametersAdjust extends ParametersAdjust
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
                         HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
-                                                .setLocalSearchTest(1)
-                                                .setLocalSearch(100)
-                                                .setNumberOfForeground(2)
+                                                .setLocalSearchTest(3)
+                                                .setLocalSearch(75)
+                                                .setNumberOfForeground(5)
                                                 .setPopulationSize(5)
                                                 .setLocalSearchBest(100)
                                                 .getConfiguration();
+                        
+                        HashMap<String, Object> saw_atributes =new SolisAndWetsBuilder(problem, null)
+                                                               .getConfiguration();
                 
                         MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
-                        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(null);
+                        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(saw_atributes);
                         MOSHRH algorithm = new   MOSBuilder(problem)
                                                                     .addTecnique(mts_exec)
                                                                     .addTecnique(sw_exec)

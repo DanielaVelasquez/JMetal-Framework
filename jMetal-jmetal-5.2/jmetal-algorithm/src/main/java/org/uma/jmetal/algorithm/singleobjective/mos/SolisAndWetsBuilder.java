@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
@@ -19,13 +20,13 @@ public class SolisAndWetsBuilder
     {
         this.problem = problem;
         this.comparator = c;
-        this.sizeNeighborhood = 5;
+        this.sizeNeighborhood = 12;
         this.rho = 0.5;
-        this.numEFOs = 5;    
-        this.penalize_value = 0;
+        this.numEFOs = 3000;    
+        this.penalize_value = 1;
     }
     
-    public SolisAndWetsBuilder setPopulationSizeNeighborhoodSize(int populationSizeNeighborhood)
+    public SolisAndWetsBuilder setSizeNeighborhood(int populationSizeNeighborhood)
     {
         if(populationSizeNeighborhood < 0)
         {
@@ -74,9 +75,46 @@ public class SolisAndWetsBuilder
         this.penalize_value = penalize_value;
         return this;
     }
+
+    public DoubleProblem getProblem() {
+        return problem;
+    }
+
+    public Comparator<DoubleSolution> getComparator() {
+        return comparator;
+    }
+
+    public int getSizeNeighborhood() {
+        return sizeNeighborhood;
+    }
+
+    public double getRho() {
+        return rho;
+    }
+
+    public int getNumEFOs() {
+        return numEFOs;
+    }
+
+    public DoubleSolution getInitialSolution() {
+        return initialSolution;
+    }
+
+    public double getPenalize_value() {
+        return penalize_value;
+    }
+    
+    
     
     public SolisAndWets build()
     {
         return new SolisAndWets(problem, comparator, numEFOs, rho, sizeNeighborhood, initialSolution, penalize_value);
+    }
+    public HashMap<String, Object> getConfiguration()
+    {
+        HashMap<String, Object> atributes = new HashMap<>();
+        atributes.put("sizeNeighborhood", sizeNeighborhood);
+        atributes.put("rho", rho);
+        return atributes;
     }
 }

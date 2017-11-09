@@ -29,7 +29,9 @@ public class SolisAndWetsTecnique extends Tecnique
         
         if(best == null)
         {
-            algorithm = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
+            algorithm = new SolisAndWetsBuilder((DoubleProblem) p, c)
+                    .setRho((double)this.atributes.get("rho"))
+                    .setSizeNeighborhood((int) this.atributes.get("sizeNeighborhood"))
                     .setNumEFOs(FE)
                     .setInitialSolution(null)
                     .setPenalizeValue(1)
@@ -37,7 +39,9 @@ public class SolisAndWetsTecnique extends Tecnique
         }
         else
         {
-            algorithm = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
+            algorithm = new SolisAndWetsBuilder((DoubleProblem) p, c)
+                    .setRho((double)this.atributes.get("rho"))
+                    .setSizeNeighborhood((int) this.atributes.get("sizeNeighborhood"))
                     .setNumEFOs(FE)
                     .setInitialSolution((DoubleSolution) best)
                     .setPenalizeValue(1)

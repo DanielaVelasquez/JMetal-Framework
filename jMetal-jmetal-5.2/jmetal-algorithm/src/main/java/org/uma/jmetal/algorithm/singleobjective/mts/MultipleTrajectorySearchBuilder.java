@@ -90,12 +90,12 @@ public class MultipleTrajectorySearchBuilder
         this.problem = p;
         this.populationSize = 5;
         this.local_search_test = 3;
-        this.local_search_best = 150;
+        this.local_search_best = 100;
         this.bonus_2 = 1;
         this.lower_bound_b = 0.1;
         this.upper_bound_b = 0.3;
-        this.number_of_foreground = 3;
-        this.local_search = 100;
+        this.number_of_foreground = 5;
+        this.local_search = 75;
         this.bonus_1 = 10;
         this.lower_bound_a = 0.4;
         this.upper_bound_a = 0.5;
