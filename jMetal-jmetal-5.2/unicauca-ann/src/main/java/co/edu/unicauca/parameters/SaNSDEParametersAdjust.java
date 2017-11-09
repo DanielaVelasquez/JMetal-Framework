@@ -57,7 +57,7 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        SaNSDE algorithm = new   SaNSDEBuilder(problem,cr1,cr2,f1,f2)
+                        SaNSDE algorithm = new   SaNSDEBuilder(problem)
                                                             .setPopulationSize(50)
                                                             .setMaxEvaluations(60)
                                                             .build();
