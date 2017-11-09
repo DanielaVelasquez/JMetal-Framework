@@ -71,7 +71,8 @@ public class SolisAndWetsRunner
         
         for(int i = 0; i < 5;i++)
         {
-            algorithm = new SolisAndWetsBuilder(problem, comparator)
+            algorithm = new SolisAndWetsBuilder(problem)
+                            .setComparator(comparator)
                             .setNumEFOs(3000)
                             .setInitialSolution(null)
                             .setPenalizeValue(1)

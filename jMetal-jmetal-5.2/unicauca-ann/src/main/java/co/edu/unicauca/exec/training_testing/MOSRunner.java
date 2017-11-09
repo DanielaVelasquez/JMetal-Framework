@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -27,11 +28,10 @@ public class MOSRunner
         problemName = "co.edu.unicauca.problem.training_testing.Shuttle";
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
-        HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
-                                                .getConfiguration();
+        
                 
-        MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
-        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(null);
+        MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem));
+        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem));
         
         for(int i = 0; i < EXECUTIONS;i++)
         {

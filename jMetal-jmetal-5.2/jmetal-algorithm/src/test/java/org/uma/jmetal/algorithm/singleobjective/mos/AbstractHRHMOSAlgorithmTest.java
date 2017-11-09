@@ -27,10 +27,9 @@ public class AbstractHRHMOSAlgorithmTest {
     public AbstractHRHMOSAlgorithmTest() {
         String problemName = "co.edu.unicauca.problem.training_testing.Iris";
         DoubleProblem problem = null;
-        HashMap<String, Object> mts_atributes = new MultipleTrajectorySearchBuilder(problem)
-                                                .getConfiguration();
-        MTSTecnique mts_exec = new MTSTecnique(mts_atributes);
-        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(null);
+        
+        MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem));
+        SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem));
         instance  =  new   MOSBuilder(problem)
                             .addTecnique(mts_exec)
                             .addTecnique(sw_exec)

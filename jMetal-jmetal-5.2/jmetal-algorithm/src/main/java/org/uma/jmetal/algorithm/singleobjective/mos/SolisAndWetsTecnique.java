@@ -2,23 +2,22 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import org.uma.jmetal.algorithm.util.Tecnique;
-import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 
 public class SolisAndWetsTecnique extends Tecnique
 {
 
-    
-    public SolisAndWetsTecnique(HashMap<String, Object> atributes) {
-        super(atributes);
+    public SolisAndWetsTecnique(SolisAndWetsBuilder builder) {
+        super(builder);
     }
+
+    
+
     
     @Override
     public Solution evolve(int FE, Solution best, Problem p, Comparator c) {
@@ -29,19 +28,17 @@ public class SolisAndWetsTecnique extends Tecnique
         
         if(best == null)
         {
-            algorithm = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
-                    .setNumEFOs(FE)
-                    .setInitialSolution(null)
-                    .setPenalizeValue(1)
-                    .build();
+            algorithm = ((SolisAndWetsBuilder) builder)
+                        .setNumEFOs(FE)
+                        .setInitialSolution(null)
+                        .build();
         }
         else
         {
-            algorithm = new SolisAndWetsBuilder((DoubleProblem) p, new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING))
-                    .setNumEFOs(FE)
-                    .setInitialSolution((DoubleSolution) best)
-                    .setPenalizeValue(1)
-                    .build();
+            algorithm = ((SolisAndWetsBuilder) builder)
+                        .setNumEFOs(FE)
+                        .setInitialSolution((DoubleSolution) best)
+                        .build();
         }
         algorithm.run();
         offspring_population = ((SolisAndWets)algorithm).getPopulation();

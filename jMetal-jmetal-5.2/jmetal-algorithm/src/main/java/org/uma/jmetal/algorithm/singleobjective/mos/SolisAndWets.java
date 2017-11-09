@@ -8,7 +8,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
-public class SolisAndWets implements Algorithm
+public class SolisAndWets implements Algorithm<DoubleSolution>
 {
     /**-----------------------------------------------------------------------------------------
      * Constants
