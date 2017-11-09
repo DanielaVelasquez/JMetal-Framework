@@ -29,14 +29,14 @@ public class MTSTecnique extends Tecnique
             List<DoubleSolution> population = new ArrayList<DoubleSolution>();
             population.add((DoubleSolution)best);
             algorithm = ((MultipleTrajectorySearchBuilder)builder)
-                            .setFE(FE)
+                            .setMaxEvaluations(FE)
                             .setDefaultPopulation(population)
                             .build();
         }
         else
         {
             algorithm = ((MultipleTrajectorySearchBuilder)builder)
-                            .setFE(FE)
+                            .setMaxEvaluations(FE)
                             .setDefaultPopulation(null)
                             .build();
         }

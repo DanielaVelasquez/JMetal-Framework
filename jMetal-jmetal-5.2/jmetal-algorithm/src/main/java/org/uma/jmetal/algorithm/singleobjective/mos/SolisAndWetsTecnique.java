@@ -29,14 +29,14 @@ public class SolisAndWetsTecnique extends Tecnique
         if(best == null)
         {
             algorithm = ((SolisAndWetsBuilder) builder)
-                        .setNumEFOs(FE)
+                        .setMaxEvaluations(FE)
                         .setInitialSolution(null)
                         .build();
         }
         else
         {
             algorithm = ((SolisAndWetsBuilder) builder)
-                        .setNumEFOs(FE)
+                        .setMaxEvaluations(FE)
                         .setInitialSolution((DoubleSolution) best)
                         .build();
         }

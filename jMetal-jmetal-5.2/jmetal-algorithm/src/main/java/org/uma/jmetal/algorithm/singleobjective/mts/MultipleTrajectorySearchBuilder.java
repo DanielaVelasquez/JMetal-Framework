@@ -27,7 +27,7 @@ public class MultipleTrajectorySearchBuilder implements AlgorithmBuilder<Multipl
     /**
      * Maximun number of generations
      */
-    private int FE;
+    private int maxEvaluations;
      /**
      * Number of local searh test
      */
@@ -101,14 +101,14 @@ public class MultipleTrajectorySearchBuilder implements AlgorithmBuilder<Multipl
         this.upper_bound_a = 0.5;
         this.lower_bound_c = 0;
         this.upper_bound_c = 1;
-        this.FE = 1000;
+        this.maxEvaluations = 3000;
         this.penalize_value = 1;
         comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
      public MultipleTrajectorySearch build()
      {
-        MultipleTrajectorySearch mts = new MultipleTrajectorySearch(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c,penalize_value);
+        MultipleTrajectorySearch mts = new MultipleTrajectorySearch(populationSize, problem, comparator, maxEvaluations, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c,penalize_value);
         if(this.default_population != null)
             mts.setPopulation(default_population);
         return mts;
@@ -130,8 +130,8 @@ public class MultipleTrajectorySearchBuilder implements AlgorithmBuilder<Multipl
         return comparator;
     }
 
-    public int getFE() {
-        return FE;
+    public int getMaxEvaluations() {
+        return maxEvaluations;
     }
 
     public int getLocalSearchTest() {
@@ -192,10 +192,10 @@ public class MultipleTrajectorySearchBuilder implements AlgorithmBuilder<Multipl
         return this;
     }
 
-    public MultipleTrajectorySearchBuilder setFE(int FE) {
+    public MultipleTrajectorySearchBuilder setMaxEvaluations(int FE) {
         if(FE <= 0)
             throw new JMetalException("Function evaluations is negative or cero: " + FE);
-        this.FE = FE;
+        this.maxEvaluations = FE;
         return this;
     }
     public MultipleTrajectorySearchBuilder setPopulationSize(int populationSize) {

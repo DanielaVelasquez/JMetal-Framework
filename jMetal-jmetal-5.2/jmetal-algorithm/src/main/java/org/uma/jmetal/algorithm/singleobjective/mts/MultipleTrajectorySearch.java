@@ -16,11 +16,11 @@ public class MultipleTrajectorySearch extends AbstractMultipleTrajectorySearch<D
      * Methods
      *-----------------------------------------------------------------------------------------*/
     public MultipleTrajectorySearch(int populationSize, DoubleProblem problem, 
-            Comparator<DoubleSolution> comparator, int FE, int local_search_test, 
+            Comparator<DoubleSolution> comparator, int maxEvaluations, int local_search_test, 
             int local_search, int local_search_best, int number_of_foreground, 
             double bonus_1, double bonus_2, double lower_bound_a, double upper_bound_a, 
             double lower_bound_b, double upper_bound_b, double lower_bound_c, double upper_bound_c, double penalize_value) {
-        super(populationSize, problem, comparator, FE, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c, penalize_value);
+        super(populationSize, problem, comparator, maxEvaluations, local_search_test, local_search, local_search_best, number_of_foreground, bonus_1, bonus_2, lower_bound_a, upper_bound_a, lower_bound_b, upper_bound_b, lower_bound_c, upper_bound_c, penalize_value);
     }
 
     @Override

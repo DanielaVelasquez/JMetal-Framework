@@ -13,7 +13,7 @@ public class SolisAndWetsBuilder implements AlgorithmBuilder<SolisAndWets>
     private Comparator<DoubleSolution> comparator;
     private int sizeNeighborhood;
     private double rho;
-    private int numEFOs;
+    private int maxEvaluations;
     private DoubleSolution initialSolution;
     private double penalize_value;
     
@@ -23,7 +23,7 @@ public class SolisAndWetsBuilder implements AlgorithmBuilder<SolisAndWets>
         comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         this.sizeNeighborhood = 12;
         this.rho = 0.5;
-        this.numEFOs = 3000;    
+        this.maxEvaluations = 3000;    
         this.penalize_value = 1;
     }
     
@@ -42,14 +42,14 @@ public class SolisAndWetsBuilder implements AlgorithmBuilder<SolisAndWets>
         return this;
     }
     
-    public SolisAndWetsBuilder setNumEFOs(int numEFOs)
+    public SolisAndWetsBuilder setMaxEvaluations(int maxEvaluations)
     {
-        if(numEFOs < 0)
+        if(maxEvaluations <= 0)
         {
-            throw new JMetalException("Evaluations is negative: " + numEFOs);
+            throw new JMetalException("maxEvaluations is negative or zero: " + maxEvaluations);
         }
         
-        this.numEFOs = numEFOs;
+        this.maxEvaluations = maxEvaluations;
         return this;
     }
     
@@ -93,8 +93,8 @@ public class SolisAndWetsBuilder implements AlgorithmBuilder<SolisAndWets>
         return rho;
     }
 
-    public int getNumEFOs() {
-        return numEFOs;
+    public int getMaxEvaluations() {
+        return maxEvaluations;
     }
 
     public DoubleSolution getInitialSolution() {
@@ -110,7 +110,7 @@ public class SolisAndWetsBuilder implements AlgorithmBuilder<SolisAndWets>
     @Override
     public SolisAndWets build()
     {
-        return new SolisAndWets(problem, comparator, numEFOs, rho, sizeNeighborhood, initialSolution, penalize_value);
+        return new SolisAndWets(problem, comparator, maxEvaluations, rho, sizeNeighborhood, initialSolution, penalize_value);
     }
 
 }

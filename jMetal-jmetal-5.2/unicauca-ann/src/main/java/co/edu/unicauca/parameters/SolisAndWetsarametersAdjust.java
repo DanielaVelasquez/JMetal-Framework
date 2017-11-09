@@ -55,7 +55,7 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
                         SolisAndWets algorithm = new SolisAndWetsBuilder(problem)
                                                             .setSizeNeighborhood(sizeNeighborhood)
                                                             .setRho(rho)
-                                                            .setNumEFOs(3000)
+                                                            .setMaxEvaluations(3000)
                                                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
