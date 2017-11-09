@@ -288,7 +288,7 @@ public class DECC_G implements Algorithm
        this.population = this.createInitialPopulation();
        
        this.evaluatePopulation(this.population);
-       this.n = population.get(0).getNumberOfVariables();
+       this.n = this.problem.getNumberOfVariables();
        this.s = this.n / (int)this.subcomponent;
        
        int missing_genes = (int) (this.n - (this.s * this.subcomponent));
