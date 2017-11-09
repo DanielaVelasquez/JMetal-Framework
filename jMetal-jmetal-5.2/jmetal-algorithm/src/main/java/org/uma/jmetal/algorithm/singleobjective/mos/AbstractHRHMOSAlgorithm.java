@@ -199,7 +199,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
             S solution = population.get(i);
             this.penalize(solution);
         }
-        //TO-DO ¿Que hago con el resto de la población que no alcance a evaluar?
+       
     }
     protected void penalize(S solution){
         solution.setObjective(0, this.penalize_value);

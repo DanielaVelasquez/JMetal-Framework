@@ -30,7 +30,7 @@ public class DoubleSearchRange extends SearchRange<DoubleSolution, DoubleProblem
         for(int i = 0; i < this.n; i++)
         {
             double value = (double)search_range.get(i);
-            if(value < Math.pow(10, -15))
+            if(value < 1.e-3)
             {
                 value = (solution.getUpperBound(i) - solution.getLowerBound(i))*0.4;
                 search_range.set(i, value);

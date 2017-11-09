@@ -43,6 +43,14 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
             
             if(i == this.n - 1)
                 evaluations_j = FE - total_evaluations; 
+            
+            //If the evalutions to perform is bigger than the number of maximun evalutions 
+            if(this.evaluations + evaluations_j > maxEvaluations)
+                evaluations_j = this.maxEvaluations - this.evaluations;
+            
+            //If there are not more availables evaluations then this can finish
+            if(evaluations_j == 0)
+                break;
             individual = (DoubleSolution) tecnique.evolve(evaluations_j, individual, this.problem, this.comparator);
             this.updateProgress(evaluations_j);
             total_evaluations +=evaluations_j;
