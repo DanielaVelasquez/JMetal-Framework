@@ -410,7 +410,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
      * Determines if the stopping was reached
      * @return true if stopping condition was reached, false otherwise
      */
-        private boolean isStoppingConditionReached() {
+    private boolean isStoppingConditionReached() {
         return evaluations >= maxEvaluations;
     }
     /**

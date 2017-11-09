@@ -68,9 +68,6 @@ public class DECC_G implements Algorithm
      * Number of subcomponents
      */
     private double subcomponent;
-
-    
-    private SolutionListEvaluator<DoubleSolution> evaluator;
     
     /**
      * Determines how a solution should be order
@@ -110,13 +107,24 @@ public class DECC_G implements Algorithm
      * Builder to create DE algorithm with params arrenged
      */
     private DEFrobeniusBuilder deFrobeniusBuilder;
+    /**
+     * Maximun number of evaluations
+     */
+    private int maxEvaluations;
+    /**
+     * current evaluations
+     */
+    private int evaluations;
+    /**
+     * Value to penalize a solution in case maxEvaluations are reached
+     */
+    private int penalize_value;
 
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
     public DECC_G(int subcomponent, int cycles, int FEs, int wFes, 
             DoubleProblem p, int population_size, 
-            SolutionListEvaluator<DoubleSolution> evaluator, 
             Comparator<DoubleSolution> comparator, SaNSDEBuilder sansdeBuilder,
             DEFrobeniusBuilder deFrobeniusBuilder)
     {
@@ -126,7 +134,6 @@ public class DECC_G implements Algorithm
         this.wFEs = wFes;
         this.problem = p;
         this.populationSize = population_size;
-        this.evaluator = evaluator;
         this.comparator = comparator;
         this.sansdeBuilder = sansdeBuilder;
         this.deFrobeniusBuilder = deFrobeniusBuilder;
@@ -147,6 +154,12 @@ public class DECC_G implements Algorithm
       return problem ;
     }
     /**
+     * Increments the number of generations evaluated
+     */
+    protected void updateProgress() {
+        evaluations += 1;
+    }
+    /**
      * Creates an initial random population
      * @return initial population with random values
      */
@@ -158,8 +171,29 @@ public class DECC_G implements Algorithm
         }
         return population;
     } 
-    private List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-       return evaluator.evaluate(population, getProblem());
+    /**
+     * Sets an individual function value to a penalization value given by 
+     * the user
+     * @param solution solution to penalize with a bad function value
+     */
+    protected void penalize(DoubleSolution solution){
+        solution.setObjective(0, this.penalize_value);
+    }
+    private void evaluatePopulation(List<DoubleSolution> population) {
+       int i = 0;
+        int populationSize = population.size();
+        while(!isStoppingConditionReached() && i < populationSize)
+        {
+            DoubleSolution solution = population.get(i);
+            this.problem.evaluate(solution);
+            i++;
+            this.updateProgress();
+        }
+        for(int j = i; j < populationSize; j++)
+        {
+            DoubleSolution solution = population.get(i);
+            this.penalize(solution);
+        }
     }
     private List<DoubleSolution> getSubPopulation(int l,int u)
     {
@@ -305,6 +339,28 @@ public class DECC_G implements Algorithm
         this.population = population;
     }
     
+    /**
+     * Determines if the stopping was reached
+     * @return true if stopping condition was reached, false otherwise
+     */
+    private boolean isStoppingConditionReached() {
+        return evaluations >= maxEvaluations;
+    }
+    /**
+     * Determines how many evalutions can be perfomed according to the 
+     * number of current of evalutions, max evaluations and number of
+     * evaluations wanting to perfomr
+     * @param nextNumberEvaluations next number of evaluations that 
+     * are likely to perfomr
+     * @return number of possible evalations
+     */
+    private int getPossibleEvaluations(int nextNumberEvaluations)
+    {
+        if(this.evaluations + nextNumberEvaluations > maxEvaluations)
+            return this.maxEvaluations - evaluations;
+        return nextNumberEvaluations;
+    }
+    
     @Override
     public void run() 
     {
@@ -317,7 +373,7 @@ public class DECC_G implements Algorithm
        int missing_genes = (int) (this.n - (this.s * this.subcomponent));
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
        
-       for(int i = 0; i < this.cycles; i++)
+       while(!isStoppingConditionReached())
        {
            
            List<Integer> index = this.randPerm(this.n);
@@ -339,8 +395,14 @@ public class DECC_G implements Algorithm
                subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
                
                List<DoubleSolution> subpopulation = this.copy(this.population);
+               
+               int evaluationsToPerfom = this.getPossibleEvaluations(FE);
+               
+               if(evaluationsToPerfom == 0) 
+                   continue;
+               
                SaNSDE sansde = sansdeBuilder
-                               .setMaxEvaluations(FE)
+                               .setMaxEvaluations(evaluationsToPerfom)
                                .setProblem(subcomponent_problem_SaNSDE)
                                .setPopulationSize(populationSize)
                                .setComparator(comparator)
@@ -357,11 +419,17 @@ public class DECC_G implements Algorithm
            }
            this.findIndividuals();
            
+           int evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
+               
+            if(evaluationsToPerfom == 0) 
+                continue;
+           
            DEFrobenius de = deFrobeniusBuilder
-                                      .setMaxEvaluations(wFEs)
+                                      .setMaxEvaluations(evaluationsToPerfom)
                                       .setProblem(subcomponent_problem_DE)
                                       .setPopulationSize(populationSize)
                                       .build();
+           
            //de.setPopulation(w_population);
            this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
            subcomponent_problem_DE.setSolution(best_inidvidual);
@@ -373,8 +441,18 @@ public class DECC_G implements Algorithm
                population.set(best_index, best_inidvidual);
            }
            
+           evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
+               
+            if(evaluationsToPerfom == 0) 
+                continue;
+           
+           de = deFrobeniusBuilder
+                .setMaxEvaluations(evaluationsToPerfom)
+                .setProblem(subcomponent_problem_DE)
+                .setPopulationSize(populationSize)
+                .build();
+           
            subcomponent_problem_DE.setSolution(random_inidividual);
-           de.setEvaluations(0);
            de.run();
            ans = de.getResult();
            if(this.getBest(random_inidividual, ans)==ans)
@@ -382,9 +460,18 @@ public class DECC_G implements Algorithm
                this.multiply(random_inidividual, ans);
                population.set(random_index, random_inidividual);
            }
+           evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
+               
+            if(evaluationsToPerfom == 0) 
+                continue;
+           
+           de = deFrobeniusBuilder
+                .setMaxEvaluations(evaluationsToPerfom)
+                .setProblem(subcomponent_problem_DE)
+                .setPopulationSize(populationSize)
+                .build();
            
            subcomponent_problem_DE.setSolution(worst_inidividual);
-           de.setEvaluations(0);
            de.run();
            
            ans = de.getResult();
