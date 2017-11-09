@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @SuppressWarnings("serial")
-public class DifferentialEvolutionDECC_G extends AbstractDifferentialEvolution<DoubleSolution> {
+public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
   private int populationSize;
   private int maxEvaluations;
   private SolutionListEvaluator<DoubleSolution> evaluator;
@@ -32,7 +32,7 @@ public class DifferentialEvolutionDECC_G extends AbstractDifferentialEvolution<D
    * @param selectionOperator
    * @param evaluator
    */
-  public DifferentialEvolutionDECC_G(DoubleProblem problem, int maxEvaluations, int populationSize,
+  public DEFrobenius(DoubleProblem problem, int maxEvaluations, int populationSize,
       DifferentialEvolutionCrossover crossoverOperator,
       DifferentialEvolutionSelection selectionOperator, SolutionListEvaluator<DoubleSolution> evaluator) {
     setProblem(problem); ;

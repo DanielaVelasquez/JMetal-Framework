@@ -9,7 +9,7 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
-public class DifferentialEvolutionDECC_GBuilder {
+public class DEFrobeniusBuilder {
   private DoubleProblem problem;
   private int populationSize;
   private int maxEvaluations;
@@ -17,7 +17,7 @@ public class DifferentialEvolutionDECC_GBuilder {
   private DifferentialEvolutionSelection selectionOperator;
   private SolutionListEvaluator<DoubleSolution> evaluator;
 
-  public DifferentialEvolutionDECC_GBuilder(DoubleProblem problem) {
+  public DEFrobeniusBuilder(DoubleProblem problem) {
     this.problem = problem;
     this.populationSize = 100;
     this.maxEvaluations = 25000;
@@ -26,7 +26,7 @@ public class DifferentialEvolutionDECC_GBuilder {
     this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>();
   }
 
-  public DifferentialEvolutionDECC_GBuilder setPopulationSize(int populationSize) {
+  public DEFrobeniusBuilder setPopulationSize(int populationSize) {
     if (populationSize < 0) {
       throw new JMetalException("Population size is negative: " + populationSize);
     }
@@ -36,7 +36,7 @@ public class DifferentialEvolutionDECC_GBuilder {
     return this;
   }
 
-  public DifferentialEvolutionDECC_GBuilder setMaxEvaluations(int maxEvaluations) {
+  public DEFrobeniusBuilder setMaxEvaluations(int maxEvaluations) {
     if (maxEvaluations < 0) {
       throw new JMetalException("MaxEvaluations is negative: " + maxEvaluations);
     }
@@ -46,26 +46,26 @@ public class DifferentialEvolutionDECC_GBuilder {
     return this;
   }
 
-  public DifferentialEvolutionDECC_GBuilder setCrossover(DifferentialEvolutionCrossover crossover) {
+  public DEFrobeniusBuilder setCrossover(DifferentialEvolutionCrossover crossover) {
     this.crossoverOperator = crossover;
 
     return this;
   }
 
-  public DifferentialEvolutionDECC_GBuilder setSelection(DifferentialEvolutionSelection selection) {
+  public DEFrobeniusBuilder setSelection(DifferentialEvolutionSelection selection) {
     this.selectionOperator = selection;
 
     return this;
   }
 
-  public DifferentialEvolutionDECC_GBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
+  public DEFrobeniusBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
     this.evaluator = evaluator;
 
     return this;
   }
 
-  public DifferentialEvolutionDECC_G build() {
-    return new DifferentialEvolutionDECC_G(problem, maxEvaluations, populationSize, crossoverOperator,
+  public DEFrobenius build() {
+    return new DEFrobenius(problem, maxEvaluations, populationSize, crossoverOperator,
         selectionOperator, evaluator);
   }
 

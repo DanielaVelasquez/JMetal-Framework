@@ -35,7 +35,7 @@ public class Experiment
             try
             {
                 connection = DataBaseConnection.getInstancia();
-                connection.modificacion("EXECUTE startTask @computerName=" + computador);
+                connection.modificacion("EXECUTE startTask @computerName = " + computador + ";");
                 ResultSet resultado = connection.seleccion("" +
                         "       SELECT d.dat_name, a.alg_name, s.see_value, r.run_id, dt.dat_type_name\n" +
                         "	FROM run r\n" +
@@ -79,7 +79,7 @@ public class Experiment
             }
             catch(Exception ex)
             {
-                
+                System.out.println(ex.getMessage());
             }
         }
     } 
