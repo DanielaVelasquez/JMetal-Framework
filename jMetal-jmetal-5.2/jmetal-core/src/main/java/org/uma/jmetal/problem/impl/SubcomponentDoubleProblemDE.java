@@ -69,11 +69,9 @@ public class SubcomponentDoubleProblemDE implements DoubleProblem
     public String getName() {
        return original_problem.getName();
     }
-
-    @Override
-    public void evaluate(DoubleSolution solution)
+    
+    public void multiply(DoubleSolution solution, DoubleSolution original_solution)
     {
-        DoubleSolution original_solution = (DoubleSolution) this.solution.copy();
         int j = 0;
         for(Integer i:index)
         {
@@ -82,6 +80,13 @@ public class SubcomponentDoubleProblemDE implements DoubleProblem
             original_solution.setVariableValue(i, newValue);
             j++;
         }
+    }
+
+    @Override
+    public void evaluate(DoubleSolution solution)
+    {
+        DoubleSolution original_solution = (DoubleSolution) this.solution.copy();
+        this.multiply(solution, original_solution);
         this.original_problem.evaluate(original_solution);
         
         int objectives = original_solution.getNumberOfObjectives();

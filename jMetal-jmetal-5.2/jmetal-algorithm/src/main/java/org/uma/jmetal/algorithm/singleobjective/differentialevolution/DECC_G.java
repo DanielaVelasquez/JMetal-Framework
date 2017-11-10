@@ -348,17 +348,20 @@ public class DECC_G implements Algorithm
     private int getPossibleEvaluations(int nextNumberEvaluations)
     {
         if(this.evaluations + nextNumberEvaluations > maxEvaluations)
-            return this.maxEvaluations - evaluations;
+        {
+            int value = this.maxEvaluations - evaluations;
+            return value>0?value:0;
+        }
         return nextNumberEvaluations;
     }
     
-    private void imprimir()
-    {
-        for(DoubleSolution s:population)
-        {
-            System.out.println(""+s.getObjective(0)+" "+s.getAttribute("B"));
-        }
-    }
+//    private void imprimir()
+//    {
+//        for(DoubleSolution s:population)
+//        {
+//            System.out.println(""+s.getObjective(0)+" "+s.getAttribute("B"));
+//        }
+//    }
     
     @Override
     public void run() 
@@ -395,12 +398,13 @@ public class DECC_G implements Algorithm
                
                List<DoubleSolution> subpopulation = this.copy(this.population);
                
-               int evaluationsToPerfom = this.getPossibleEvaluations(FE);
+               //ESTO DEBE CAMBIARSE PORQQUE AHORA SANSDE Y DE ESTAN POR CICLOS, PERO DESPUES SI VAN A SER POR EVALUAICONES
+               int evaluationsToPerfom = this.getPossibleEvaluations(FE*this.populationSize+this.populationSize);
                
                if(evaluationsToPerfom == 0) 
                    continue;
                
-               evaluations += evaluationsToPerfom;
+               evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
                
                SaNSDE sansde = sansdeBuilder
                                .setMaxEvaluations(evaluationsToPerfom)
@@ -409,13 +413,8 @@ public class DECC_G implements Algorithm
                                .setComparator(comparator)
                                .build();
                sansde.setPopulation(subpopulation);
-               imprimir();
-               System.out.println("------------------");
                sansde.run();
-               
                this.replaceInPopulation(sansde.getPopulation(), l, u, index);
-               imprimir();
-               System.out.println("***************************+");
                if(!load_missing_genes && missing_genes>0 && (j+1)==missing_genes)
                {
                    this.s = this.s + 1;
@@ -424,12 +423,12 @@ public class DECC_G implements Algorithm
            }
            this.findIndividuals();
            
-           int evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
+           int evaluationsToPerfom = this.getPossibleEvaluations(wFEs*this.populationSize + this.populationSize);
                
             if(evaluationsToPerfom == 0) 
                 continue;
             
-           evaluations += evaluationsToPerfom;
+           evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
            
            DEFrobenius de = deFrobeniusBuilder
                                       .setMaxEvaluations(evaluationsToPerfom)
@@ -448,11 +447,11 @@ public class DECC_G implements Algorithm
                population.set(best_index, best_inidvidual);
            }
            
-           evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
+           evaluationsToPerfom = this.getPossibleEvaluations(wFEs*this.populationSize + this.populationSize);
                
             if(evaluationsToPerfom == 0) 
                 continue;
-           evaluations += evaluationsToPerfom;
+           evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
                 .setProblem(subcomponent_problem_DE)
@@ -467,12 +466,12 @@ public class DECC_G implements Algorithm
                this.multiply(random_inidividual, ans);
                population.set(random_index, random_inidividual);
            }
-           evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
+           evaluationsToPerfom = this.getPossibleEvaluations(wFEs*this.populationSize + this.populationSize);
                
             if(evaluationsToPerfom == 0) 
                 continue;
             
-            evaluations += evaluationsToPerfom;
+            evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
            
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)

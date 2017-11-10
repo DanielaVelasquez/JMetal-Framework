@@ -94,8 +94,6 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
 
     @Override
     public void evaluate(DoubleSolution solution) {
-        if(this.total>=2900)
-            System.out.println("j");
         getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);

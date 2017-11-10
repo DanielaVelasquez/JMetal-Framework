@@ -8,8 +8,6 @@ import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
 public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
@@ -20,8 +18,8 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
   private DifferentialEvolutionCrossover crossoverOperator;
   private DifferentialEvolutionCrossover crossoverOperator2;
   private DifferentialEvolutionSelection selectionOperator;
-  private SolutionListEvaluator<DoubleSolution> evaluator;
   private Comparator<DoubleSolution> comparator ;
+  private double penalize_value;
 
   public SaNSDEBuilder(DoubleProblem problem) {
     this.problem = problem;
@@ -31,12 +29,12 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
     this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin");
     this.comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
     this.selectionOperator = new DifferentialEvolutionSelection();
-    this.evaluator = new SequentialSolutionListEvaluator<>();
+    this.penalize_value = 1;
   }
   
   @Override
   public SaNSDE build() {
-    return new SaNSDE(problem, maxEvaluations, populationSize, crossoverOperator, crossoverOperator2, selectionOperator, evaluator, comparator);
+    return new SaNSDE(problem, maxEvaluations, populationSize, crossoverOperator, crossoverOperator2, selectionOperator, comparator,penalize_value);
   }
 
   public SaNSDEBuilder setPopulationSize(int populationSize) {
@@ -75,18 +73,9 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
     return this;
   }
 
-  public SaNSDEBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-    if(evaluator == null)
-          throw new JMetalException("evaluator can't be null");
-    this.evaluator = evaluator;
+   public SaNSDEBuilder setPenalizeValue(double penalize_value) {
+    this.penalize_value = penalize_value;
 
-    return this;
-  }
-  
-  public SaNSDEBuilder setEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-    if(evaluator == null)
-        throw new JMetalException("evaluator can't be null");
-    this.evaluator = evaluator;
     return this;
   }
   
@@ -130,14 +119,12 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
   public DifferentialEvolutionSelection getSelectionOperator() {
     return selectionOperator;
   }
-  public SolutionListEvaluator<DoubleSolution> getEvaluator() {
-    return evaluator;
-  }
+
   public DifferentialEvolutionCrossover getCrossoverOperator2() {
     return crossoverOperator2;
   }
-  public SolutionListEvaluator<DoubleSolution> getSolutionListEvaluator() {
-    return evaluator;
+  public double getPenalizeValue() {
+    return penalize_value;
   }
   public Comparator<DoubleSolution> getComparator() {
     return comparator;
