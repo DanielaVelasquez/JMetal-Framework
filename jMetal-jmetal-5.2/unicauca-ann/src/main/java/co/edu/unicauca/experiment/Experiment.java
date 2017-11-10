@@ -5,6 +5,8 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobenius;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
@@ -14,6 +16,7 @@ import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
+import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -104,11 +107,11 @@ public class Experiment
             {
                 case "DECC_G":
                     algAux = new DECC_GBuilder(problem)
-                        .setCycles(2)
+                        .setMaxEvaluations(600)
                         .setPopulationSize(10)
                         .setSubcomponets(6)
-                        .setFEs(2)
-                        .setwFes(3)
+                        .setFEs(30)
+                        .setwFes(40)
                         .build();
                     break;
                 case "MemeticED":
@@ -128,11 +131,11 @@ public class Experiment
             {
                 case "DECC_G":
                     algAux = new DECC_GBuilder(problem)
-                        .setCycles(3)
+                        .setMaxEvaluations(3000)
                         .setPopulationSize(10)
                         .setSubcomponets(10)
-                        .setFEs(6)
-                        .setwFes(9)
+                        .setFEs(70)
+                        .setwFes(100)
                         .build();
                     break;
                 case "MemeticED":
@@ -156,8 +159,8 @@ public class Experiment
                     algAux =  new   MOSBuilder(problem)
                             .addTecnique(mts_exec)
                             .addTecnique(sw_exec)
-                            .setFE(300)
-                            .setE(0.01)
+                            .setFE(75)
+                            .setE(0.15)
                             .setMaxEvaluations(3000)
                             .build();
                     break;
@@ -177,13 +180,20 @@ public class Experiment
                                   .build();
                     break;
                 case "DE":
-                    //algAux = --------------------------------------------------------
+                    algAux = new DEFrobeniusBuilder(problem)
+                                 .setPopulationSize(10)
+                                 .setMaxEvaluations(3000)
+                                 .setPenalizeValue(1)
+                                 .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
+                                 .setSelection(new DifferentialEvolutionSelection())
+                                 .build();
                     break;
                 case "SaNSDE":
                     algAux = new SaNSDEBuilder(problem)
                                    .setMaxEvaluations(3000)
                                    .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
                                    .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin"))
+                                   .setSelection(new DifferentialEvolutionSelection())
                                    .build();
                                    
                                    
