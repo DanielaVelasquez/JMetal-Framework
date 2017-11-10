@@ -12,7 +12,6 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 public class DECC_GBuilder 
 {
   private DoubleProblem problem;
-  private SolutionListEvaluator<DoubleSolution> evaluator;
   private Comparator<DoubleSolution> comparator ;
   private int cycles;
   private int subcomponets;
@@ -20,16 +19,41 @@ public class DECC_GBuilder
   private int wFes;
   private int population_size;
   private int numCyclesSaNSDE;
+  private SaNSDEBuilder sansdeBuilder;
+  private DEFrobeniusBuilder deFrobeniusBuilder;
 
   public DECC_GBuilder(DoubleProblem problem) {
     this.problem = problem;
-    this.evaluator = new SequentialSolutionListEvaluator<>();
     this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
     this.cycles = 2;
     this.subcomponets = 5;
     this.FEs = 50;
     this.wFes = 50;
     this.population_size = 50;
+    this.sansdeBuilder = new SaNSDEBuilder(problem);
+    this.deFrobeniusBuilder = new DEFrobeniusBuilder(problem);
+  }
+
+  public DECC_G build() {
+    return new DECC_G(subcomponets, cycles, FEs, wFes, problem, population_size, comparator, sansdeBuilder, deFrobeniusBuilder);
+  }
+  public DECC_GBuilder setSaNSDEBuilder(SaNSDEBuilder sansdeBuilder) {
+    if (sansdeBuilder == null) {
+      throw new JMetalException("sansdeBuilder can't be null ");
+    }
+
+    this.sansdeBuilder = sansdeBuilder;
+
+    return this;
+  }
+  public DECC_GBuilder setDEFrobeniusBuilder(DEFrobeniusBuilder deFrobeniusBuilder) {
+    if (deFrobeniusBuilder == null) {
+      throw new JMetalException("deFrobeniusBuilder can't be null ");
+    }
+
+    this.deFrobeniusBuilder = deFrobeniusBuilder;
+
+    return this;
   }
 
   public DECC_GBuilder setPopulationSize(int populationSize) {
@@ -51,19 +75,47 @@ public class DECC_GBuilder
 
     return this;
   }
-
-
-  public DECC_GBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-    this.evaluator = evaluator;
-
+  
+  public DECC_GBuilder setwFes(int wFes) {
+    if (wFes < 0) {
+      throw new JMetalException("wFes is negative: " + wFes);
+    }
+    this.wFes = wFes;
     return this;
   }
+  public DECC_GBuilder setSubcomponets(int subcomponets) {
+    if (subcomponets < 0) {
+        throw new JMetalException("subcomponets is negative: " + subcomponets);
+    }
+    this.subcomponets = subcomponets;
+    return this;
+   }
+  
+   public DECC_GBuilder setFEs(int FEs) {
+    if (FEs < 0) {
+        throw new JMetalException("FEs is negative: " + FEs);
+    }
+    this.FEs = FEs;
+    return this;
+   }
 
-  public DECC_G build() {
-    return new DECC_G(subcomponets, cycles, FEs, wFes, problem, population_size, evaluator, comparator);
+  public Comparator<DoubleSolution> getComparator() {
+    return comparator;
   }
 
-  /* Getters */
+  public int getPopulation_size() {
+    return population_size;
+  }
+
+  public SaNSDEBuilder getSansdeBuilder() {
+    return sansdeBuilder;
+  }
+
+  public DEFrobeniusBuilder getDeFrobeniusBuilder() {
+    return deFrobeniusBuilder;
+  }
+
+  
   public DoubleProblem getProblem() {
     return problem;
   }
@@ -76,45 +128,14 @@ public class DECC_GBuilder
     return this.cycles;
   }
 
-    public int getSubcomponets() {
-        return subcomponets;
-    }
-
-    public DECC_GBuilder setSubcomponets(int subcomponets) {
-        if (subcomponets < 0) {
-            throw new JMetalException("subcomponets is negative: " + subcomponets);
-        }
-        this.subcomponets = subcomponets;
-        return this;
-    }
-
-    public int getFEs() {
-        return FEs;
-    }
-
-    public DECC_GBuilder setFEs(int FEs) {
-        if (FEs < 0) {
-            throw new JMetalException("FEs is negative: " + FEs);
-        }
-        this.FEs = FEs;
-        return this;
-    }
-
-    public int getwFes() {
-        return wFes;
-    }
-
-    public DECC_GBuilder setwFes(int wFes) {
-      if (wFes < 0) {
-        throw new JMetalException("wFes is negative: " + wFes);
-      }
-        this.wFes = wFes;
-        return this;
-    }
-
- 
-  public SolutionListEvaluator<DoubleSolution> getSolutionListEvaluator() {
-    return evaluator;
+  public int getSubcomponets() {
+    return subcomponets;
+  }
+  public int getFEs() {
+    return FEs;
+  }
+  public int getwFes() {
+    return wFes;
   }
 }
 

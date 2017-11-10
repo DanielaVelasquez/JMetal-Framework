@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -57,7 +58,9 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        SaNSDE algorithm = new   SaNSDEBuilder(problem,cr1,cr2,f1,f2)
+                        SaNSDE algorithm = new   SaNSDEBuilder(problem)
+                                                            .setCrossover(new DifferentialEvolutionCrossover(cr1, f1, "rand/1/bin"))
+                                                            .setCrossoverOperator2(new DifferentialEvolutionCrossover(cr2, f2, "current-to-best/1/bin"))
                                                             .setPopulationSize(50)
                                                             .setMaxEvaluations(60)
                                                             .build();
