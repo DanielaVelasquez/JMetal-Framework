@@ -75,7 +75,7 @@ public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 
     @Override
     public Solution<Double> copy() {
-        return new DoubleSolutionSubcomponentSaNSDE((DoubleSolution) solution, problem);
+        return new DoubleSolutionSubcomponentSaNSDE((DoubleSolution) solution.copy(), problem);
     }
 
     @Override

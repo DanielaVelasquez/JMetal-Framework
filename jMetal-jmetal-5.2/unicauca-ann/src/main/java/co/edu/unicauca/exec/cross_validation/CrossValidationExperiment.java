@@ -83,7 +83,6 @@ public abstract class CrossValidationExperiment {
     
       
      algorithm = new DECC_GBuilder(problem)
-                        .setCycles(2)
                         .setPopulationSize(10)
                         .setSubcomponets(6)
                         .setFEs(2)

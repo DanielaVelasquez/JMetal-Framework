@@ -217,17 +217,11 @@ public class DECC_G implements Algorithm
     {
         for(int i = 0; i < populationSize; i++)
         {
-            DoubleSolution original = population.get(i);
-            DoubleSolution other = subpopulation.get(i);
-            this.copyObjectivesFrom(original, other);
-            int k = 0;
-            for(int j = l; j <= u; j++)
-            {
-                original.setVariableValue(index.get(j), other.getVariableValue(k));
-                k++;
-            }
+            DoubleSolutionSubcomponentSaNSDE other = (DoubleSolutionSubcomponentSaNSDE)subpopulation.get(i);
+            population.set(i, other.getSolution());
         }
     }
+    
     private void copyObjectivesFrom(DoubleSolution origin,DoubleSolution destination)
     {
         int size = origin.getNumberOfObjectives();
@@ -415,11 +409,13 @@ public class DECC_G implements Algorithm
                                .setComparator(comparator)
                                .build();
                sansde.setPopulation(subpopulation);
-               
                imprimir();
-               System.out.println("-----------------------");
+               System.out.println("------------------");
                sansde.run();
+               
+               this.replaceInPopulation(sansde.getPopulation(), l, u, index);
                imprimir();
+               System.out.println("***************************+");
                if(!load_missing_genes && missing_genes>0 && (j+1)==missing_genes)
                {
                    this.s = this.s + 1;
