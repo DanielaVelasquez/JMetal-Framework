@@ -94,17 +94,17 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
 
     @Override
     public void evaluate(DoubleSolution solution) {
-        if(this.total>=3000)
+        if(this.total>=2900)
             System.out.println("j");
         getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
         double accuracy = this.train();
         solution.setAttribute("B", elm.getOuputWightNorm());
-        solution.setAttribute("g", this.getGradient(solution));
+        //solution.setAttribute("g", this.getGradient(solution));
         solution.setObjective(0, (1 - accuracy));
     }
-    
+    ///ESTA MAAAAAAAAAAAAAAAAL
     private DenseMatrix getGradient(DoubleSolution solution)
     {
         double delta = 0.05;

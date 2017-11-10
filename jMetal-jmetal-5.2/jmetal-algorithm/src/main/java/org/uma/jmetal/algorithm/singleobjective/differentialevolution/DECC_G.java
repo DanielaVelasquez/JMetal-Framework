@@ -183,6 +183,7 @@ public class DECC_G implements Algorithm
         {
             DoubleSolution solution = population.get(i);
             this.problem.evaluate(solution);
+            System.out.println("FE "+solution.getObjective(0));
             i++;
             this.updateProgress();
         }
@@ -373,8 +374,6 @@ public class DECC_G implements Algorithm
        
        while(!isStoppingConditionReached())
        {
-           if(evaluations >=maxEvaluations)
-               System.out.println("fsjaf");
            List<Integer> index = this.randPerm(this.n);
            boolean load_missing_genes = false;
            //w_population.clear();
