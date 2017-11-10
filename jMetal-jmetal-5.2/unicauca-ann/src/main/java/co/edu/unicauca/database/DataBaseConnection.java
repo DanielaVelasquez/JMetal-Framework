@@ -21,12 +21,12 @@ public class DataBaseConnection
     public void conectar() 
     {
         // Connect to database
-        String hostName = "localhost";
-        String dbName = "elm-experiment";
-        String user = "elm";
-        String password = "elm";
-        String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
-        //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
+        String hostName = "sql7001.site4now.net";
+        String dbName = "DB_A2D155_elmExperiment1";
+        String user = "DB_A2D155_elmExperiment1_admin";
+        String password = "Experiment123";
+        //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
+        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;loginTimeout=30;", hostName, dbName, user, password);        
 
         try {
                 connection = DriverManager.getConnection(url);
