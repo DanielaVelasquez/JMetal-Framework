@@ -480,7 +480,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     public DoubleSolution getResult() 
     {
-        Collections.sort(getPopulation(), comparator) ;
         DoubleSolution best =  getPopulation().get(0);
         for(int i = 1; i < populationSize; i++)
         {

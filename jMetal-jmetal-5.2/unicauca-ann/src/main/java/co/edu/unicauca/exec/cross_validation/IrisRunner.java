@@ -51,20 +51,20 @@ public class IrisRunner
         System.out.println("Accuracy training: "+tt.train());*/
         
         
-        algorithm = new DECC_G(5,10,10,10,problem,50,evaluator, comparator);
+        //algorithm = new DECC_G(5,10,10,10,problem,50,evaluator, comparator);
         
 
-        AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
-          .execute() ;
-
-        DoubleSolution solution = algorithm.getResult() ;
-        long computingTime = algorithmRunner.getComputingTime() ;
-
-        System.out.println("Total execution time: " + computingTime + "ms");
-        System.out.println("Objective "+(1-solution.getObjective(0)));
-        
-        AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-        System.out.println("Testing: "+p.test(solution));
+//        AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
+//          .execute() ;
+//
+//        DoubleSolution solution = algorithm.getResult() ;
+//        long computingTime = algorithmRunner.getComputingTime() ;
+//
+//        System.out.println("Total execution time: " + computingTime + "ms");
+//        System.out.println("Objective "+(1-solution.getObjective(0)));
+//        
+//        AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
+//        System.out.println("Testing: "+p.test(solution));
         
         
         /*double a = ((TrainingTestingEvaluator)problem).test(solution);

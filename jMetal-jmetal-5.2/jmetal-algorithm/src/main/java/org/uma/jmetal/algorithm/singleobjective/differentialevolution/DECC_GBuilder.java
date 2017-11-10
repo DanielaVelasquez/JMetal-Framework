@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
 import java.util.Comparator;
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
@@ -13,7 +14,6 @@ public class DECC_GBuilder
 {
   private DoubleProblem problem;
   private Comparator<DoubleSolution> comparator ;
-  private int cycles;
   private int subcomponets;
   private int FEs;
   private int wFes;
@@ -21,21 +21,25 @@ public class DECC_GBuilder
   private int numCyclesSaNSDE;
   private SaNSDEBuilder sansdeBuilder;
   private DEFrobeniusBuilder deFrobeniusBuilder;
+  private int maxEvaluations;
+  private double penalize_value;
+
 
   public DECC_GBuilder(DoubleProblem problem) {
     this.problem = problem;
     this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
-    this.cycles = 2;
     this.subcomponets = 5;
     this.FEs = 50;
     this.wFes = 50;
     this.population_size = 50;
+    this.maxEvaluations = 3000;
+    this.penalize_value = 1;
     this.sansdeBuilder = new SaNSDEBuilder(problem);
     this.deFrobeniusBuilder = new DEFrobeniusBuilder(problem);
   }
 
   public DECC_G build() {
-    return new DECC_G(subcomponets, cycles, FEs, wFes, problem, population_size, comparator, sansdeBuilder, deFrobeniusBuilder);
+    return new DECC_G(subcomponets,  FEs, wFes, problem, population_size, comparator, sansdeBuilder, deFrobeniusBuilder, maxEvaluations, penalize_value);
   }
   public DECC_GBuilder setSaNSDEBuilder(SaNSDEBuilder sansdeBuilder) {
     if (sansdeBuilder == null) {
@@ -66,15 +70,7 @@ public class DECC_GBuilder
     return this;
   }
 
-  public DECC_GBuilder setCycles(int cycles) {
-    if (cycles < 0) {
-      throw new JMetalException("Cycles is negative: " + cycles);
-    }
 
-    this.cycles = cycles;
-
-    return this;
-  }
   
   public DECC_GBuilder setwFes(int wFes) {
     if (wFes < 0) {
@@ -98,6 +94,16 @@ public class DECC_GBuilder
     this.FEs = FEs;
     return this;
    }
+   public DECC_GBuilder setMaxEvaluations(int FE) {
+        if(FE <= 0)
+            throw new JMetalException("Function evaluations is negative or cero: " + FE);
+        this.maxEvaluations = FE;
+        return this;
+    }
+    public DECC_GBuilder setPenalizeValue(double penalize_value) {
+        this.penalize_value = penalize_value;
+        return this;
+    }
 
   public Comparator<DoubleSolution> getComparator() {
     return comparator;
@@ -124,9 +130,6 @@ public class DECC_GBuilder
     return population_size;
   }
 
-  public int getCycles() {
-    return this.cycles;
-  }
 
   public int getSubcomponets() {
     return subcomponets;

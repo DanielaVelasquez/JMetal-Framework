@@ -51,10 +51,11 @@ public class DECCGRunner
         
         long initTime = System.currentTimeMillis();
         
-        for(int i = 0; i < 5;i++)
+        for(int i = 0; i < 1;i++)
         {
             algorithm = new DECC_GBuilder(problem)
-                        .setCycles(3)
+                        .setPenalizeValue(1)
+                        .setMaxEvaluations(3000)
                         .setPopulationSize(10)
                         .setSubcomponets(10)
                         .setFEs(6)

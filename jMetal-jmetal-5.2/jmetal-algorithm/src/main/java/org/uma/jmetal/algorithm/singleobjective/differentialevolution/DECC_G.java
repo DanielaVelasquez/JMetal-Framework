@@ -11,7 +11,6 @@ import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemSaNSDE;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentDE;
 import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentSaNSDE;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 
@@ -60,10 +59,6 @@ public class DECC_G implements Algorithm
      * Population size
      */
     private int populationSize;
-    /**
-     * Number of cycles that the algorithm should run
-     */
-    private int cycles;
     /**
      * Number of subcomponents
      */
@@ -118,18 +113,18 @@ public class DECC_G implements Algorithm
     /**
      * Value to penalize a solution in case maxEvaluations are reached
      */
-    private int penalize_value;
+    private double penalize_value;
 
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-    public DECC_G(int subcomponent, int cycles, int FEs, int wFes, 
+    public DECC_G(int subcomponent, int FEs, int wFes, 
             DoubleProblem p, int population_size, 
             Comparator<DoubleSolution> comparator, SaNSDEBuilder sansdeBuilder,
-            DEFrobeniusBuilder deFrobeniusBuilder)
+            DEFrobeniusBuilder deFrobeniusBuilder, int maxEvaluations,
+            double penalize_value)
     {
         this.subcomponent = subcomponent;
-        this.cycles = cycles;
         this.FE = FEs;
         this.wFEs = wFes;
         this.problem = p;
@@ -137,6 +132,8 @@ public class DECC_G implements Algorithm
         this.comparator = comparator;
         this.sansdeBuilder = sansdeBuilder;
         this.deFrobeniusBuilder = deFrobeniusBuilder;
+        this.maxEvaluations = maxEvaluations;
+        this.penalize_value = penalize_value;
         
         randomGenerator = JMetalRandom.getInstance();
         best_index = 0;
@@ -364,6 +361,7 @@ public class DECC_G implements Algorithm
     @Override
     public void run() 
     {
+       this.evaluations = 0;
        this.population = this.createInitialPopulation();
        
        this.evaluatePopulation(this.population);
@@ -375,7 +373,8 @@ public class DECC_G implements Algorithm
        
        while(!isStoppingConditionReached())
        {
-           
+           if(evaluations >=maxEvaluations)
+               System.out.println("fsjaf");
            List<Integer> index = this.randPerm(this.n);
            boolean load_missing_genes = false;
            //w_population.clear();
@@ -401,6 +400,8 @@ public class DECC_G implements Algorithm
                if(evaluationsToPerfom == 0) 
                    continue;
                
+               evaluations += evaluationsToPerfom;
+               
                SaNSDE sansde = sansdeBuilder
                                .setMaxEvaluations(evaluationsToPerfom)
                                .setProblem(subcomponent_problem_SaNSDE)
@@ -423,6 +424,8 @@ public class DECC_G implements Algorithm
                
             if(evaluationsToPerfom == 0) 
                 continue;
+            
+           evaluations += evaluationsToPerfom;
            
            DEFrobenius de = deFrobeniusBuilder
                                       .setMaxEvaluations(evaluationsToPerfom)
@@ -445,7 +448,7 @@ public class DECC_G implements Algorithm
                
             if(evaluationsToPerfom == 0) 
                 continue;
-           
+           evaluations += evaluationsToPerfom;
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
                 .setProblem(subcomponent_problem_DE)
@@ -464,6 +467,8 @@ public class DECC_G implements Algorithm
                
             if(evaluationsToPerfom == 0) 
                 continue;
+            
+            evaluations += evaluationsToPerfom;
            
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
@@ -480,8 +485,10 @@ public class DECC_G implements Algorithm
                this.multiply(worst_inidividual,  ans);
                population.set(worst_index, worst_inidividual);
            }
+           
            //this.evaluatePopulation(population);
        }
+        System.out.println("evaluations "+evaluations);
     }
     /**
      * Gets the best individual between two individuals, if they are equals
