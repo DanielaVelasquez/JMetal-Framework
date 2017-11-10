@@ -103,39 +103,7 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
 
         for (int i = 0; i < populationSize; i++) 
         {
-            DoubleSolution popul = population.get(i);
-            DoubleSolution offPopul = offspringPopulation.get(i);
-            int comparison = comparator.compare(popul, offPopul);
-            
-            if (comparison == 0) 
-            {
-                try
-                {
-                    double bPopul = (double) popul.getAttribute("B");
-                    double bOffPopul = (double) offPopul.getAttribute("B");
-                    
-                    if(bPopul <= bOffPopul)
-                    {
-                        pop.add(popul);
-                    }
-                    else
-                    {                        
-                        pop.add(offPopul);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    pop.add(popul);
-                }
-            } 
-            else if (comparison < 0)
-            {                
-                pop.add(popul);
-            }
-            else
-            {
-                pop.add(offPopul);
-            }
+            pop.add(getBest(population.get(i), offspringPopulation.get(i)));
         }
 
         Collections.sort(pop, comparator) ;
@@ -145,10 +113,19 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
   /**
    * Returns the best individual
    */
-  @Override public DoubleSolution getResult() {
-    Collections.sort(getPopulation(), comparator) ;
-
-    return getPopulation().get(0);
+  @Override 
+  public DoubleSolution getResult() 
+  {
+        DoubleSolution best = getPopulation().get(0);
+        for(int i = 1; i < populationSize; i++)
+        {
+            DoubleSolution s = this.getPopulation().get(i);
+            if(s.getObjective(0) == best.getObjective(0))
+            {
+                best = this.getBest(best, s);
+            }
+        }
+        return best;
   }
 
   @Override public String getName() {
@@ -158,4 +135,46 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
   @Override public String getDescription() {
     return "Differential Evolution Algorithm" ;
   }
+    
+    /**
+     * Gets the best individual between two individuals, if they are equals
+     * the firts indiviudal is return by default
+     * @param s1 first individual
+     * @param s2 seconde individual
+     * @return best individual between s1 and s2
+     */
+    private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
+    {
+        int comparison = comparator.compare(s1, s2);
+            
+        if (comparison == 0) 
+        {
+            try
+            {                
+                double bS1 = (double) s1.getAttribute("B");
+                double bS2 = (double) s2.getAttribute("B");
+
+                if(bS1 <= bS2)
+                {
+                    return s1;
+                }
+                else
+                {                        
+                    return s2;
+                }
+            }
+            catch(Exception ex)
+            {
+                return s1;
+            }
+        } 
+        else if (comparison < 0)
+        {                
+            return s1;
+        }
+        else
+        {
+            return s2;
+        }
+    }
 }
