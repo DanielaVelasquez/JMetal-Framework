@@ -13,20 +13,16 @@ import org.uma.jmetal.solution.Solution;
 
 public class DoubleSolutionSubcomponentDE implements DoubleSolution
 {
-    private double[] objectives;
     private double[] variables;
+    private DoubleSolution complete_solution;
     private SubcomponentDoubleProblemDE problem;
 
-    public DoubleSolutionSubcomponentDE(double[] objectives, double[] variables, SubcomponentDoubleProblemDE problem) {
-        this.objectives = objectives;
+    public DoubleSolutionSubcomponentDE(double[] variables, SubcomponentDoubleProblemDE problem,DoubleSolution complete_solution) {
         this.variables = variables;
         this.problem = problem;
+        this.complete_solution = complete_solution;
     }
 
-    
-    
-    
-    
     @Override
     public Double getLowerBound(int index) {
         
@@ -40,12 +36,12 @@ public class DoubleSolutionSubcomponentDE implements DoubleSolution
 
     @Override
     public void setObjective(int index, double value) {
-       objectives[index] = value ;
+       complete_solution.setObjective(index, value);
     }
 
     @Override
     public double getObjective(int index) {
-        return objectives[index];
+        return complete_solution.getObjective(index);
     }
 
     @Override
@@ -75,17 +71,27 @@ public class DoubleSolutionSubcomponentDE implements DoubleSolution
 
     @Override
     public Solution<Double> copy() {
-        return new DoubleSolutionSubcomponentDE(objectives, variables, problem);
+        return new DoubleSolutionSubcomponentDE(variables, problem, (DoubleSolution) complete_solution.copy());
     }
 
     @Override
     public void setAttribute(Object id, Object value) {
-      
+      complete_solution.setAttribute(id, value);
     }
 
     @Override
     public Object getAttribute(Object id) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      
+        return complete_solution.getAttribute(id);
     }
+
+    public DoubleSolution getCompleteSolution() {
+        return complete_solution;
+    }
+
+    public void setCompleteSolution(DoubleSolution complete_solution) {
+        this.complete_solution = complete_solution;
+    }
+    
     
 }

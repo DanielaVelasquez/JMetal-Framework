@@ -275,16 +275,16 @@ public class DECC_G implements Algorithm
         }
         return variables;
     }
-    private List<DoubleSolution> initWPopulation(int size, int variables)
-    {
-        List<DoubleSolution> s = new ArrayList<>();
-        for(int i = 0; i < size; i++)
-        {
-            DoubleSolutionSubcomponentDE solution = new DoubleSolutionSubcomponentDE(new double[1], new double[variables],subcomponent_problem_DE);
-            s.add(solution);
-        }
-        return s;
-    }
+//    private List<DoubleSolution> initWPopulation(int size, int variables)
+//    {
+//        List<DoubleSolution> s = new ArrayList<>();
+//        for(int i = 0; i < size; i++)
+//        {
+//            DoubleSolutionSubcomponentDE solution = new DoubleSolutionSubcomponentDE(new double[1], new double[variables],subcomponent_problem_DE);
+//            s.add(solution);
+//        }
+//        return s;
+//    }
     private double[] getObjectives(DoubleSolution s)
     {
         int size = s.getNumberOfObjectives();
@@ -296,19 +296,6 @@ public class DECC_G implements Algorithm
         return objectives;
     }
     
-    private void multiply(DoubleSolution original, DoubleSolution weight)
-    {
-        List<Integer> index = subcomponent_problem_DE.getIndex();
-        int i = 0;
-        for(Integer j:index)
-        {
-            double value = original.getVariableValue(j);
-            double newValue = weight.getVariableValue(i) * value;
-            original.setVariableValue(j, newValue);
-            i++;
-        }
-        this.copyObjectivesFrom(original, weight);
-    }
     private void chooseIndexWPopulation(int size)
     {
         List<Integer> index = new ArrayList<>();
@@ -399,12 +386,12 @@ public class DECC_G implements Algorithm
                List<DoubleSolution> subpopulation = this.copy(this.population);
                
                //ESTO DEBE CAMBIARSE PORQQUE AHORA SANSDE Y DE ESTAN POR CICLOS, PERO DESPUES SI VAN A SER POR EVALUAICONES
-               int evaluationsToPerfom = this.getPossibleEvaluations(FE*this.populationSize+this.populationSize);
+               int evaluationsToPerfom = this.getPossibleEvaluations(FE);
                
                if(evaluationsToPerfom == 0) 
                    continue;
                
-               evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
+               evaluations += evaluationsToPerfom;
                
                SaNSDE sansde = sansdeBuilder
                                .setMaxEvaluations(evaluationsToPerfom)
@@ -423,12 +410,12 @@ public class DECC_G implements Algorithm
            }
            this.findIndividuals();
            
-           int evaluationsToPerfom = this.getPossibleEvaluations(wFEs*this.populationSize + this.populationSize);
+           int evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
                
             if(evaluationsToPerfom == 0) 
                 continue;
             
-           evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
+           evaluations += evaluationsToPerfom;
            
            DEFrobenius de = deFrobeniusBuilder
                                       .setMaxEvaluations(evaluationsToPerfom)
@@ -440,18 +427,16 @@ public class DECC_G implements Algorithm
            this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
            subcomponent_problem_DE.setSolution(best_inidvidual);
            de.run();
-           DoubleSolution ans = de.getResult();
-           if(this.getBest(best_inidvidual, ans)==ans)
-           {
-               this.multiply(best_inidvidual, ans);
-               population.set(best_index, best_inidvidual);
-           }
+           DoubleSolution ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
+           ans = this.getBest(best_inidvidual, ans);
+           population.set(best_index, ans);
            
-           evaluationsToPerfom = this.getPossibleEvaluations(wFEs*this.populationSize + this.populationSize);
+           
+           evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
                
             if(evaluationsToPerfom == 0) 
                 continue;
-           evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
+           evaluations += evaluationsToPerfom;
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
                 .setProblem(subcomponent_problem_DE)
@@ -460,18 +445,16 @@ public class DECC_G implements Algorithm
            
            subcomponent_problem_DE.setSolution(random_inidividual);
            de.run();
-           ans = de.getResult();
-           if(this.getBest(random_inidividual, ans)==ans)
-           {
-               this.multiply(random_inidividual, ans);
-               population.set(random_index, random_inidividual);
-           }
-           evaluationsToPerfom = this.getPossibleEvaluations(wFEs*this.populationSize + this.populationSize);
+           ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
+           ans = this.getBest(best_inidvidual, ans);
+           population.set(random_index, ans);
+           
+           evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
                
             if(evaluationsToPerfom == 0) 
                 continue;
             
-            evaluations += evaluationsToPerfom*this.populationSize + this.populationSize;
+            evaluations += evaluationsToPerfom;
            
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
@@ -482,16 +465,11 @@ public class DECC_G implements Algorithm
            subcomponent_problem_DE.setSolution(worst_inidividual);
            de.run();
            
-           ans = de.getResult();
-           if(this.getBest(worst_inidividual, ans)==ans)
-           {
-               this.multiply(worst_inidividual,  ans);
-               population.set(worst_index, worst_inidividual);
-           }
+           ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
+           ans = this.getBest(best_inidvidual, ans);
+           population.set(worst_index, ans);
            
-           //this.evaluatePopulation(population);
        }
-        System.out.println("evaluations "+evaluations);
     }
     /**
      * Gets the best individual between two individuals, if they are equals
@@ -526,7 +504,6 @@ public class DECC_G implements Algorithm
     }
     @Override
     public DoubleSolution getResult() {
-        Collections.sort(getPopulation(), comparator) ;
         DoubleSolution best =  getPopulation().get(0);
         for(int i = 1; i < populationSize; i++)
         {

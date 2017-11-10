@@ -3,7 +3,8 @@ package org.uma.jmetal.problem.impl;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
+import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentDE;
+import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 
 public class SubcomponentDoubleProblemDE implements DoubleProblem
@@ -77,7 +78,8 @@ public class SubcomponentDoubleProblemDE implements DoubleProblem
         {
             double value = original_solution.getVariableValue(i);
             double newValue = value * solution.getVariableValue(j);
-            original_solution.setVariableValue(i, newValue);
+            if(newValue>=original_problem.getLowerBound(i) && newValue<=original_problem.getUpperBound(j))
+              original_solution.setVariableValue(i, newValue);
             j++;
         }
     }
@@ -85,20 +87,24 @@ public class SubcomponentDoubleProblemDE implements DoubleProblem
     @Override
     public void evaluate(DoubleSolution solution)
     {
-        DoubleSolution original_solution = (DoubleSolution) this.solution.copy();
+        DoubleSolutionSubcomponentDE s = (DoubleSolutionSubcomponentDE)solution;
+        s.setCompleteSolution((DoubleSolution) this.solution.copy());
+        DoubleSolution original_solution = s.getCompleteSolution();
         this.multiply(solution, original_solution);
         this.original_problem.evaluate(original_solution);
         
-        int objectives = original_solution.getNumberOfObjectives();
-        for(int k = 0; k < objectives; k++)
-        {
-            solution.setObjective(k, original_solution.getObjective(k));
-        }
         
     }
 
     @Override
     public DoubleSolution createSolution() {
-        return new DefaultDoubleSolution(this);
+        JMetalRandom randomGenerator = JMetalRandom.getInstance();
+        int size = index.size();
+        double[] variables = new double[size];
+        for(int i = 0; i < size; i++)
+        {
+            variables[i] = randomGenerator.nextDouble(LOWER_BOUND, UPPER_BOUND);
+        }
+        return new DoubleSolutionSubcomponentDE(variables,this, null);
     }
 }
