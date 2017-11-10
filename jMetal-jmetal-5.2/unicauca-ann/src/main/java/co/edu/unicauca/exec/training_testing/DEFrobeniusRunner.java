@@ -3,8 +3,11 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobenius;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -14,14 +17,14 @@ import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-public class DECCGRunner 
+public class DEFrobeniusRunner 
 {    
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
         
         DoubleProblem problem;
-        DECC_G algorithm;
+        DEFrobenius algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -46,21 +49,25 @@ public class DECCGRunner
         tt.getInputWeightsBiasFrom(result);
         System.out.println("Accuracy training: "+tt.train());*/
         
+        double cr = 0.5 ;
+        double f = 0.5 ;
+        crossover = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin") ;
+
+        selection = new DifferentialEvolutionSelection() ;
+        
         double train = -1.0;
         double test = -1.0;
+        double train_best = -1.0;
+        double test_best = -1.0;
         
         long initTime = System.currentTimeMillis();
         
         for(int i = 0; i < 1;i++)
         {
-            algorithm = new DECC_GBuilder(problem)
-                        .setPenalizeValue(1)
-                        .setMaxEvaluations(3000)
-                        .setPopulationSize(10)
-                        .setSubcomponets(10)
-                        .setFEs(70)
-                        .setwFes(100)
-                        .build();
+            algorithm =  new  DEFrobeniusBuilder(problem)
+                         .setPopulationSize(13)
+                         .setMaxEvaluations(3000)
+                         .build();
             rnd.setSeed(1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -68,16 +75,13 @@ public class DECCGRunner
 
               DoubleSolution solution = (DoubleSolution) algorithm.getResult();
               long computingTime = algorithmRunner.getComputingTime() ;
-
-              System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-              
-              System.out.println("evaluaciones: "+p.total);
+              System.out.println("----->"+p.total);
+              System.out.println("Total execution time: " + computingTime + "ms");
               train = (1-solution.getObjective(0));
               System.out.println("Objective "+train);
               
               test = p.test(solution);
-              
               System.out.println("Testing: "+test);
              
         }

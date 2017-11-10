@@ -18,9 +18,9 @@ import java.util.List;
 public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
   private int populationSize;
   private int maxEvaluations;
-  private SolutionListEvaluator<DoubleSolution> evaluator;
   private Comparator<DoubleSolution> comparator;
   private int evaluations;
+  private double penalize_value;
 
   /**
    * Constructor
@@ -34,13 +34,13 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
    */
   public DEFrobenius(DoubleProblem problem, int maxEvaluations, int populationSize,
       DifferentialEvolutionCrossover crossoverOperator,
-      DifferentialEvolutionSelection selectionOperator, SolutionListEvaluator<DoubleSolution> evaluator) {
+      DifferentialEvolutionSelection selectionOperator, double penalize_value) {
     setProblem(problem); ;
     this.maxEvaluations = maxEvaluations;
     this.populationSize = populationSize;
     this.crossoverOperator = crossoverOperator;
     this.selectionOperator = selectionOperator;
-    this.evaluator = evaluator;
+    this.penalize_value = penalize_value;
     comparator = new ObjectiveComparator<DoubleSolution>(0);
   }
   
@@ -53,28 +53,53 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
   }
 
   @Override protected void initProgress() {
-    evaluations = 1;//this.populationSize;
+    //evaluations = 1;//this.populationSize;
   }
 
   @Override protected void updateProgress() {
-    evaluations += 1;//this.populationSize;
+   // evaluations += 1;//this.populationSize;
   }
 
   @Override protected boolean isStoppingConditionReached() {
-    return evaluations > maxEvaluations;
+    return evaluations >= maxEvaluations;
   }
 
   @Override protected List<DoubleSolution> createInitialPopulation() {
-    List<DoubleSolution> population = new ArrayList<>(populationSize);
+    this.evaluations = 0;
+    if(getPopulation() !=null)
+        return this.getPopulation();
+      List<DoubleSolution> population = new ArrayList<>(populationSize);
     for (int i = 0; i < populationSize; i++) {
       DoubleSolution newIndividual = getProblem().createSolution();
       population.add(newIndividual);
     }
     return population;
   }
+  /**
+     * Sets an individual function value to a penalization value given by 
+     * the user
+     * @param solution solution to penalize with a bad function value
+     */
+    protected void penalize(DoubleSolution solution){
+        solution.setObjective(0, this.penalize_value);
+    }
 
   @Override protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-    return evaluator.evaluate(population, getProblem());
+    int i = 0;
+        int populationSize = population.size();
+        while(!isStoppingConditionReached() && i < populationSize)
+        {
+            DoubleSolution solution = population.get(i);
+            this.getProblem().evaluate(solution);
+            i++;
+            this.evaluations++;
+        }
+        for(int j = i; j < populationSize; j++)
+        {
+            DoubleSolution solution = population.get(i);
+            this.penalize(solution);
+        }
+        return population;
   }
 
   @Override protected List<DoubleSolution> selection(List<DoubleSolution> population) {

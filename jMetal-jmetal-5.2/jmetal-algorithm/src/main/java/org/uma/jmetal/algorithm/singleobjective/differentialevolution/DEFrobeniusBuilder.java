@@ -3,33 +3,31 @@ package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
-import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
-public class DEFrobeniusBuilder 
+public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
 {
   private DoubleProblem problem;
   private int populationSize;
   private int maxEvaluations;
   private DifferentialEvolutionCrossover crossoverOperator;
   private DifferentialEvolutionSelection selectionOperator;
-  private SolutionListEvaluator<DoubleSolution> evaluator;
+  private double penalize_value;
 
   public DEFrobeniusBuilder(DoubleProblem problem) {
     this.problem = problem;
     this.populationSize = 100;
-    this.maxEvaluations = 25000;
+    this.maxEvaluations = 3000;
     this.crossoverOperator = new DifferentialEvolutionCrossover(0.5, 0.5, "rand/1/bin");
     this.selectionOperator = new DifferentialEvolutionSelection();
-    this.evaluator = new SequentialSolutionListEvaluator<DoubleSolution>();
+    this.penalize_value = 0;
   }
   
   public DEFrobenius build() {
     return new DEFrobenius(problem, maxEvaluations, populationSize, crossoverOperator,
-        selectionOperator, evaluator);
+        selectionOperator, penalize_value);
   }
 
   public DEFrobeniusBuilder setPopulationSize(int populationSize) {
@@ -68,10 +66,8 @@ public class DEFrobeniusBuilder
     return this;
   }
 
-  public DEFrobeniusBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-    if(evaluator == null)
-      throw new JMetalException("evaluator can't be null");
-    this.evaluator = evaluator;
+  public DEFrobeniusBuilder setPenalizeValue(double penalize_value) {
+    this.penalize_value = penalize_value;
 
     return this;
   }
@@ -102,8 +98,8 @@ public class DEFrobeniusBuilder
     return selectionOperator;
   }
 
-  public SolutionListEvaluator<DoubleSolution> getSolutionListEvaluator() {
-    return evaluator;
+  public double getPenalizeValue() {
+    return penalize_value;
   }
 }
 
