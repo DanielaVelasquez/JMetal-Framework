@@ -183,7 +183,6 @@ public class DECC_G implements Algorithm
         {
             DoubleSolution solution = population.get(i);
             this.problem.evaluate(solution);
-            System.out.println("FE "+solution.getObjective(0));
             i++;
             this.updateProgress();
         }
@@ -359,6 +358,14 @@ public class DECC_G implements Algorithm
         return nextNumberEvaluations;
     }
     
+    private void imprimir()
+    {
+        for(DoubleSolution s:population)
+        {
+            System.out.println(""+s.getObjective(0)+" "+s.getAttribute("B"));
+        }
+    }
+    
     @Override
     public void run() 
     {
@@ -409,8 +416,10 @@ public class DECC_G implements Algorithm
                                .build();
                sansde.setPopulation(subpopulation);
                
-               
+               imprimir();
+               System.out.println("-----------------------");
                sansde.run();
+               imprimir();
                if(!load_missing_genes && missing_genes>0 && (j+1)==missing_genes)
                {
                    this.s = this.s + 1;

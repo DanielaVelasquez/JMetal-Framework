@@ -55,7 +55,6 @@ public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 
     @Override
     public void setVariableValue(int index, Double value) {
-        
         solution.setVariableValue(problem.getIndex(index), value);
     }
 
@@ -76,7 +75,7 @@ public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 
     @Override
     public Solution<Double> copy() {
-        return new DoubleSolutionSubcomponentSaNSDE((DoubleSolution) solution.copy(), problem);
+        return new DoubleSolutionSubcomponentSaNSDE((DoubleSolution) solution, problem);
     }
 
     @Override

@@ -80,7 +80,7 @@ public class DoubleSolutionSubcomponentDE implements DoubleSolution
 
     @Override
     public void setAttribute(Object id, Object value) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.uma.jmetal.problem.impl;
 
-import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentDE;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
