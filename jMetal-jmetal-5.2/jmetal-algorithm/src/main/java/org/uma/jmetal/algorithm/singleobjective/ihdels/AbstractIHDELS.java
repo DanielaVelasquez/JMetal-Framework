@@ -65,6 +65,18 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
      * Random generator
      */
     protected JMetalRandom randomGenerator ;
+    /**
+     * Number of evaluations for DE
+     */
+    protected int FE_DE;
+    /**
+     * Number of evaluations for a local search
+     */
+    protected int FE_LS;
+    /**
+     * Number of iterations before local search's probabilities are  updated
+     */
+    protected double frecLS;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -73,8 +85,9 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
     public void run() {
         this.population = this.createInitialPopulation();
         S initial_solution = this.createInitialSolution();
-        this.current_best = this.applyLS(initial_solution);
         this.defineProbabilities();
+        this.current_best = this.applyLS(initial_solution);
+        
         this.best = (S) this.current_best.copy();
         int countLS = 0;
         while(!isStoppingConditionReached())
