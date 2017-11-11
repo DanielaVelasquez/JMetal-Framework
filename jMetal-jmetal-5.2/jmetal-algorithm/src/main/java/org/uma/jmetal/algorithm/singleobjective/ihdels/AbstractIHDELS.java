@@ -8,7 +8,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorithm<S>
+public abstract class AbstractIHDELS <S extends Solution<?>,P extends Problem<S>>  implements Algorithm<S>
 {
     /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -65,6 +65,18 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
      * Random generator
      */
     protected JMetalRandom randomGenerator ;
+    /**
+     * Number of evaluations for DE
+     */
+    protected int FE_DE;
+    /**
+     * Number of evaluations for a local search
+     */
+    protected int FE_LS;
+    /**
+     * Number of iterations before local search's probabilities are  updated
+     */
+    protected double frecLS;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -73,8 +85,8 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
     public void run() {
         this.population = this.createInitialPopulation();
         S initial_solution = this.createInitialSolution();
-        this.current_best = this.applyLS(initial_solution);
-        this.defineProbabilities();
+        this.current_best = this.executeLocalSearches(initial_solution, population);
+        
         this.best = (S) this.current_best.copy();
         int countLS = 0;
         while(!isStoppingConditionReached())
@@ -115,16 +127,7 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
     public String getDescription() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    /**
-     * Define initial probabilities for local searhes
-     */
-    protected void defineProbabilities()
-    {
-        for(LocalSearch ls: this.local_searches)
-        {
-            ls.setProbability(1/this.numberLS);
-        }
-    }
+
     /**
      * Update number of evaluations performed
      */
@@ -182,7 +185,6 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
             S solution = population.get(i);
             this.penalize(solution);
         }
-        //TO-DO ¿Que hago con el resto de la población que no alcance a evaluar?
     }
     protected void penalize(S solution){
         solution.setObjective(0, this.penalize_value);
@@ -232,4 +234,12 @@ public abstract class AbstractIHDELS <S extends Solution<?>>  implements Algorit
      * @return 
      */
     protected abstract boolean restart();
+    /**
+     * Execute all local searches, all LS executes as inital params
+     * individual S and population
+     * @param from first individual
+     * @param population population to start 
+     * @return Best individual 
+     */
+    protected abstract S executeLocalSearches(S from, List<S> population);
 }

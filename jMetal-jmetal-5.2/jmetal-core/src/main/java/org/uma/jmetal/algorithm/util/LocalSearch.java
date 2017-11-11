@@ -2,35 +2,41 @@ package org.uma.jmetal.algorithm.util;
 
 import java.util.Comparator;
 import java.util.List;
+import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 
 public abstract class LocalSearch <S extends Solution<?>>
 {
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
+
     /**
-     * Probability to execute local search
+     * Ratio of improvement
      */
-    protected double probability;
+    protected double ratio;
     /**
-     * Local search improvement
+     * Algorithm builder which creates the algorithm with values on its
+     * variables
      */
-    protected double improvement;
-    
-    protected int FE;
+    protected AlgorithmBuilder builder;
+    /**
+     * Algorithm to execute
+     */
+    protected Algorithm algorithm;
+
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
-     
-    public double getProbability() {
-        return probability;
-    }
-
-    public void setProbability(double probability) {
-        this.probability = probability;
+    public void setRatio(double ratio) {
+        this.ratio = ratio;
     }
     
-    public abstract S evolve( S best, List<S> population,Problem p, Comparator c);
+    public double getRatio( ) {
+        return ratio;
+    }
+
+    public abstract S evolve(S best, List<S> population, Problem p, Comparator c);
 }

@@ -64,12 +64,8 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Maximun number of evaluations
      */
-    private int cycles;
+    private int maxEvaluations;
 
-    /**
-     * Problem's evaluator
-     */
-    private SolutionListEvaluator<DoubleSolution> evaluator;
     /**
      * Determines how a solution should be order
      */
@@ -81,7 +77,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Actual number of evaluations
      */
-    private int iteration;
+    private int evaluations;
     /**
      * Crossover rate self adaption
      */
@@ -92,6 +88,8 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     private List CRrec;
     
     private JMetalRandom randomGenerator ;
+    
+    private double penalize_value;
     
     /**-----------------------------------------------------------------------------------------
      * Methods
@@ -104,24 +102,24 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
      * @param crossoverOperator crossover operator with a crossover strategy 1
      * @param crossoverOperator2 crossover operator with a crossover strategy 2
      * @param selectionOperator operator for selection of individual's parent
-     * @param evaluator
      * @param comparator Determines how a solution should be order
+     * @param penalize_value value that must be assign to individual whent 
+     * it is run out of evaluations
      */
     public SaDE(DoubleProblem problem, int maxEvaluations, int populationSize,
         DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionCrossover crossoverOperator2, 
-        DifferentialEvolutionSelection selectionOperator, SolutionListEvaluator<DoubleSolution> evaluator,
-      Comparator<DoubleSolution> comparator)
+        DifferentialEvolutionSelection selectionOperator, 
+      Comparator<DoubleSolution> comparator,double penalize_value)
     {
         setProblem(problem);
-        this.cycles = maxEvaluations;
+        this.maxEvaluations = maxEvaluations;
         this.populationSize = populationSize;
         this.crossoverOperator = crossoverOperator;
         this.selectionOperator = selectionOperator;
-        this.evaluator = evaluator;
         this.crossoverOperator2 = crossoverOperator2;
         this.comparator = comparator;
         randomGenerator = JMetalRandom.getInstance();
-        
+        this.penalize_value = penalize_value;
         this.CRrec = new ArrayList();
         
         this.initVariables();
@@ -223,21 +221,22 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     protected void initProgress() {
-       iteration = 1;
+       //evaluations = 1;
     }
 
     @Override
     protected void updateProgress() {
-        iteration += 1;
+        //evaluations += 1;
     }
 
     @Override
     protected boolean isStoppingConditionReached() {
-        return iteration > cycles;
+        return evaluations >= maxEvaluations;
     }
 
     @Override
     protected List<DoubleSolution> createInitialPopulation() {
+        this.evaluations = 0;
         if(this.getPopulation()!=null)
             return this.getPopulation();
         List<DoubleSolution> population = new ArrayList<>(populationSize);
@@ -247,11 +246,32 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         return population;
     }
-
-    @Override
-    protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-        return evaluator.evaluate(population, getProblem());
+  /**
+     * Sets an individual function value to a penalization value given by 
+     * the user
+     * @param solution solution to penalize with a bad function value
+     */
+    protected void penalize(DoubleSolution solution){
+        solution.setObjective(0, this.penalize_value);
     }
+
+  @Override protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
+    int i = 0;
+        int populationSize = population.size();
+        while(!isStoppingConditionReached() && i < populationSize)
+        {
+            DoubleSolution solution = population.get(i);
+            this.getProblem().evaluate(solution);
+            i++;
+            this.evaluations++;
+        }
+        for(int j = i; j < populationSize; j++)
+        {
+            DoubleSolution solution = population.get(i);
+            this.penalize(solution);
+        }
+        return population;
+  }
 
     @Override
     protected List<DoubleSolution> selection(List<DoubleSolution> population) {
