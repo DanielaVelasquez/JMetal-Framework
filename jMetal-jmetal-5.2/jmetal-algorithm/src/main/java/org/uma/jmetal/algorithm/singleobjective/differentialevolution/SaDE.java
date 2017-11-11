@@ -102,13 +102,14 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
      * @param crossoverOperator crossover operator with a crossover strategy 1
      * @param crossoverOperator2 crossover operator with a crossover strategy 2
      * @param selectionOperator operator for selection of individual's parent
-     * @param evaluator
      * @param comparator Determines how a solution should be order
+     * @param penalize_value value that must be assign to individual whent 
+     * it is run out of evaluations
      */
     public SaDE(DoubleProblem problem, int maxEvaluations, int populationSize,
         DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionCrossover crossoverOperator2, 
         DifferentialEvolutionSelection selectionOperator, 
-      Comparator<DoubleSolution> comparator)
+      Comparator<DoubleSolution> comparator,double penalize_value)
     {
         setProblem(problem);
         this.maxEvaluations = maxEvaluations;
@@ -118,7 +119,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         this.crossoverOperator2 = crossoverOperator2;
         this.comparator = comparator;
         randomGenerator = JMetalRandom.getInstance();
-        
+        this.penalize_value = penalize_value;
         this.CRrec = new ArrayList();
         
         this.initVariables();
