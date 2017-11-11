@@ -61,8 +61,8 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
                         SaNSDE algorithm = new   SaNSDEBuilder(problem)
                                                             .setCrossover(new DifferentialEvolutionCrossover(cr1, f1, "rand/1/bin"))
                                                             .setCrossoverOperator2(new DifferentialEvolutionCrossover(cr2, f2, "current-to-best/1/bin"))
-                                                            .setPopulationSize(50)
-                                                            .setMaxEvaluations(60)
+                                                            .setPopulationSize(10)
+                                                            .setMaxEvaluations(3000)
                                                             .build();
                         new AlgorithmRunner.Executor(algorithm)
                         .execute() ;
