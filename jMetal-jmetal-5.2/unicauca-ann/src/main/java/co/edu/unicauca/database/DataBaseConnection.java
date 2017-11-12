@@ -25,6 +25,8 @@ public class DataBaseConnection
         String dbName = "DB_A2D155_elmExperiment1";
         String user = "DB_A2D155_elmExperiment1_admin";
         String password = "Experiment123";
+        
+        //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
         //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
         String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;loginTimeout=30;", hostName, dbName, user, password);        
 

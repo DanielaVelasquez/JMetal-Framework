@@ -50,14 +50,17 @@ public class Experiment
                 System.out.println("voy a pedir");
                 connection.modificacion("EXECUTE startTask @computerName = " + computador + ";");
                 System.out.println("reservé");
+                
                 ResultSet resultado = connection.seleccion("" +
-                        "       SELECT d.dat_name, a.alg_name, s.see_value, r.run_id, dt.dat_type_name\n" +
-                        "	FROM run r\n" +
-                        "		INNER JOIN algorithm a ON a.alg_id = r.alg_id\n" +
-                        "		INNER JOIN dataset d ON d.dat_id = r.dat_id\n" +
-                        "		INNER JOIN seed s ON s.see_id = r.see_id\n" +
-                        "		INNER JOIN datasettype dt ON dt.dat_type_id = r.dat_type_id\n" +
-                        "	WHERE r.run_pc = " + computador + " AND r.run_status = 1;");
+                        "       SELECT name_problem, name_algorithm, seed_executing, run_id_executing, name_type\n" +
+                        "	FROM executing\n" +
+                        "	INNER JOIN run ON run_id_executing = id_run\n" +
+                        "	INNER JOIN algorithm ON algorithm_run = id_algorithm\n" +
+                        "	INNER JOIN problem ON problem_run = id_problem\n" +
+                        "	INNER JOIN type ON type_run = id_type\n" +
+                        "	WHERE computer_executing = " + computador + " and executing_executing = 1;");               
+                                
+                
                 if(!resultado.next())
                 {
                     rta = "FINISHED";
@@ -76,8 +79,6 @@ public class Experiment
                     System.out.println("-----"+problema+"-----"+algoritmo+"-----"+semilla+"-----"+runId+"-----"+tipo);
                     JMetalRandom rndm = JMetalRandom.getInstance();
                     rndm.setSeed(semilla);
-
-                    System.out.println("------------" + auxAlg.getName() + " --- " + problema + " ---- " + semilla + " --- " + tipo);
                     AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(auxAlg).execute() ;
 
                     AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
@@ -85,28 +86,12 @@ public class Experiment
                     DoubleSolution solution = (DoubleSolution) auxAlg.getResult();
                     double resultadoExecTrain = (1 - solution.getObjective(0));
                     double resultadoExecTest = p.test(solution);
-                    
-                    String consulta = "SELECT * FROM results WHERE run_id = " + runId;
-                    ResultSet result = connection.seleccion(consulta);
-                    if(!result.next())
-                    {
-                        String insertResultado = "INSERT INTO results VALUES(" + runId + ", " + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ");"
-                                               + "UPDATE run SET run_status = 2 WHERE run_id = " + runId + ";";
-                        connection.modificacion(insertResultado);
-                        System.out.println("******"+insertResultado);
-                    }
+                    String insertResultado = "INSERT INTO results VALUES(" + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ", " + runId + ", " + semilla + ")";
+                    connection.modificacion(insertResultado);
                 }
             }
             catch(Exception ex)
             {
-                String insertResultado = "UPDATE run SET run_status = 3 WHERE run_id = " + runId + ";";
-                try
-                {
-                    connection.modificacion(insertResultado);
-                }
-                catch(Exception e)
-                {                    
-                }
                 System.out.println(ex.getMessage());
             }
         }

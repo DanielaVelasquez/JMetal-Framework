@@ -35,7 +35,7 @@ public class SaNSDERunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Banknote";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -65,7 +65,7 @@ public class SaNSDERunner
             algorithm =  new  SaNSDEBuilder(problem)
                          .setMaxEvaluations(3000)
                          .build();
-            rnd.setSeed(1);
+            rnd.setSeed(2);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
