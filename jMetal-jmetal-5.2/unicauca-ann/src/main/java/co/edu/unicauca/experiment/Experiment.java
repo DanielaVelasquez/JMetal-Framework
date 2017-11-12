@@ -49,7 +49,9 @@ public class Experiment
             try
             {
                 connection = DataBaseConnection.getInstancia();
+                System.out.println("voy a pedir");
                 connection.modificacion("EXECUTE startTask @computerName = " + computador + ";");
+                System.out.println("reservé");
                 ResultSet resultado = connection.seleccion("" +
                         "       SELECT d.dat_name, a.alg_name, s.see_value, r.run_id, dt.dat_type_name\n" +
                         "	FROM run r\n" +
