@@ -32,7 +32,7 @@ public class Experiment
     
     public static void main(String[] args) {
         Experiment exp = new Experiment();
-        exp.correr(2);
+        exp.correr(3);
     }
     
     public void correr(int computador)
@@ -73,6 +73,7 @@ public class Experiment
                     String nombreProblema = "co.edu.unicauca.problem." + (tipo.equals("cv")? "cross_validation":"training_testing") + "." + problema;
                     DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(nombreProblema);
                     Algorithm auxAlg = retornarAlgoritmo(algoritmo, tipo, problem);
+                    System.out.println("-----"+problema+"-----"+algoritmo+"-----"+semilla+"-----"+runId+"-----"+tipo);
                     JMetalRandom rndm = JMetalRandom.getInstance();
                     rndm.setSeed(semilla);
                     AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(auxAlg).execute() ;
