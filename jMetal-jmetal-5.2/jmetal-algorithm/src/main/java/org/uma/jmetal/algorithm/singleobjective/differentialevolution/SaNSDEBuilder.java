@@ -59,7 +59,7 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
 
   public SaNSDEBuilder setCrossover(DifferentialEvolutionCrossover crossover) {
     if(crossover == null)
-            throw new JMetalException("crossover can't be null");
+        throw new JMetalException("crossover can't be null");
     this.crossoverOperator = crossover;
 
     return this;
