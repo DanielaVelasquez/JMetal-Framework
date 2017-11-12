@@ -111,6 +111,10 @@ public class ELM {
      * Method calculates moore-penrose pseudoinverse
      */
     private AbstractMoorePenroseMethod inverse;
+    /**
+     * Determinate if ELM was trained
+     */
+    private boolean trained;
 
 
     /**
@@ -148,7 +152,8 @@ public class ELM {
      * they will be randomly assigned
      */
     public void train() {
-
+           
+        trained = false;
             /**
              * In case the input weights is not defined in the ELM they will be
              * randomly assigned
@@ -177,13 +182,12 @@ public class ELM {
 
                 DenseMatrix T = calculate_output(H, number_data);
                 accuracy = evaluate(tabular, T);
+                trained = true;
             }
             catch(Exception ex)
             {
                 accuracy = 0;
             }
-
-        
     }
 
 
@@ -192,9 +196,16 @@ public class ELM {
      */
     public void test() {
         //Get output matrix from hidden layer
-        DenseMatrix H = calculateH(X);
-        DenseMatrix T = calculate_output(H, number_data);
-        accuracy = evaluate(tabular, T);
+        if(trained)
+        {
+            DenseMatrix H = calculateH(X);
+            DenseMatrix T = calculate_output(H, number_data);
+            accuracy = evaluate(tabular, T);
+        }
+        else
+        {
+            accuracy = 0;
+        }
     }
 
     /**

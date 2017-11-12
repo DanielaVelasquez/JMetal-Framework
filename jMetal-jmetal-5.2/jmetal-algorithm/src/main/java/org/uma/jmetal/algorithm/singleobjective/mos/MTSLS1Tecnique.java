@@ -36,7 +36,7 @@ public class MTSLS1Tecnique extends Tecnique
         }
         else
         {
-            algorithm = ((MultipleTrajectorySearchBuilder)builder)
+            algorithm = ((MTS_LS1Builder)builder)
                             .setMaxEvaluations(FE)
                             .setDefaultPopulation(null)
                             .build();
