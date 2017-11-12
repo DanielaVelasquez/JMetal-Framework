@@ -4,7 +4,7 @@ import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.randomsearch.RandomSearchBuilder;
+import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
@@ -16,7 +16,6 @@ import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
-import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearch;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -40,7 +39,7 @@ public class Experiment
         String problema;
         String algoritmo;
         int semilla;
-        int runId;
+        int runId = -1;
         String tipo;
         
         while(!rta.equals("FINISHED"))
@@ -77,11 +76,12 @@ public class Experiment
                     System.out.println("-----"+problema+"-----"+algoritmo+"-----"+semilla+"-----"+runId+"-----"+tipo);
                     JMetalRandom rndm = JMetalRandom.getInstance();
                     rndm.setSeed(semilla);
-                    long initTime = System.currentTimeMillis();
-                    auxAlg.run();
-                    //AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(auxAlg).execute() ;
+
+                    System.out.println("------------" + auxAlg.getName() + " --- " + problema + " ---- " + semilla + " --- " + tipo);
+                    AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(auxAlg).execute() ;
+
                     AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-                    long computingTime = System.currentTimeMillis() - initTime;
+                    long computingTime = algorithmRunner.getComputingTime();
                     DoubleSolution solution = (DoubleSolution) auxAlg.getResult();
                     double resultadoExecTrain = (1 - solution.getObjective(0));
                     double resultadoExecTest = p.test(solution);
@@ -99,6 +99,14 @@ public class Experiment
             }
             catch(Exception ex)
             {
+                String insertResultado = "UPDATE run SET run_status = 3 WHERE run_id = " + runId + ";";
+                try
+                {
+                    connection.modificacion(insertResultado);
+                }
+                catch(Exception e)
+                {                    
+                }
                 System.out.println(ex.getMessage());
             }
         }
@@ -316,7 +324,7 @@ public class Experiment
                     break;
                     
                 case "Random":
-                    algAux = new RandomSearchBuilder<>(problem)
+                    algAux = new RandomSearchBuilder(problem)
                         .setMaxEvaluations(3000)
                         .build();
                     break;

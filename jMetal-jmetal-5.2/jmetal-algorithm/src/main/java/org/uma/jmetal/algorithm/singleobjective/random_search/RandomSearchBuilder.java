@@ -6,7 +6,7 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
-public class RandomSearchBuild <S extends Solution<?>,P extends Problem<S>>
+public class RandomSearchBuilder <S extends Solution<?>,P extends Problem<S>>
 {
      /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -33,7 +33,7 @@ public class RandomSearchBuild <S extends Solution<?>,P extends Problem<S>>
      * Methods
      *-----------------------------------------------------------------------------------------*/
     
-    public RandomSearchBuild(P problem)
+    public RandomSearchBuilder(P problem)
     {
         this.problem  = problem;
         this.maxEvaluations = 3000;
@@ -45,7 +45,7 @@ public class RandomSearchBuild <S extends Solution<?>,P extends Problem<S>>
         return problem;
     }
 
-    public RandomSearchBuild setProblem(P problem) {
+    public RandomSearchBuilder setProblem(P problem) {
         if(problem == null)
             throw new JMetalException("Problem can`t be null");
         this.problem = problem;
@@ -56,7 +56,7 @@ public class RandomSearchBuild <S extends Solution<?>,P extends Problem<S>>
         return comparator;
     }
 
-    public RandomSearchBuild setComparator(Comparator<S> comparator) {
+    public RandomSearchBuilder setComparator(Comparator<S> comparator) {
         if(comparator == null)
             throw new JMetalException("Comparator can`t be null");
         this.comparator = comparator;
@@ -67,7 +67,7 @@ public class RandomSearchBuild <S extends Solution<?>,P extends Problem<S>>
         return maxEvaluations;
     }
 
-    public RandomSearchBuild setMaxEvaluations(int maxEvaluations) {
+    public RandomSearchBuilder setMaxEvaluations(int maxEvaluations) {
         if(maxEvaluations <= 0)
             throw new JMetalException("maxEvaluations must be a positive number greater than 0");
         this.maxEvaluations = maxEvaluations;
@@ -78,7 +78,7 @@ public class RandomSearchBuild <S extends Solution<?>,P extends Problem<S>>
         return penalize_value;
     }
 
-    public RandomSearchBuild setPenalize_value(double penalize_value) {
+    public RandomSearchBuilder setPenalize_value(double penalize_value) {
         this.penalize_value = penalize_value;
         return this;
     }

@@ -4,7 +4,7 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearch;
-import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuild;
+import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -40,7 +40,7 @@ public class RandomSearchRunner
         
         for(int i = 0; i < ITERATIONS;i++)
         {
-            algorithm =  new  RandomSearchBuild(problem).build();
+            algorithm =  new  RandomSearchBuilder(problem).build();
             rnd.setSeed(1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
