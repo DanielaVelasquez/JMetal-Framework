@@ -56,8 +56,8 @@ public class DEFrobeniusParameterAdjust extends ParametersAdjust
                     {
                         DifferentialEvolutionCrossover crossoverOperator = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin");
                         DEFrobenius algorithm = new   DEFrobeniusBuilder(problem)
-                                                            .setPopulationSize(50)
-                                                            .setMaxEvaluations(60)
+                                                            .setPopulationSize(10)
+                                                            .setMaxEvaluations(3000)
                                                             .setCrossover(crossoverOperator)
                                                             .build();
                         new AlgorithmRunner.Executor(algorithm)

@@ -20,7 +20,7 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
     this.problem = problem;
     this.populationSize = 100;
     this.maxEvaluations = 3000;
-    this.crossoverOperator = new DifferentialEvolutionCrossover(0.5, 0.5, "rand/1/bin");
+    this.crossoverOperator = new DifferentialEvolutionCrossover(0.5, 0.6, "rand/1/bin");
     this.selectionOperator = new DifferentialEvolutionSelection();
     this.penalize_value = 0;
   }

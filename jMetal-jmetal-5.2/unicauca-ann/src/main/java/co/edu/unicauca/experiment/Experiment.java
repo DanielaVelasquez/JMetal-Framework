@@ -171,7 +171,7 @@ public class Experiment
                         .setPopulationSize(10)
                         .setMaxEvaluations(600)
                         .setPenalizeValue(1)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
+                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.6, "rand/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;
@@ -295,7 +295,7 @@ public class Experiment
                         .setPopulationSize(10)
                         .setMaxEvaluations(3000)
                         .setPenalizeValue(1)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
+                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.6, "rand/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;
