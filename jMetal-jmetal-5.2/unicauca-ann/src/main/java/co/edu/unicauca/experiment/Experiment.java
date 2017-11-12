@@ -31,7 +31,7 @@ public class Experiment
     
     public static void main(String[] args) {
         Experiment exp = new Experiment();
-        exp.correr(8);
+        exp.correr(3);
     }
     
     public void correr(int computador)
@@ -48,7 +48,9 @@ public class Experiment
             try
             {
                 connection = DataBaseConnection.getInstancia();
+                System.out.println("voy a pedir");
                 connection.modificacion("EXECUTE startTask @computerName = " + computador + ";");
+                System.out.println("reservé");
                 ResultSet resultado = connection.seleccion("" +
                         "       SELECT d.dat_name, a.alg_name, s.see_value, r.run_id, dt.dat_type_name\n" +
                         "	FROM run r\n" +
@@ -72,6 +74,7 @@ public class Experiment
                     String nombreProblema = "co.edu.unicauca.problem." + (tipo.equals("cv")? "cross_validation":"training_testing") + "." + problema;
                     DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(nombreProblema);
                     Algorithm auxAlg = retornarAlgoritmo(algoritmo, tipo, problem);
+                    System.out.println("-----"+problema+"-----"+algoritmo+"-----"+semilla+"-----"+runId+"-----"+tipo);
                     JMetalRandom rndm = JMetalRandom.getInstance();
                     rndm.setSeed(semilla);
                     System.out.println("------------" + auxAlg.getName() + " --- " + problema + " ---- " + semilla + " --- " + tipo);
