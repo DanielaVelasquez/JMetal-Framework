@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.multiobjective.randomsearch.RandomSearchBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobenius;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
@@ -78,9 +77,11 @@ public class Experiment
                     System.out.println("-----"+problema+"-----"+algoritmo+"-----"+semilla+"-----"+runId+"-----"+tipo);
                     JMetalRandom rndm = JMetalRandom.getInstance();
                     rndm.setSeed(semilla);
-                    AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(auxAlg).execute() ;
+                    long initTime = System.currentTimeMillis();
+                    auxAlg.run();
+                    //AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(auxAlg).execute() ;
                     AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-                    long computingTime = algorithmRunner.getComputingTime();
+                    long computingTime = System.currentTimeMillis() - initTime;
                     DoubleSolution solution = (DoubleSolution) auxAlg.getResult();
                     double resultadoExecTrain = (1 - solution.getObjective(0));
                     double resultadoExecTest = p.test(solution);
@@ -92,6 +93,7 @@ public class Experiment
                         String insertResultado = "INSERT INTO results VALUES(" + runId + ", " + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ");"
                                                + "UPDATE run SET run_status = 2 WHERE run_id = " + runId + ";";
                         connection.modificacion(insertResultado);
+                        System.out.println("******"+insertResultado);
                     }
                 }
             }
