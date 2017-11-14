@@ -28,7 +28,7 @@ public class DataBaseConnection
         
         //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
         //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
-        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;loginTimeout=30;", hostName, dbName, user, password);        
+        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;", hostName, dbName, user, password);        
 
         try {
                 connection = DriverManager.getConnection(url);
