@@ -30,7 +30,7 @@ public class Experiment
     
     public static void main(String[] args) {
         Experiment exp = new Experiment();
-        exp.correr(5);
+        exp.correr(78);
     }
     
     public void correr(int computador)
