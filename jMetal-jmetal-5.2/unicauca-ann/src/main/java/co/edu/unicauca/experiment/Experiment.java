@@ -58,7 +58,7 @@ public class Experiment
                         "	INNER JOIN algorithm ON algorithm_run = id_algorithm\n" +
                         "	INNER JOIN problem ON problem_run = id_problem\n" +
                         "	INNER JOIN type ON type_run = id_type\n" +
-                        "	WHERE computer_executing = " + computador + " and executing_executing = 1;");               
+                        "	WHERE computer_executing = " + computador + " and executing_executing = 1;"); 
                                 
                 
                 if(!resultado.next())
