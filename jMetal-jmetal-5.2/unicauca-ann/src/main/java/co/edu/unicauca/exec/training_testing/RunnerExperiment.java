@@ -15,7 +15,7 @@ import java.io.IOException;
 public class RunnerExperiment extends TrainingTestingExperiment{
     
     public RunnerExperiment() throws IOException {
-        super("co.edu.unicauca.problem.training_testing.Haberman");
+        super("co.edu.unicauca.problem.training_testing.Libras");
     }
     public static void main(String[] args) throws Exception 
     {

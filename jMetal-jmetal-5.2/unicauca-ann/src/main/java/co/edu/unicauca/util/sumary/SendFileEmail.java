@@ -7,8 +7,8 @@ import javax.activation.*;
 
 public class SendFileEmail {
 
-    final String username = "pusildaniel@gmail.com";
-    final String password = "daniel320TkD";
+    final String username = "";
+    final String password = "";
     // Recipient's email ID needs to be mentioned.
     final String to = "danielpusil@unicauca.edu.co";
     final String from = "pusildaniel@gmail.com";

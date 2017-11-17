@@ -286,30 +286,36 @@ public class DECC_G implements Algorithm
     @Override
     public void run() 
     {
-       if(this.population == null)
-        this.population = this.createInitialPopulation();
+       //if(this.population == null)
+       this.population = this.createInitialPopulation();
        
        this.evaluatePopulation(this.population);
        this.n = population.get(0).getNumberOfVariables();
        this.s = this.n / (int)this.subcomponent;
        //AbstractELMEvaluator p = (AbstractELMEvaluator) problem;
        //this.subcomponent = (double)this.n/(double)this.s;
-       
+       int missing_genes = (int) (this.n - (this.s * this.subcomponent));
        subcomponent_problem_DE = new SubcomponentDoubleProblemDE(problem);
        //w_population = this.initWPopulation(populationSize, (int) Math.ceil(subcomponent));
        
        //subcomponent_problem = new 
        for(int i = 0; i < this.cycles; i++)
        {
+           
            List<Integer> index = this.randPerm(this.n);
+           boolean load_missing_genes = false;
            //w_population.clear();
+           int l = 0;
+           int u = -1;
            for(int j = 0; j < subcomponent; j++)
-           {
-               int l = j * this.s;
-               int u = ((j+1) * s) - 1;
+           {  
+               l = u + 1;
+               u = l + this.s - 1;
                
-               if(u>n)
-                   u = n - 1;
+               if(u> this.n)
+               {
+                   u = this.n - 1;
+               }
                
                List<Integer> sublist = index.subList(l, u + 1);
                subcomponent_problem_SaNSDE = new SubcomponentDoubleProblemSaNSDE(sublist,problem);
@@ -324,6 +330,12 @@ public class DECC_G implements Algorithm
                //randomWeight(this.w_population, j); //TODO los valores que se creen deben cuplir con las restricciones del problema original!!!!
                this.replaceInPopulation(subpopulation, l, u,index);
                //this.evaluatePopulation(population);
+               
+               if(!load_missing_genes && missing_genes>0 && (j+1)==missing_genes)
+               {
+                   this.s = this.s + 1;
+                   load_missing_genes = true;
+               }
            }
            this.findIndividuals();
            

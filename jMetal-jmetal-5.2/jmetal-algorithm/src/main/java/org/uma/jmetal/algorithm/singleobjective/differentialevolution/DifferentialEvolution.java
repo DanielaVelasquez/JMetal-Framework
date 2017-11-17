@@ -86,7 +86,7 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
   }
 
   @Override protected boolean isStoppingConditionReached() {
-    return evaluations >= maxEvaluations;
+    return evaluations > maxEvaluations;
   }
 
   @Override protected List<DoubleSolution> createInitialPopulation() {
