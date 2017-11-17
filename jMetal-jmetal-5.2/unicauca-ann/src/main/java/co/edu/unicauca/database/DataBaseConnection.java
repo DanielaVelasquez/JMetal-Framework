@@ -1,18 +1,17 @@
-package co.edu.unicauca.azure;
+package co.edu.unicauca.database;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
 
-public class ConectaBD 
+public class DataBaseConnection 
 {
     private Connection connection;
-    private static ConectaBD instancia;
+    private static DataBaseConnection instancia;
     
     //constructor privado se hace uso del patron singleton
-    private ConectaBD()
+    private DataBaseConnection()
     {
         
     }
@@ -21,18 +20,19 @@ public class ConectaBD
     //Retorna un objeto de tipo Connection y lanza una exception si no logra conectarse
     public void conectar() 
     {
-
         // Connect to database
-        String hostName = "elm-experiment.database.windows.net";
-        String dbName = "elm-experiment";
-        String user = "elm";
-        String password = "e42-6yh-upd-prs";
-        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
+        String hostName = "sql7001.site4now.net";
+        String dbName = "DB_A2D155_experimento";
+        String user = "DB_A2D155_experimento_admin";
+        String password = "Experimento123";
         
+        //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
+        //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
+        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;", hostName, dbName, user, password);        
 
         try {
                 connection = DriverManager.getConnection(url);
-                String schema = connection.getSchema();
+                //String schema = connection.getSchema();
                 /*System.out.println("Successful connection - Schema: " + schema);
 
                 System.out.println("Query data example:");
@@ -59,11 +59,11 @@ public class ConectaBD
     }
     
     //Metodo que obtiene la unica instancia creada del objeto, se declara estatica
-    public static ConectaBD getInstancia() throws Exception
+    public static DataBaseConnection getInstancia() throws Exception
     {
         if (instancia == null)
         {
-            instancia = new ConectaBD();
+            instancia = new DataBaseConnection();
             
             try
             {

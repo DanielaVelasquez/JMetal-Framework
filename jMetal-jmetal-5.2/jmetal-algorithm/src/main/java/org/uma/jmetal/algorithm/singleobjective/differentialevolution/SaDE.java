@@ -1,19 +1,21 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import org.uma.jmetal.algorithm.impl.AbstractDifferentialEvolution;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 
-public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
+public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
 {
     /**-------------------------------------------------------------------------z----------------
      * Constants
@@ -25,15 +27,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Standar deviation used for getting next gaussian value - it is use for calculating f value 
      */
-    private final static double STANDAR_DEVIATION = 0.5;
-    /**
-     * Location parameter for cauchy distribution - it is use for calculating f value 
-     */
-    private final static double X0 = 0;
-    /**
-     * Scale parameter for cauchy distribution - it is use for calculating f value 
-     */
-    private final static double Y_F = 1;
+    private final static double STANDAR_DEVIATION = 0.3;    
     /**
      * Scale parameter for cauchy distribution - it is use for calculating crossover rate value for an individual
      */
@@ -64,26 +58,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      **/
     private int nf2;
     /**
-     * Probability to control wich distribution (Gaussian or Cauchy) use for calculating F in a generation
-     */
-    private double fp;
-    /**
-     * Number of individuals using gaussian distribution in a generation
-     */
-    private int fp_ns1;
-    /**
-     * Number of individuals using cauchy distribution in a generation
-     */
-    private int fp_ns2;
-    /**
-     * Number of individual discarded using gaussian distribution in a generation
-     */
-    private int fp_nf1;
-    /**
-     * Number of individual discarded using cauchy distribution in a generation
-     */
-    private int fp_nf2;
-    /**
      * Populition's size
      */
     private int populationSize;
@@ -103,7 +77,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Actual number of evaluations
      */
-    private int iteration;
+    private int evaluations;
     /**
      * Crossover rate self adaption
      */
@@ -112,17 +86,8 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * Succesful crossover rate used
      */
     private List CRrec;
-    /**
-     * Improvement of fitness value between an indivual from population an a new child in a generation
-     * frec(k) = f(k) - f_new(k)
-     */
-    private List frec;
-    /**
-     * Total of improvement values in a generation
-     */
-    private double sum_frec;
     
-    private final JMetalRandom randomGenerator ;
+    private JMetalRandom randomGenerator ;
     
     private double penalize_value;
     
@@ -137,10 +102,11 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * @param crossoverOperator crossover operator with a crossover strategy 1
      * @param crossoverOperator2 crossover operator with a crossover strategy 2
      * @param selectionOperator operator for selection of individual's parent
-     * @param penalize_value value to penalize a solution if evaluation run out
      * @param comparator Determines how a solution should be order
+     * @param penalize_value value that must be assign to individual whent 
+     * it is run out of evaluations
      */
-    public SaNSDE(DoubleProblem problem, int maxEvaluations, int populationSize,
+    public SaDE(DoubleProblem problem, int maxEvaluations, int populationSize,
         DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionCrossover crossoverOperator2, 
         DifferentialEvolutionSelection selectionOperator, 
       Comparator<DoubleSolution> comparator,double penalize_value)
@@ -155,8 +121,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         randomGenerator = JMetalRandom.getInstance();
         this.penalize_value = penalize_value;
         this.CRrec = new ArrayList();
-        this.frec = new ArrayList();
-        this.sum_frec = 0;
         
         this.initVariables();
     }
@@ -166,20 +130,11 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     private void initVariables()
     {
         this.p = 0.5;
-        this.fp = 0.5;
         this.CRm = 0.5;
         ns1 = 0;
         ns2 = 0;
         nf1 = 0;
-        nf2 = 0;
-        
-        fp_ns1 = 0;
-        fp_ns2 = 0;
-        fp_nf1 = 0;
-        fp_nf2 = 0;
-        
-        this.iteration = 0;
-        
+        nf2 = 0;        
     }
     /**
      * Updates p value according to the number of individuals using crossover 
@@ -199,51 +154,22 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         nf1 = 0;
         nf2 = 0;
     }
-    /**
-     * Updates fp value according to the number of individuals using gaussian 
-     * and cauchy distribution and indivuals discarded using gaussian and 
-     * cauchy distribution
-     */
-    private void updateFP()
-    {
-        int num = (fp_ns1*(fp_ns2+fp_nf2));
-        int den = (fp_ns2*(fp_ns1+fp_nf1)+fp_ns1*(fp_ns2+fp_nf2));
-        /*if(num!=0 && den != 0)
-        {*/
-        fp = (double) num / (double) den;
-        //}
-        
-        fp_ns1 = 0;
-        fp_ns2 = 0;
-        fp_nf1 = 0;
-        fp_nf2 = 0;
-    }
+    
     /**
      * Calculates scale factor for an individual in the current generation
-     * Counts if scale factor value was calculated using gaussian or cauchy
-     * distribution
+     * This value is calculated using gaussian distribution
      * @return scale factor value for i-th indiviual
      */
     private double calculateF()
     {
-        double u = randomGenerator.nextDouble(0, 1);
-        RandomDistribution distributionRnd = RandomDistribution.getInstance();
-        if(u < fp)
-        {
-            fp_ns1++;
-            fp_nf2++;
-            return distributionRnd.nextGaussian(MEAN, STANDAR_DEVIATION);
-        }
-        else
-        {
-            fp_ns2++;
-            fp_nf1++;
-            return distributionRnd.nextCauchy(X0, Y_F);
-        }
+        RandomDistribution distributionRnd = RandomDistribution.getInstance();        
+        return distributionRnd.nextGaussian(MEAN, STANDAR_DEVIATION);
     }
+    
     /**
      * Calculates crossover rate for i-th individual in currrent generation
-     * it use gaussian distribution between CRm value and 
+     * it use gaussian distribution between CRm value and a standar deviation
+     * In our case the SD is defined in constant Y_CR
      * @return crossover rate
      */
     private double calculateCR()
@@ -261,9 +187,9 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         CRm = 0;
         for(int i = 0; i < size; i++)
         {
-            double wk = (double) frec.get(i) /(double) sum_frec;
-            CRm += wk * (double) CRrec.get(i);
+            CRm += (double) CRrec.get(i);
         }
+        CRm = (CRm / size);
     }
     /**
      * Calculate sum of objectives value from a solution
@@ -295,22 +221,22 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     protected void initProgress() {
-       iteration = iteration;
+       //evaluations = 1;
     }
 
     @Override
     protected void updateProgress() {
-        //iteration += 1;
+        //evaluations += 1;
     }
 
     @Override
     protected boolean isStoppingConditionReached() {
-        return iteration >= maxEvaluations;
+        return evaluations >= maxEvaluations;
     }
 
     @Override
     protected List<DoubleSolution> createInitialPopulation() {
-        this.iteration  = 0;
+        this.evaluations = 0;
         if(this.getPopulation()!=null)
             return this.getPopulation();
         List<DoubleSolution> population = new ArrayList<>(populationSize);
@@ -320,7 +246,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         return population;
     }
-   /**
+  /**
      * Sets an individual function value to a penalization value given by 
      * the user
      * @param solution solution to penalize with a bad function value
@@ -329,16 +255,15 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         solution.setObjective(0, this.penalize_value);
     }
 
-    @Override
-    protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-        int i = 0;
+  @Override protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
+    int i = 0;
         int populationSize = population.size();
         while(!isStoppingConditionReached() && i < populationSize)
         {
             DoubleSolution solution = population.get(i);
             this.getProblem().evaluate(solution);
             i++;
-            this.iteration++;
+            this.evaluations++;
         }
         for(int j = i; j < populationSize; j++)
         {
@@ -346,7 +271,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             this.penalize(solution);
         }
         return population;
-    }
+  }
 
     @Override
     protected List<DoubleSolution> selection(List<DoubleSolution> population) {
@@ -359,8 +284,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         List<DoubleSolution> offspringPopulation = new ArrayList<>();
         //Start improvement of fitness and crossoer rate values for current generation
         CRrec = new ArrayList();
-        frec = new ArrayList();
-        sum_frec = 0;
         
         for (int i = 0; i < populationSize; i++)
         {
@@ -395,17 +318,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
           }
           //Adds the best children
           offspringPopulation.add(children.get(0));
-          //Calculates improvement of fitness between the i-th indiviual and its best child
-          double frec_k = calculateSumObjectives(matingPopulation.get(i)) - calculateSumObjectives(children.get(0));
-          frec.add(frec_k);
-          sum_frec += frec_k;
           //Adds the crossover rate value used
           CRrec.add(cr);
         }
         //As P, FP and CR are auto adaptative they are re calculated accoring to the current generation 
         //values and perfomance
         this.updateP();
-        this.updateFP();
         this.updateCR();
         return offspringPopulation;
     }
@@ -445,7 +363,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                 int n = this.getProblem().getNumberOfVariables();
                 for(int i = 0; i < n; i++)
                 {
-                    if(Objects.equals(s.getVariableValue(i), individual.getVariableValue(i)))
+                    if(s.getVariableValue(i) == individual.getVariableValue(i))
                     {
                         if(i== n-1)
                             return true;
@@ -467,7 +385,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
         int comparison = comparator.compare(s1, s2);
-        
         if(comparison == 0)
         {
             try
@@ -475,13 +392,9 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                 double b_s1 = (double) s1.getAttribute("B");
                 double b_s2 = (double) s2.getAttribute("B");
                 if(b_s1 <= b_s2)
-                {
                     return s1;
-                }
                 else
-                {
                     return s2;
-                }
             }
             catch(Exception e)
             {
@@ -489,17 +402,13 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             }
         }
         else if(comparison < 0)
-        {
             return s1;
-        }
         else
-        {
             return s2;
-        }
     }
     @Override
-    public DoubleSolution getResult() 
-    {
+    public DoubleSolution getResult() {
+        Collections.sort(getPopulation(), comparator) ;
         DoubleSolution best =  getPopulation().get(0);
         for(int i = 1; i < populationSize; i++)
         {

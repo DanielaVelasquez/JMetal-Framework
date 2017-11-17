@@ -55,7 +55,6 @@ public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 
     @Override
     public void setVariableValue(int index, Double value) {
-        
         solution.setVariableValue(problem.getIndex(index), value);
     }
 
@@ -81,12 +80,12 @@ public class DoubleSolutionSubcomponentSaNSDE implements DoubleSolution
 
     @Override
     public void setAttribute(Object id, Object value) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      solution.setAttribute(id, value);
     }
 
     @Override
     public Object getAttribute(Object id) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return solution.getAttribute(id);
     }
     
 }

@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.util.comparator.FitnessNorma2Comparator;
 
 /**
  * This class implements a differential evolution algorithm.
@@ -66,7 +65,7 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
     this.crossoverOperator = crossoverOperator;
     this.selectionOperator = selectionOperator;
     this.evaluator = evaluator;
-    comparator = new FitnessNorma2Comparator<>();
+    comparator = new ObjectiveComparator<DoubleSolution>(0);
   }
   
   public int getEvaluations() {
@@ -78,11 +77,11 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
   }
 
   @Override protected void initProgress() {
-    evaluations = this.populationSize;
+    evaluations = 1;//this.populationSize;
   }
 
   @Override protected void updateProgress() {
-    evaluations += this.populationSize;
+    evaluations += 1;//this.populationSize;
   }
 
   @Override protected boolean isStoppingConditionReached() {
@@ -140,11 +139,10 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
 
   /**
    * Returns the best individual
-     * @return 
    */
   @Override public DoubleSolution getResult() {
     Collections.sort(getPopulation(), comparator) ;
-      System.out.println("Evaluaction : "+evaluations);
+
     return getPopulation().get(0);
   }
 

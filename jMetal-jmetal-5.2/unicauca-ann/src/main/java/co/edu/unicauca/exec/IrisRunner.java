@@ -1,4 +1,4 @@
-package co.edu.unicauca.exec.cross_validation.harmony;
+package co.edu.unicauca.exec;
 
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -55,7 +55,7 @@ public class IrisRunner
         double f = 0.5 ;
         crossover = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin") ;
 
-        selection = new DifferentialEvolutionSelection() ;
+        /*selection = new DifferentialEvolutionSelection() ;
 
         algorithm = new DECC_G(20,30,100,100,problem,10,evaluator, comparator);
         
