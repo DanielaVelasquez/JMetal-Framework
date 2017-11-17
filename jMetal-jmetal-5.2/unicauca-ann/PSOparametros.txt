@@ -1,0 +1,6 @@
+#prueba de variacion de parametros para PSO, cada indica un conjunto de distintos parametros
+#Ordenados en la secuencia  swarmSize y numberOfParticlesToInform 
+#Los parametros toman valores 2,3,5 informantes
+2
+3
+5

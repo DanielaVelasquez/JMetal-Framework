@@ -16,20 +16,21 @@ import org.uma.jmetal.solution.DoubleSolution;
 
 public class SumaryFile {
 
-    public static void SumaryHS(Algorithm MyAlgoritm, LocalSearchOperator LS, AbstractELMEvaluator evaluator, List<DoubleSolution> Solutions, List AccList, List time, Problem problema) throws IOException {
+    public static void SumaryHS(Algorithm MyAlgoritm, LocalSearchOperator LS, AbstractELMEvaluator evaluator, List<DoubleSolution> Solutions, List AccList, List time, Problem problema, String descriptor) throws IOException {
 
-        double[] auxTrainHist = new double[Solutions.size()];
-        double[] auxTestHist = new double[Solutions.size()];
-        double[] auxTime = new double[Solutions.size()];
-        double best = Solutions.get(0).getObjective(0);
+        float[] auxTrainHist = new float[Solutions.size()];
+        float[] auxTestHist = new float[Solutions.size()];
+        float[] auxTime = new float[Solutions.size()];
+        float best = (float)Solutions.get(0).getObjective(0);
         String words = " ";
-      
 
         Object resultForFile = evaluator.getProblemName();
-        String SumaryNameFile = MyAlgoritm.getName() + "Result\\" + evaluator.getType() + "\\" + resultForFile + "_Results.txt";
+        String directorio = "Result\\" + MyAlgoritm.getName() + "Result\\" + evaluator.getType() + "\\";
 
-        String Dir = MyAlgoritm.getName() + "Result\\" + evaluator.getType() + "\\";
-        File dir = new File(Dir);
+        String SumaryNameFile = directorio + descriptor +"_"+ resultForFile + "_Results.txt";
+
+        File dir = new File(directorio);
+        
 
         if (!dir.exists()) {
             dir.mkdirs();
@@ -48,7 +49,7 @@ public class SumaryFile {
         sumary.newLine();
         sumary.write(currentDate.toString());
         sumary.newLine();
-        
+
         sumary.write(MyAlgoritm.getName());
         sumary.newLine();
         String parametersHS;
@@ -66,16 +67,16 @@ public class SumaryFile {
         parametersELM = " NHiddenNeurons " + evaluator.getElm().getHiddenNeurons() + " NInputNeuros " + evaluator.getElm().getInputNeurons() + " func " + "Null";
         sumary.write(parametersHS);
         sumary.newLine();
-    
+
         sumary.write(parametersELM);
         sumary.newLine();
-        
+
         sumary.write(parametersEvaluator);
         sumary.newLine();
-        
+
         sumary.write(parametersOptimizador);
         sumary.newLine();
-        
+
         sumary.write("TrainingAccuracyHistory      TestingAccuracyHistory");
         sumary.newLine();
 
@@ -84,12 +85,13 @@ public class SumaryFile {
             line = line + "  Test[" + i + "]=" + AccList.get(i);
             line += "   Time : " + time.get(i);
             System.out.println(line);
-            auxTrainHist[i] = Solutions.get(i).getObjective(0);
-            auxTestHist[i] = (double) AccList.get(i);
+            auxTrainHist[i] = (float) Solutions.get(i).getObjective(0);
+            double tmp = (double) AccList.get(i);
+            auxTestHist[i] = (float) tmp;
             auxTime[i] = (long) time.get(i);
 
             if (Solutions.get(i).getObjective(0) > best) {
-                best = Solutions.get(i).getObjective(0);
+                best = (float)Solutions.get(i).getObjective(0);
             }
             sumary.write(line);
             sumary.newLine();
@@ -114,8 +116,10 @@ public class SumaryFile {
             sumary.write(" Test Standard deviation: " + st.desviacion(auxTestHist));
             sumary.newLine();
         }
-        sumary.write("Average running time: " + st.media(auxTime) + "ms");
+        sumary.write("Average running time: " + st.media(auxTime) + " ms");
         sumary.close();
+        //sendMail(MyAlgoritm.getName()+"_" + resultForFile , SumaryNameFile, "Resultado para " + resultForFile + " en " + MyAlgoritm.getName());
+
     }
 
     private static String truncateTo(double unroundedNumber, int decimalPlaces) {
@@ -129,4 +133,6 @@ public class SumaryFile {
         return numberFormat.format(unroundedNumber).replaceAll(",", ".");
     }
 
+    
+    
 }

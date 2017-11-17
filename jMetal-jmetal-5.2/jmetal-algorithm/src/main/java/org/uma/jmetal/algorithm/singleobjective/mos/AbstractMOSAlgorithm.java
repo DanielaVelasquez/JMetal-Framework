@@ -7,6 +7,7 @@ import org.uma.jmetal.solution.Solution;
 
 public abstract class AbstractMOSAlgorithm <S extends Solution<?>, R>  implements Algorithm<R>
 {
+    
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/

@@ -37,6 +37,9 @@ public class OptSimulatedAnnealing<S extends Solution<?>> implements LocalSearch
         this.comparator = comparator;
         randomGenerator = JMetalRandom.getInstance();
         numberOfImprovements = 0;
+        if (randomGenerator == null) {
+            randomGenerator = JMetalRandom.getInstance();
+        }
     }
 
     /**
@@ -160,7 +163,4 @@ public class OptSimulatedAnnealing<S extends Solution<?>> implements LocalSearch
         return (S) aux;
     }
 
-    public void setRandom(JMetalRandom rnd) {
-        this.randomGenerator = rnd;
-    }
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 public class Soybean extends AbstractCrossValidationEvaluator {
 
     public Soybean() throws IOException {
+        //miss values
         super(AbstractELMEvaluator.EvaluatorType.CV, "Soybean", new DataSet("src/resources-elm", "soybean.train", 35), new DataSet("src/resources-elm", "soybean.test", 35), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 

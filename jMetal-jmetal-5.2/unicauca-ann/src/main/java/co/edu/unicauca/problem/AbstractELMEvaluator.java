@@ -65,8 +65,10 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
      * Bias values from last given solution
      */
     protected DenseVector bias;
-    
+
     public int total;
+
+    private int type_solution;
 
     /**
      * -----------------------------------------------------------------------------------------
@@ -86,7 +88,7 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         this.testing_data_set = testing_data_set;
         this.type = type;
         this.name = name;
-        
+        this.type_solution = 0;//default
         this.total = 0;
     }
 
@@ -97,7 +99,8 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
         double accuracy = this.train();
-        solution.setObjective(0, (1 - accuracy));
+        solution.setObjective(0, (accuracy));
+        solution.setAttribute("norm2", elm.getOuputWightNorm());
     }
 
     /**
@@ -115,39 +118,35 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         int col = 0;
         input_weights = new DenseMatrix(hidden_neurons, input_neurons);
         bias = new DenseVector(hidden_neurons);
-        int i = 0;
-        while (i < numberOfVariables) {
-            input_weights.set(row, col, solution.getVariableValue(i));
-            col++;
-            if (col >= input_neurons) {
-                i++;
-                bias.set(row, solution.getVariableValue(i));
-                col = 0;
-                row++;
-            }
-            i++;
-        }
-    }
+        if (this.type_solution == 0) {
+            int i = 0;
+            while (i < numberOfVariables) {/*representation V=[pesos1,bias1,pesos2.bias2.....pesosÑ,pesosÑ]*/
 
-    public void getInputWeightsBiasFrom(double[] solution) {
-        int numberOfVariables = solution.length;
-        int hidden_neurons = elm.getHiddenNeurons();
-        int input_neurons = elm.getInputNeurons();
-        int row = 0;
-        int col = 0;
-        input_weights = new DenseMatrix(hidden_neurons, input_neurons);
-        bias = new DenseVector(hidden_neurons);
-        int i = 0;
-        while (i < numberOfVariables) {
-            input_weights.set(row, col, solution[i]);
-            col++;
-            if (col >= input_neurons) {
+                input_weights.set(row, col, solution.getVariableValue(i));
+                col++;
+                if (col >= input_neurons) {
+                    i++;
+                    bias.set(row, solution.getVariableValue(i));
+                    col = 0;
+                    row++;
+                }
                 i++;
-                bias.set(row, solution[i]);
-                col = 0;
-                row++;
             }
-            i++;
+
+        } else if (this.type_solution == 1) {
+            //representation V=[pesos1,pesos2..pesosÑ,bias1,bias2..biasÑ]
+            int iter = 0;
+            for (int j = 0; j < (hidden_neurons); j++) {
+                for (int k = 0; k < input_neurons; k++) {
+                    input_weights.set(j, k, solution.getVariableValue(iter));
+                    iter++;
+                }
+            }
+            int k = 0;
+            for (int j = (hidden_neurons * input_neurons); k < hidden_neurons; j++) {
+                bias.set(k, solution.getVariableValue(j));
+                k++;
+            }
         }
     }
 
@@ -180,8 +179,16 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
     }
 
     public String getProblemName() {
-        
+
         return this.name;
+    }
+
+    public int getType_solution() {
+        return type_solution;
+    }
+
+    public void setType_solution(int type_solution) {
+        this.type_solution = type_solution;
     }
 
     /**

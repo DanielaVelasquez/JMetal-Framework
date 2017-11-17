@@ -4,7 +4,6 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
-import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 /**
  *
@@ -21,7 +20,6 @@ public class IHSBuilder {
     private double BWMAX;//Bandwidth maximum
 
     private double HMCR;//Harmonic memory Consideration Rate
-    private JMetalRandom randomGenerator;
     private SolutionListEvaluator<DoubleSolution> evaluator;
 
     public IHSBuilder(DoubleProblem problem) {
@@ -35,13 +33,11 @@ public class IHSBuilder {
         this.BWMAX = 0.4;
 
         this.HMCR = 0.8;
-        randomGenerator = JMetalRandom.getInstance();
         this.evaluator = new SequentialSolutionListEvaluator<>();
     }
 
-    public ImprovedHarmonySearch build() {
-        ImprovedHarmonySearch hs = new ImprovedHarmonySearch(problem, maxEvaluations, HMS, PARMIN, PARMAX, BWMIN, BWMAX, HMCR, evaluator);
-        hs.setRandonGenerator(randomGenerator);
+    public IHS build() {
+        IHS hs = new IHS(problem, maxEvaluations, HMS, HMCR, PARMIN, PARMAX, BWMIN, BWMAX, evaluator);
         return hs;
     }
 
@@ -74,15 +70,6 @@ public class IHSBuilder {
 
     public IHSBuilder setProblem(DoubleProblem problem) {
         this.problem = problem;
-        return this;
-    }
-
-    public JMetalRandom getRandomGenerator() {
-        return randomGenerator;
-    }
-
-    public IHSBuilder setRandomGenerator(JMetalRandom randomGenerator) {
-        this.randomGenerator = randomGenerator;
         return this;
     }
 
@@ -120,7 +107,6 @@ public class IHSBuilder {
     public IHSBuilder setEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
         this.evaluator = evaluator;
         return this;
-
     }
 
     public double getBWMIN() {

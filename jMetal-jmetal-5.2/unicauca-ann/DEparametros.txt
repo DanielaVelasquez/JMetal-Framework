@@ -1,0 +1,14 @@
+#prueba de variacion de parametros para DE, cada indica un conjunto de distintos parametros
+#Ordenados en la secuencia DifferentialEvolutionCrossover [CR,F ]y los valores que puede tomar el parametro 
+#Los parametros toman valores CR,F
+10 0.95 0.4 0.01
+10 0.95 0.4 0.04
+10 0.95 0.4 0.1
+10 0.95 0.4 0.2
+10 0.95 0.4 0.4
+15 0.95 0.3 0.01
+15 0.95 0.3 0.01
+15 0.95 0.4 0.04
+20 0.95 0.4 0.1
+20 0.95 0.4 0.2
+20 0.95 0.4 0.3

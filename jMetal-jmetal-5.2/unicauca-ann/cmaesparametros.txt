@@ -1,0 +1,11 @@
+#prueba de variacion de parametros para CovarianceMatrixAdaptationEvolutionStrategy, cada indica un conjunto de distintos parametros
+#Ordenados en la secuencia  Lambda,Sigma
+10 0.2
+15 0.2
+20 0.2
+10 0.25
+15 0.25
+20 0.25
+10 0.3
+15 0.3
+20 0.3

@@ -37,6 +37,7 @@ import org.uma.jmetal.util.solutionattribute.impl.GenericSolutionAttribute;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.uma.jmetal.util.comparator.FitnessNorma2Comparator;
 
 /**
  * Class implementing a Standard PSO 2011 algorithm.
@@ -91,7 +92,7 @@ public class StandardPSO2011 extends AbstractParticleSwarmOptimization<DoubleSol
     c = 1.0 / 2.0 + Math.log(2); //1.193;
     changeVelocity = -0.5 ;
 
-    fitnessComparator = new ObjectiveComparator<DoubleSolution>(objectiveId);
+    fitnessComparator = new FitnessNorma2Comparator<>();
     findBestSolution = new BestSolutionSelection<DoubleSolution>(fitnessComparator);
 
     localBest = new DoubleSolution[swarmSize];

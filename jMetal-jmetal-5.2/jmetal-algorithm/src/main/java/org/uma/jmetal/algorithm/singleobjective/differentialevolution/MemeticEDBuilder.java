@@ -103,7 +103,6 @@ public class MemeticEDBuilder {
     public MemeticED build() {
         MemeticED m = new MemeticED(problem, maxEvaluations, populationSize, crossoverOperator,
                 selectionOperator, evaluator, localSearch);
-        m.setRandomGenerator(this.rand);
         return m;
     }
 

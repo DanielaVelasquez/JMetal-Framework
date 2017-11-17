@@ -1,0 +1,12 @@
+#prueba de variacion de parametros para DE, cada indica un conjunto de distintos parametros
+#Ordenados en la secuencia DifferentialEvolutionCrossover [CR,F ] variant y los valores que puede tomar el parametro 
+#Los parametros toman valores population[10,20,30],CR (0.45,0.5,0.55), F(0.75,0.8,0.85) , "Variantion rand/1/exp" sin CA()
+10 0.45 0.75 rand/1/exp
+20 0.5 0.75 rand/1/exp
+30 0.55 0.75 rand/1/exp
+10 0.45 0.8 rand/1/exp
+20 0.5 0.8 rand/1/exp
+30 0.55 0.8 rand/1/exp
+10 0.45 0.85 rand/1/exp
+20 0.5 0.85 rand/1/exp
+30 0.55 0.85 rand/1/exp

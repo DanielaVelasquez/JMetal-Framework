@@ -14,6 +14,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 /**
  *
@@ -238,7 +239,6 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
      */
     @Override
     public DoubleSolution getResult() {
-
         Collections.sort(getPopulation(), comparator);
         return getPopulation().get(0);
     }
@@ -336,8 +336,11 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
      * @return CR
      */
     public double getCR(double CRm, double CRsigma) {
+
+        RandomDistribution distributionRnd = RandomDistribution.getInstance();
+
         //   If CR > 1, set CR = 1. If CR < 0, set CR = 0.
-        double cr = CRm + CRsigma; //->>>>* randGen.nextGaussian();
+        double cr = CRm + CRsigma * distributionRnd.nextGaussian(); //->>>>* randGen.nextGaussian();
         if (cr < 0) {//truncated to [0 1]
             cr = 0.0;
         } else {
@@ -442,7 +445,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
         for (Object numb : lst) {
             suma += (double) numb;
         }
-        if (lst.size() != 0) {
+        if (!lst.isEmpty()) {
             suma = suma / lst.size();
         }
         return suma;

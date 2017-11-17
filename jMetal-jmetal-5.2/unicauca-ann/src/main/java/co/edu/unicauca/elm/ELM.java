@@ -149,24 +149,22 @@ public class ELM {
         this.maxEvaluations = maxEvaluations;
         this.EFOs = 0;
     }
-    
+
     /**
      * Restart to 0 the number of actual EFOs
      */
-    public void resetEFOS()
-    {
+    public void resetEFOS() {
         this.EFOs = 0;
-    }    
-    
+    }
+
     /**
      * Train an artificial neural network using ELM algorithm with the input and
      * output data given, if input weight and/or bias are not defined in the ELM
      * they will be randomly assigned
      */
     public void train() {
-        
-        if(this.EFOs < maxEvaluations)
-        {        
+
+        if (this.EFOs < maxEvaluations) {
             this.EFOs++;
             /**
              * In case the input weights is not defined in the ELM they will be
@@ -185,8 +183,8 @@ public class ELM {
 
             //Get output matrix from hidden layer
             DenseMatrix H = calculateH(X);
-            try
-            {
+            try {
+
                 DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
                 DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
                 tabular.transpose(transT);
@@ -196,16 +194,15 @@ public class ELM {
 
                 DenseMatrix T = calculate_output(H, number_data);
                 accuracy = evaluate(tabular, T);
+            } catch (Exception ex) {
+                accuracy = Integer.MAX_VALUE;
+              //  System.out.println("No converge");
+               // ex.printStackTrace();
             }
-            catch(Exception ex)
-            {
-                accuracy = 1;
-            }
+        } else {
+            accuracy = Integer.MAX_VALUE;
         }
-        else            
-        {
-            accuracy = 1;
-        }
+     //   System.out.println("" + EFOs);
     }
 
     /**
@@ -256,6 +253,7 @@ public class ELM {
         }
         DenseMatrix H = new DenseMatrix(numData, hidden_neurons);
         HTemp.transpose(H);
+
         return H;
 
     }
@@ -305,7 +303,7 @@ public class ELM {
                 T.set(j, indexT);
             }
 
-            accuracy = 1 - ((double) errors / (double) numCols);
+            accuracy = ((double) errors / (double) numCols);
         } else {
             /**
              * Square differences between tabular and output network
@@ -317,7 +315,7 @@ public class ELM {
             for (int j = 0; j < numCols; j++) {
                 double valueY = tabular.get(0, j);
                 double valueT = TNetwork.get(0, j);
-                aux += Math.pow(valueY - valueT, 2);
+                aux += Math.pow((valueY - valueT), 2);
                 //Original format for the output network
                 this.T.set(j, valueT);
             }
@@ -350,10 +348,10 @@ public class ELM {
                 }
             }
         } else {
-            Y = new DenseMatrix(output_neurons, 1);
-
-            for (int i = 0; i < output_neurons; i++) {
-                Y.set(i, 0, y.get(i));
+            output_neurons = 1;
+            Y = new DenseMatrix(1, y.size());
+            for (int i = 0; i < y.size(); i++) {
+                Y.set(0, i, y.get(i));
             }
         }
         return Y;
@@ -401,7 +399,7 @@ public class ELM {
     }
 
     public double getOuputWightNorm() {
-        return output_weight.norm(Matrix.Norm.One);
+        return output_weight.norm(Matrix.Norm.Frobenius);
     }
 
     public double getAccuracy() {
@@ -416,7 +414,16 @@ public class ELM {
         return hidden_neurons;
     }
 
+    public ELMType getElm_type() {
+        return elm_type;
+    }
+
+    public void setElm_type(ELMType elm_type) {
+        this.elm_type = elm_type;
+    }
+
     public void setInputNeurons(int input_neurons) {
         this.input_neurons = input_neurons;
     }
+
 }
