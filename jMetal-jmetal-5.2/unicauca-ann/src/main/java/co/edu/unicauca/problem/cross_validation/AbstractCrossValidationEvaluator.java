@@ -71,6 +71,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         inverse = DEFAULT_INVERSE;
 
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse, maxEvaluations);
+
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
 
@@ -156,9 +157,11 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         elm.setY(testing_data_set.getY());
         elm.test();
         elm.resetEFOS();
+        
         if (elm.getElm_type() == ELM.ELMType.CLASSIFICATION) {
             return 1 - elm.getAccuracy();
         }
+        
         return elm.getAccuracy();
     }
 }
