@@ -119,6 +119,10 @@ public class ELM {
      * Actual number of EFOs
      */
     private int EFOs;
+    /**
+     * Determinate if ELM was trained
+     */
+    private boolean trained;
 
     /**
      * -----------------------------------------------------------------------------------------
@@ -163,7 +167,9 @@ public class ELM {
      * they will be randomly assigned
      */
     public void train() {
-
+        
+        trained = false;
+        
         if (this.EFOs < maxEvaluations) {
             this.EFOs++;
             /**
@@ -194,6 +200,7 @@ public class ELM {
 
                 DenseMatrix T = calculate_output(H, number_data);
                 accuracy = evaluate(tabular, T);
+                trained = true;
             } catch (Exception ex) {
                 accuracy = Integer.MAX_VALUE;
               //  System.out.println("No converge");
@@ -210,9 +217,16 @@ public class ELM {
      */
     public void test() {
         //Get output matrix from hidden layer
-        DenseMatrix H = calculateH(X);
-        DenseMatrix T = calculate_output(H, number_data);
-        accuracy = evaluate(tabular, T);
+        if(trained)
+        {
+            DenseMatrix H = calculateH(X);
+            DenseMatrix T = calculate_output(H, number_data);
+            accuracy = evaluate(tabular, T);
+        }
+        else
+        {
+            accuracy = 0; --------------------------------
+        }
     }
 
     /**
