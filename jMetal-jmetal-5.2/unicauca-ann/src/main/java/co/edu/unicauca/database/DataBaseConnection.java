@@ -20,11 +20,16 @@ public class DataBaseConnection
     //Retorna un objeto de tipo Connection y lanza una exception si no logra conectarse
     public void conectar() 
     {
-        // Connect to database
+        /*Connect to database
         String hostName = "sql7001.site4now.net";
         String dbName = "DB_A2D155_experimento";
         String user = "DB_A2D155_experimento_admin";
-        String password = "Experimento123";
+        String password = "Experimento123";*/
+        
+        String hostName = "localhost";
+        String dbName = "elm-experiment";
+        String user = "elm";
+        String password = "elm";
         
         //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
         //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
