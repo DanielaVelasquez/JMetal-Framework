@@ -65,14 +65,12 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
     public AbstractCrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
         /*EL contructor deberia recibir Una Red ELM abstracta y no los componentes*/
         super(type, name, training_data_set, testing_data_set);
-
         /*Quitar esta liena para experimento no controlados*/
         hidden_neurons = DEFAULT_NUMBER_OF_HIDDEN_NEURONS;
         this.number_folders = DEFAULT_NUMBER_OF_FOLDERS;
         inverse = DEFAULT_INVERSE;
 
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse, maxEvaluations);
-
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
 
@@ -128,8 +126,8 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
     @Override
     public double train() {
+        total += number_folders;
         double accuracy = 0.0;
-        this.total += number_folders - 1;
         for (int i = 0; i < number_folders; i++) {
             DataSet training = training_folders.get(i);
             DataSet testing = testing_folders.get(i);
