@@ -42,7 +42,7 @@ public class SteepestAscentHillClimbing  implements Algorithm<Solution>
 
     @Override
     public void run() {
-        if(best!=null)
+        if(best==null)
             best = problem.createSolution();
         this.evaluate(best);
         

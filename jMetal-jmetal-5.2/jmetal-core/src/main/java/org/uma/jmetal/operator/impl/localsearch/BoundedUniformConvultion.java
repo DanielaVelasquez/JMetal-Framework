@@ -31,7 +31,7 @@ public class BoundedUniformConvultion extends Tweak<DoubleSolution>
                 do
                 {
                     x = random.nextDouble(-radius, radius);
-                }while((value + x >= solution.getLowerBound(i)) && (value + x <= solution.getUpperBound(i)));
+                }while((value + x <= solution.getLowerBound(i)) && (value + x >= solution.getUpperBound(i)));
                 
                 solution.setVariableValue(i, value + x);
             }
