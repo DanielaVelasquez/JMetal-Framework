@@ -21,8 +21,6 @@ public class SteepestAscentHillClimbingBuilder  implements AlgorithmBuilder<Stee
     private int n;
     private Problem problem;
     private double penalize_value;
-    private double probability;
-    private double radius;
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
@@ -34,9 +32,7 @@ public class SteepestAscentHillClimbingBuilder  implements AlgorithmBuilder<Stee
         this.problem = problem;
         this.maxEvaluations = 3000;
         this.comparator = new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.DESCENDING, 0);
-        this.probability = 0.5;
-        this.radius = 0.3;
-        this.tweak = new BoundedUniformConvultion(probability, radius);
+        this.tweak = new BoundedUniformConvultion(0.5, 0.3);
         this.penalize_value = 1;
     }
 
@@ -69,13 +65,6 @@ public class SteepestAscentHillClimbingBuilder  implements AlgorithmBuilder<Stee
         return penalize_value;
     }
 
-    public double getProbability() {
-        return probability;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
 
     public SteepestAscentHillClimbingBuilder setMaxEvaluations(int maxEvaluations) {
         if(maxEvaluations < 1)
@@ -116,25 +105,5 @@ public class SteepestAscentHillClimbingBuilder  implements AlgorithmBuilder<Stee
         this.penalize_value = penalize_value;
         return this;
     }
-
-    public SteepestAscentHillClimbingBuilder setProbability(double probability) {
-        if(probability < 0)
-            throw new JMetalException("probability less than zero: "+probability);
-        if(probability > 1)
-            throw new JMetalException("probability is greater than 1:  "+probability);
-        this.probability = probability;
-        return this;
-    }
-
-    public SteepestAscentHillClimbingBuilder setRadius(double radius) {
-        if(radius <= 0)
-            throw new JMetalException("radius is zero or less: "+probability);
-        this.radius = radius;
-        return this;
-    }
-    
-    
-    
-    
     
 }
