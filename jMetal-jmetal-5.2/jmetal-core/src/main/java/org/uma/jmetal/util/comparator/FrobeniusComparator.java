@@ -15,11 +15,11 @@ public class FrobeniusComparator <S extends Solution<?>> implements Comparator<S
     /**
      * Ordering for objective
      */
-    private ObjectiveComparator.Ordering orderObjective;
+    private FrobeniusComparator.Ordering orderObjective;
     /**
      * Ordering for frobenius norm
      */
-    private ObjectiveComparator.Ordering orderFrobenius;
+    private FrobeniusComparator.Ordering orderFrobenius;
     /**
      * Objective of the index to compare
      */
@@ -34,11 +34,11 @@ public class FrobeniusComparator <S extends Solution<?>> implements Comparator<S
     public FrobeniusComparator(int objectiveIndex) 
     {
         this.objectiveIndex = objectiveIndex;
-        this.orderObjective = ObjectiveComparator.Ordering.ASCENDING;
-        this.orderObjective = ObjectiveComparator.Ordering.DESCENDING;
+        this.orderObjective = FrobeniusComparator.Ordering.ASCENDING;
+        this.orderObjective = FrobeniusComparator.Ordering.DESCENDING;
     }
 
-    public FrobeniusComparator(ObjectiveComparator.Ordering orderObjective, ObjectiveComparator.Ordering orderFrobenius, int objectiveIndex) 
+    public FrobeniusComparator(FrobeniusComparator.Ordering orderObjective, FrobeniusComparator.Ordering orderFrobenius, int objectiveIndex) 
     {
         this.orderObjective = orderObjective;
         this.orderFrobenius = orderFrobenius;
@@ -78,7 +78,7 @@ public class FrobeniusComparator <S extends Solution<?>> implements Comparator<S
         {
             Double objective1 = solution1.getObjective(this.objectiveIndex);
             Double objective2 = solution2.getObjective(this.objectiveIndex);
-            if (orderObjective == ObjectiveComparator.Ordering.ASCENDING) {
+            if (orderObjective == FrobeniusComparator.Ordering.ASCENDING) {
               result = Double.compare(objective1, objective2);
             } else {
               result = Double.compare(objective2, objective1);
@@ -91,7 +91,7 @@ public class FrobeniusComparator <S extends Solution<?>> implements Comparator<S
                     Double frobenius1 = (Double)solution1.getAttribute("B");
                     Double frobenius2 = (Double)solution2.getAttribute("B");
                     
-                    if(orderFrobenius == ObjectiveComparator.Ordering.ASCENDING)
+                    if(orderFrobenius == FrobeniusComparator.Ordering.ASCENDING)
                     {
                       result = Double.compare(frobenius1, frobenius2);
                     }

@@ -112,7 +112,7 @@ public class MOSBuilder
 
     public MOSBuilder setMaxEvaluations(int maxEvaluations) {
         if(maxEvaluations < 1)
-            throw new JMetalException("Problem can't be null");
+            throw new JMetalException("maxEvaluations must be greater than 1");
         this.maxEvaluations = maxEvaluations;
         return this;
     }

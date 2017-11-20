@@ -7,7 +7,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
 
-public class SteepestAscentHillClimbing  <S extends Solution<?>,P extends Problem<S>>  implements Algorithm<S>
+public class SteepestAscentHillClimbing  implements Algorithm<Solution>
 {
     
      /**-----------------------------------------------------------------------------------------
@@ -16,32 +16,46 @@ public class SteepestAscentHillClimbing  <S extends Solution<?>,P extends Proble
     
     private int maxEvaluations;
     private int evaluations;
-    private Comparator<S> comparator;
+    private Comparator<Solution> comparator;
     private Tweak tweak;
     private int n;
-    private S best;
-    private P problem;
+    private Solution best;
+    private Problem problem;
     private double penalize_value;
     
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
 
+    
+    
+    public SteepestAscentHillClimbing(int maxEvaluations, Comparator<Solution> comparator, Tweak tweak, int n, Problem problem, double penalize_value) {
+        this.maxEvaluations = maxEvaluations;
+        this.comparator = comparator;
+        this.tweak = tweak;
+        this.n = n;
+        this.problem = problem;
+        this.penalize_value = penalize_value;
+        
+        this.evaluations = 0;
+    }
+
     @Override
     public void run() {
-        best = problem.createSolution();
+        if(best!=null)
+            best = problem.createSolution();
         this.evaluate(best);
         
         while(!isStoppingConditionReached())
         {
-            S r = (S) best.copy();
+            Solution r = (Solution) best.copy();
             tweak.tweak(r);
             this.evaluate(r);
             int nEvaluations = this.getPossibleEvaluations(n);
             
             for(int i = 0; i < nEvaluations; i++)
             {
-                S w = (S) best.copy(); 
+                Solution w = (Solution) best.copy(); 
                 tweak.tweak(w);
                 this.evaluate(w);
                 
@@ -56,11 +70,10 @@ public class SteepestAscentHillClimbing  <S extends Solution<?>,P extends Proble
                 best = r;
             }
         }
-        
     }
 
     @Override
-    public S getResult() 
+    public Solution getResult() 
     {
         return this.best;
     }
@@ -105,7 +118,7 @@ public class SteepestAscentHillClimbing  <S extends Solution<?>,P extends Proble
      * Evaluates an individual as long as max evaluations hasnot been reache
      * @param individual solution to evaluate
      */
-    protected void evaluate(S individual)
+    protected void evaluate(Solution individual)
     {
         if(!isStoppingConditionReached())
         {
@@ -118,7 +131,71 @@ public class SteepestAscentHillClimbing  <S extends Solution<?>,P extends Proble
         }
     }
     
-    protected void penalize(S solution){
+    protected void penalize(Solution solution){
         solution.setObjective(0, this.penalize_value);
+    }
+
+    public int getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(int evaluations) {
+        this.evaluations = evaluations;
+    }
+
+    public Solution getBest() {
+        return best;
+    }
+
+    public void setBest(Solution best) {
+        this.best = best;
+    }
+
+    public int getMaxEvaluations() {
+        return maxEvaluations;
+    }
+
+    public void setMaxEvaluations(int maxEvaluations) {
+        this.maxEvaluations = maxEvaluations;
+    }
+
+    public Comparator<Solution> getComparator() {
+        return comparator;
+    }
+
+    public void setComparator(Comparator<Solution> comparator) {
+        this.comparator = comparator;
+    }
+
+    public Tweak getTweak() {
+        return tweak;
+    }
+
+    public void setTweak(Tweak tweak) {
+        this.tweak = tweak;
+    }
+
+    public int getN() {
+        return n;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
+    }
+
+    public double getPenalize_value() {
+        return penalize_value;
+    }
+
+    public void setPenalize_value(double penalize_value) {
+        this.penalize_value = penalize_value;
     }
 }
