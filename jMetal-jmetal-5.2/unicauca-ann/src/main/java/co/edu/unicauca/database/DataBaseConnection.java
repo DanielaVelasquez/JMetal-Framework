@@ -22,11 +22,13 @@ public class DataBaseConnection
     {
         // Connect to database
         String hostName = "sql7001.site4now.net";
-        String dbName = "DB_A2D155_elmExperiment1";
-        String user = "DB_A2D155_elmExperiment1_admin";
-        String password = "Experiment123";
+        String dbName = "DB_A2D155_experimento";
+        String user = "DB_A2D155_experimento_admin";
+        String password = "Experimento123";
+        
+        //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
         //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");
-        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;loginTimeout=30;", hostName, dbName, user, password);        
+        String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;", hostName, dbName, user, password);        
 
         try {
                 connection = DriverManager.getConnection(url);
