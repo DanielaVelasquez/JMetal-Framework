@@ -34,13 +34,15 @@ public class SteepestAscentHillClimbing  <S extends Solution<?>,P extends Proble
         
         while(!isStoppingConditionReached())
         {
-            S r = (S) tweak.tweak(best.copy());
+            S r = (S) best.copy();
+            tweak.tweak(r);
             this.evaluate(r);
             int nEvaluations = this.getPossibleEvaluations(n);
             
             for(int i = 0; i < nEvaluations; i++)
             {
-                S w = (S) tweak.tweak(best.copy());
+                S w = (S) best.copy(); 
+                tweak.tweak(w);
                 this.evaluate(w);
                 
                 if (comparator.compare(w, r) > 0)
