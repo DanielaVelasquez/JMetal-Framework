@@ -38,5 +38,7 @@ public abstract class LocalSearch <S extends Solution<?>>
         return ratio;
     }
 
-    public abstract S evolve(S best, List<S> population, Problem p, Comparator c);
+    public abstract S evolve(S best, List<S> population, Problem p, Comparator c, int FE);
+    
+    public abstract void restart();
 }

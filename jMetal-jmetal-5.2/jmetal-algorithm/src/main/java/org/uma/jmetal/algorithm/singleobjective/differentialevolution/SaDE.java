@@ -2,7 +2,6 @@ package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.impl.AbstractDifferentialEvolution;
@@ -10,7 +9,6 @@ import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
@@ -90,6 +88,8 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     private JMetalRandom randomGenerator ;
     
     private double penalize_value;
+    
+    private DoubleSolution best;
     
     /**-----------------------------------------------------------------------------------------
      * Methods
@@ -191,21 +191,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         CRm = (CRm / size);
     }
-    /**
-     * Calculate sum of objectives value from a solution
-     * @param s given solution
-     * @return sum of solution's objectives
-     */
-    private double calculateSumObjectives(DoubleSolution s)
-    {
-        int size = s.getNumberOfObjectives();
-        double sum = 0;
-        for(int i = 0; i< size; i++)
-        {
-            sum += s.getObjective(i);
-        }
-        return sum;
-    }
+
     /**
      * Updates values crossover rate and scale factor value for a crossover strategy
      * @param selected crossover srategy
@@ -237,14 +223,29 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> createInitialPopulation() {
         this.evaluations = 0;
-        if(this.getPopulation()!=null)
-            return this.getPopulation();
         List<DoubleSolution> population = new ArrayList<>(populationSize);
+        if(this.getPopulation()!=null)
+        {
+            population = this.getPopulation();
+            this.populationSize = population.size();
+        }
+        
         for (int i = 0; i < populationSize; i++) {
           DoubleSolution newIndividual = getProblem().createSolution();
           population.add(newIndividual);
         }
+        
         return population;
+    }
+    protected DoubleSolution getBest(List<DoubleSolution> population)
+    {
+        DoubleSolution best = population.get(0);
+        for(int i = 1; i < populationSize; i++)
+        {
+            DoubleSolution next = population.get(i);
+            best = getBest(best, next);
+        }
+        return best;
     }
   /**
      * Sets an individual function value to a penalization value given by 
@@ -257,7 +258,6 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
 
   @Override protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
     int i = 0;
-        int populationSize = population.size();
         while(!isStoppingConditionReached() && i < populationSize)
         {
             DoubleSolution solution = population.get(i);
@@ -329,6 +329,9 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
+        
+        if(best == null)
+            best = getBest(population);
         List<DoubleSolution> pop = new ArrayList<>();
         for (int i = 0; i < populationSize; i++)
         {
@@ -340,9 +343,15 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
           else
           {
               if(s==o)
+              {
                   pop.add(p);
+                  best = getBest(best, p);
+              }
               else
+              {
                   pop.add(o);
+                  best = getBest(best, o);
+              }
           }
         }
         return pop;
@@ -408,18 +417,21 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     @Override
     public DoubleSolution getResult() {
-        Collections.sort(getPopulation(), comparator) ;
         DoubleSolution best =  getPopulation().get(0);
         for(int i = 1; i < populationSize; i++)
         {
             DoubleSolution s = this.getPopulation().get(i);
-            if(s.getObjective(0) == best.getObjective(0))
-            {
-                best = this.getBest(best, s);
-            }
+            best = this.getBest(best, s);
+            
         }
         return best;
     }
+
+    public void setBest(DoubleSolution best) {
+        this.best = best;
+    }
+
+    
 
     @Override
     public String getName() {
@@ -430,4 +442,10 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     public String getDescription() {
         return "Self-adaptative Differential Evolution with Neighborhood Search Algorithm" ;
     }
+
+    public void setMaxEvaluations(int maxEvaluations) {
+        this.maxEvaluations = maxEvaluations;
+    }
+    
+    
 }
