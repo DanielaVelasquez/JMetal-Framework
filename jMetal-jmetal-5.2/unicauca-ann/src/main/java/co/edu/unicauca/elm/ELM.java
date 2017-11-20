@@ -20,7 +20,7 @@ public class ELM {
     /**
      * Minimum value allowed in ELM's weight
      */
-    private static final double MIN_VALUE = 0;
+    private static final double MIN_VALUE = -1;
     /**
      * Max value allowed in ELM's weight
      */
@@ -225,7 +225,7 @@ public class ELM {
         }
         else
         {
-            accuracy = 0; --------------------------------
+            accuracy = 0;
         }
     }
 

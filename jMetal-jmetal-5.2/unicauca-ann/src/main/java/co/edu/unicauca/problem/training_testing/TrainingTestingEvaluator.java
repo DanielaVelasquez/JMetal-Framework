@@ -6,6 +6,7 @@ import co.edu.unicauca.elm.util.ELMUtil;
 import co.edu.unicauca.elm_function.ELMFunction;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
+import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -43,7 +44,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
         super(AbstractELMEvaluator.EvaluatorType.TT, name, training_data_set, testing_data_set);
         
         hidden_neurons = DEFAULT_NUMBER_OF_HIDDEN_NEURONS;
-        inverse=DEFAULT_INVERSE;
+        inverse = DEFAULT_INVERSE;
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse, maxEvaluations);
 
         this.elm.setX(training_data_set.getX());

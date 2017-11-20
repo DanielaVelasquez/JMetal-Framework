@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Vertebral2C extends AbstractCrossValidationEvaluator {
 
     public Vertebral2C() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Vertebral(2c)", new DataSet("src/resources-elm", "vertebral(2c).train", 6), new DataSet("src/resources-elm", "vertebral(2c).test", 6), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Vertebral(2c)", new DataSet("src/resources-elm", "vertebral(2c).train", 6), new DataSet("src/resources-elm", "vertebral(2c).test", 6), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 
 }

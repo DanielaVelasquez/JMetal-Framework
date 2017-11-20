@@ -6,6 +6,7 @@ import co.edu.unicauca.elm.util.ELMUtil;
 import co.edu.unicauca.elm_function.ELMFunction;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
 import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
+import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import java.util.ArrayList;
 import java.util.List;
 import no.uib.cipr.matrix.DenseMatrix;

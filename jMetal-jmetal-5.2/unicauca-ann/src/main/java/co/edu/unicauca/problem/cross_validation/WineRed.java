@@ -9,6 +9,6 @@ import java.io.IOException;
 public class WineRed extends AbstractCrossValidationEvaluator {
 
     public WineRed() throws IOException {
-        super(AbstractELMEvaluator.EvaluatorType.CV, "Wine(Red)", new DataSet("src/resources-elm", "wine(red).train", 11), new DataSet("src/resources-elm", "wine(red).test", 11), 5, 20, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
+        super(AbstractELMEvaluator.EvaluatorType.CV, "Wine(Red)", new DataSet("src/resources-elm", "wine(red).train", 11), new DataSet("src/resources-elm", "wine(red).test", 11), 5, 50, new Sigmoid(), new RidgeRegressionTheory(new double[]{0, 000001}), 3000);
     }
 }

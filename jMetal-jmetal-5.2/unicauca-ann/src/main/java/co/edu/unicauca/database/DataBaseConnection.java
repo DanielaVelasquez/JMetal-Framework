@@ -27,7 +27,7 @@ public class DataBaseConnection
         String password = "Experimento123";*/
         
         String hostName = "localhost";
-        String dbName = "elm-experiment";
+        String dbName = "elm-experimentoRegresion";
         String user = "elm";
         String password = "elm";
         
