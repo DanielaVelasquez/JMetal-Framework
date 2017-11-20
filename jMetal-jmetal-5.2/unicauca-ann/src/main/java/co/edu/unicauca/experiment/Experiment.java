@@ -28,9 +28,10 @@ public class Experiment
 {
     private DataBaseConnection connection;
     
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         Experiment exp = new Experiment();
-        exp.correr(78);
+        exp.correr(Integer.parseInt(args[0]));
     }
     
     public void correr(int computador)
