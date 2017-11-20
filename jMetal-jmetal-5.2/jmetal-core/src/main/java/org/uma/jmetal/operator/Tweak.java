@@ -5,5 +5,5 @@ import org.uma.jmetal.solution.Solution;
 
 public abstract class Tweak <S extends Solution<?>>
 {
-    public abstract S tweak(S solution);
+    public abstract void tweak(S solution);
 }
