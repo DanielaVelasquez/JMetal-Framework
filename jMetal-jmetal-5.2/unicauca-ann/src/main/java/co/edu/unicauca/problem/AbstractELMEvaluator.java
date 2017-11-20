@@ -100,6 +100,7 @@ public abstract class AbstractELMEvaluator extends AbstractDoubleProblem {
         double accuracy = this.train();
         solution.setObjective(0, (accuracy));
         solution.setAttribute("norm2", elm.getOuputWightNorm());
+        //solution.setAttribute("B", elm.getOuputWightNorm());
     }
     ///ESTA MAAAAAAAAAAAAAAAAL
     private DenseMatrix getGradient(DoubleSolution solution)

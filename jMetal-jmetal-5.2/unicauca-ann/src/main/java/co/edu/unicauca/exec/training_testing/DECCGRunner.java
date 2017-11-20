@@ -61,7 +61,7 @@ public class DECCGRunner
                         .setFEs(70)
                         .setwFes(100)
                         .build();
-            rnd.setSeed(1);
+            rnd.setSeed(5);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

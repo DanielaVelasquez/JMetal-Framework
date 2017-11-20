@@ -413,7 +413,9 @@ public class ELM {
     }
 
     public double getOuputWightNorm() {
-        return output_weight.norm(Matrix.Norm.Frobenius);
+        if(output_weight !=null)
+            return output_weight.norm(Matrix.Norm.Frobenius);
+        return Double.MAX_VALUE;
     }
 
     public double getAccuracy() {
