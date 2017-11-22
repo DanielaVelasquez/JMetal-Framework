@@ -105,9 +105,18 @@ public class DECC_GBuilder
         return this;
     }
 
+  public DECC_GBuilder setComparator(Comparator<DoubleSolution> comparator) {
+    this.comparator = comparator;
+    return this;
+  }
+    
+  
+
   public Comparator<DoubleSolution> getComparator() {
     return comparator;
   }
+
+  
 
   public int getPopulation_size() {
     return population_size;

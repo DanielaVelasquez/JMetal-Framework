@@ -59,13 +59,13 @@ public class SteepestAscentHillClimbing  implements Algorithm<Solution>
                 tweak.tweak(w);
                 this.evaluate(w);
                 
-                if (comparator.compare(w, r) > 0)
+                if (comparator.compare(w, r) < 0)
                 {
                     r = w;
                 }
             }
             
-            if (comparator.compare(r, best) > 0)
+            if (comparator.compare(r, best) < 0)
             {
                 best = r;
             }

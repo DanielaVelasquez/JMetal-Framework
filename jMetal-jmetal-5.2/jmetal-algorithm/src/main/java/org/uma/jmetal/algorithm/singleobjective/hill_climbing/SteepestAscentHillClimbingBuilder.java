@@ -31,7 +31,7 @@ public class SteepestAscentHillClimbingBuilder  implements AlgorithmBuilder<Stee
     {
         this.problem = problem;
         this.maxEvaluations = 3000;
-        this.comparator = new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.DESCENDING, 0);
+        this.comparator = new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
         this.tweak = new BoundedUniformConvultion(0.5, 0.3);
         this.penalize_value = 1;
         this.n = 10;

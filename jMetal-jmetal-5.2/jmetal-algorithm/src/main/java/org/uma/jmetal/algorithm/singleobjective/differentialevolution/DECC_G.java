@@ -1,7 +1,6 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -19,25 +18,25 @@ public class DECC_G implements Algorithm
     /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/
-    private int LOWER_BOUND = 0;
+    private final static int LOWER_BOUND = 0;
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/
     /**
-     * Individiuals
+     * Individuals of the population
      */
     private List<DoubleSolution> population;
-     /**
-     * Individiuals for Diferential evolution algorithm 
-     */
-    //private List<DoubleSolution> w_population;
     /**
      * Problem to solve
      */
     private DoubleProblem problem ;
-    
+    /**
+     * Problem created to solve subcomponents on DE algorithm
+     */
     private SubcomponentDoubleProblemDE subcomponent_problem_DE;
-    
+    /**
+     * Problem created to solve subcomponents on SaNSDE algorithm
+     */
     private SubcomponentDoubleProblemSaNSDE subcomponent_problem_SaNSDE;
     /**
      * Subcomponent dimension size
@@ -52,7 +51,7 @@ public class DECC_G implements Algorithm
      */
     private int wFEs;
     /**
-     * Number of dimension (variables) of the function
+     * Number of variables on a solution
      */
     private int n;
     /**
@@ -63,17 +62,18 @@ public class DECC_G implements Algorithm
      * Number of subcomponents
      */
     private double subcomponent;
-    
     /**
-     * Determines how a solution should be order
+     * Determines the problem is maximizing or minimizing
      */
     private Comparator<DoubleSolution> comparator;
-    
+    /**
+     * Random number generator
+     */
     private JMetalRandom randomGenerator ;
     /**
      * Best individual when needed
      */
-    private DoubleSolution best_inidvidual;
+    private DoubleSolution best_individual;
     /**
      * Index in population of the best individual when asked
      */
@@ -89,7 +89,7 @@ public class DECC_G implements Algorithm
     /**
      * Worst individual found when asked
      */
-    private DoubleSolution worst_inidividual;
+    private DoubleSolution worst_individual;
     /**
      * Index in population from worst indiviual when  asked
      */
@@ -103,7 +103,7 @@ public class DECC_G implements Algorithm
      */
     private DEFrobeniusBuilder deFrobeniusBuilder;
     /**
-     * Maximun number of evaluations
+     * Maximum number of evaluations
      */
     private int maxEvaluations;
     /**
@@ -118,6 +118,24 @@ public class DECC_G implements Algorithm
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
+    /**
+     * Creates an algorithm DECC-G with specific parameters
+     * @param subcomponent number of subcomponents
+     * @param FEs number of evaluations for SaNSDE algorithm
+     * @param wFes number of evaluations for DE algorithm
+     * @param p problem to solve
+     * @param population_size number of individuals in the population
+     * @param comparator determines if problem is maximizing or minimizing
+     * @param sansdeBuilder builder to create SaNSDE algorithm, the builder
+     *                      is configured with the values that are needed for 
+     *                      SaNSDE
+     * @param deFrobeniusBuilder  builder to create DE algorithm, the builder
+     *                            is configured with the values that are needed 
+     *                            for DE
+     * @param maxEvaluations Maximum number of evaluations
+     * @param penalize_value Value use to penalize solutions when stopping 
+     *                       condition is reached 
+     */
     public DECC_G(int subcomponent, int FEs, int wFes, 
             DoubleProblem p, int population_size, 
             Comparator<DoubleSolution> comparator, SaNSDEBuilder sansdeBuilder,
@@ -139,19 +157,20 @@ public class DECC_G implements Algorithm
         best_index = 0;
         worst_index = populationSize - 1;
     }
-    
-    public List<DoubleSolution> getPopulation() {
-      return population;
+    @Override
+    public String getName() {
+       return "DECC-G";
     }
 
-    public void setProblem(DoubleProblem problem) {
-      this.problem = problem ;
-    }
-    public DoubleProblem getProblem() {
-      return problem ;
+    @Override
+    public String getDescription() {
+        return "Large Scale Evolutionary Optimization Using "+
+                "Cooperative Coevolution";
     }
     /**
-     * Increments the number of generations evaluated
+     * Increments the number of individuals evaluated,
+     * it is called every time one individual or several is evaluated
+     * @param evaluations number evaluations performed
      */
     protected void updateProgress() {
         evaluations += 1;
@@ -173,12 +192,26 @@ public class DECC_G implements Algorithm
      * the user
      * @param solution solution to penalize with a bad function value
      */
-    protected void penalize(DoubleSolution solution){
+    protected void penalize(DoubleSolution solution)
+    {
         solution.setObjective(0, this.penalize_value);
     }
-    private void evaluatePopulation(List<DoubleSolution> population) {
+    /**
+     * Evaluate individuals from a population as long as stopping condition
+     * is not reached, if this happen, the individuals that were not 
+     * evaluated are penalized
+     * @param population individuals to evaluate
+     */
+    private void evaluatePopulation(List<DoubleSolution> population) 
+    {
        int i = 0;
         int populationSize = population.size();
+        /**
+         * <p>
+         * While maxEvaluation is not reached and there are individuals
+         * who has not been evaluted, every individual is send to evaluation
+         * </p>
+         */
         while(!isStoppingConditionReached() && i < populationSize)
         {
             DoubleSolution solution = population.get(i);
@@ -186,34 +219,20 @@ public class DECC_G implements Algorithm
             i++;
             this.updateProgress();
         }
+        /**
+         * If there are individual who were not evaluated, they are penalized
+         */
         for(int j = i; j < populationSize; j++)
         {
             DoubleSolution solution = population.get(i);
             this.penalize(solution);
         }
     }
-    private List<DoubleSolution> getSubPopulation(int l,int u)
-    {
-        List<DoubleSolution> population = new ArrayList<>(populationSize);
-        int size = u - l + 1;
-        for(int i = 0; i < populationSize; i++)
-        {
-            //DoubleSolution solution = new ArrayDoubleSolution();
-        }
-        return population;
-    }
-    private void randomWeight(List<DoubleSolution> w_population, int column)
-    {
-        int size = w_population.size();
-        for(int i = 0; i < size; i++)
-        {
-            
-            DoubleSolution s = w_population.get(i);
-            double value = randomGenerator.nextDouble(s.getLowerBound(column), s.getUpperBound(column));
-            s.setVariableValue(column, value);
-        }
-    } 
-    private void replaceInPopulation(List<DoubleSolution> subpopulation, int l, int u, List<Integer> index)
+    /**
+     * Get real individuals who are wrapped on a SaNSDE subcomponent solution
+     * @param subpopulation individuals used on a SaNSDE subcomponent problem
+     */
+    private void getIndividualsFromSubpopulation(List<DoubleSolution> subpopulation)
     {
         for(int i = 0; i < populationSize; i++)
         {
@@ -221,23 +240,42 @@ public class DECC_G implements Algorithm
             population.set(i, other.getSolution());
         }
     }
-    
-    private void copyObjectivesFrom(DoubleSolution origin,DoubleSolution destination)
+    /**
+     * Sets the best and worst individual and its indexes
+     * @param population individuals to select best and worst individuals
+     */
+    private void selectBestWorstIndividual(List<DoubleSolution> population)
     {
-        int size = origin.getNumberOfObjectives();
-        for(int i = 0; i < size; i++)
+        best_index = 0;
+        worst_index = 0;
+        
+        best_individual = population.get(best_index);
+        worst_individual = population.get(worst_index);
+        
+        for(int i = 1; i < populationSize; i++)
         {
-            destination.setObjective(i, origin.getObjective(i));
+            DoubleSolution next = population.get(i);
+            
+            //if next individual is better than current best
+            if(comparator.compare(best_individual, next) < 0)
+            {
+                best_individual = next;
+                best_index = i;
+            }
+            else
+            {
+                //if next is worst than current worst
+                if(comparator.compare(worst_individual, next) > 0)
+                {
+                    worst_individual = next;
+                    worst_index = i;
+                }
+            }
         }
     }
-    
     private void findIndividuals()
     {
-        Collections.sort(getPopulation(), comparator) ;
-        //Collections.sort(w_population, comparator) ; //REVISAR SI EL W_POPULATION SE ARREGLA IGUAL QUE EL POPULATION
-        best_inidvidual = population.get(best_index);
-        worst_inidividual = population.get(worst_index);
-        
+        this.selectBestWorstIndividual(population);
         do
         {
             random_index = randomGenerator.nextInt(LOWER_BOUND, populationSize);
@@ -401,7 +439,7 @@ public class DECC_G implements Algorithm
                                .build();
                sansde.setPopulation(subpopulation);
                sansde.run();
-               this.replaceInPopulation(sansde.getPopulation(), l, u, index);
+               this.getIndividualsFromSubpopulation(sansde.getPopulation());
                if(!load_missing_genes && missing_genes>0 && (j+1)==missing_genes)
                {
                    this.s = this.s + 1;
@@ -425,10 +463,10 @@ public class DECC_G implements Algorithm
            
            //de.setPopulation(w_population);
            this.chooseIndexWPopulation((int) Math.ceil(subcomponent));
-           subcomponent_problem_DE.setSolution(best_inidvidual);
+           subcomponent_problem_DE.setSolution(best_individual);
            de.run();
            DoubleSolution ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
-           ans = this.getBest(best_inidvidual, ans);
+           ans = this.getBest(best_individual, ans);
            population.set(best_index, ans);
            
            
@@ -446,7 +484,7 @@ public class DECC_G implements Algorithm
            subcomponent_problem_DE.setSolution(random_inidividual);
            de.run();
            ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
-           ans = this.getBest(best_inidvidual, ans);
+           ans = this.getBest(best_individual, ans);
            population.set(random_index, ans);
            
            evaluationsToPerfom = this.getPossibleEvaluations(wFEs);
@@ -462,11 +500,11 @@ public class DECC_G implements Algorithm
                 .setPopulationSize(populationSize)
                 .build();
            
-           subcomponent_problem_DE.setSolution(worst_inidividual);
+           subcomponent_problem_DE.setSolution(worst_individual);
            de.run();
            
            ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
-           ans = this.getBest(best_inidvidual, ans);
+           ans = this.getBest(best_individual, ans);
            population.set(worst_index, ans);
            
        }
@@ -543,14 +581,21 @@ public class DECC_G implements Algorithm
         }
         return false;
     }
-    @Override
-    public String getName() {
-       return "DECC-G";
+
+    
+       /**
+     * Get the current population
+     * @return 
+     */
+    public List<DoubleSolution> getPopulation() {
+      return population;
     }
 
-    @Override
-    public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setProblem(DoubleProblem problem) {
+      this.problem = problem ;
+    }
+    public DoubleProblem getProblem() {
+      return problem ;
     }
     
 }

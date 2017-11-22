@@ -11,6 +11,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -60,8 +61,9 @@ public class DECCGRunner
                         .setSubcomponets(10)
                         .setFEs(70)
                         .setwFes(100)
+                        .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .build();
-            rnd.setSeed(5);
+            rnd.setSeed(1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
