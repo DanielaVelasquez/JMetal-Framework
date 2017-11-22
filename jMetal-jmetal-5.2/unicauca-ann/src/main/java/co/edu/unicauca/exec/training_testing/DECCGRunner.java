@@ -52,7 +52,7 @@ public class DECCGRunner
         
         long initTime = System.currentTimeMillis();
         
-        for(int i = 0; i < 1;i++)
+        for(int i = 0; i < 30;i++)
         {
             algorithm = new DECC_GBuilder(problem)
                         .setPenalizeValue(1)
@@ -63,7 +63,7 @@ public class DECCGRunner
                         .setwFes(100)
                         .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .build();
-            rnd.setSeed(71);
+            rnd.setSeed(i);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
@@ -71,12 +71,12 @@ public class DECCGRunner
               DoubleSolution solution = (DoubleSolution) algorithm.getResult();
               long computingTime = algorithmRunner.getComputingTime() ;
 
-              System.out.println("Total execution time: " + computingTime + "ms");
+             // System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               
               System.out.println("evaluaciones: "+p.total);
               train = (1-solution.getObjective(0));
-              System.out.println("Objective "+train);
+              //System.out.println("Objective "+train);
               
               test = p.test(solution);
               

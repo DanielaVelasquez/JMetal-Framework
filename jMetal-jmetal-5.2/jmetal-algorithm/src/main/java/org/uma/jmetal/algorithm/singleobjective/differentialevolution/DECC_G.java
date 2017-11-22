@@ -174,9 +174,8 @@ public class DECC_G implements Algorithm
        
        while(!isStoppingConditionReached())
        {
-           List<Integer> index = Util.createRandomPermutation(n);//this.randPerm(this.n);
+           List<Integer> index = Util.createRandomPermutation(n);
            boolean load_missing_genes = false;
-           //w_population.clear();
            int l = 0;
            int u = -1;
            for(int j = 0; j < subcomponent; j++)
@@ -194,13 +193,12 @@ public class DECC_G implements Algorithm
                
                List<DoubleSolution> subpopulation = this.createSubcomponent(this.population);
                
-               //ESTO DEBE CAMBIARSE PORQQUE AHORA SANSDE Y DE ESTAN POR CICLOS, PERO DESPUES SI VAN A SER POR EVALUAICONES
                int evaluationsToPerfom = this.getPossibleEvaluations(FE);
                
                if(evaluationsToPerfom == 0) 
                    continue;
                
-               evaluations += evaluationsToPerfom;
+               this.updateProgress(evaluationsToPerfom);
                
                SaNSDE sansde = sansdeBuilder
                                .setMaxEvaluations(evaluationsToPerfom)
@@ -224,8 +222,7 @@ public class DECC_G implements Algorithm
             if(evaluationsToPerfom == 0) 
                 continue;
             
-           evaluations += evaluationsToPerfom;
-           
+           this.updateProgress(evaluationsToPerfom);
            DEFrobenius de = deFrobeniusBuilder
                                       .setMaxEvaluations(evaluationsToPerfom)
                                       .setProblem(subcomponent_problem_DE)
@@ -245,7 +242,8 @@ public class DECC_G implements Algorithm
                
             if(evaluationsToPerfom == 0) 
                 continue;
-           evaluations += evaluationsToPerfom;
+            
+           this.updateProgress(evaluationsToPerfom);
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
                 .setProblem(subcomponent_problem_DE)
@@ -263,8 +261,7 @@ public class DECC_G implements Algorithm
             if(evaluationsToPerfom == 0) 
                 continue;
             
-            evaluations += evaluationsToPerfom;
-           
+           this.updateProgress(evaluationsToPerfom);
            de = deFrobeniusBuilder
                 .setMaxEvaluations(evaluationsToPerfom)
                 .setProblem(subcomponent_problem_DE)
