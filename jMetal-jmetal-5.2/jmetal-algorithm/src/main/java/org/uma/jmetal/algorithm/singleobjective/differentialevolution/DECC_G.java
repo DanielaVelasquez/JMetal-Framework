@@ -10,7 +10,6 @@ import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemSaNSDE;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentDE;
 import org.uma.jmetal.solution.impl.DoubleSolutionSubcomponentSaNSDE;
-import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.Util;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -516,5 +515,69 @@ public class DECC_G implements Algorithm
     
     public void setPopulation(List<DoubleSolution> population) {
         this.population = population;
+    }
+
+    public int getFE() {
+        return FE;
+    }
+
+    public void setFE(int FE) {
+        this.FE = FE;
+    }
+
+    public int getwFEs() {
+        return wFEs;
+    }
+
+    public void setwFEs(int wFEs) {
+        this.wFEs = wFEs;
+    }
+
+    public Comparator<DoubleSolution> getComparator() {
+        return comparator;
+    }
+
+    public void setComparator(Comparator<DoubleSolution> comparator) {
+        this.comparator = comparator;
+    }
+
+    public SaNSDEBuilder getSansdeBuilder() {
+        return sansdeBuilder;
+    }
+
+    public void setSansdeBuilder(SaNSDEBuilder sansdeBuilder) {
+        this.sansdeBuilder = sansdeBuilder;
+    }
+
+    public DEFrobeniusBuilder getDeFrobeniusBuilder() {
+        return deFrobeniusBuilder;
+    }
+
+    public void setDeFrobeniusBuilder(DEFrobeniusBuilder deFrobeniusBuilder) {
+        this.deFrobeniusBuilder = deFrobeniusBuilder;
+    }
+
+    public int getMaxEvaluations() {
+        return maxEvaluations;
+    }
+
+    public void setMaxEvaluations(int maxEvaluations) {
+        this.maxEvaluations = maxEvaluations;
+    }
+
+    public int getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(int evaluations) {
+        this.evaluations = evaluations;
+    }
+
+    public double getPenalize_value() {
+        return penalize_value;
+    }
+
+    public void setPenalize_value(double penalize_value) {
+        this.penalize_value = penalize_value;
     }
 }
