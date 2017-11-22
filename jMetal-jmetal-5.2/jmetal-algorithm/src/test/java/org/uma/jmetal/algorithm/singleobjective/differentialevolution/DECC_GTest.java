@@ -13,11 +13,8 @@ import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemDE;
 import org.uma.jmetal.problem.impl.SubcomponentDoubleProblemSaNSDE;
 import org.uma.jmetal.solution.DoubleSolution;
 
-/**
- *
- * @author danielavelasquezgarzon
- */
-public class DECC_GTest {
+public class DECC_GTest
+{
     
     public DECC_GTest() {
     }
