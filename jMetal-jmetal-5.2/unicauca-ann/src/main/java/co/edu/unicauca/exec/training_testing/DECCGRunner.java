@@ -63,7 +63,7 @@ public class DECCGRunner
                         .setwFes(100)
                         .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .build();
-            rnd.setSeed(1);
+            rnd.setSeed(71);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
