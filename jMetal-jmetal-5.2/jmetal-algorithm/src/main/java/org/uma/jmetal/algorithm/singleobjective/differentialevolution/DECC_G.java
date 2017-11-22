@@ -294,10 +294,7 @@ public class DECC_G implements Algorithm
         for(int i = 1; i < populationSize; i++)
         {
             DoubleSolution s = this.getPopulation().get(i);
-            if(s.getObjective(0) == best.getObjective(0))
-            {
-                best = this.getBest(best, s);
-            }
+            best = this.getBest(best, s);
         }
         return best;
     }

@@ -16,7 +16,8 @@ import org.uma.jmetal.solution.DoubleSolution;
 public class DECC_GTest
 {
     
-    public DECC_GTest() {
+    public DECC_GTest()
+    {
     }
     
     @BeforeClass
@@ -33,46 +34,6 @@ public class DECC_GTest
     
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of run method, of class DECC_G.
-     */
-    @Test
-    public void testRun() {
-        System.out.println("run");
-        DECC_G instance = null;
-        instance.run();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getName method, of class DECC_G.
-     */
-    @Test
-    public void testGetName() {
-        System.out.println("getName");
-        DECC_G instance = null;
-        String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getDescription method, of class DECC_G.
-     */
-    @Test
-    public void testGetDescription() {
-        System.out.println("getDescription");
-        DECC_G instance = null;
-        String expResult = "";
-        String result = instance.getDescription();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
