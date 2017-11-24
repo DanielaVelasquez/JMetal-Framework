@@ -7,6 +7,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 
@@ -27,7 +28,7 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
     this.maxEvaluations = 3000;
     this.crossoverOperator =  new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin");
     this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin");
-    this.comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
+    this.comparator = new FrobeniusComparator<>(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
     this.selectionOperator = new DifferentialEvolutionSelection();
     this.penalize_value = 1;
   }

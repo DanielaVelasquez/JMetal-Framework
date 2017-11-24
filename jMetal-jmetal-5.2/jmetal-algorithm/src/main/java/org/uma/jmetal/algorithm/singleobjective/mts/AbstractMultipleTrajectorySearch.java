@@ -378,7 +378,7 @@ public abstract class AbstractMultipleTrajectorySearch <S extends Solution<?>,P 
         }
         for(int j = i; j < populationSize; j++)
         {
-            S solution = population.get(i);
+            S solution = population.get(j);
             this.penalize(solution);
         }
     }

@@ -267,7 +267,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         for(int j = i; j < populationSize; j++)
         {
-            DoubleSolution solution = population.get(i);
+            DoubleSolution solution = population.get(j);
             this.penalize(solution);
         }
         return population;
@@ -367,21 +367,34 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     {
         for(DoubleSolution s: population)
         {
-            if(s!=individual)
+            if(s != individual)
             {
                 int n = this.getProblem().getNumberOfVariables();
+                
                 for(int i = 0; i < n; i++)
                 {
-                    if(s.getVariableValue(i) == individual.getVariableValue(i))
+                    double sValue = s.getVariableValue(i);
+                    double individualValue = individual.getVariableValue(i);
+                    
+                    if(sValue == individualValue)
                     {
-                        if(i== n-1)
+                        if(i == n-1)
+                        {
                             return true;
+                        }
                     }
                     else
+                    {
                         break;
+                    }
                 }
             }
+            else
+            {
+                return true;
+            }
         }
+        
         return false;
     }
     /**
