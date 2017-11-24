@@ -3,27 +3,30 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.hill_climbing.SteepestAscentHillClimbing;
-import org.uma.jmetal.algorithm.singleobjective.hill_climbing.SteepestAscentHillClimbingBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobenius;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolution;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
-import org.uma.jmetal.operator.impl.localsearch.BoundedUniformConvultion;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-public class SteepestAscentHCRunner 
+public class DERunner 
 {    
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
         
         DoubleProblem problem;
-        SteepestAscentHillClimbing algorithm;
+        DifferentialEvolution algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -48,35 +51,40 @@ public class SteepestAscentHCRunner
         tt.getInputWeightsBiasFrom(result);
         System.out.println("Accuracy training: "+tt.train());*/
         
+        double cr = 0.5 ;
+        double f = 0.5 ;
+        crossover = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin") ;
+
+        selection = new DifferentialEvolutionSelection() ;
+        
         double train = -1.0;
         double test = -1.0;
+        double train_best = -1.0;
+        double test_best = -1.0;
         
         long initTime = System.currentTimeMillis();
         
         for(int i = 0; i < 1;i++)
         {
-            //revisar el ordering de la norma de frobenirus. en deccg dio mejores resultados si
-            //        se ponia ascendete
-            algorithm = new SteepestAscentHillClimbingBuilder(problem)
-                    .setTweak(new BoundedUniformConvultion(0.5, 0.07))
-                    .build();
-            rnd.setSeed(5);
+            algorithm =  new  DifferentialEvolutionBuilder(problem)
+                         .setPopulationSize(10)
+                         .setMaxEvaluations(20)
+                    
+                         .build();
+            rnd.setSeed(1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
 
               DoubleSolution solution = (DoubleSolution) algorithm.getResult();
               long computingTime = algorithmRunner.getComputingTime() ;
-
-              System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-              
-              System.out.println("evaluaciones: "+p.total);
+              System.out.println("----->"+p.total);
+              System.out.println("Total execution time: " + computingTime + "ms");
               train = (1-solution.getObjective(0));
               System.out.println("Objective "+train);
               
               test = p.test(solution);
-              
               System.out.println("Testing: "+test);
              
         }
