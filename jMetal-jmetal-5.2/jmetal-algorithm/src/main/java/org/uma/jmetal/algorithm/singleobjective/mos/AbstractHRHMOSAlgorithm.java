@@ -196,7 +196,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
         }
         for(int j = i; j < populationSize; j++)
         {
-            S solution = population.get(i);
+            S solution = population.get(j);
             this.penalize(solution);
         }
        

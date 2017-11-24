@@ -96,7 +96,7 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
         }
         for(int j = i; j < populationSize; j++)
         {
-            DoubleSolution solution = population.get(i);
+            DoubleSolution solution = population.get(j);
             this.penalize(solution);
         }
         return population;
@@ -174,24 +174,7 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
             
         if (comparison == 0) 
         {
-            try
-            {                
-                double bS1 = (double) s1.getAttribute("B");
-                double bS2 = (double) s2.getAttribute("B");
-
-                if(bS1 <= bS2)
-                {
-                    return s1;
-                }
-                else
-                {                        
-                    return s2;
-                }
-            }
-            catch(Exception ex)
-            {
-                return s1;
-            }
+            return s1;
         } 
         else if (comparison < 0)
         {                

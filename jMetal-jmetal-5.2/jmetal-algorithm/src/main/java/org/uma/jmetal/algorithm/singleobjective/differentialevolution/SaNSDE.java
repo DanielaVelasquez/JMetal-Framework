@@ -47,7 +47,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      *-----------------------------------------------------------------------------------------*/
     
     /**
-     * Probability to control wich mutation strategy to use
+     * Probability to control which mutation strategy to use
      */
     private double p;
     /**
@@ -94,7 +94,6 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * Maximun number of evaluations
      */
     private int maxEvaluations;
-
     /**
      * Determines how a solution should be order
      */
@@ -106,7 +105,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     /**
      * Actual number of evaluations
      */
-    private int iteration;
+    private int evaluations;
     /**
      * Crossover rate self adaption
      */
@@ -171,7 +170,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     
     @Override
     protected void initProgress() {
-       iteration = iteration;
+       //iteration = iteration;
     }
 
     @Override
@@ -181,12 +180,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 
     @Override
     protected boolean isStoppingConditionReached() {
-        return iteration >= maxEvaluations;
+        return evaluations >= maxEvaluations;
     }
 
     @Override
     protected List<DoubleSolution> createInitialPopulation() {
-        this.iteration = 0;
+        this.evaluations = 0;
         
         if(this.getPopulation() != null)
         {
@@ -214,12 +213,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             DoubleSolution solution = population.get(i);
             this.getProblem().evaluate(solution);
             i++;
-            this.iteration++;
+            this.evaluations++;
         }
         
         for(int j = i; j < populationSize; j++)
         {
-            DoubleSolution solution = population.get(i);
+            DoubleSolution solution = population.get(j);
             this.penalize(solution);
         }
         
@@ -273,7 +272,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             //Adds the best children
             offspringPopulation.add(children.get(0));
             //Calculates improvement of fitness between the i-th indiviual and its best child
-            double frec_k = calculateSumObjectives(matingPopulation.get(i)) - calculateSumObjectives(children.get(0));
+            double frec_k = matingPopulation.get(i).getObjective(0) - children.get(0).getObjective(0);
             frec.add(frec_k);
             sum_frec += frec_k;
             //Adds the crossover rate value used
@@ -299,7 +298,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 
             if(!this.inPopulation(pop, s))
             {
-              pop.add(s);
+                pop.add(s);
             }
             else
             {
@@ -328,11 +327,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         for(int i = 1; i < populationSize; i++)
         {
             DoubleSolution s = this.getPopulation().get(i);
-            
-            if(s.getObjective(0) == best.getObjective(0))
-            {
-                best = this.getBest(best, s);
-            }
+            best = this.getBest(best, s);
         }
         
         return best;
@@ -366,7 +361,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         fp_nf1 = 0;
         fp_nf2 = 0;
         
-        this.iteration = 0;        
+        this.evaluations = 0;        
     }
     
     /**
@@ -457,31 +452,13 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     }
     
     /**
-     * Calculate sum of objectives value from a solution
-     * @param s given solution
-     * @return sum of solution's objectives
-     */
-    private double calculateSumObjectives(DoubleSolution s)
-    {
-        int size = s.getNumberOfObjectives();
-        double sum = 0;
-        
-        for(int i = 0; i< size; i++)
-        {
-            sum += s.getObjective(i);
-        }
-        
-        return sum;
-    }
-    
-    /**
      * Updates values crossover rate and scale factor value for a crossover strategy
      * @param selected crossover srategy
      * @param f new scale factor for the selected crossover strategy
      * @param cr new crossover rate for the selected crossover strategy
      * @return Copy of the selected crossover rate strategy with the new scale factor and crossover rate
      */
-    private DifferentialEvolutionCrossover updateValuesOf(DifferentialEvolutionCrossover selected,double f, double cr)
+    private DifferentialEvolutionCrossover updateValuesOf(DifferentialEvolutionCrossover selected, double f, double cr)
     {
         double k = selected.getK();
         String variant = selected.getVariant();
@@ -514,7 +491,10 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                 
                 for(int i = 0; i < n; i++)
                 {
-                    if(Objects.equals(s.getVariableValue(i), individual.getVariableValue(i)))
+                    double sValue = s.getVariableValue(i);
+                    double individualValue = individual.getVariableValue(i);
+                    
+                    if(sValue == individualValue)
                     {
                         if(i == n-1)
                         {
@@ -526,6 +506,10 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                         break;
                     }
                 }
+            }
+            else
+            {
+                return true;
             }
         }
         
@@ -543,28 +527,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     {
         int comparison = comparator.compare(s1, s2);
         
-        if(comparison == 0)
-        {
-            try
-            {
-                double b_s1 = (double) s1.getAttribute("B");
-                double b_s2 = (double) s2.getAttribute("B");
-                
-                if(b_s1 <= b_s2)
-                {
-                    return s1;
-                }
-                else
-                {
-                    return s2;
-                }
-            }
-            catch(Exception e)
-            {
-                return s1;
-            }
-        }
-        else if(comparison < 0)
+        if(comparison <= 0)
         {
             return s1;
         }
@@ -621,20 +584,12 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     public void setCrossoverOperator2(DifferentialEvolutionCrossover crossoverOperator2) {
         this.crossoverOperator2 = crossoverOperator2;
     }
-
-    public int getIteration() {
-        return iteration;
-    }
-
-    public void setIteration(int iteration) {
-        this.iteration = iteration;
-    }
-
+    
     public double getPenalize_value() {
         return penalize_value;
     }
 
     public void setPenalize_value(double penalize_value) {
         this.penalize_value = penalize_value;
-    }
+    }    
 }

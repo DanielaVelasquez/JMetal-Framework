@@ -267,7 +267,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
         }
         for(int j = i; j < populationSize; j++)
         {
-            DoubleSolution solution = population.get(i);
+            DoubleSolution solution = population.get(j);
             this.penalize(solution);
         }
     }
