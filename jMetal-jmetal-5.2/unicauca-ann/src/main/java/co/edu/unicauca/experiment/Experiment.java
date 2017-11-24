@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
@@ -166,7 +166,7 @@ public class Experiment
                     break;
                     
                 case "DE":
-                    algAux = new DEFrobeniusBuilder(problem)
+                    algAux = new DEUnicaucaBuilder(problem)
                         .setPopulationSize(10)
                         .setMaxEvaluations(600)
                         .setPenalizeValue(1)
@@ -290,7 +290,7 @@ public class Experiment
                     break;
                     
                 case "DE":
-                    algAux = new DEFrobeniusBuilder(problem)
+                    algAux = new DEUnicaucaBuilder(problem)
                         .setPopulationSize(10)
                         .setMaxEvaluations(3000)
                         .setPenalizeValue(1)

@@ -19,17 +19,17 @@ public class MTS_LS1ParametersAdjust extends ParametersAdjust
     }
 
     @Override
-    public void run() throws IOException
+    public void run(int inicio, int end) throws IOException
     {
         
         int combinations = this.covering_array.getN();
         int values = this.covering_array.getK();
         
-        FileWriter fw = new FileWriter("results-mts");
+        FileWriter fw = new FileWriter("results-mts-" + inicio + "-" + end);
         PrintWriter pw = new PrintWriter(fw);
         
         try {
-            for(int i = 0; i < combinations; i++)
+            for(int i = inicio; i < end; i++)
             {
                 String line = "";
                 int local_search_test = -1 ;
@@ -99,10 +99,10 @@ public class MTS_LS1ParametersAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        MTS_LS1ParametersAdjust parameters = new MTS_LS1ParametersAdjust(3, 5, 10);
+        MTS_LS1ParametersAdjust parameters = new MTS_LS1ParametersAdjust(3, 5, 30);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/mts-params");
         parameters.getCovering_array().load("src/resources-params/mts-ca");
-        parameters.run();
+        parameters.run(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
     }
 }

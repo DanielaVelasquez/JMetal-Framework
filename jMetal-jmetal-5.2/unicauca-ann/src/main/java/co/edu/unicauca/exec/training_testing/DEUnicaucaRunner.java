@@ -3,8 +3,8 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobenius;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicauca;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
@@ -17,14 +17,14 @@ import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-public class DEFrobeniusRunner 
+public class DEUnicaucaRunner 
 {    
     public static void main(String[] args) throws Exception 
     {
         JMetalRandom rnd = JMetalRandom.getInstance();
         
         DoubleProblem problem;
-        DEFrobenius algorithm;
+        DEUnicauca algorithm;
         DifferentialEvolutionSelection selection;
         DifferentialEvolutionCrossover crossover;
         SolutionListEvaluator<DoubleSolution> evaluator ;
@@ -64,7 +64,7 @@ public class DEFrobeniusRunner
         
         for(int i = 0; i < 1;i++)
         {
-            algorithm =  new  DEFrobeniusBuilder(problem)
+            algorithm =  new  DEUnicaucaBuilder(problem)
                          .setPopulationSize(13)
                          .setMaxEvaluations(3000)
                     

@@ -20,17 +20,17 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
     }
 
     @Override
-    public void run() throws IOException
+    public void run(int inicio, int end) throws IOException
     {
         
         int combinations = this.covering_array.getN();
         int values = this.covering_array.getK();
         
-        FileWriter fw = new FileWriter("results-SaNSDE");
+        FileWriter fw = new FileWriter("results-SaNSDE-" + inicio + "-" + end);
         PrintWriter pw = new PrintWriter(fw);
         
         try {
-            for(int i = 0; i < combinations; i++)
+            for(int i = inicio; i < end; i++)
             {
                 String line = "";
                 double cr1 = -1 ;
@@ -91,10 +91,10 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        SaNSDEParametersAdjust parameters = new SaNSDEParametersAdjust(5, 4, 10);
+        SaNSDEParametersAdjust parameters = new SaNSDEParametersAdjust(5, 4, 30);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/SaNSDE-params");
         parameters.getCovering_array().load("src/resources-params/SaNSDE-ca");
-        parameters.run();
+        parameters.run(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
     }
 }

@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -23,12 +22,12 @@ import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SaNSDETest {
+public class DEUnicaucaTest {
     
     private int maxEvaluations;
     private int sizePopulation;
     private double penalizeValue;
-    private SaNSDE instance;
+    private DEUnicauca instance;
     
     @Mock private DoubleProblem problem;
            
@@ -37,7 +36,7 @@ public class SaNSDETest {
         maxEvaluations = 3000;
         sizePopulation = 3;
         penalizeValue = 17.1234567898765;
-        instance = new SaNSDEBuilder(problem)
+        instance = new DEUnicaucaBuilder(problem)
             .setMaxEvaluations(maxEvaluations)
             .setPopulationSize(sizePopulation)
             .setPenalizeValue(penalizeValue)

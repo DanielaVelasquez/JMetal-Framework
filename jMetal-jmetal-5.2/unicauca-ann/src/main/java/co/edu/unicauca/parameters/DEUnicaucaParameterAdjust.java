@@ -4,33 +4,33 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobenius;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEFrobeniusBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicauca;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
 
-public class DEFrobeniusParameterAdjust extends ParametersAdjust
+public class DEUnicaucaParameterAdjust extends ParametersAdjust
 {
 
-    public DEFrobeniusParameterAdjust(int v, int k, int total_iterations) {
+    
+    public DEUnicaucaParameterAdjust(int v, int k, int total_iterations) {
         super(v, k, total_iterations);
     }
 
     @Override
-    public void run() throws IOException
+    public void run(int inicio, int end) throws IOException
     {
         
-        int combinations = this.covering_array.getN();
         int values = this.covering_array.getK();
         
-        FileWriter fw = new FileWriter("results-DE");
+        FileWriter fw = new FileWriter("results-DE-"+ inicio + "-" + end);
         PrintWriter pw = new PrintWriter(fw);
         
         try {
-            for(int i = 0; i < combinations; i++)
+            for(int i = inicio; i < end; i++)
             {
                 String line = "";
                 double cr = -1 ;
@@ -55,7 +55,7 @@ public class DEFrobeniusParameterAdjust extends ParametersAdjust
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
                         DifferentialEvolutionCrossover crossoverOperator = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin");
-                        DEFrobenius algorithm = new   DEFrobeniusBuilder(problem)
+                        DEUnicauca algorithm = new   DEUnicaucaBuilder(problem)
                                                             .setPopulationSize(10)
                                                             .setMaxEvaluations(3000)
                                                             .setCrossover(crossoverOperator)
@@ -87,10 +87,10 @@ public class DEFrobeniusParameterAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        DEFrobeniusParameterAdjust parameters = new DEFrobeniusParameterAdjust(5, 4, 10);
+        DEUnicaucaParameterAdjust parameters = new DEUnicaucaParameterAdjust(5, 4, 30);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/de-params");
         parameters.getCovering_array().load("src/resources-params/de-ca");
-        parameters.run();
+        parameters.run(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
     }
 }

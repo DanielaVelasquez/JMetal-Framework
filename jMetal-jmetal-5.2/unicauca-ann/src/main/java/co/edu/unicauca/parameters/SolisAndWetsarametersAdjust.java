@@ -20,18 +20,18 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
     }
 
     @Override
-    public void run() throws IOException
+    public void run(int inicio, int end) throws IOException
     {
         
         int combinations = this.covering_array.getN();
         int values = this.covering_array.getK();
         
-        FileWriter fw = new FileWriter("results-SolisAndWets");
+        FileWriter fw = new FileWriter("results-SolisAndWets-" + inicio + "-" + end);
         PrintWriter pw = new PrintWriter(fw);
         
         try 
         {
-            for(int i = 0; i < combinations; i++)
+            for(int i = inicio; i < end; i++)
             {
                 String line = "";
                 double rho = -1;
@@ -82,10 +82,10 @@ public class SolisAndWetsarametersAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        SolisAndWetsarametersAdjust parameters = new SolisAndWetsarametersAdjust(5, 2, 10);
+        SolisAndWetsarametersAdjust parameters = new SolisAndWetsarametersAdjust(5, 2, 30);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/SolisAndWets-params");
         parameters.getCovering_array().load("src/resources-params/SolisAndWets-ca");
-        parameters.run();
+        parameters.run(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
     }
 }

@@ -1,14 +1,10 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
 import java.util.Comparator;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.FrobeniusComparator;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 
 public class DECC_GBuilder 
@@ -19,9 +15,8 @@ public class DECC_GBuilder
   private int FEs;
   private int wFes;
   private int population_size;
-  private int numCyclesSaNSDE;
   private SaNSDEBuilder sansdeBuilder;
-  private DEFrobeniusBuilder deFrobeniusBuilder;
+  private DEUnicaucaBuilder deFrobeniusBuilder;
   private int maxEvaluations;
   private double penalize_value;
 
@@ -36,7 +31,7 @@ public class DECC_GBuilder
     this.maxEvaluations = 3000;
     this.penalize_value = 1;
     this.sansdeBuilder = new SaNSDEBuilder(problem);
-    this.deFrobeniusBuilder = new DEFrobeniusBuilder(problem);
+    this.deFrobeniusBuilder = new DEUnicaucaBuilder(problem);
   }
 
   public DECC_G build() {
@@ -51,7 +46,7 @@ public class DECC_GBuilder
 
     return this;
   }
-  public DECC_GBuilder setDEFrobeniusBuilder(DEFrobeniusBuilder deFrobeniusBuilder) {
+  public DECC_GBuilder setDEFrobeniusBuilder(DEUnicaucaBuilder deFrobeniusBuilder) {
     if (deFrobeniusBuilder == null) {
       throw new JMetalException("deFrobeniusBuilder can't be null ");
     }
@@ -127,7 +122,7 @@ public class DECC_GBuilder
     return sansdeBuilder;
   }
 
-  public DEFrobeniusBuilder getDeFrobeniusBuilder() {
+  public DEUnicaucaBuilder getDeFrobeniusBuilder() {
     return deFrobeniusBuilder;
   }
 

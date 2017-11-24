@@ -96,5 +96,5 @@ public abstract class ParametersAdjust
         return covering_array;
     }
     
-    public abstract void run() throws Exception;
+    public abstract void run(int inicio, int end) throws Exception;
 }

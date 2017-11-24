@@ -7,7 +7,7 @@ import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
 
 
-public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
+public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
 {
   private DoubleProblem problem;
   private int populationSize;
@@ -16,7 +16,7 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
   private DifferentialEvolutionSelection selectionOperator;
   private double penalize_value;
 
-  public DEFrobeniusBuilder(DoubleProblem problem) {
+  public DEUnicaucaBuilder(DoubleProblem problem) {
     this.problem = problem;
     this.populationSize = 100;
     this.maxEvaluations = 3000;
@@ -25,12 +25,12 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
     this.penalize_value = 0;
   }
   
-  public DEFrobenius build() {
-    return new DEFrobenius(problem, maxEvaluations, populationSize, crossoverOperator,
+  public DEUnicauca build() {
+    return new DEUnicauca(problem, maxEvaluations, populationSize, crossoverOperator,
         selectionOperator, penalize_value);
   }
 
-  public DEFrobeniusBuilder setPopulationSize(int populationSize) {
+  public DEUnicaucaBuilder setPopulationSize(int populationSize) {
     if (populationSize < 0) {
       throw new JMetalException("Population size is negative: " + populationSize);
     }
@@ -40,7 +40,7 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
     return this;
   }
 
-  public DEFrobeniusBuilder setMaxEvaluations(int maxEvaluations) {
+  public DEUnicaucaBuilder setMaxEvaluations(int maxEvaluations) {
     if (maxEvaluations <= 0) {
       throw new JMetalException("MaxEvaluations is negative or zero: " + maxEvaluations);
     }
@@ -50,7 +50,7 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
     return this;
   }
 
-  public DEFrobeniusBuilder setCrossover(DifferentialEvolutionCrossover crossover) {
+  public DEUnicaucaBuilder setCrossover(DifferentialEvolutionCrossover crossover) {
     if(crossover == null)
       throw new JMetalException("crossover can't be null");
     this.crossoverOperator = crossover;
@@ -58,7 +58,7 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
     return this;
   }
 
-  public DEFrobeniusBuilder setSelection(DifferentialEvolutionSelection selection) {
+  public DEUnicaucaBuilder setSelection(DifferentialEvolutionSelection selection) {
     if(selection == null)
       throw new JMetalException("selection can't be null");
     this.selectionOperator = selection;
@@ -66,12 +66,12 @@ public class DEFrobeniusBuilder implements AlgorithmBuilder<DEFrobenius>
     return this;
   }
 
-  public DEFrobeniusBuilder setPenalizeValue(double penalize_value) {
+  public DEUnicaucaBuilder setPenalizeValue(double penalize_value) {
     this.penalize_value = penalize_value;
 
     return this;
   }
-  public DEFrobeniusBuilder setProblem(DoubleProblem problem) {
+  public DEUnicaucaBuilder setProblem(DoubleProblem problem) {
     if(problem == null)
         throw new JMetalException("problem can't be null");
     this.problem = problem;

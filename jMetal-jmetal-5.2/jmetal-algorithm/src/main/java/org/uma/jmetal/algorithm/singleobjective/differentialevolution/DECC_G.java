@@ -102,7 +102,7 @@ public class DECC_G implements Algorithm
     /**
      * Builder to create DE algorithm with params arrenged
      */
-    private DEFrobeniusBuilder deFrobeniusBuilder;
+    private DEUnicaucaBuilder deFrobeniusBuilder;
     /**
      * Maximum number of evaluations
      */
@@ -140,7 +140,7 @@ public class DECC_G implements Algorithm
     public DECC_G(int subcomponent, int FEs, int wFes, 
             DoubleProblem p, int population_size, 
             Comparator<DoubleSolution> comparator, SaNSDEBuilder sansdeBuilder,
-            DEFrobeniusBuilder deFrobeniusBuilder, int maxEvaluations,
+            DEUnicaucaBuilder deFrobeniusBuilder, int maxEvaluations,
             double penalize_value)
     {
         this.subcomponent = subcomponent;
@@ -223,7 +223,7 @@ public class DECC_G implements Algorithm
                 continue;
             
            this.updateProgress(evaluationsToPerfom);
-           DEFrobenius de = deFrobeniusBuilder
+           DEUnicauca de = deFrobeniusBuilder
                                       .setMaxEvaluations(evaluationsToPerfom)
                                       .setProblem(subcomponent_problem_DE)
                                       .setPopulationSize(populationSize)
@@ -541,7 +541,7 @@ public class DECC_G implements Algorithm
         return sansdeBuilder;
     }
 
-    public DEFrobeniusBuilder getDeFrobeniusBuilder() {
+    public DEUnicaucaBuilder getDeFrobeniusBuilder() {
         return deFrobeniusBuilder;
     }
 
@@ -583,7 +583,7 @@ public class DECC_G implements Algorithm
         this.sansdeBuilder = sansdeBuilder;
     }
 
-    public void setDeFrobeniusBuilder(DEFrobeniusBuilder deFrobeniusBuilder) {
+    public void setDeFrobeniusBuilder(DEUnicaucaBuilder deFrobeniusBuilder) {
         this.deFrobeniusBuilder = deFrobeniusBuilder;
     }
 

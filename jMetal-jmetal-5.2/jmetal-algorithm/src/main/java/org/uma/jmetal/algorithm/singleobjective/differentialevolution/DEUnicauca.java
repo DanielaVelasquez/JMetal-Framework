@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @SuppressWarnings("serial")
-public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
+public class DEUnicauca extends AbstractDifferentialEvolution<DoubleSolution> {
   private int populationSize;
   private int maxEvaluations;
   private Comparator<DoubleSolution> comparator;
@@ -32,7 +32,7 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
    * @param selectionOperator
    * @param evaluator
    */
-  public DEFrobenius(DoubleProblem problem, int maxEvaluations, int populationSize,
+  public DEUnicauca(DoubleProblem problem, int maxEvaluations, int populationSize,
       DifferentialEvolutionCrossover crossoverOperator,
       DifferentialEvolutionSelection selectionOperator, double penalize_value) {
     setProblem(problem); ;
@@ -125,33 +125,49 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
     @Override protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) 
     {
         List<DoubleSolution> pop = new ArrayList<>();
-
-        for (int i = 0; i < populationSize; i++) 
+        
+        for (int i = 0; i < populationSize; i++)
         {
-            pop.add(getBest(population.get(i), offspringPopulation.get(i)));
-        }
+            DoubleSolution p = population.get(i);
+            DoubleSolution o = offspringPopulation.get(i);
+            DoubleSolution s = this.getBest(p, o);
 
-        Collections.sort(pop, comparator) ;
+            if(!this.inPopulation(pop, s))
+            {
+                pop.add(s);
+            }
+            else
+            {
+                if(s == o)
+                {
+                    pop.add(p);
+                }
+                else
+                {
+                    pop.add(o);
+                }
+            }
+        }
+        
         return pop;
     }
 
-  /**
-   * Returns the best individual
-   */
-  @Override 
-  public DoubleSolution getResult() 
-  {
+    /**
+     * @return best individual in population
+     */
+    @Override
+    public DoubleSolution getResult() 
+    {
         DoubleSolution best = getPopulation().get(0);
+        
         for(int i = 1; i < populationSize; i++)
         {
             DoubleSolution s = this.getPopulation().get(i);
-            if(s.getObjective(0) == best.getObjective(0))
-            {
-                best = this.getBest(best, s);
-            }
+            best = this.getBest(best, s);
         }
+        
         return best;
-  }
+    }
 
   @Override public String getName() {
     return "DE" ;
@@ -171,18 +187,72 @@ public class DEFrobenius extends AbstractDifferentialEvolution<DoubleSolution> {
     private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
         int comparison = comparator.compare(s1, s2);
-            
-        if (comparison == 0) 
+        
+        if(comparison <= 0)
         {
-            return s1;
-        } 
-        else if (comparison < 0)
-        {                
             return s1;
         }
         else
         {
             return s2;
         }
+    }
+    
+    /**
+     * Determines if an individual with the same values already exists on a
+     * population
+     * @param population population to search
+     * @param individual individual to compare with individuals in population
+     * @return 
+     */
+    private boolean inPopulation(List<DoubleSolution> population, DoubleSolution individual)
+    {
+        for(DoubleSolution s: population)
+        {
+            if(s != individual)
+            {
+                int n = this.getProblem().getNumberOfVariables();
+                
+                for(int i = 0; i < n; i++)
+                {
+                    double sValue = s.getVariableValue(i);
+                    double individualValue = individual.getVariableValue(i);
+                    
+                    if(sValue == individualValue)
+                    {
+                        if(i == n-1)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public Comparator<DoubleSolution> getComparator() {
+        return comparator;
+    }
+
+    public void setComparator(Comparator<DoubleSolution> comparator) {
+        this.comparator = comparator;
+    }
+
+    public int getMaxEvaluations() {
+        return maxEvaluations;
+    }
+
+    public void setMaxEvaluations(int maxEvaluations) {
+        this.maxEvaluations = maxEvaluations;
     }
 }

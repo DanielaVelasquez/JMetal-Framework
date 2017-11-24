@@ -36,7 +36,7 @@ public class DECC_GTest
     {
         penalize_value = 10;
         instance = new DECC_GBuilder(problem)
-                        .setDEFrobeniusBuilder(new DEFrobeniusBuilder(problem))
+                        .setDEFrobeniusBuilder(new DEUnicaucaBuilder(problem))
                         .setPenalizeValue(penalize_value)
                         .build();
         Mockito.when(problem.getNumberOfObjectives()).thenReturn(1);
