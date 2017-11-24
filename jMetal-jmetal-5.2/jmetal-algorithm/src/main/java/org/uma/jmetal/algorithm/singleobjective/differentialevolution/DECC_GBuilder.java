@@ -5,6 +5,7 @@ import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuil
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
@@ -27,7 +28,7 @@ public class DECC_GBuilder
 
   public DECC_GBuilder(DoubleProblem problem) {
     this.problem = problem;
-    this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
+    this.comparator = new FrobeniusComparator<>(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
     this.subcomponets = 5;
     this.FEs = 50;
     this.wFes = 50;
@@ -61,8 +62,8 @@ public class DECC_GBuilder
   }
 
   public DECC_GBuilder setPopulationSize(int populationSize) {
-    if (populationSize < 0) {
-      throw new JMetalException("Population size is negative: " + populationSize);
+    if (populationSize < 3) {
+      throw new JMetalException("Population size must . be greater than 3: " + populationSize);
     }
 
     this.population_size = populationSize;

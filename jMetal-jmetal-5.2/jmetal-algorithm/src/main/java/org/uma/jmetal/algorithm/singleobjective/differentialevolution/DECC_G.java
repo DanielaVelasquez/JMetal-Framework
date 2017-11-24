@@ -82,7 +82,7 @@ public class DECC_G implements Algorithm
     /**
      * A random individual when asked
      */
-    private DoubleSolution random_inidividual;
+    private DoubleSolution random_individual;
     /**
      * Index in population from a random individual when asked
      */
@@ -250,7 +250,7 @@ public class DECC_G implements Algorithm
                 .setPopulationSize(populationSize)
                 .build();
            
-           subcomponent_problem_DE.setSolution(random_inidividual);
+           subcomponent_problem_DE.setSolution(random_individual);
            de.run();
            ans = ((DoubleSolutionSubcomponentDE) de.getResult()).getCompleteSolution();
            ans = this.getBest(best_individual, ans);
@@ -355,7 +355,7 @@ public class DECC_G implements Algorithm
          */
         for(int j = i; j < populationSize; j++)
         {
-            DoubleSolution solution = population.get(i);
+            DoubleSolution solution = population.get(j);
             this.penalize(solution);
         }
     }
@@ -388,7 +388,7 @@ public class DECC_G implements Algorithm
             DoubleSolution next = population.get(i);
             
             //if next individual is better than current best
-            if(comparator.compare(best_individual, next) < 0)
+            if(comparator.compare(next, best_individual) < 0)
             {
                 best_individual = next;
                 best_index = i;
@@ -396,7 +396,7 @@ public class DECC_G implements Algorithm
             else
             {
                 //if next is worst than current worst
-                if(comparator.compare(worst_individual, next) > 0)
+                if(comparator.compare(next, worst_individual) > 0)
                 {
                     worst_individual = next;
                     worst_index = i;
@@ -412,10 +412,10 @@ public class DECC_G implements Algorithm
         this.selectBestWorstIndividual(population);
         do
         {
-            random_index = randomGenerator.nextInt(LOWER_BOUND, populationSize);
-        }while(random_index != best_index && random_index!= worst_index);
+            random_index = randomGenerator.nextInt(LOWER_BOUND, populationSize-1);
+        }while(random_index == best_index || random_index== worst_index);
         
-        random_inidividual = population.get(random_index);
+        random_individual = population.get(random_index);
     }
     /**
      * Creates subcomponents solution for SaNSDE algorithm
@@ -483,9 +483,7 @@ public class DECC_G implements Algorithm
     private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison == 0)
-            return s1;
-        else if(comparison < 0)
+        if(comparison <= 0)
             return s1;
         else
             return s2;
