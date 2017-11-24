@@ -109,7 +109,7 @@ public class Experiment
             {
                 case "DECC_G":
                     algAux = new DECC_GBuilder(problem)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .setPopulationSize(10)
                         .setSubcomponets(6)
                         .setFEs(30)
@@ -119,7 +119,7 @@ public class Experiment
                     
                 case "MemeticED":
                     algAux = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .setPopulationSize(10)
                         .build();
                     break;
@@ -143,7 +143,7 @@ public class Experiment
                         .addTecnique(sw_exec)
                         .setFE(75)
                         .setE(0.15)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .build();                    
                     break;
                     
@@ -151,7 +151,7 @@ public class Experiment
                     algAux = new SolisAndWetsBuilder(problem)
                         .setRho(0.5)
                         .setSizeNeighborhood(12)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .build();
                     break;
                     
@@ -161,16 +161,16 @@ public class Experiment
                         .setBonus1(10)
                         .setBonus2(1)
                         .setPenalizeValue(1)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .build();
                     break;
                     
                 case "DE":
                     algAux = new DEUnicaucaBuilder(problem)
                         .setPopulationSize(10)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .setPenalizeValue(1)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.6, "rand/1/bin"))
+                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.3, "rand/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;
@@ -178,16 +178,16 @@ public class Experiment
                 case "SaNSDE":
                     algAux = new SaNSDEBuilder(problem)
                         .setPopulationSize(10)
-                        .setMaxEvaluations(600)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
-                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin"))
+                        .setMaxEvaluations(300)
+                        .setCrossover(new DifferentialEvolutionCrossover(0.3, 0.6, "rand/1/bin"))
+                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.3, 0.7, "current-to-best/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;
                     
                 case "Random":
                     algAux = new RandomSearchBuilder<>(problem)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .build();
                     break;
                                    
@@ -198,7 +198,7 @@ public class Experiment
                         .setNumberOfForeground(5)
                         .setPopulationSize(5)
                         .setLocalSearchBest(100)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(300)
                         .setBonus1(10)
                         .setBonus2(1)
                         .build();
@@ -219,7 +219,7 @@ public class Experiment
                             .addTecnique(sw_exec1)
                             .setFE(75)
                             .setE(0.15)
-                            .setMaxEvaluations(600)
+                            .setMaxEvaluations(300)
                             .build();
                     break;
                     
@@ -294,7 +294,7 @@ public class Experiment
                         .setPopulationSize(10)
                         .setMaxEvaluations(3000)
                         .setPenalizeValue(1)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.6, "rand/1/bin"))
+                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.3, "rand/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;
@@ -303,8 +303,8 @@ public class Experiment
                     algAux = new SaNSDEBuilder(problem)
                         .setPopulationSize(10)
                         .setMaxEvaluations(3000)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin"))
-                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin"))
+                        .setCrossover(new DifferentialEvolutionCrossover(0.3, 0.6, "rand/1/bin"))
+                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.3, 0.7, "current-to-best/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;

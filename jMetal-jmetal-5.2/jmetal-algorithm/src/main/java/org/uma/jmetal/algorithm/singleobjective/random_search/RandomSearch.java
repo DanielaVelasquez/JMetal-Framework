@@ -4,6 +4,7 @@ package org.uma.jmetal.algorithm.singleobjective.random_search;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 
@@ -93,26 +94,10 @@ public class RandomSearch <S extends Solution<?>,P extends Problem<S>>  implemen
      * @param s2 seconde individual
      * @return best individual between s1 and s2
      */
-    protected S getBest(S s1, S s2)
+    private S getBest(S s1, S s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison == 0)
-        {
-            try
-            {
-                double b_s1 = (double) s1.getAttribute("B");
-                double b_s2 = (double) s2.getAttribute("B");
-                if(b_s1 <= b_s2)
-                    return s1;
-                else
-                    return s2;
-            }
-            catch(Exception e)
-            {
-                return s1;
-            }
-        }
-        else if(comparison < 1)
+        if(comparison <= 0)
             return s1;
         else
             return s2;

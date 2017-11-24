@@ -26,8 +26,8 @@ public class SaNSDEBuilder implements AlgorithmBuilder<SaNSDE>
     this.problem = problem;
     this.populationSize = 10;
     this.maxEvaluations = 3000;
-    this.crossoverOperator =  new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin");
-    this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin");
+    this.crossoverOperator =  new DifferentialEvolutionCrossover(0.3, 0.6, "rand/1/bin");
+    this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.3, 0.7, "current-to-best/1/bin");
     this.comparator = new FrobeniusComparator<>(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
     this.selectionOperator = new DifferentialEvolutionSelection();
     this.penalize_value = 1;
