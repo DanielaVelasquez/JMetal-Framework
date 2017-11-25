@@ -21,7 +21,7 @@ public class DataBaseConnection
     public void conectar() 
     {
         //Connect to database
-        String hostName = "sql7001.site4now.net";
+        String hostName = "sql7003.site4now.net";
         String dbName = "DB_A2D155_primerExperimento";
         String user = "DB_A2D155_primerExperimento_admin";
         String password = "Experimento123";
