@@ -77,10 +77,6 @@ public class IHDELS implements Algorithm<DoubleSolution>
      */
     protected int FE_LS;
     /**
-     * Number of iterations before local search's probabilities are  updated
-     */
-    protected double frecLS;
-    /**
      * Evolutionary algorithm builder
      */
     protected SaDEBuilder builder;
@@ -100,15 +96,27 @@ public class IHDELS implements Algorithm<DoubleSolution>
     private double a;
     
     private double b;
-    /**-----------------------------------------------------------------------------------------
-     * Methods
-     *-----------------------------------------------------------------------------------------*/
-            
-    //---------INICIAR EL RANDOM GENERATOR
     
-    @Override
-    public void run() 
+    public IHDELS(int maxEvaluations, List<LocalSearch> local_searches, DoubleProblem problem, Comparator<DoubleSolution> comparator, double penalize_value, int reStart, int population_size, int FE_DE, int FE_LS, SaDEBuilder builder, double threshold, double a, double b) 
     {
+        this.maxEvaluations = maxEvaluations;
+        this.local_searches =  local_searches;
+        this.problem = problem;
+        this.comparator = comparator;
+        this.penalize_value = penalize_value;
+        this.reStart = reStart;
+        this.population_size =  population_size;
+        this.FE_DE = FE_DE;
+        this.FE_LS = FE_LS;
+        this.builder = builder;
+        this.threshold = threshold;
+        this.a = a;
+        this.b = b;
+        this.randomGenerator = JMetalRandom.getInstance();
+    }
+
+    @Override
+    public void run() {
         /**
          * 1. PARA ENVIAR A EJECUTAR A DE, COMO LE MANDO EL CURRENT BEST? COMO EL BEST DE DE?
          * 2. COMO ENVIAR EL CURRENT BEST A LAS BL
@@ -117,7 +125,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
          */
         
         this.m = this.problem.getNumberOfVariables();
-        
+        this.numberLS = this.local_searches.size();
         //Creates SaDE algorithm
         algorithm =  builder.build();
         
