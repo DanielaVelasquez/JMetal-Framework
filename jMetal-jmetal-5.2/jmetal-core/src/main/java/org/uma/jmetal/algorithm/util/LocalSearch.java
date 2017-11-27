@@ -30,6 +30,16 @@ public abstract class LocalSearch <S extends Solution<?>>
     /**-----------------------------------------------------------------------------------------
      * Methods
      *-----------------------------------------------------------------------------------------*/
+    
+    /**
+     * Creates a local search with its algorithm builder
+     * @param builder to create tha algorithm of the local search
+     */
+    public LocalSearch(AlgorithmBuilder builder) {
+        this.builder = builder;
+        this.algorithm = builder.build();
+    }
+
     public void setRatio(double ratio) {
         this.ratio = ratio;
     }

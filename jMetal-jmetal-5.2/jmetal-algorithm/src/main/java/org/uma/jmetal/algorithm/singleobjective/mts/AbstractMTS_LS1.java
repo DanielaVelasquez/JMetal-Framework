@@ -489,6 +489,18 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
     public List<S> getOffspringPopulation() {
         return offspring_population;
     }
+
+    public void setMaxEvaluations(int maxEvaluations) {
+        this.maxEvaluations = maxEvaluations;
+    }
+
+    public void setEvaluations(int evaluations) {
+        this.evaluations = evaluations;
+    }
+
+    public void setBest(S best) {
+        this.best = best;
+    }
     
     
 }
