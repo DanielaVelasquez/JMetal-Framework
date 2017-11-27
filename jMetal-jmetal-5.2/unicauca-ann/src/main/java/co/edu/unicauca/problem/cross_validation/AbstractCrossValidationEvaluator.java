@@ -70,7 +70,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         this.number_folders = DEFAULT_NUMBER_OF_FOLDERS;
         inverse = DEFAULT_INVERSE;
 
-        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse, maxEvaluations);
+        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse);
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
 
@@ -145,7 +145,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
     @Override
     public double test(DoubleSolution solution) {
-        elm.resetEFOS();
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);
@@ -155,7 +154,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
         elm.test();
-        elm.resetEFOS();
         
         if (elm.getElm_type() == ELM.ELMType.CLASSIFICATION) {
             return 1 - elm.getAccuracy();

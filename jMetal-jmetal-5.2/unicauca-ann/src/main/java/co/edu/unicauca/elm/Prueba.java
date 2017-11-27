@@ -24,7 +24,7 @@ public class Prueba {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("lfjdfjafladfjd");
-        /*ELM elm;
+        ELM elm;
         int input_neuron = 2;
         int output_neuron = 2;
         int hidden_neuron = 3;
@@ -38,10 +38,10 @@ public class Prueba {
         input_weight.set(2,0,0.940);
         input_weight.set(2,1,0.947);
         
-        DenseMatrix bias = new DenseMatrix(hidden_neuron,1);
-        bias.set(0,0,0.731);
-        bias.set(1,0,0.333);
-        bias.set(2,0,0.964);
+        DenseVector bias = new DenseVector(hidden_neuron);
+        bias.set(0,0.731);
+        bias.set(1,0.333);
+        bias.set(2,0.964);
         
         DenseMatrix X = new DenseMatrix(input_neuron,trainig_data);
         X.set(0,0,5);
@@ -62,16 +62,16 @@ public class Prueba {
         Y.set(3,1);
         Y.set(4,0);
         
-        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(),2,new RidgeRegressionTheory(new double[]{0.000001}));
+        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(), 2, new MultiplicationMethod(null));
         elm.setInputWeight(input_weight);
         elm.setBiasHiddenNeurons(bias);
         elm.setX(X);
         elm.setY(Y);
         
         elm.train();
-        System.out.println("Accuracy: "+elm.getAccuracy());
+        System.out.println("Accuracy: " + (1 - elm.getAccuracy()));
         elm.test();
-        System.out.println("Test Accuracy: "+elm.getAccuracy());
+        System.out.println("Test Accuracy: " + (1 - elm.getAccuracy()));
         
         System.out.println("Values\n");
         double values[] = elm.getOutputNetwork().getData();
@@ -79,7 +79,6 @@ public class Prueba {
         {
             System.out.println(""+values[i]);
         }
-*/
         
     }
     

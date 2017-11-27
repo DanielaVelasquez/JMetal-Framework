@@ -127,9 +127,9 @@ public class AbstractHRHMOSAlgorithmTest {
         instance.participation_ratio = participation_ratio;
         
         double[] expResult = new double[3];
-        expResult[0] = (0.500328947);
-        expResult[1] = (0.249671053);
-        expResult[2] = (0.25);
+        expResult[0] = (0.5001645);
+        expResult[1] = (0.2496711);
+        expResult[2] = (0.2501645);
         
         double[] res = new double[3];
         
@@ -140,7 +140,7 @@ public class AbstractHRHMOSAlgorithmTest {
             res[i] = Double.parseDouble(o.toString());
             i++;
         }
-        assertArrayEquals(expResult, res, 0.1);
+        assertArrayEquals(expResult, res, 0.0000001);
         
         //---------------------------------------------
         //Un elemento en omega
@@ -157,10 +157,10 @@ public class AbstractHRHMOSAlgorithmTest {
         instance.participation_ratio = participation_ratio;
         
         expResult = new double[4];
-        expResult[0] = (0.149807692);
-        expResult[1] = (0.349102564);
-        expResult[2] = (0.249679487);
-        expResult[3] = (0.251410256);
+        expResult[0] = (0.14980);
+        expResult[1] = (0.34916);
+        expResult[2] = (0.24967);
+        expResult[3] = (0.25141);
         
         res = new double[4];
         
@@ -171,7 +171,7 @@ public class AbstractHRHMOSAlgorithmTest {
             res[i] = Double.parseDouble(o.toString());
             i++;
         }
-        assertArrayEquals(expResult, res, 0.1);
+        assertArrayEquals(expResult, res, 0.0001);
         
         //---------------------------------------------
         //Todos en omega

@@ -147,38 +147,6 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
             }
         }
     }
-
-    /**
-     * Gets the best individual between two individuals, if they are equals
-     * the firts indiviudal is return by default
-     * @param s1 first individual
-     * @param s2 seconde individual
-     * @return best individual between s1 and s2
-     */
-    protected  S getBest(S s1, S s2)
-    {
-        int comparison = comparator.compare(s1, s2);
-        if(comparison == 0)
-        {
-            try
-            {
-                double b_s1 = (double) s1.getAttribute("B");
-                double b_s2 = (double) s2.getAttribute("B");
-                if(b_s1 <= b_s2)
-                    return s1;
-                else
-                    return s2;
-            }
-            catch(Exception e)
-            {
-                return s1;
-            }
-        }
-        else if(comparison < 1)
-            return s1;
-        else
-            return s2;
-    }
     
     /**
      * Evaluates a population as maximun FE has not been reached

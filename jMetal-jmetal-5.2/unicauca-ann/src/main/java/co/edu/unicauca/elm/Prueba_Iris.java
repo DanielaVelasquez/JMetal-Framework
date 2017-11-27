@@ -63,7 +63,7 @@ public class Prueba_Iris {
         Y.set(4, 2);
         Y.set(5, 2);
 
-        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(), output_neuron, new RidgeRegressionTheory(new double[]{0.0000000001}), 10);
+        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(), output_neuron, new RidgeRegressionTheory(new double[]{0.0000000001}));
         elm.setInputWeight(input_weight);
         elm.setBiasHiddenNeurons(bias);
         elm.setX(X);

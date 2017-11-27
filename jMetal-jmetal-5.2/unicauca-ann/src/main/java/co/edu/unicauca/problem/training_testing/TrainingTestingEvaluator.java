@@ -45,7 +45,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
         
         hidden_neurons = DEFAULT_NUMBER_OF_HIDDEN_NEURONS;
         inverse = DEFAULT_INVERSE;
-        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse, maxEvaluations);
+        super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse);
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
 
@@ -61,7 +61,6 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
 
     @Override
     public double test(DoubleSolution solution) {
-        elm.resetEFOS();
         super.getInputWeightsBiasFrom(solution);
         elm.setInputWeight(input_weights);
         elm.setBiasHiddenNeurons(bias);

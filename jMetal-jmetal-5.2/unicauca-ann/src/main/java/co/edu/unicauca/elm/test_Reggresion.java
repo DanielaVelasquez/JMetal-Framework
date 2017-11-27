@@ -20,7 +20,7 @@ public class test_Reggresion {
      
        
 
-        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(), output_neuron, new RidgeRegressionTheory(new double[]{0.0000000001}), 10);
+        elm = new ELM(ELM.ELMType.CLASSIFICATION, hidden_neuron, new Sigmoid(), output_neuron, new RidgeRegressionTheory(new double[]{0.0000000001}));
 
 
         elm.train();

@@ -93,6 +93,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
         List<Double> pr = new ArrayList<>();
         this.findBestQualityTecniques();
         double etha = this.calculateEtha();
+        
         for(int k = 0; k < n; k++)
         {
             double actual_pr = (double) this.participation_ratio.get(k);
@@ -113,6 +114,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
     {
         return this.individual;
     }
+    
     /**
      * Represents the decrease in participation for a tecnique
      * @param tecnique tecnique 
