@@ -38,7 +38,7 @@ public class LSMTS_LS1 extends LocalSearch
         if(c.compare(ans, best) > 0)
             ans = best;
         double newFitness = ans.getObjective(0);
-        this.setRatio((newFitness - oldFitness)/oldFitness);
+        this.setRatio(Math.abs(newFitness - oldFitness)/oldFitness);
         return ans;
     }
 

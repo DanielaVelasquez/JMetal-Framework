@@ -79,7 +79,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
     /**
      * Evolutionary algorithm builder
      */
-    protected SaDEBuilder builder;
+    protected SaDEBuilder SADEbuilder;
     /**
      * Evolutionary algorithm 
      */
@@ -92,12 +92,19 @@ public class IHDELS implements Algorithm<DoubleSolution>
      * Threshold use to identify when an improvement is enough
      */
     private double threshold;
-    
+    /**
+     * Search domain first value
+     */
     private double a;
-    
+    /**
+     * Search domain last value
+     */
     private double b;
     
-    public IHDELS(int maxEvaluations, List<LocalSearch> local_searches, DoubleProblem problem, Comparator<DoubleSolution> comparator, double penalize_value, int reStart, int population_size, int FE_DE, int FE_LS, SaDEBuilder builder, double threshold, double a, double b) 
+    public IHDELS(int maxEvaluations, List<LocalSearch> local_searches, 
+            DoubleProblem problem, Comparator<DoubleSolution> comparator, 
+            double penalize_value, int reStart, int population_size, int FE_DE,
+            int FE_LS, SaDEBuilder builder, double threshold, double a, double b) 
     {
         this.maxEvaluations = maxEvaluations;
         this.local_searches =  local_searches;
@@ -108,7 +115,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
         this.population_size =  population_size;
         this.FE_DE = FE_DE;
         this.FE_LS = FE_LS;
-        this.builder = builder;
+        this.SADEbuilder = builder;
         this.threshold = threshold;
         this.a = a;
         this.b = b;
@@ -117,17 +124,16 @@ public class IHDELS implements Algorithm<DoubleSolution>
 
     @Override
     public void run() {
-        /**
-         * 1. PARA ENVIAR A EJECUTAR A DE, COMO LE MANDO EL CURRENT BEST? COMO EL BEST DE DE?
-         * 2. COMO ENVIAR EL CURRENT BEST A LAS BL
-         * 3. LA TASA DE MEJORA SE HACE UNICAMENTE SOBRE EL VALOR DE LA EVALUACION,
-         * SE DEBE INCLUIR LA NORMA DE FROBENIUS?
-         */
+        
+        
         
         this.m = this.problem.getNumberOfVariables();
         this.numberLS = this.local_searches.size();
         //Creates SaDE algorithm
-        algorithm =  builder.build();
+        SADEbuilder.setComparator(comparator)
+               .setPenalize_value(penalize_value)
+               .setPopulationSize(population_size);
+        algorithm =  SADEbuilder.build();
         
         //Create random initial population
         this.population = this.createInitialPopulation();

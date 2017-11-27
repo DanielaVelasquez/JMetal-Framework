@@ -47,7 +47,7 @@ public class LSHillClimbing extends LocalSearch
                 current_best = ans;
         }
         double newFitness = current_best.getObjective(0);
-        this.setRatio((oldFitness - newFitness)/oldFitness);
+        this.setRatio(Math.abs(oldFitness - newFitness)/oldFitness);
         return current_best;
     }
 
