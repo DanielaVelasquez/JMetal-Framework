@@ -32,13 +32,18 @@ public class LSMTS_LS1 extends LocalSearch
         this.mts_ls1.setMaxEvaluations(FE);
         this.mts_ls1.setBest((DoubleSolution)best);
         this.mts_ls1.setPopulation(population);
+        this.mts_ls1.setPopulationSize(population.size());
         
         this.mts_ls1.run();
         Solution ans = this.mts_ls1.getResult();
-        if(c.compare(ans, best) > 0)
+        if(c.compare(ans, best) < 0)
             ans = best;
         double newFitness = ans.getObjective(0);
-        this.setRatio(Math.abs(newFitness - oldFitness)/oldFitness);
+        if(oldFitness != 0)
+            this.setRatio(Math.abs(oldFitness - newFitness)/oldFitness);
+        else 
+            this.setRatio(Math.abs(oldFitness - newFitness));
+        population = mts_ls1.getPopulation();
         return ans;
     }
 

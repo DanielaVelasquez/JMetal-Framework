@@ -1,6 +1,8 @@
 package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -135,7 +137,7 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
             }
         }
         
-        this.best = getBest(this.population);
+        this.best = getBest(this.population, best);
         this.enable = new ArrayList<>();
         this.improve = new ArrayList<>();
         this.search_range = new ArrayList<>();
@@ -330,10 +332,17 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
         return this.getBest(original, modified ) == original;
     }
     
-    protected S getBest(List<S> population)
+    protected S getBest(List<S> population, S best)
     {
-        S best = population.get(0);
-        for(int i = 1; i < populationSize; i++)
+        int index = 0;
+    
+        if(best == null)
+        {
+            best = population.get(0);
+            index = 1;
+        }
+        
+        for(int i = index; i < populationSize; i++)
         {
             S next = population.get(i);
             best = this.getBest(best, next);
@@ -345,24 +354,13 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
 
     @Override
     public S getResult() {
-        try
+        for(S s: population)
         {
-            for(S s: population)
-            {
-                if(best!=s)
-                {
-                    best = this.getBest(best, s);
-                }
-            }
+            best = this.getBest(best, s);
         }
-        catch(Exception e)
-        {
-            
-        }
+        Collections.sort(population, comparator);
         return best;
-        /*Collections.sort(this.population, comparator);
-        return this.population.get(4);*/
-        //return best;
+        
     }
     /**
      * Determines if first individual is better than second individual

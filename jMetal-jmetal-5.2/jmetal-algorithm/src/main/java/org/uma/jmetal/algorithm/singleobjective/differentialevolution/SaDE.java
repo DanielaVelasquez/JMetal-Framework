@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.impl.AbstractDifferentialEvolution;
@@ -229,11 +230,13 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
             population = this.getPopulation();
             this.populationSize = population.size();
         }
-        
-        for (int i = 0; i < populationSize; i++) {
-          DoubleSolution newIndividual = getProblem().createSolution();
-          population.add(newIndividual);
+        else{
+            for (int i = 0; i < populationSize; i++) {
+                DoubleSolution newIndividual = getProblem().createSolution();
+                population.add(newIndividual);
+              }
         }
+        
         
         return population;
     }
@@ -338,8 +341,12 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
           DoubleSolution p = population.get(i);
           DoubleSolution o = offspringPopulation.get(i);
           DoubleSolution s = this.getBest(p, o);
+          
           if(!this.inPopulation(pop, s))
-            pop.add(s);
+          {
+              pop.add(s);
+              best = this.getBest(best, s);
+          }
           else
           {
               if(s==o)
@@ -356,6 +363,13 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         return pop;
     }
+    /**
+     * Determines if an individual with the same values already exists on a
+     * population
+     * @param population population to search
+     * @param individual individual to compare with individuals in population
+     * @return 
+     */
     /**
      * Determines if an individual with the same values already exists on a
      * population
@@ -407,36 +421,18 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison == 0)
+        
+        if(comparison <= 0)
         {
-            try
-            {
-                double b_s1 = (double) s1.getAttribute("B");
-                double b_s2 = (double) s2.getAttribute("B");
-                if(b_s1 <= b_s2)
-                    return s1;
-                else
-                    return s2;
-            }
-            catch(Exception e)
-            {
-                return s1;
-            }
-        }
-        else if(comparison < 0)
             return s1;
+        }
         else
+        {
             return s2;
+        }
     }
     @Override
     public DoubleSolution getResult() {
-        DoubleSolution best =  getPopulation().get(0);
-        for(int i = 1; i < populationSize; i++)
-        {
-            DoubleSolution s = this.getPopulation().get(i);
-            best = this.getBest(best, s);
-            
-        }
         return best;
     }
 

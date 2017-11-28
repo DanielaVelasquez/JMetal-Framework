@@ -40,14 +40,18 @@ public class LSHillClimbing extends LocalSearch
                 FE_individual++;
             this.hillClimbing.setEvaluations(0);
             this.hillClimbing.setMaxEvaluations(FE_individual);
-            this.hillClimbing.setBest(current_best);
+            this.hillClimbing.setBest((Solution) population.get(i));
             this.hillClimbing.run();
             Solution ans = this.hillClimbing.getResult();
+            population.set(i, ans);
             if(c.compare(ans, current_best) < 0)
                 current_best = ans;
         }
         double newFitness = current_best.getObjective(0);
-        this.setRatio(Math.abs(oldFitness - newFitness)/oldFitness);
+        if(oldFitness != 0)
+            this.setRatio(Math.abs(oldFitness - newFitness)/oldFitness);
+        else 
+            this.setRatio(Math.abs(oldFitness - newFitness));
         return current_best;
     }
 

@@ -124,9 +124,6 @@ public class IHDELS implements Algorithm<DoubleSolution>
 
     @Override
     public void run() {
-        
-        
-        
         this.m = this.problem.getNumberOfVariables();
         this.numberLS = this.local_searches.size();
         //Creates SaDE algorithm
@@ -148,15 +145,18 @@ public class IHDELS implements Algorithm<DoubleSolution>
         
         this.best =  (DoubleSolution) this.current_best.copy();
         int countLS = 0;
-        
         while(!isStoppingConditionReached())
         {
             double lastFitness = this.current_best.getObjective(0);
-            
             this.runSaDE();
             this.best = getBest(best, current_best);
             
-            double improvement = (current_best.getObjective(0) - lastFitness)/lastFitness;
+            double improvement;
+            double newFitness = current_best.getObjective(0);
+            if(lastFitness != 0)
+                 improvement= Math.abs(lastFitness - newFitness)/lastFitness;
+            else
+                improvement = Math.abs(lastFitness - newFitness);
             
             //DE population is restarted because solution was not improved
             if(improvement == 0)
@@ -168,7 +168,12 @@ public class IHDELS implements Algorithm<DoubleSolution>
             lastFitness = this.current_best.getObjective(0);
             LocalSearch ls = this.runLS();
             this.best = getBest(best, current_best);
-            improvement = (current_best.getObjective(0) - lastFitness)/lastFitness;
+            newFitness = current_best.getObjective(0);
+            
+            if(lastFitness != 0)
+                 improvement= Math.abs(lastFitness - newFitness)/lastFitness;
+            else
+                improvement = Math.abs(lastFitness - newFitness);
             
             
             //Local search is restarted because soution was not improved
@@ -187,24 +192,25 @@ public class IHDELS implements Algorithm<DoubleSolution>
                 }
             }
             
-            current_best = this.getBest(best, current_best);
-            
+            current_best = (DoubleSolution) this.getBest(best, current_best).copy();
         }
     }
 
     @Override
     public DoubleSolution getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return best;
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Iterative Hybrid DE with local search";
     }
 
     @Override
     public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "It is an iterative algorithm that during the run it applies "+
+                "iteratively a DE and a local search method, exploring all the "+
+                "variables at the same time";
     }
     /**
      * Calculate number of possible evaluations according to next posible number of evaluations
@@ -221,18 +227,20 @@ public class IHDELS implements Algorithm<DoubleSolution>
     protected void runSaDE()
     {
         int evaluations =  this.getPossibleEvaluations(FE_DE);
+        this.updateProgress(evaluations);
         algorithm.setPopulation(population);
         algorithm.setBest(current_best);
         algorithm.setMaxEvaluations(evaluations);
         algorithm.run();
         current_best = algorithm.getResult();
+        population = algorithm.getPopulation();
     }
     /**
      * Update number of evaluations performed
      */
-    protected void updateProgress()
+    protected void updateProgress(int evals)
     {
-        this.evaluations += 1;
+        this.evaluations += evals;
     }
     /**
      * Gets the best individual between two individuals, if they are equals
@@ -261,7 +269,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
             DoubleSolution solution = population.get(i);
             this.problem.evaluate(solution);
             i++;
-            this.updateProgress();
+            this.updateProgress(1);
         }
         for(int j = i; j < populationSize; j++)
         {
@@ -278,7 +286,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
         if(!isStoppingConditionReached())
         {
             this.problem.evaluate(individual);
-            this.updateProgress();
+            this.updateProgress(1);
         }
         else
         {
@@ -313,6 +321,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
             int evaluations = this.getPossibleEvaluations(FE_LS);
             if(evaluations == 0)
                 continue;
+            this.updateProgress(evaluations);
             DoubleSolution ans = (DoubleSolution) ls.evolve(from.copy(),this.clone(population), problem, comparator,evaluations);
             best = getBest(best, ans);
         }
@@ -396,6 +405,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
     private LocalSearch runLS()
     {
         int evaluations = this.getPossibleEvaluations(FE_LS);
+        this.updateProgress(evaluations);
         LocalSearch ls = this.selectLocalSearch();
         current_best = (DoubleSolution) ls.evolve( current_best, population, problem, comparator,evaluations);
         return ls;

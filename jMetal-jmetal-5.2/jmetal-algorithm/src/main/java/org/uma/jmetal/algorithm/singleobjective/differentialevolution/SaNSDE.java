@@ -295,7 +295,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             DoubleSolution p = population.get(i);
             DoubleSolution o = offspringPopulation.get(i);
             DoubleSolution s = this.getBest(p, o);
-
+            
             if(!this.inPopulation(pop, s))
             {
                 pop.add(s);
