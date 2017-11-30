@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-11-23T15:49:28</date>
-  <millis>1511470168870</millis>
+  <date>2017-11-29T19:37:57</date>
+  <millis>1512002277339</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -13,199 +13,25 @@
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2017-11-23T15:49:28</date>
-  <millis>1511470168930</millis>
+  <date>2017-11-29T19:37:57</date>
+  <millis>1512002277361</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>SEVERE</level>
-  <class>org.uma.jmetal.util.JMetalException</class>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.evaluator.impl.MultithreadedSolutionListEvaluator</class>
   <method>&lt;init&gt;</method>
   <thread>1</thread>
-  <message>Class.forName() did not recognized the name of the class</message>
-  <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.training_testing.Iris</message>
-    <frame>
-      <class>java.net.URLClassLoader</class>
-      <method>findClass</method>
-      <line>381</line>
-    </frame>
-    <frame>
-      <class>java.lang.ClassLoader</class>
-      <method>loadClass</method>
-      <line>424</line>
-    </frame>
-    <frame>
-      <class>sun.misc.Launcher$AppClassLoader</class>
-      <method>loadClass</method>
-      <line>335</line>
-    </frame>
-    <frame>
-      <class>java.lang.ClassLoader</class>
-      <method>loadClass</method>
-      <line>357</line>
-    </frame>
-    <frame>
-      <class>java.lang.Class</class>
-      <method>forName0</method>
-    </frame>
-    <frame>
-      <class>java.lang.Class</class>
-      <method>forName</method>
-      <line>264</line>
-    </frame>
-    <frame>
-      <class>org.uma.jmetal.util.ProblemUtils</class>
-      <method>loadProblem</method>
-      <line>23</line>
-    </frame>
-    <frame>
-      <class>org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GTest</class>
-      <method>setUp</method>
-      <line>30</line>
-    </frame>
-    <frame>
-      <class>sun.reflect.NativeMethodAccessorImpl</class>
-      <method>invoke0</method>
-    </frame>
-    <frame>
-      <class>sun.reflect.NativeMethodAccessorImpl</class>
-      <method>invoke</method>
-      <line>62</line>
-    </frame>
-    <frame>
-      <class>sun.reflect.DelegatingMethodAccessorImpl</class>
-      <method>invoke</method>
-      <line>43</line>
-    </frame>
-    <frame>
-      <class>java.lang.reflect.Method</class>
-      <method>invoke</method>
-      <line>498</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.model.FrameworkMethod$1</class>
-      <method>runReflectiveCall</method>
-      <line>47</line>
-    </frame>
-    <frame>
-      <class>org.junit.internal.runners.model.ReflectiveCallable</class>
-      <method>run</method>
-      <line>12</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.model.FrameworkMethod</class>
-      <method>invokeExplosively</method>
-      <line>44</line>
-    </frame>
-    <frame>
-      <class>org.junit.internal.runners.statements.RunBefores</class>
-      <method>evaluate</method>
-      <line>24</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner</class>
-      <method>runLeaf</method>
-      <line>271</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.BlockJUnit4ClassRunner</class>
-      <method>runChild</method>
-      <line>70</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.BlockJUnit4ClassRunner</class>
-      <method>runChild</method>
-      <line>50</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner$3</class>
-      <method>run</method>
-      <line>238</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner$1</class>
-      <method>schedule</method>
-      <line>63</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner</class>
-      <method>runChildren</method>
-      <line>236</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner</class>
-      <method>access$000</method>
-      <line>53</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner$2</class>
-      <method>evaluate</method>
-      <line>229</line>
-    </frame>
-    <frame>
-      <class>org.junit.runners.ParentRunner</class>
-      <method>run</method>
-      <line>309</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.junit4.JUnit4TestSet</class>
-      <method>execute</method>
-      <line>53</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.junit4.JUnit4Provider</class>
-      <method>executeTestSet</method>
-      <line>123</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.junit4.JUnit4Provider</class>
-      <method>invoke</method>
-      <line>104</line>
-    </frame>
-    <frame>
-      <class>sun.reflect.NativeMethodAccessorImpl</class>
-      <method>invoke0</method>
-    </frame>
-    <frame>
-      <class>sun.reflect.NativeMethodAccessorImpl</class>
-      <method>invoke</method>
-      <line>62</line>
-    </frame>
-    <frame>
-      <class>sun.reflect.DelegatingMethodAccessorImpl</class>
-      <method>invoke</method>
-      <line>43</line>
-    </frame>
-    <frame>
-      <class>java.lang.reflect.Method</class>
-      <method>invoke</method>
-      <line>498</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.util.ReflectionUtils</class>
-      <method>invokeMethodWithArray</method>
-      <line>164</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy</class>
-      <method>invoke</method>
-      <line>110</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.booter.SurefireStarter</class>
-      <method>invokeProvider</method>
-      <line>175</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.booter.SurefireStarter</class>
-      <method>runSuitesInProcessWhenForked</method>
-      <line>107</line>
-    </frame>
-    <frame>
-      <class>org.apache.maven.surefire.booter.ForkedBooter</class>
-      <method>main</method>
-      <line>68</line>
-    </frame>
-  </exception>
+  <message>Number of cores: 2</message>
+</record>
+<record>
+  <date>2017-11-29T19:37:57</date>
+  <millis>1512002277521</millis>
+  <sequence>2</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.evaluator.impl.MultithreadedSolutionListEvaluator</class>
+  <method>&lt;init&gt;</method>
+  <thread>1</thread>
+  <message>Number of cores: 2</message>
 </record>
 </log>

@@ -75,7 +75,6 @@ public class DECC_GTest
         
         DoubleSolution expResult = c;
         DoubleSolution result = instance.getResult();
-        System.out.println("->"+result.getObjective(0));
         assertEquals(expResult, result);
     }
     /**

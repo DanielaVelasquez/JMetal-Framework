@@ -1,14 +1,13 @@
 package org.uma.jmetal.algorithm.singleobjective.mts;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.util.SearchRange;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.Util;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 //ISSUES
@@ -19,8 +18,6 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
     /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/
-    private final int LOWER_BOUND_ROW = 0;
-    
     private final int SOA_DEFAULT_VALUE = -1;
     /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -161,15 +158,15 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
    
     protected int[][] buildSOA(int m, int n) {
         int[][] SOA = new int[m][n];
-        this.fillWith(SOA, SOA_DEFAULT_VALUE);
+        Util.fillArrayWith(SOA, SOA_DEFAULT_VALUE);
         
-        List<Integer> C  = this.buildSequence(m);
+        List<Integer> C  = Util.createRandomPermutation(m);
         for(int i = 0; i < n; i++)
         {
             int aux = 0;
             for(int j = 0; j < m;j++)
             {
-                int index = this.getIndexWhere(SOA_DEFAULT_VALUE, SOA, i);
+                int index = Util.getIndexWhere(SOA_DEFAULT_VALUE, SOA, i);
                 SOA[index][i] = C.get(aux);
                 aux++;
                 if(aux > m-1)
@@ -178,55 +175,7 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
         }
         return SOA;
     }
-    /**
-     * Fills an array with an specific value
-     * @param array array to fill
-     * @param value value to set
-     */
-    protected void fillWith(int[][] array, int value)
-    {
-        int rows = array.length;
-        int cols = array[0].length;
-        for(int i = 0; i < rows;i++)
-            for(int j = 0; j< cols;j++)
-                array[i][j] = value;
-    }
-    /**
-     * Builds a random permutation of 0,1,...m-1 
-     * @param m max value of the sequence
-     * @return a random sequence
-     */
-    protected List<Integer> buildSequence(int m)
-    {
-        List<Integer> C  = new ArrayList<>();
-        while(C.size() != m)
-        {
-            int value = -1;
-            do
-            {
-                value = randomGenerator.nextInt(LOWER_BOUND_ROW, m - 1);
-            }while(C.contains(value));
-            C.add(value);
-        }
-        return C;
-    }
-    /**
-     * Finds row index where a column  in a array has an specfific value
-     * @param value value to find
-     * @param array collection where to look
-     * @param col column where the row index will be selected
-     * @return a row index where the array has the value
-     */
-    protected int getIndexWhere(int value, int[][] array, int col)
-    {
-        int row = -1;
-        int rows = array.length - 1;
-        do
-        {
-            row = randomGenerator.nextInt(LOWER_BOUND_ROW, rows);
-        }while(array[row][col] != value);
-        return row;
-    }
+    
     /**
      * Evaluates a population as maximun FE has not been reached
      * @param population 
@@ -288,26 +237,10 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
      * @param s2 seconde individual
      * @return best individual between s1 and s2
      */
-    protected S getBest(S s1, S s2)
+    private S getBest(S s1, S s2)
     {
         int comparison = comparator.compare(s1, s2);
-        if(comparison == 0)
-        {
-            try
-            {
-                double b_s1 = (double) s1.getAttribute("B");
-                double b_s2 = (double) s2.getAttribute("B");
-                if(b_s1 <= b_s2)
-                    return s1;
-                else
-                    return s2;
-            }
-            catch(Exception e)
-            {
-                return s1;
-            }
-        }
-        else if(comparison < 1)
+        if(comparison <= 0)
             return s1;
         else
             return s2;
@@ -353,12 +286,12 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
     
 
     @Override
-    public S getResult() {
+    public S getResult()
+    {
         for(S s: population)
         {
             best = this.getBest(best, s);
         }
-        Collections.sort(population, comparator);
         return best;
         
     }
@@ -370,27 +303,7 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
      */
     protected boolean isBetterOriginal(S original, S modified)
     {
-        int comparison = comparator.compare(original, modified);
-        if(comparison == 0)
-        {
-            try
-            {
-                double b_s1 = (double) original.getAttribute("B");
-                double b_s2 = (double) modified.getAttribute("B");
-                if(b_s1 <= b_s2)
-                    return true;
-                else
-                    return false;
-            }
-            catch(Exception e)
-            {
-                return true;
-            }
-        }
-        else if(comparison < 1)
-            return true;
-        else
-            return false;
+        return getBest(original, modified) == original;
     }
     
     /**
@@ -487,6 +400,12 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
     public List<S> getOffspringPopulation() {
         return offspring_population;
     }
+
+    public int getEvaluations() {
+        return evaluations;
+    }
+    
+    
 
     public void setMaxEvaluations(int maxEvaluations) {
         this.maxEvaluations = maxEvaluations;

@@ -124,6 +124,10 @@ public class SaNSDETest {
         
         result = ReflectionTestUtils.invokeMethod(instance, "inPopulation", population, c);
         assertEquals(true, result);
+        
+        Mockito.when(c.getVariableValue(2)).thenReturn(0.3);
+        result = ReflectionTestUtils.invokeMethod(instance, "inPopulation", population, c);
+        assertEquals(false, result);
     }
     
     /**

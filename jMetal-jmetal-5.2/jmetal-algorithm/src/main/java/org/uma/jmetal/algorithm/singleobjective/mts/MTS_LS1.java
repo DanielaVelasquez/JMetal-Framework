@@ -7,6 +7,7 @@ import org.uma.jmetal.algorithm.util.DoubleSearchRange;
 import org.uma.jmetal.algorithm.util.SearchRange;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.Util;
 
 
 public class MTS_LS1 extends AbstractMTS_LS1<DoubleSolution, DoubleProblem>
@@ -85,7 +86,7 @@ public class MTS_LS1 extends AbstractMTS_LS1<DoubleSolution, DoubleProblem>
             SR.update(xi);
         }
         improve_i = false;
-        List<Integer> sequence = this.buildSequence(n);
+        List<Integer> sequence = Util.createRandomPermutation(n);
         for(int j = 0; j < n; j++)
         {
             int i = sequence.get(j);
