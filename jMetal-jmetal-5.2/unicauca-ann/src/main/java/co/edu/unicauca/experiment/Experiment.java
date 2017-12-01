@@ -31,7 +31,7 @@ public class Experiment
     public static void main(String[] args) 
     {
         Experiment exp = new Experiment();
-        exp.correr(Integer.parseInt(args[0]));
+        exp.correr(1);
     }
     
     public void correr(int computador)

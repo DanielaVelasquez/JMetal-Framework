@@ -22,24 +22,11 @@ public class SolisAndWetsTecnique extends Tecnique
     @Override
     public Solution evolve(int FE, Solution best, Problem p, Comparator c) {
         
-        
-        List<DoubleSolution> population = new ArrayList<DoubleSolution>();
-        population.add((DoubleSolution)best);
-        
-        if(best == null)
-        {
-            algorithm = ((SolisAndWetsBuilder) builder)
-                        .setMaxEvaluations(FE)
-                        .setInitialSolution(null)
-                        .build();
-        }
-        else
-        {
-            algorithm = ((SolisAndWetsBuilder) builder)
+        algorithm = ((SolisAndWetsBuilder) builder)
                         .setMaxEvaluations(FE)
                         .setInitialSolution((DoubleSolution) best)
                         .build();
-        }
+        
         algorithm.run();
         offspring_population = ((SolisAndWets)algorithm).getPopulation();
         return (Solution) algorithm.getResult();

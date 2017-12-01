@@ -27,17 +27,13 @@ public class MOSRunner
         MOSHRH algorithm;
         String problemName ;
         
-        problemName = "co.edu.unicauca.problem.cross_validation.Banknote";
+        problemName = "co.edu.unicauca.problem.training_testing.Banknote";
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
         
                 
-        MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem)
-                        .setLocalSearchTest(3)
-                        .setLocalSearch(75)
-                        .setNumberOfForeground(5)
+        MTSLS1Tecnique mts_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
                         .setPopulationSize(5)
-                        .setLocalSearchBest(100)
                         .setBonus1(10)
                         .setBonus2(1));
                     
@@ -52,9 +48,9 @@ public class MOSRunner
                         .addTecnique(sw_exec)
                         .setFE(75)
                         .setE(0.15)
-                        .setMaxEvaluations(600)
+                        .setMaxEvaluations(3000)
                         .build(); 
-            rnd.setSeed(10);
+            rnd.setSeed(1);
             System.out.println("-------------------------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

@@ -149,7 +149,7 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
 
     @Override
     public MTS_LS1 build() {
-        return new MTS_LS1(populationSize, problem, comparator, populationSize, penalize_value, bonus_1, bonus_2);
+        return new MTS_LS1(populationSize, problem, comparator, maxEvaluations, penalize_value, bonus_1, bonus_2);
     }
 
 }
