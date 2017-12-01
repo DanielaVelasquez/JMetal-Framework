@@ -10,7 +10,6 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 public class SolisAndWetsarametersAdjust extends ParametersAdjust
 {

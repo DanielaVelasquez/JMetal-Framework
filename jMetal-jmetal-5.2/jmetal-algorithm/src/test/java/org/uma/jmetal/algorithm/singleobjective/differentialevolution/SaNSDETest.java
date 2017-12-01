@@ -4,17 +4,13 @@ package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -212,7 +208,7 @@ public class SaNSDETest {
         
         instance.setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0));
         
-        //Create 6 solutions
+        //Create 2 solutions
         DoubleSolution a = mock(DoubleSolution.class);
         DoubleSolution b = mock(DoubleSolution.class);
         

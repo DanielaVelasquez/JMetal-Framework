@@ -348,29 +348,12 @@ public class SolisAndWets implements Algorithm<DoubleSolution>
     private boolean improveBest(DoubleSolution ind)
     {
         int comparison = comparator.compare(best, ind);
-
-        if(comparison < 0)
+        
+        if(comparison <= 0)
         {
             return false;
         }
-        else if (comparison == 0)
-        {
-            try
-            {
-                double B = (double) best.getAttribute("B");
-                double BI = (double) ind.getAttribute("B");
-
-                if(BI < B)
-                {
-                    return true;
-                }
-            }
-            catch(Exception ex)
-            {
-                
-            }
-        }
-        return true;
+        return true;        
     }
     
     public List getPopulation()
@@ -395,5 +378,9 @@ public class SolisAndWets implements Algorithm<DoubleSolution>
     
     public DoubleProblem getProblem() {
         return problem;
+    }
+
+    public void setComparator(Comparator<DoubleSolution> comparator) {
+        this.comparator = comparator;
     }
 }
