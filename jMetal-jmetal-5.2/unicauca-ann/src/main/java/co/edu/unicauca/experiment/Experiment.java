@@ -22,6 +22,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class Experiment 
@@ -152,6 +153,7 @@ public class Experiment
                         .setRho(0.5)
                         .setSizeNeighborhood(12)
                         .setMaxEvaluations(300)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .build();
                     break;
                     
@@ -162,6 +164,7 @@ public class Experiment
                         .setBonus2(1)
                         .setPenalizeValue(1)
                         .setMaxEvaluations(300)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .build();
                     break;
                     
@@ -208,6 +211,7 @@ public class Experiment
                     MTSLS1Tecnique mtsls1_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
                         .setPopulationSize(5)
                         .setBonus1(10)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .setBonus2(1));
                     
                     SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)
@@ -220,6 +224,7 @@ public class Experiment
                             .setFE(75)
                             .setE(0.15)
                             .setMaxEvaluations(300)
+                            .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                             .build();
                     break;
                     
@@ -276,6 +281,7 @@ public class Experiment
                         .setRho(0.5)
                         .setSizeNeighborhood(12)
                         .setMaxEvaluations(3000)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .build();
                     break;
                     
@@ -285,6 +291,7 @@ public class Experiment
                         .setBonus1(10)
                         .setBonus2(1)
                         .setPenalizeValue(1)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .setMaxEvaluations(3000)
                         .build();
                     break;
@@ -332,6 +339,7 @@ public class Experiment
                     MTSLS1Tecnique mtsls1_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
                         .setPopulationSize(5)
                         .setBonus1(10)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .setBonus2(1));
                     
                     SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)

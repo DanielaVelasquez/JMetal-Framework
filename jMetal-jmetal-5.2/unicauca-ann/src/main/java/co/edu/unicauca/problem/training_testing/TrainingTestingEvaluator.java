@@ -72,7 +72,7 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
         this.elm.setY(training_data_set.getY());
         
         if (elm.getElm_type() == ELM.ELMType.CLASSIFICATION) {
-            return 1 - elm.getAccuracy();
+            return elm.getAccuracy();
         }
         return elm.getAccuracy();
     }

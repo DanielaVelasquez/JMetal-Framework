@@ -156,7 +156,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         elm.test();
         
         if (elm.getElm_type() == ELM.ELMType.CLASSIFICATION) {
-            return 1 - elm.getAccuracy();
+            return elm.getAccuracy();
         }
         
         return elm.getAccuracy();
