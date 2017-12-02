@@ -126,7 +126,10 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
         {
             double quality = (double) this.quality_measures.get(tecnique);
             double participation = (double) this.participation_ratio.get(tecnique);
-            return this.E * ((this.quality_max - quality)/(this.quality_max)) * participation;
+            if(this.quality_max!= 0)
+                return this.E * (Math.abs(this.quality_max - quality)/(this.quality_max)) * participation;
+            else
+                return this.E * (Math.abs(this.quality_max - quality)) * participation;
         }
         return null;
     }
