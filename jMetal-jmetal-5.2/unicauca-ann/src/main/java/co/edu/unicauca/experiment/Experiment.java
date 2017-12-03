@@ -32,7 +32,7 @@ public class Experiment
     public static void main(String[] args) 
     {
         Experiment exp = new Experiment();
-        exp.correr(1);
+        exp.correr(Integer.parseInt(args[0]));
     }
     
     public void correr(int computador)
@@ -150,7 +150,7 @@ public class Experiment
                     
                 case "SolisAndWets":
                     algAux = new SolisAndWetsBuilder(problem)
-                        .setRho(0.5)
+                        .setRho(0.4)
                         .setSizeNeighborhood(12)
                         .setMaxEvaluations(300)
                         .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
@@ -278,7 +278,7 @@ public class Experiment
                     
                 case "SolisAndWets":
                     algAux = new SolisAndWetsBuilder(problem)
-                        .setRho(0.5)
+                        .setRho(0.4)
                         .setSizeNeighborhood(12)
                         .setMaxEvaluations(3000)
                         .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
