@@ -25,7 +25,7 @@ public class MOSRunner
         MOSHRH algorithm;
         String problemName ;
         
-        problemName = "co.edu.unicauca.problem.training_testing.Blood";
+        problemName = "co.edu.unicauca.problem.training_testing.Haberman";
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
         
         
@@ -42,13 +42,14 @@ public class MOSRunner
         for(int i = 0; i < EXECUTIONS;i++)
         {
             algorithm = new MOSBuilder(problem)
-                            .addTecnique(mtsls1_exec)
-                            .addTecnique(sw_exec1)
-                            .setFE(75)
-                            .setE(0.15)
-                            .setMaxEvaluations(300)
-                            .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                            .build();
+
+                        .addTecnique(mtsls1_exec)
+                        .addTecnique(sw_exec1)
+                        .setFE(75)
+                        .setE(0.15)
+                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                        .setMaxEvaluations(3000)
+                        .build(); 
             rnd.setSeed(1);
             System.out.println("-------------------------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

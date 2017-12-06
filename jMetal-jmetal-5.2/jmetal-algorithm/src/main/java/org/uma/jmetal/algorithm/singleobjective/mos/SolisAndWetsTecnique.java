@@ -24,6 +24,7 @@ public class SolisAndWetsTecnique extends Tecnique
         
         algorithm = ((SolisAndWetsBuilder) builder)
                         .setMaxEvaluations(FE)
+                        .setComparator(c)
                         .setInitialSolution((DoubleSolution) best)
                         .build();
         
