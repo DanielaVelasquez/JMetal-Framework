@@ -180,7 +180,10 @@ public class ELM {
                 accuracy = evaluate(tabular, T);
                 trained = true;
             } catch (Exception ex) {
-                accuracy = Double.MAX_VALUE;
+                if(elm_type == ELM.ELMType.REGRESSION)
+                    accuracy = 100;
+                else
+                    accuracy = 0;
               //  System.out.println("No converge");
                // ex.printStackTrace();
             }
@@ -293,7 +296,7 @@ public class ELM {
                 T.set(j, indexT);
             }
 
-            accuracy = ((double) errors / (double) numCols);
+            accuracy = 1 - ((double) errors / (double) numCols);
         } else {
             /**
              * Square differences between tabular and output network

@@ -7,14 +7,17 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
+import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
+import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 public class MOSParametersAdjust extends ParametersAdjust
 {
@@ -59,16 +62,20 @@ public class MOSParametersAdjust extends ParametersAdjust
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
                         
-                        
-                        MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem));
+                        System.out.println("iteration: "+iterations);
+                        MTSLS1Tecnique mts_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
+                        .setPopulationSize(5)
+                        .setBonus1(10)
+                        .setBonus2(1));
                         SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem));
                         MOSHRH algorithm = new   MOSBuilder(problem)
-                                                                    .addTecnique(mts_exec)
-                                                                    .addTecnique(sw_exec)
-                                                                    .setFE(FE)
-                                                                    .setE(E)
-                                                                    .setMaxEvaluations(3000)
-                                                                    .build();
+                                                .addTecnique(mts_exec)
+                                                .addTecnique(sw_exec)
+                                                .setFE(FE)
+                                                .setE(E)
+                                                .setMaxEvaluations(3000)
+                                .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                                                .build();
                          new AlgorithmRunner.Executor(algorithm)
                         .execute() ;
 

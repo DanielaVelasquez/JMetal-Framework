@@ -5,8 +5,11 @@ import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.util.Tecnique;
+import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 
 public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implements Algorithm<S>
 {
@@ -132,6 +135,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
         best_tecniques_qualities = new ArrayList<>();
         best_tecniques_qualities.add(0);
         quality_max = (double) this.quality_measures.get(0);
+        
         for(int k = 1; k < n; k++)
         {
             double value = (double) this.quality_measures.get(k);

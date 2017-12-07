@@ -32,6 +32,7 @@ public class MTSLS1Tecnique extends Tecnique
             algorithm = ((MTS_LS1Builder)builder)
                             .setMaxEvaluations(FE)
                             .setDefaultPopulation(population)
+                            .setComparator(c)
                             .build();
         }
         else
@@ -39,6 +40,7 @@ public class MTSLS1Tecnique extends Tecnique
             algorithm = ((MTS_LS1Builder)builder)
                             .setMaxEvaluations(FE)
                             .setDefaultPopulation(null)
+                           .setComparator(c)
                             .build();
         }
         
