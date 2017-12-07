@@ -125,6 +125,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         
         this.initVariables();
     }
+    
     /**
      * Initializes the algorithm's auto-adaptive variables
      */
@@ -137,6 +138,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         nf1 = 0;
         nf2 = 0;        
     }
+    
     /**
      * Updates p value according to the number of individuals using crossover 
      * operator 1 and 2 and indivuals discarded using crossover operator 1 and 2 
@@ -224,22 +226,28 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> createInitialPopulation() {
         this.evaluations = 0;
-        List<DoubleSolution> population = new ArrayList<>(populationSize);
-        if(this.getPopulation()!=null)
+        
+        if(this.getPopulation() != null)
         {
-            population = this.getPopulation();
-            this.populationSize = population.size();
-        }
-        else{
-            for (int i = 0; i < populationSize; i++) {
-                DoubleSolution newIndividual = getProblem().createSolution();
-                population.add(newIndividual);
-              }
+            return this.getPopulation();
         }
         
+        List<DoubleSolution> population = new ArrayList<>(populationSize);
+        
+        for (int i = 0; i < populationSize; i++) 
+        {
+            DoubleSolution newIndividual = getProblem().createSolution();
+            population.add(newIndividual);
+        }
         
         return population;
     }
+    
+    /**
+     * Obtain best individual in population
+     * @param population where to search best
+     * @return best individual
+     */
     protected DoubleSolution getBest(List<DoubleSolution> population)
     {
         DoubleSolution best = population.get(0);
@@ -250,7 +258,8 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         return best;
     }
-  /**
+    
+    /**
      * Sets an individual function value to a penalization value given by 
      * the user
      * @param solution solution to penalize with a bad function value
@@ -259,22 +268,22 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         solution.setObjective(0, this.penalize_value);
     }
 
-  @Override protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-    int i = 0;
-        while(!isStoppingConditionReached() && i < populationSize)
-        {
-            DoubleSolution solution = population.get(i);
-            this.getProblem().evaluate(solution);
-            i++;
-            this.evaluations++;
-        }
-        for(int j = i; j < populationSize; j++)
-        {
-            DoubleSolution solution = population.get(j);
-            this.penalize(solution);
-        }
-        return population;
-  }
+    @Override protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
+      int i = 0;
+          while(!isStoppingConditionReached() && i < populationSize)
+          {
+              DoubleSolution solution = population.get(i);
+              this.getProblem().evaluate(solution);
+              i++;
+              this.evaluations++;
+          }
+          for(int j = i; j < populationSize; j++)
+          {
+              DoubleSolution solution = population.get(j);
+              this.penalize(solution);
+          }
+          return population;
+    }
 
     @Override
     protected List<DoubleSolution> selection(List<DoubleSolution> population) {
@@ -330,6 +339,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         this.updateCR();
         return offspringPopulation;
     }
+    
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         
@@ -363,6 +373,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         }
         return pop;
     }
+    
     /**
      * Determines if an individual with the same values already exists on a
      * population
@@ -370,13 +381,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
      * @param individual individual to compare with individuals in population
      * @return 
      */
-    /**
-     * Determines if an individual with the same values already exists on a
-     * population
-     * @param population population to search
-     * @param individual individual to compare with individuals in population
-     * @return 
-     */
+    
     private boolean inPopulation(List<DoubleSolution> population, DoubleSolution individual)
     {
         for(DoubleSolution s: population)
@@ -411,6 +416,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         
         return false;
     }
+    
     /**
      * Gets the best individual between two individuals, if they are equals
      * the firts indiviudal is return by default
@@ -420,7 +426,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
      */
     private DoubleSolution getBest(DoubleSolution s1, DoubleSolution s2)
     {
-        int comparison = comparator.compare(s1, s2);
+        int comparison = getComparator().compare(s1, s2);
         
         if(comparison <= 0)
         {
@@ -431,16 +437,23 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
             return s2;
         }
     }
+    
     @Override
     public DoubleSolution getResult() {
+        DoubleSolution best = getPopulation().get(0);
+        
+        for(int i = 1; i < populationSize; i++)
+        {
+            DoubleSolution s = this.getPopulation().get(i);
+            best = this.getBest(best, s);
+        }
+        
         return best;
     }
 
     public void setBest(DoubleSolution best) {
         this.best = best;
-    }
-
-    
+    }    
 
     @Override
     public String getName() {
@@ -456,5 +469,11 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         this.maxEvaluations = maxEvaluations;
     }
     
+    public Comparator<DoubleSolution> getComparator() {
+        return comparator;
+    }
     
+    public void setComparator(Comparator<DoubleSolution> comparator) {
+        this.comparator = comparator;
+    }   
 }
