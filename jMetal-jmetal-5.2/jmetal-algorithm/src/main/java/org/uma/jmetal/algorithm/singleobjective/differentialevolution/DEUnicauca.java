@@ -30,18 +30,19 @@ public class DEUnicauca extends AbstractDifferentialEvolution<DoubleSolution> {
    * @param populationSize
    * @param crossoverOperator
    * @param selectionOperator
-   * @param evaluator
+     * @param penalize_value
+     * @param comparator
    */
   public DEUnicauca(DoubleProblem problem, int maxEvaluations, int populationSize,
       DifferentialEvolutionCrossover crossoverOperator,
-      DifferentialEvolutionSelection selectionOperator, double penalize_value) {
+      DifferentialEvolutionSelection selectionOperator, double penalize_value, Comparator<DoubleSolution> comparator) {
     setProblem(problem); ;
     this.maxEvaluations = maxEvaluations;
     this.populationSize = populationSize;
     this.crossoverOperator = crossoverOperator;
     this.selectionOperator = selectionOperator;
     this.penalize_value = penalize_value;
-    comparator = new ObjectiveComparator<DoubleSolution>(0);
+    this.comparator = comparator;
   }
   
   public int getEvaluations() {

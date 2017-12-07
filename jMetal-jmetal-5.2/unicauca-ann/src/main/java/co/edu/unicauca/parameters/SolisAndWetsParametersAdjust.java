@@ -10,6 +10,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 public class SolisAndWetsParametersAdjust extends ParametersAdjust
 {
@@ -52,10 +53,11 @@ public class SolisAndWetsParametersAdjust extends ParametersAdjust
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
                         SolisAndWets algorithm = new SolisAndWetsBuilder(problem)
-                                                            .setSizeNeighborhood(sizeNeighborhood)
-                                                            .setRho(rho)
-                                                            .setMaxEvaluations(3000)
-                                                            .build();
+                            .setSizeNeighborhood(sizeNeighborhood)
+                            .setRho(rho)
+                            .setMaxEvaluations(3000)
+                            .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                            .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();

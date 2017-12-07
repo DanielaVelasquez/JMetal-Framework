@@ -1,10 +1,13 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+import java.util.Comparator;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 
 public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
@@ -15,6 +18,7 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
   private DifferentialEvolutionCrossover crossoverOperator;
   private DifferentialEvolutionSelection selectionOperator;
   private double penalize_value;
+  private Comparator<DoubleSolution> comparator;
 
   public DEUnicaucaBuilder(DoubleProblem problem) {
     this.problem = problem;
@@ -23,11 +27,12 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
     this.crossoverOperator = new DifferentialEvolutionCrossover(0.5, 0.3, "rand/1/bin");
     this.selectionOperator = new DifferentialEvolutionSelection();
     this.penalize_value = 0;
+    this.comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
   }
   
   public DEUnicauca build() {
     return new DEUnicauca(problem, maxEvaluations, populationSize, crossoverOperator,
-        selectionOperator, penalize_value);
+        selectionOperator, penalize_value, comparator);
   }
 
   public DEUnicaucaBuilder setPopulationSize(int populationSize) {
@@ -64,6 +69,17 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
     this.selectionOperator = selection;
 
     return this;
+  }
+  
+  public DEUnicaucaBuilder setComparator(Comparator<DoubleSolution> comparator)
+  {
+        if(comparator == null)
+        {
+          throw new JMetalException("Comparator can't be null");
+        }
+        this.comparator = comparator;
+        
+        return this;
   }
 
   public DEUnicaucaBuilder setPenalizeValue(double penalize_value) {
