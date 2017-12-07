@@ -46,9 +46,9 @@ public class DECC_GBuilder
 
     return this;
   }
-  public DECC_GBuilder setDEFrobeniusBuilder(DEUnicaucaBuilder deFrobeniusBuilder) {
+  public DECC_GBuilder setDEBuilder(DEUnicaucaBuilder deFrobeniusBuilder) {
     if (deFrobeniusBuilder == null) {
-      throw new JMetalException("deFrobeniusBuilder can't be null ");
+      throw new JMetalException("DEBuilder can't be null ");
     }
 
     this.deFrobeniusBuilder = deFrobeniusBuilder;

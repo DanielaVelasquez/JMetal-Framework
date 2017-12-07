@@ -296,16 +296,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
     protected void penalize(DoubleSolution solution){
         solution.setObjective(0, this.penalize_value);
     }
-    protected DoubleSolution getRandomIndividual(List<DoubleSolution> population)
-    {
-        DoubleSolution individual = null;
-        do
-        {
-            int index = randomGenerator.nextInt(0, population_size);
-            individual = population.get(index);
-        }while(comparator.compare(current_best, individual) == 0); //TO-DO si funcioan asi???
-        return individual;
-    }
+    
     /**
      * Execute all local searches, all LS executes as inital params
      * individual S and population
@@ -342,7 +333,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
         return copy;
     }
     /**
-     * Each tecnique produces a subset of individuals according to its participation ratio
+     * Individuals  are created randomly
      * @return initial population
      */
     protected  List<DoubleSolution> createInitialPopulation() 
@@ -391,13 +382,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
         }
         return ls;
     }
-  
-    /**
-     * Update probabilities of local searchesd
-     */
-    protected void updateProbabities(){
-        
-    }
+
     /**
      * Execute a local search
      * @return return the local search executed
@@ -448,5 +433,143 @@ public class IHDELS implements Algorithm<DoubleSolution>
             ls.restart();
         }
     }
+
+    public List<DoubleSolution> getPopulation() {
+        return population;
+    }
+
+    public DoubleSolution getBest() {
+        return best;
+    }
+
+    public DoubleSolution getCurrent_best() {
+        return current_best;
+    }
+
+    public int getEvaluations() {
+        return evaluations;
+    }
+
+    public int getMaxEvaluations() {
+        return maxEvaluations;
+    }
+
+    public List<LocalSearch> getLocal_searches() {
+        return local_searches;
+    }
+
+    public int getNumberLS() {
+        return numberLS;
+    }
+
+    public DoubleProblem getProblem() {
+        return problem;
+    }
+
+    public Comparator<DoubleSolution> getComparator() {
+        return comparator;
+    }
+
+    public double getPenalize_value() {
+        return penalize_value;
+    }
+
+    public int getReStart() {
+        return reStart;
+    }
+
+    public int getPopulation_size() {
+        return population_size;
+    }
+
+    public int getFE_DE() {
+        return FE_DE;
+    }
+
+    public int getFE_LS() {
+        return FE_LS;
+    }
+
+    public SaDEBuilder getSADEbuilder() {
+        return SADEbuilder;
+    }
+
+    public int getM() {
+        return m;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public double getA() {
+        return a;
+    }
+
+    public void setPopulation(List<DoubleSolution> population) {
+        this.population = population;
+    }
+
+    public void setEvaluations(int evaluations) {
+        this.evaluations = evaluations;
+    }
+
+    public void setMaxEvaluations(int maxEvaluations) {
+        this.maxEvaluations = maxEvaluations;
+    }
+
+    public void setLocal_searches(List<LocalSearch> local_searches) {
+        this.local_searches = local_searches;
+    }
+
+    public void setProblem(DoubleProblem problem) {
+        this.problem = problem;
+    }
+
+    public void setComparator(Comparator<DoubleSolution> comparator) {
+        this.comparator = comparator;
+    }
+
+    public void setPenalize_value(double penalize_value) {
+        this.penalize_value = penalize_value;
+    }
+
+    public void setReStart(int reStart) {
+        this.reStart = reStart;
+    }
+
+    public void setFE_DE(int FE_DE) {
+        this.FE_DE = FE_DE;
+    }
+
+    public void setFE_LS(int FE_LS) {
+        this.FE_LS = FE_LS;
+    }
+
+    public void setSADEbuilder(SaDEBuilder SADEbuilder) {
+        this.SADEbuilder = SADEbuilder;
+    }
+
+    public void setAlgorithm(SaDE algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public void setM(int m) {
+        this.m = m;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public void setA(double a) {
+        this.a = a;
+    }
+
+    public void setB(double b) {
+        this.b = b;
+    }
+    
+    
     
 }

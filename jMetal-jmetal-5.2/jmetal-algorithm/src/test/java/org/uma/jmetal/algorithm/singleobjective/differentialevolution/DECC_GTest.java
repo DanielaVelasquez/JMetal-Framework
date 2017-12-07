@@ -21,7 +21,6 @@ import org.uma.jmetal.util.comparator.FrobeniusComparator;
 @RunWith(MockitoJUnitRunner.class)
 public class DECC_GTest
 {
-    
     private DECC_G instance;
     private int penalize_value;
     @Mock
@@ -36,7 +35,7 @@ public class DECC_GTest
     {
         penalize_value = 10;
         instance = new DECC_GBuilder(problem)
-                        .setDEFrobeniusBuilder(new DEUnicaucaBuilder(problem))
+                        .setDEBuilder(new DEUnicaucaBuilder(problem))
                         .setPenalizeValue(penalize_value)
                         .build();
         Mockito.when(problem.getNumberOfObjectives()).thenReturn(1);
