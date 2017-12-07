@@ -11,6 +11,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 public class HillClimbingParameterAdjust extends ParametersAdjust
 {
@@ -55,6 +56,7 @@ public class HillClimbingParameterAdjust extends ParametersAdjust
                         HillClimbing algorithm = new HillClimbingBuilder(problem)
                             .setTweak(new BoundedUniformConvultion(mean, standarDeviation))
                             .setMaxEvaluations(3000)
+                            .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
