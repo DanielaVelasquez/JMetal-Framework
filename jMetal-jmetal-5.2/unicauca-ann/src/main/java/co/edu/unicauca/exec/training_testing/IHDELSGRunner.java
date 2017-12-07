@@ -10,7 +10,7 @@ import org.uma.jmetal.algorithm.singleobjective.ihdels.IHDELSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.ihdels.LSHillClimbing;
 import org.uma.jmetal.algorithm.singleobjective.ihdels.LSMTS_LS1;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
-import org.uma.jmetal.algorithm.util.LocalSearch;
+import org.uma.jmetal.algorithm.local_search.LocalSearch;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;

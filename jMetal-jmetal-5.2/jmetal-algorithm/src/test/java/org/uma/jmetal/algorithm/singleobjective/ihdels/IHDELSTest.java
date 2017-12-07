@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.uma.jmetal.algorithm.util.LocalSearch;
+import org.uma.jmetal.algorithm.local_search.LocalSearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.impl.DefaultDoubleSolution;

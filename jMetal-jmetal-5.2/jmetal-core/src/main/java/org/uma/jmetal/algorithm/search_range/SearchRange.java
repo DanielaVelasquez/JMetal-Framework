@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.util;
+package org.uma.jmetal.algorithm.search_range;
 
 import java.util.List;
 import org.uma.jmetal.problem.Problem;

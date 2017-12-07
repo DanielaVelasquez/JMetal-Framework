@@ -6,7 +6,7 @@ import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDE;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilder;
-import org.uma.jmetal.algorithm.util.LocalSearch;
+import org.uma.jmetal.algorithm.local_search.LocalSearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;

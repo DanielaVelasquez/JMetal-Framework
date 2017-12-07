@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.util;
+package org.uma.jmetal.algorithm.tecnique;
 
 import java.util.Comparator;
 import java.util.HashMap;

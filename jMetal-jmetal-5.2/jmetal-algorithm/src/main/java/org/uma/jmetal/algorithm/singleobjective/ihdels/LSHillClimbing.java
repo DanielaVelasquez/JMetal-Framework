@@ -3,7 +3,7 @@ package org.uma.jmetal.algorithm.singleobjective.ihdels;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbing;
-import org.uma.jmetal.algorithm.util.LocalSearch;
+import org.uma.jmetal.algorithm.local_search.LocalSearch;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmBuilder;

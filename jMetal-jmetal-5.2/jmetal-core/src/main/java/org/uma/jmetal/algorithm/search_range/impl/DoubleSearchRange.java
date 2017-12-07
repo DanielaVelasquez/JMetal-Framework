@@ -1,5 +1,6 @@
-package org.uma.jmetal.algorithm.util;
+package org.uma.jmetal.algorithm.search_range.impl;
 
+import org.uma.jmetal.algorithm.search_range.SearchRange;
 import java.util.ArrayList;
 import java.util.List;
 import org.uma.jmetal.problem.DoubleProblem;
