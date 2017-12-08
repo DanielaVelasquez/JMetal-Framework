@@ -57,6 +57,7 @@ public class SolisAndWetsParametersAdjust extends ParametersAdjust
                             .setRho(rho)
                             .setMaxEvaluations(3000)
                             .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                                .setPenalizeValue(0)
                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
