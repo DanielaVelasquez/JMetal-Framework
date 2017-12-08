@@ -2,9 +2,9 @@ package co.edu.unicauca.exec.training_testing;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
+import org.uma.jmetal.algorithm.singleobjective.mos.MOS;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -22,7 +22,7 @@ public class MOSRunner
         JMetalRandom rnd = JMetalRandom.getInstance();
         
         DoubleProblem problem;
-        MOSHRH algorithm;
+        MOS algorithm;
         String problemName ;
         
         problemName = "co.edu.unicauca.problem.training_testing.Haberman";

@@ -13,7 +13,7 @@ import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilde
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;

@@ -61,11 +61,11 @@ public class MOSBuilder
         this.tecniques = new ArrayList<>();
     }
     
-    public MOSHRH build()
+    public MOS build()
     {
         if(!tecniques.isEmpty() || tecniques.size() < 2)
         {
-            return new MOSHRH(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
+            return new MOS(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
         }
         throw new JMetalException("Should be at least 2 tecniques");
     }
