@@ -26,8 +26,8 @@ public class SaDEBuilder implements AlgorithmBuilder<SaDE>
         this.problem = problem;
         this.maxEvaluations = 3000;
         this.populationSize = 10;
-        this.crossoverOperator =  new DifferentialEvolutionCrossover(0.4, 0.6, "rand/1/bin");
-        this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.5, 0.4, "current-to-best/1/bin");
+        this.crossoverOperator =  new DifferentialEvolutionCrossover(0.6, 0.5, "rand/1/bin");
+        this.crossoverOperator2 = new DifferentialEvolutionCrossover(0.5, 0.7, "current-to-best/1/bin");
         this.comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         this.selectionOperator = new DifferentialEvolutionSelection();
         this.penalize_value = 1;

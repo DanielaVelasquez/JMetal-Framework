@@ -4,15 +4,12 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSHRH;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
-import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -29,7 +26,6 @@ public class MOSParametersAdjust extends ParametersAdjust
     @Override
     public void run(int inicio, int end) throws IOException
     {
-        
         int combinations = this.covering_array.getN();
         int values = this.covering_array.getK();
         
@@ -74,7 +70,7 @@ public class MOSParametersAdjust extends ParametersAdjust
                                                 .setFE(FE)
                                                 .setE(E)
                                                 .setMaxEvaluations(3000)
-                                .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                                                .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                                                 .build();
                          new AlgorithmRunner.Executor(algorithm)
                         .execute() ;

@@ -10,6 +10,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 public class MTS_LS1ParametersAdjust extends ParametersAdjust
 {
@@ -71,6 +72,7 @@ public class MTS_LS1ParametersAdjust extends ParametersAdjust
                                                             .setLocalSearchBest(local_search_best)
                                                             .setNumberOfForeground(number_of_foregrounds)
                                                             .setLocalSearchTest(local_search_test)
+                                                            .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                                                             .build();
                         new AlgorithmRunner.Executor(algorithm)
                         .execute() ;

@@ -1,10 +1,13 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
+import java.util.Comparator;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 
 public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
@@ -15,19 +18,21 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
   private DifferentialEvolutionCrossover crossoverOperator;
   private DifferentialEvolutionSelection selectionOperator;
   private double penalize_value;
+  private Comparator<DoubleSolution> comparator;
 
   public DEUnicaucaBuilder(DoubleProblem problem) {
     this.problem = problem;
     this.populationSize = 100;
     this.maxEvaluations = 3000;
-    this.crossoverOperator = new DifferentialEvolutionCrossover(0.5, 0.3, "rand/1/bin");
+    this.crossoverOperator = new DifferentialEvolutionCrossover(0.7, 0.5, "rand/1/bin");
     this.selectionOperator = new DifferentialEvolutionSelection();
+    comparator = new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
     this.penalize_value = 0;
   }
   
   public DEUnicauca build() {
     return new DEUnicauca(problem, maxEvaluations, populationSize, crossoverOperator,
-        selectionOperator, penalize_value);
+        selectionOperator, penalize_value, comparator);
   }
 
   public DEUnicaucaBuilder setPopulationSize(int populationSize) {
@@ -57,7 +62,13 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
 
     return this;
   }
+  public DEUnicaucaBuilder setComparator(Comparator<DoubleSolution>  comparator) {
+    if(comparator == null)
+      throw new JMetalException("comparator can't be null");
+    this.comparator = comparator;
 
+    return this;
+  }
   public DEUnicaucaBuilder setSelection(DifferentialEvolutionSelection selection) {
     if(selection == null)
       throw new JMetalException("selection can't be null");

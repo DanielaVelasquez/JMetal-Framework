@@ -7,13 +7,21 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 
 public abstract class ParametersAdjust 
 {
     protected static int SPACES = 30;
     protected static int DECIMALS = 3;
+    
+    protected static final Comparator<DoubleSolution> COMPARATOR =
+            new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
+    protected static final double PENALIZE_VALUE = 0;
+    protected static final int MAXEVALUATIONS = 3000;
     /**
      * Possibles values for every entry
      * row - entry
