@@ -187,7 +187,7 @@ public class Experiment
                             .setE(0.15)
                             .setMaxEvaluations(evaluations_cv)
                             .setComparator(comparator)
-                            .setPenalize_value(penalize_value)
+                            .setPenalizeValue(penalize_value)
                             .build();
                     break;
                 case "MTSLS1":
@@ -347,7 +347,7 @@ public class Experiment
                         .setFE(75)
                         .setE(0.15)
                         .setMaxEvaluations(evaluations_tt)
-                        .setPenalize_value(penalize_value)
+                        .setPenalizeValue(penalize_value)
                         .build();
                     break;
             }
