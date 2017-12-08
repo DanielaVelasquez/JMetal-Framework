@@ -1,6 +1,7 @@
 package co.edu.unicauca.experiment;
 
 import co.edu.unicauca.database.DataBaseConnection;
+import co.edu.unicauca.factory.AlgorithmFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import java.util.Comparator;
@@ -95,9 +96,10 @@ public class Experiment
                     semilla = Integer.parseInt(resultado.getString(3));
                     runId = Integer.parseInt(resultado.getString(4));
                     tipo = resultado.getString(5);
+                    AbstractELMEvaluator.EvaluatorType type = tipo.equals("cv")?AbstractELMEvaluator.EvaluatorType.CV:AbstractELMEvaluator.EvaluatorType.TT;
                     String nombreProblema = "co.edu.unicauca.problem." + (tipo.equals("cv")? "cross_validation":"training_testing") + "." + problema;
                     DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(nombreProblema);
-                    Algorithm auxAlg = retornarAlgoritmo(algoritmo, tipo, problem);
+                    Algorithm auxAlg = AlgorithmFactory.getAlgorithm(algoritmo, type, problem);
                     System.out.println("-----"+problema+"-----"+algoritmo+"-----"+semilla+"-----"+runId+"-----"+tipo);
                     JMetalRandom rndm = JMetalRandom.getInstance();
                     rndm.setSeed(semilla);
@@ -120,7 +122,7 @@ public class Experiment
     } 
 
     
-    public Algorithm retornarAlgoritmo(String nombreAlgoritmo, String tipo, DoubleProblem problem)
+    /*public Algorithm retornarAlgoritmo(String nombreAlgoritmo, String tipo, DoubleProblem problem)
     {
         Algorithm algAux = null;
         Comparator<DoubleSolution> comparator = new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
@@ -354,5 +356,5 @@ public class Experiment
         }
         
         return algAux;
-    }
+    }*/
 }

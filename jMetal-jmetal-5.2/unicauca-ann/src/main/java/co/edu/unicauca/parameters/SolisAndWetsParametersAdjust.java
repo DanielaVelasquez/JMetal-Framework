@@ -53,13 +53,14 @@ public class SolisAndWetsParametersAdjust extends ParametersAdjust
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
                         System.out.println("iteration "+iterations+ " "+problemName);
-                        SolisAndWets algorithm = new SolisAndWetsBuilder(problem)
-                                                 .setSizeNeighborhood(sizeNeighborhood)
-                                                            .setRho(rho)
-                                                            .setComparator(COMPARATOR)
-                                                            .setMaxEvaluations(MAXEVALUATIONS)
-                                                            .setPenalizeValue(PENALIZE_VALUE)
-                                                            .build();
+                        SolisAndWets algorithm = new SolisAndWetsBuilder(problem)                                
+                            .setSizeNeighborhood(sizeNeighborhood)
+                            .setRho(rho)
+                            .setComparator(COMPARATOR)
+                            .setMaxEvaluations(MAXEVALUATIONS)
+                            .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                            .setPenalizeValue(PENALIZE_VALUE)
+                            .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();

@@ -1,5 +1,6 @@
 package co.edu.unicauca.parameters;
 
+import co.edu.unicauca.factory.IHDELSFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -65,18 +66,27 @@ public class IHDELSParameterAdjust extends ParametersAdjust
                     elm = (AbstractELMEvaluator)problem;
                     double train = 0;
                     
-                    HillClimbingBuilder hcBuilder = new HillClimbingBuilder(problem)
+                    /*HillClimbingBuilder hcBuilder = new HillClimbingBuilder(problem)
                         .setTweak(new BoundedUniformConvultion(0.55, 0.3));
                     LocalSearch hillClimbing = new LSHillClimbing(hcBuilder);
 
                     MTS_LS1Builder mtsls1Builder = new MTS_LS1Builder(problem);
-                    LocalSearch mtsls1 = new LSMTS_LS1(mtsls1Builder);
+                    LocalSearch mtsls1 = new LSMTS_LS1(mtsls1Builder);*/
                     
-                    SaDEBuilder builder = new SaDEBuilder(problem);
+                    //SaDEBuilder builder = new SaDEBuilder(problem);
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        IHDELS algorithm = new IHDELSBuilder(problem)
+                        IHDELSFactory factory = new IHDELSFactory();
+                        IHDELSBuilder builder = (IHDELSBuilder) factory.getAlgorithm("IHDELS", AbstractELMEvaluator.EvaluatorType.TT, problem);
+                        builder.setFE_DE(fe_de)
+                               .setFE_LS(fe_ls)
+                               .setPopulation_size(10)
+                               .setReStart(restart)
+                               .setSearchDomain(a, b)
+                               .setThreshold(threshold);
+                        IHDELS algorithm = builder.build();
+                        /*IHDELS algorithm = new IHDELSBuilder(problem)
                             .addLocalSearch(mtsls1)
                             .addLocalSearch(hillClimbing)
                             .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
@@ -89,7 +99,7 @@ public class IHDELSParameterAdjust extends ParametersAdjust
                             .setThreshold(threshold)
                             .setSaDEBuilder(builder)
                              
-                            .build();
+                            .build();*/
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();

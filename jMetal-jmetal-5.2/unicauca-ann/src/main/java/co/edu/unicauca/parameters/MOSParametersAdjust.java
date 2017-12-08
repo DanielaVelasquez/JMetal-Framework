@@ -1,5 +1,6 @@
 package co.edu.unicauca.parameters;
 
+import co.edu.unicauca.factory.MOSFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -59,7 +60,13 @@ public class MOSParametersAdjust extends ParametersAdjust
                     {
                         
                         System.out.println("iteration: "+iterations);
-                        MTSLS1Tecnique mts_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
+                        MOSFactory factory = new MOSFactory();
+                        MOSBuilder builder  =  (MOSBuilder) factory.getAlgorithm("MOS", AbstractELMEvaluator.EvaluatorType.TT, problem);
+                        
+                        builder.setE(E)
+                                .setFE(FE);
+                        MOS algorithm = builder.build();
+                        /*MTSLS1Tecnique mts_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
                         .setPopulationSize(5)
                         .setBonus1(10)
                         .setBonus2(1));
@@ -71,9 +78,9 @@ public class MOSParametersAdjust extends ParametersAdjust
                                                 .setE(E)
                                                 .setMaxEvaluations(3000)
                                                 .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                                                .build();
+                                                .build();*/
                          new AlgorithmRunner.Executor(algorithm)
-                        .execute() ;
+                                            .execute() ;
 
                         DoubleSolution solution = (DoubleSolution) algorithm.getResult();
                         double evaluation = elm.test(solution);

@@ -57,6 +57,7 @@ public class HillClimbingParameterAdjust extends ParametersAdjust
                             .setTweak(new BoundedUniformConvultion(mean, standarDeviation))
                             .setMaxEvaluations(3000)
                             .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                            .setPenalizeValue(0)
                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;
