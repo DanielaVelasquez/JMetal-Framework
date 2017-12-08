@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.singleobjective.mos;
+package org.uma.jmetal.algorithm.singleobjective.solis_and_wets;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -58,11 +58,14 @@ public class SaNSDEParametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
+                        System.out.println("iteration "+iterations+ " "+problemName);
                         SaNSDE algorithm = new   SaNSDEBuilder(problem)
                                                             .setCrossover(new DifferentialEvolutionCrossover(cr1, f1, "rand/1/bin"))
                                                             .setCrossoverOperator2(new DifferentialEvolutionCrossover(cr2, f2, "current-to-best/1/bin"))
                                                             .setPopulationSize(10)
-                                                            .setMaxEvaluations(3000)
+                                                            .setComparator(COMPARATOR)
+                                                            .setMaxEvaluations(MAXEVALUATIONS)
+                                                            .setPenalizeValue(PENALIZE_VALUE)
                                                             .build();
                         new AlgorithmRunner.Executor(algorithm)
                         .execute() ;

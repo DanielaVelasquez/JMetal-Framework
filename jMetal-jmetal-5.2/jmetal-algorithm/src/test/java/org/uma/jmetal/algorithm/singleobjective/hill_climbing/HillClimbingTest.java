@@ -32,7 +32,7 @@ public class HillClimbingTest {
     {
         penalizeValue = 123.456789;
         instance = new HillClimbingBuilder(problem)
-                    .setPenalize_value(penalizeValue)
+                    .setPenalizeValue(penalizeValue)
                     .build();
         Mockito.when(problem.getNumberOfObjectives()).thenReturn(1);
     }

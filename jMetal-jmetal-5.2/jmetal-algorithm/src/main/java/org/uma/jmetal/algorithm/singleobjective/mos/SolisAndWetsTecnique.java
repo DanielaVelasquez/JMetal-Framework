@@ -1,5 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWets;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

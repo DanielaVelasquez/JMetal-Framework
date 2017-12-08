@@ -11,7 +11,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 
-public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implements Algorithm<S>
+public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<S>
 {
     /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -88,7 +88,7 @@ public abstract class AbstractHRHMOSAlgorithm <S extends Solution<?>>  implement
     
     
     
-    public AbstractHRHMOSAlgorithm(List<Tecnique> tecniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
+    public AbstractMOS(List<Tecnique> tecniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
     {
         this.tecniques = tecniques;
         this.problem = problem;

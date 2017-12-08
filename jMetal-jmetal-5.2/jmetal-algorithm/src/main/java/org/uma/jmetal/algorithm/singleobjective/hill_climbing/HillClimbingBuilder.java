@@ -89,7 +89,7 @@ public class HillClimbingBuilder  implements AlgorithmBuilder<HillClimbing>
         return this;
     }
 
-    public HillClimbingBuilder setPenalize_value(double penalize_value) {
+    public HillClimbingBuilder setPenalizeValue(double penalize_value) {
         this.penalize_value = penalize_value;
         return this;
     }

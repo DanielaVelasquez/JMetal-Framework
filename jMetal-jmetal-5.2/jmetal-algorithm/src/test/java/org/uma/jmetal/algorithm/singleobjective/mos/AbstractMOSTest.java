@@ -5,6 +5,7 @@
  */
 package org.uma.jmetal.algorithm.singleobjective.mos;
 
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +21,11 @@ import org.uma.jmetal.problem.DoubleProblem;
  *
  * @author danielavelasquezgarzon
  */
-public class AbstractHRHMOSAlgorithmTest {
+public class AbstractMOSTest {
     
-    private AbstractHRHMOSAlgorithm instance ;
+    private AbstractMOS instance ;
     
-    public AbstractHRHMOSAlgorithmTest() {
+    public AbstractMOSTest() {
         String problemName = "co.edu.unicauca.problem.training_testing.Iris";
         DoubleProblem problem = null;
         

@@ -3,19 +3,19 @@ package co.edu.unicauca.experiment;
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
+import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
-import org.uma.jmetal.algorithm.singleobjective.mos.MTSTecnique;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -27,7 +27,27 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class Experiment 
 {
+     //Sansde
+    private final static double CR1_SANSDE = 0.3;
+    private final static double F1_SANSDE = 0.6;
+    private final static double CR2_SANSDE = 0.7;
+    private final static double F2_SANSDE = 0.3;
+    //DE
+    private final static double CR_DE = 0.7;
+    private final static double F_DE = 0.5;
+    //Sade
+    private final static double CR1_SADE = 0.6;
+    private final static double F1_SADE = 0.5;
+    private final static double CR2_SADE = 0.5;
+    private final static double F2_SADE = 0.7;
+    
+    //solis
+    private final static double RHO = 0.4;
+    private final static int NEIGHBORHOOD = 12;
+    
     private DataBaseConnection connection;
+    
+    
     
     public static void main(String[] args) 
     {
@@ -103,130 +123,120 @@ public class Experiment
     public Algorithm retornarAlgoritmo(String nombreAlgoritmo, String tipo, DoubleProblem problem)
     {
         Algorithm algAux = null;
-        
+        Comparator<DoubleSolution> comparator = new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
+        int evaluations_cv = 300;
+        int evaluations_tt = 3000;
+        double penalize_value = 0;
+       
         if(tipo.equals("cv"))
         {
             switch(nombreAlgoritmo)
             {
                 case "DECC_G":
                     algAux = new DECC_GBuilder(problem)
-                        .setMaxEvaluations(300)
+                        .setMaxEvaluations(evaluations_cv)
                         .setPopulationSize(10)
                         .setSubcomponets(6)
                         .setFEs(30)
                         .setwFes(40)
+                        .setPenalizeValue(penalize_value)
+                        .setComparator(comparator)
+                        .setDEBuilder(new DEUnicaucaBuilder(problem)
+                                      .setCrossover(new DifferentialEvolutionCrossover(CR_DE, F_DE, "rand/1/bin"))
+                                      .setSelection(new DifferentialEvolutionSelection()))
+                        .setSaNSDEBuilder(new SaNSDEBuilder(problem)
+                                          .setCrossover(new DifferentialEvolutionCrossover(CR1_SANSDE, F1_SANSDE, "rand/1/bin"))
+                                          .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SANSDE, F2_SANSDE, "current-to-best/1/bin")))
                         .build();
                     break;
-                    
-                case "MemeticED":
-                    algAux = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(300)
-                        .setPopulationSize(10)
-                        .build();
-                    break;
-                    
-                case "MOS":
-                    MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem)
-                        .setLocalSearchTest(3)
-                        .setLocalSearch(75)
-                        .setNumberOfForeground(5)
-                        .setPopulationSize(5)
-                        .setLocalSearchBest(100)
-                        .setBonus1(10)
-                        .setBonus2(1));
-                    
-                    SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)
-                        .setRho(0.5)
-                        .setSizeNeighborhood(12));
-                    
-                    algAux = new MOSBuilder(problem)
-                        .addTecnique(mts_exec)
-                        .addTecnique(sw_exec)
-                        .setFE(75)
-                        .setE(0.15)
-                        .setMaxEvaluations(300)
-                        .build();                    
-                    break;
-                    
-                case "SolisAndWets":
-                    algAux = new SolisAndWetsBuilder(problem)
-                        .setRho(0.4)
-                        .setSizeNeighborhood(12)
-                        .setMaxEvaluations(300)
-                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                        .build();
-                    break;
-                    
-                case "MTSLS1":
-                    algAux = new MTS_LS1Builder(problem)
-                        .setPopulationSize(10)
-                        .setBonus1(10)
-                        .setBonus2(1)
-                        .setPenalizeValue(1)
-                        .setMaxEvaluations(300)
-                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                        .build();
-                    break;
-                    
                 case "DE":
                     algAux = new DEUnicaucaBuilder(problem)
                         .setPopulationSize(10)
-                        .setMaxEvaluations(300)
-                        .setPenalizeValue(1)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.3, "rand/1/bin"))
+                        .setMaxEvaluations(evaluations_cv)
+                        .setPenalizeValue(penalize_value)
+                        .setCrossover(new DifferentialEvolutionCrossover(CR_DE, F_DE, "rand/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
+                        .setComparator(comparator)
                         .build();
                     break;
-                    
                 case "SaNSDE":
                     algAux = new SaNSDEBuilder(problem)
                         .setPopulationSize(10)
-                        .setMaxEvaluations(300)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.3, 0.6, "rand/1/bin"))
-                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.3, 0.7, "current-to-best/1/bin"))
+                        .setMaxEvaluations(evaluations_cv)
+                        .setPenalizeValue(penalize_value)
+                        .setCrossover(new DifferentialEvolutionCrossover(CR1_SANSDE, F1_SANSDE, "rand/1/bin"))
+                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SANSDE, F2_SANSDE, "current-to-best/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
+                        .setComparator(comparator)
                         .build();
                     break;
-                    
-                case "Random":
-                    algAux = new RandomSearchBuilder<>(problem)
-                        .setMaxEvaluations(300)
-                        .build();
-                    break;
-                                   
-                case "MTS":
-                    algAux = new MultipleTrajectorySearchBuilder(problem)
-                        .setLocalSearchTest(3)
-                        .setLocalSearch(75)
-                        .setNumberOfForeground(5)
-                        .setPopulationSize(5)
-                        .setLocalSearchBest(100)
-                        .setMaxEvaluations(300)
-                        .setBonus1(10)
-                        .setBonus2(1)
-                        .build();
-                    break;
-                    
-                case "MOS1":
+                case "MOS":
                     MTSLS1Tecnique mtsls1_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
                         .setPopulationSize(5)
                         .setBonus1(10)
-                        .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                         .setBonus2(1));
                     
                     SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)
-                        .setRho(0.5)
-                        .setSizeNeighborhood(12));
+                        .setRho(RHO)
+                        .setSizeNeighborhood(NEIGHBORHOOD));
                     
                     algAux = new MOSBuilder(problem)
                             .addTecnique(mtsls1_exec)
                             .addTecnique(sw_exec1)
                             .setFE(75)
                             .setE(0.15)
-                            .setMaxEvaluations(300)
-                            .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                            .setMaxEvaluations(evaluations_cv)
+                            .setComparator(comparator)
+                            .setPenalizeValue(penalize_value)
                             .build();
                     break;
+                case "MTSLS1":
+                    algAux = new MTS_LS1Builder(problem)
+                        .setPopulationSize(10)
+                        .setBonus1(10)
+                        .setBonus2(1)
+                        .setPenalizeValue(penalize_value)
+                        .setMaxEvaluations(evaluations_cv)
+                        .setComparator(comparator)
+                        .build();
+                    break;
+                case "SolisAndWets":
+                    algAux = new SolisAndWetsBuilder(problem)
+                        .setRho(RHO)
+                        .setSizeNeighborhood(NEIGHBORHOOD)
+                        .setPenalizeValue(penalize_value)
+                        .setMaxEvaluations(evaluations_cv)
+                        .setComparator(comparator)
+                        .build();
+                    break;
+                    
+                case "MemeticED":
+                    algAux = new MemeticEDBuilder(problem)
+                        .setMaxEvaluations(evaluations_cv)
+                        .setPopulationSize(10)
+                        .build();
+                    break;
+                      
+                case "Random":
+                    algAux = new RandomSearchBuilder<>(problem)
+                        .setMaxEvaluations(evaluations_cv)
+                        .setComparator(comparator)
+                        .build();
+                    break;
+                
+                case "SaDE":
+                    algAux = new SaDEBuilder(problem)
+                                .setPopulationSize(10)
+                                .setMaxEvaluations(evaluations_cv)
+                                .setCrossoverOperator(new DifferentialEvolutionCrossover(CR1_SADE, F1_SADE, "rand/1/bin"))
+                                .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SADE, F2_SADE, "current-to-best/1/bin"))
+                                .setSelectionOperator(new DifferentialEvolutionSelection())
+                                .setComparator(comparator)
+                                .setPenalizeValue(penalize_value)
+                                .build();
+                    break;
+                    
+                
                     
                     //NO PONER 3000 sino 600
                
@@ -238,50 +248,46 @@ public class Experiment
             {
                 case "DECC_G":
                     algAux = new DECC_GBuilder(problem)
-                        .setMaxEvaluations(3000)
+                        .setMaxEvaluations(evaluations_tt)
                         .setPopulationSize(10)
                         .setSubcomponets(10)
                         .setFEs(70)
                         .setwFes(100)
+                        .setPenalizeValue(penalize_value)
+                        .setDEBuilder(new DEUnicaucaBuilder(problem)
+                                      .setCrossover(new DifferentialEvolutionCrossover(CR_DE, F_DE, "rand/1/bin"))
+                                      .setSelection(new DifferentialEvolutionSelection()))
+                        .setSaNSDEBuilder(new SaNSDEBuilder(problem)
+                                          .setCrossover(new DifferentialEvolutionCrossover(CR1_SANSDE, F1_SANSDE, "rand/1/bin"))
+                                          .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SANSDE, F2_SANSDE, "current-to-best/1/bin")))
                         .build();
+                    break;
+                case "SaDE":
+                    algAux = new SaDEBuilder(problem)
+                                .setPopulationSize(10)
+                                .setMaxEvaluations(evaluations_tt)
+                                .setPenalizeValue(penalize_value)
+                                .setCrossoverOperator(new DifferentialEvolutionCrossover(CR1_SADE, F1_SADE, "rand/1/bin"))
+                                .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SADE, F2_SADE, "current-to-best/1/bin"))
+                                .setSelectionOperator(new DifferentialEvolutionSelection())
+                                .setComparator(comparator)
+                                 .build();
                     break;
                     
                 case "MemeticED":
                     algAux = new MemeticEDBuilder(problem)
-                        .setMaxEvaluations(3000)
+                        .setMaxEvaluations(evaluations_tt)
                         .setPopulationSize(10)
-                        .build();
-                    break;
-                    
-                 case "MOS":
-                    MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem)
-                        .setLocalSearchTest(3)
-                        .setLocalSearch(75)
-                        .setNumberOfForeground(5)
-                        .setPopulationSize(5)
-                        .setLocalSearchBest(100)
-                        .setBonus1(10)
-                        .setBonus2(1));
-                    
-                    SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)
-                        .setRho(0.5)
-                        .setSizeNeighborhood(12));
-                    
-                    algAux = new MOSBuilder(problem)
-                        .addTecnique(mts_exec)
-                        .addTecnique(sw_exec)
-                        .setFE(75)
-                        .setE(0.15)
-                        .setMaxEvaluations(3000)
                         .build();
                     break;
                     
                 case "SolisAndWets":
                     algAux = new SolisAndWetsBuilder(problem)
-                        .setRho(0.4)
-                        .setSizeNeighborhood(12)
-                        .setMaxEvaluations(3000)
+                        .setRho(RHO)
+                        .setSizeNeighborhood(NEIGHBORHOOD)
+                        .setMaxEvaluations(evaluations_tt)
                         .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                        .setPenalizeValue(penalize_value)
                         .build();
                     break;
                     
@@ -290,18 +296,18 @@ public class Experiment
                         .setPopulationSize(10)
                         .setBonus1(10)
                         .setBonus2(1)
-                        .setPenalizeValue(1)
+                        .setPenalizeValue(penalize_value)
                         .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                        .setMaxEvaluations(3000)
+                        .setMaxEvaluations(evaluations_tt)
                         .build();
                     break;
                     
                 case "DE":
                     algAux = new DEUnicaucaBuilder(problem)
                         .setPopulationSize(10)
-                        .setMaxEvaluations(3000)
-                        .setPenalizeValue(1)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.5, 0.3, "rand/1/bin"))
+                        .setMaxEvaluations(evaluations_tt)
+                        .setPenalizeValue(penalize_value)
+                        .setCrossover(new DifferentialEvolutionCrossover(0.7, 0.5, "rand/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
                         .build();
                     break;
@@ -309,33 +315,22 @@ public class Experiment
                 case "SaNSDE":
                     algAux = new SaNSDEBuilder(problem)
                         .setPopulationSize(10)
-                        .setMaxEvaluations(3000)
-                        .setCrossover(new DifferentialEvolutionCrossover(0.3, 0.6, "rand/1/bin"))
-                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(0.3, 0.7, "current-to-best/1/bin"))
+                        .setMaxEvaluations(evaluations_tt)
+                        .setCrossover(new DifferentialEvolutionCrossover(CR1_SANSDE, F1_SANSDE, "rand/1/bin"))
+                        .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SANSDE, F2_SANSDE, "current-to-best/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
+                        .setPenalizeValue(penalize_value)
                         .build();
                     break;
                     
                 case "Random":
                     algAux = new RandomSearchBuilder(problem)
-                        .setMaxEvaluations(3000)
+                        .setMaxEvaluations(evaluations_tt)
                         .build();
                     break;
-                                   
-                case "MTS":
-                    algAux = new MultipleTrajectorySearchBuilder(problem)
-                        .setLocalSearchTest(3)
-                        .setLocalSearch(75)
-                        .setNumberOfForeground(5)
-                        .setPopulationSize(5)
-                        .setLocalSearchBest(100)
-                        .setMaxEvaluations(3000)
-                        .setBonus1(10)
-                        .setBonus2(1)
-                        .build();
-                    break;
+                             
                     
-                case "MOS1":
+                case "MOS":
                     MTSLS1Tecnique mtsls1_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem)
                         .setPopulationSize(5)
                         .setBonus1(10)
@@ -343,15 +338,16 @@ public class Experiment
                         .setBonus2(1));
                     
                     SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem)
-                        .setRho(0.5)
-                        .setSizeNeighborhood(12));
+                        .setRho(RHO)
+                        .setSizeNeighborhood(NEIGHBORHOOD));
                     
                     algAux =  new   MOSBuilder(problem)
                         .addTecnique(mtsls1_exec)
                         .addTecnique(sw_exec1)
                         .setFE(75)
                         .setE(0.15)
-                        .setMaxEvaluations(3000)
+                        .setMaxEvaluations(evaluations_tt)
+                        .setPenalizeValue(penalize_value)
                         .build();
                     break;
             }

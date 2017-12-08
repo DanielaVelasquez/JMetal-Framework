@@ -4,8 +4,8 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWets;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsBuilder;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWets;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -52,12 +52,14 @@ public class SolisAndWetsParametersAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        SolisAndWets algorithm = new SolisAndWetsBuilder(problem)
+                        System.out.println("iteration "+iterations+ " "+problemName);
+                        SolisAndWets algorithm = new SolisAndWetsBuilder(problem)                                
                             .setSizeNeighborhood(sizeNeighborhood)
                             .setRho(rho)
-                            .setMaxEvaluations(3000)
+                            .setComparator(COMPARATOR)
+                            .setMaxEvaluations(MAXEVALUATIONS)
                             .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                                .setPenalizeValue(0)
+                            .setPenalizeValue(PENALIZE_VALUE)
                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;

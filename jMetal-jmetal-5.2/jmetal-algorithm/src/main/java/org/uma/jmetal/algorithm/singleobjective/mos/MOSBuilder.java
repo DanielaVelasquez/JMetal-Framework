@@ -6,10 +6,11 @@ import java.util.List;
 import org.uma.jmetal.algorithm.tecnique.Tecnique;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
-public class MOSBuilder 
+public class MOSBuilder implements AlgorithmBuilder
 {
     /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -61,11 +62,11 @@ public class MOSBuilder
         this.tecniques = new ArrayList<>();
     }
     
-    public MOSHRH build()
+    public MOS build()
     {
         if(!tecniques.isEmpty() || tecniques.size() < 2)
         {
-            return new MOSHRH(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
+            return new MOS(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
         }
         throw new JMetalException("Should be at least 2 tecniques");
     }
@@ -129,7 +130,7 @@ public class MOSBuilder
         return this;
     }
 
-    public MOSBuilder setPenalize_value(double penalize_value) {
+    public MOSBuilder setPenalizeValue(double penalize_value) {
         this.penalize_value = penalize_value;
         return this;
     }

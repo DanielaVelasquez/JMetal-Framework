@@ -8,7 +8,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 
 
-public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
+public class MOS extends AbstractMOS<DoubleSolution>
 {
 
     /**-----------------------------------------------------------------------------------------
@@ -20,7 +20,7 @@ public class MOSHRH extends AbstractHRHMOSAlgorithm<DoubleSolution>
      *-----------------------------------------------------------------------------------------*/
     
     
-    public MOSHRH(List<Tecnique> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
+    public MOS(List<Tecnique> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
         super(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
     }
     @Override

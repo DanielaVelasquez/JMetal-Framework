@@ -35,7 +35,7 @@ public class SaDETest {
         instance = new SaDEBuilder(problem)
             .setMaxEvaluations(maxEvaluations)
             .setPopulationSize(sizePopulation)
-            .setPenalize_value(penalizeValue)
+            .setPenalizeValue(penalizeValue)
             .build();
         
         Mockito.when(problem.getNumberOfObjectives()).thenReturn(1);

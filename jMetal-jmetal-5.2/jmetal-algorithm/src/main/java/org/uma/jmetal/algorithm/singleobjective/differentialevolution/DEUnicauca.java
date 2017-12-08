@@ -35,7 +35,8 @@ public class DEUnicauca extends AbstractDifferentialEvolution<DoubleSolution> {
    */
   public DEUnicauca(DoubleProblem problem, int maxEvaluations, int populationSize,
       DifferentialEvolutionCrossover crossoverOperator,
-      DifferentialEvolutionSelection selectionOperator, double penalize_value, Comparator<DoubleSolution> comparator) {
+      DifferentialEvolutionSelection selectionOperator, double penalize_value,
+      Comparator<DoubleSolution> comparator) {
     setProblem(problem); ;
     this.maxEvaluations = maxEvaluations;
     this.populationSize = populationSize;

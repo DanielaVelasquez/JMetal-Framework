@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.uma.jmetal.algorithm.singleobjective.mos;
+package org.uma.jmetal.algorithm.singleobjective.solis_and_wets;
 
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
+import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWets;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
