@@ -69,7 +69,7 @@ public class IHDELSGRunner
             algorithm = new IHDELSBuilder(problem)
                     .addLocalSearch(mtsls1)
                     .addLocalSearch(hillClimbing)
-                    .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                    .setComparator(new FrobeniusComparator<>(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
                     .setMaxEvaluations(3000)
                     .setFE_DE(100)
                     .setFE_LS(100)
