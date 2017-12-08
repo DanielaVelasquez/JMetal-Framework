@@ -4,26 +4,11 @@ import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.AlgorithmFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
-import java.util.Comparator;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
-import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mos.SolisAndWetsTecnique;
-import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
-import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
-import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.FrobeniusComparator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class Experiment 
