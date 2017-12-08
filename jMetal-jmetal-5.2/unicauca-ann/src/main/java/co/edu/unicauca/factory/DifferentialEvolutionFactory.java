@@ -20,24 +20,24 @@ public class DifferentialEvolutionFactory extends AbstractFactory
     /**
      * Default configuration for DE
      */
-    private final static double CR_DE = 0.7;
-    private final static double F_DE = 0.5;
+    private final static double CR_DE = 0.3;
+    private final static double F_DE = 0.7;
     private final static int POPULATION_DE = 10;
     /**
      * Default configuration SaDE
      */
     private final static double CR1_SADE = 0.6;
-    private final static double F1_SADE = 0.5;
-    private final static double CR2_SADE = 0.5;
-    private final static double F2_SADE = 0.7;
+    private final static double F1_SADE = 0.3;
+    private final static double CR2_SADE = 0.6;
+    private final static double F2_SADE = 0.6;
     private final static int POPULATION_SaDE = 10;
     /**
      * Default configuration SaNSDE
      */
-    private final static double CR1_SANSDE = 0.3;
-    private final static double F1_SANSDE = 0.6;
-    private final static double CR2_SANSDE = 0.7;
-    private final static double F2_SANSDE = 0.3;
+    private final static double CR1_SANSDE = 0.4;
+    private final static double F1_SANSDE = 0.4;
+    private final static double CR2_SANSDE = 0.4;
+    private final static double F2_SANSDE = 0.4;
     private final static int POPULATION_SANSDE = 10;
     
     @Override

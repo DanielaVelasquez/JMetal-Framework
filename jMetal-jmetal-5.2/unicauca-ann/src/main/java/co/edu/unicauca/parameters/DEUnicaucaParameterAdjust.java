@@ -54,7 +54,7 @@ public class DEUnicaucaParameterAdjust extends ParametersAdjust
 
                     for(int iterations = 0; iterations < total_iterations; iterations++)
                     {
-                        //System.out.println("iteration "+iterations+ " "+problemName);
+                        System.out.println("iteration "+iterations+ " "+problemName);
                         DifferentialEvolutionCrossover crossoverOperator = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin");
 
                         DEUnicauca algorithm = new   DEUnicaucaBuilder(problem)
@@ -95,6 +95,7 @@ public class DEUnicaucaParameterAdjust extends ParametersAdjust
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/de-params");
         parameters.getCovering_array().load("src/resources-params/de-ca");
+        //parameters.run(0, 3);
         parameters.run(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
     }
 }
