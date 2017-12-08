@@ -3,10 +3,11 @@ package org.uma.jmetal.algorithm.singleobjective.random_search;
 import java.util.Comparator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
-public class RandomSearchBuilder <S extends Solution<?>,P extends Problem<S>>
+public class RandomSearchBuilder <S extends Solution<?>,P extends Problem<S>> implements AlgorithmBuilder
 {
      /**-----------------------------------------------------------------------------------------
      * Atributes
@@ -74,11 +75,11 @@ public class RandomSearchBuilder <S extends Solution<?>,P extends Problem<S>>
         return this;
     }
 
-    public double getPenalize_value() {
+    public double getPenalizeValue() {
         return penalize_value;
     }
 
-    public RandomSearchBuilder setPenalize_value(double penalize_value) {
+    public RandomSearchBuilder setPenalizeValue(double penalize_value) {
         this.penalize_value = penalize_value;
         return this;
     }

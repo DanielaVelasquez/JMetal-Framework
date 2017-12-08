@@ -17,6 +17,7 @@ public class AlgorithmFactory
     private final static MOSFactory mos = new MOSFactory();
     private final static MTSFactory mts = new MTSFactory();
     private final static SolisAndWetsFactory sw = new SolisAndWetsFactory();
+    private final static RandomFactory random = new RandomFactory();
     
     public static Algorithm getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
                                   DoubleProblem problem)
@@ -42,6 +43,8 @@ public class AlgorithmFactory
                 return de.getAlgorithm(name, evaluatorType, problem).build();
             case "HillClimbing":
                 return hc.getAlgorithm(name, evaluatorType, problem).build();
+            case "Random":
+                return random.getAlgorithm(name, evaluatorType, problem).build();
             default:
                 throw new JMetalException("Algorithm "+name+" not exists");
         }
