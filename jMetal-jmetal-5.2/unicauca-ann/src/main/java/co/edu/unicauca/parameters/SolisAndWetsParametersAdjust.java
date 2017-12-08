@@ -54,10 +54,11 @@ public class SolisAndWetsParametersAdjust extends ParametersAdjust
                     {
                         System.out.println("iteration "+iterations+ " "+problemName);
                         SolisAndWets algorithm = new SolisAndWetsBuilder(problem)
-                                                            .setSizeNeighborhood(sizeNeighborhood)
+                                                 .setSizeNeighborhood(sizeNeighborhood)
                                                             .setRho(rho)
-                                                            .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
-                                                            .setMaxEvaluations(3000)
+                                                            .setComparator(COMPARATOR)
+                                                            .setMaxEvaluations(MAXEVALUATIONS)
+                                                            .setPenalizeValue(PENALIZE_VALUE)
                                                             .build();
                         
                         new AlgorithmRunner.Executor(algorithm).execute() ;

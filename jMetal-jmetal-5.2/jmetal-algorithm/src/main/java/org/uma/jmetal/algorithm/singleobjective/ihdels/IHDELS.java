@@ -419,7 +419,9 @@ public class IHDELS implements Algorithm<DoubleSolution>
     {
         for(int i = 0; i < m; i++)
         {
-            current_best.setVariableValue(i, best.getVariableValue(i) + randomGenerator.nextDouble(-0.05, 0.05) * 0.1 * (b - a));
+            double value = best.getVariableValue(i) + randomGenerator.nextDouble(-0.05, 0.05) * 0.1 * (b - a);
+            if(value >= problem.getLowerBound(i) && value <= problem.getUpperBound(i))
+                current_best.setVariableValue(i, value);
         }
         this.evaluate(current_best);
     }

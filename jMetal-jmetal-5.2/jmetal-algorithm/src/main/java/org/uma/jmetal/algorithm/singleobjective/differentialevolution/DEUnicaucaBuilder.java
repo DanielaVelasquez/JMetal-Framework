@@ -26,7 +26,7 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
     this.maxEvaluations = 3000;
     this.crossoverOperator = new DifferentialEvolutionCrossover(0.7, 0.5, "rand/1/bin");
     this.selectionOperator = new DifferentialEvolutionSelection();
-    comparator = new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
+    this.comparator = new FrobeniusComparator(FrobeniusComparator.Ordering.DESCENDING, FrobeniusComparator.Ordering.ASCENDING, 0);
     this.penalize_value = 0;
   }
   
@@ -76,6 +76,7 @@ public class DEUnicaucaBuilder implements AlgorithmBuilder<DEUnicauca>
 
     return this;
   }
+
 
   public DEUnicaucaBuilder setPenalizeValue(double penalize_value) {
     this.penalize_value = penalize_value;

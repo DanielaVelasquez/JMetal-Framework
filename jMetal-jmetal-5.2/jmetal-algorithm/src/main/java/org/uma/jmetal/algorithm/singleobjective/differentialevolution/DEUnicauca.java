@@ -30,7 +30,8 @@ public class DEUnicauca extends AbstractDifferentialEvolution<DoubleSolution> {
    * @param populationSize
    * @param crossoverOperator
    * @param selectionOperator
-   * @param evaluator
+     * @param penalize_value
+     * @param comparator
    */
   public DEUnicauca(DoubleProblem problem, int maxEvaluations, int populationSize,
       DifferentialEvolutionCrossover crossoverOperator,

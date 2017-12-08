@@ -11,7 +11,6 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 public class DEUnicaucaParameterAdjust extends ParametersAdjust
 {
@@ -57,6 +56,7 @@ public class DEUnicaucaParameterAdjust extends ParametersAdjust
                     {
                         //System.out.println("iteration "+iterations+ " "+problemName);
                         DifferentialEvolutionCrossover crossoverOperator = new DifferentialEvolutionCrossover(cr, f, "rand/1/bin");
+
                         DEUnicauca algorithm = new   DEUnicaucaBuilder(problem)
                                                             .setPopulationSize(10)
                                                             .setMaxEvaluations(MAXEVALUATIONS)
