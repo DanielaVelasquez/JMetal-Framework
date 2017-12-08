@@ -33,7 +33,7 @@ public class Experiment
     private final static double CR2_SANSDE = 0.7;
     private final static double F2_SANSDE = 0.3;
     //DE
-     private final static double CR_DE = 0.7;
+    private final static double CR_DE = 0.7;
     private final static double F_DE = 0.5;
     //Sade
     private final static double CR1_SADE = 0.6;
@@ -232,7 +232,7 @@ public class Experiment
                                 .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SADE, F2_SADE, "current-to-best/1/bin"))
                                 .setSelectionOperator(new DifferentialEvolutionSelection())
                                 .setComparator(comparator)
-                                .setPenalize_value(penalize_value)
+                                .setPenalizeValue(penalize_value)
                                 .build();
                     break;
                     
@@ -266,7 +266,7 @@ public class Experiment
                     algAux = new SaDEBuilder(problem)
                                 .setPopulationSize(10)
                                 .setMaxEvaluations(evaluations_tt)
-                                .setPenalize_value(penalize_value)
+                                .setPenalizeValue(penalize_value)
                                 .setCrossoverOperator(new DifferentialEvolutionCrossover(CR1_SADE, F1_SADE, "rand/1/bin"))
                                 .setCrossoverOperator2(new DifferentialEvolutionCrossover(CR2_SADE, F2_SADE, "current-to-best/1/bin"))
                                 .setSelectionOperator(new DifferentialEvolutionSelection())

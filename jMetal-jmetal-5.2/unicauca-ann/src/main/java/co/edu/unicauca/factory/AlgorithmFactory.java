@@ -7,8 +7,10 @@ import org.uma.jmetal.algorithm.Algorithm;
  */
 public class AlgorithmFactory 
 {
+    
+    
     private static Algorithm getAlgorithm(String name)
     {
-        
+        return null;
     }
 }

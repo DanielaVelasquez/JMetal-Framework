@@ -3,11 +3,12 @@ package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 import java.util.Comparator;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 
-public class DECC_GBuilder 
+public class DECC_GBuilder implements AlgorithmBuilder
 {
   private DoubleProblem problem;
   private Comparator<DoubleSolution> comparator ;
@@ -34,11 +35,13 @@ public class DECC_GBuilder
     this.deFrobeniusBuilder = new DEUnicaucaBuilder(problem);
   }
 
+  @Override
   public DECC_G build() {
     return new DECC_G(subcomponets,  FEs, wFes, problem, population_size, comparator, sansdeBuilder, deFrobeniusBuilder, maxEvaluations, penalize_value);
   }
   public DECC_GBuilder setSaNSDEBuilder(SaNSDEBuilder sansdeBuilder) {
-    if (sansdeBuilder == null) {
+    if (sansdeBuilder == null) 
+    {
       throw new JMetalException("sansdeBuilder can't be null ");
     }
 
@@ -102,7 +105,20 @@ public class DECC_GBuilder
     }
 
   public DECC_GBuilder setComparator(Comparator<DoubleSolution> comparator) {
+    if(comparator == null)
+    {
+        throw new JMetalException("compartor can't be null ");
+    }
     this.comparator = comparator;
+    return this;
+  }
+  
+  public DECC_GBuilder setProblem(DoubleProblem problem) {
+    if(problem == null)
+    {
+        throw new JMetalException("problem can't be null ");
+    }
+    this.problem = problem;
     return this;
   }
     

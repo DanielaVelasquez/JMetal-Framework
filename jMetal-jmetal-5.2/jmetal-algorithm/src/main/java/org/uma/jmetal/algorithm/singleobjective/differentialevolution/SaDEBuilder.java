@@ -87,7 +87,7 @@ public class SaDEBuilder implements AlgorithmBuilder<SaDE>
         return this;
     }
 
-    public SaDEBuilder setPenalize_value(double penalize_value) {
+    public SaDEBuilder setPenalizeValue(double penalize_value) {
         this.penalize_value = penalize_value;
         return this;
     }

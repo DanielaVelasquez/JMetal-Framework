@@ -62,7 +62,7 @@ public class SaDEParametersAdjust extends ParametersAdjust
                             .setPopulationSize(10)
                             .setMaxEvaluations(MAXEVALUATIONS)
                             .setComparator(COMPARATOR)
-                            .setPenalize_value(PENALIZE_VALUE)
+                            .setPenalizeValue(PENALIZE_VALUE)
                             .build();
                         new AlgorithmRunner.Executor(algorithm)
                         .execute() ;

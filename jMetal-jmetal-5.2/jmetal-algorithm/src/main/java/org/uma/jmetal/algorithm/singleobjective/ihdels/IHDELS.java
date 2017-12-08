@@ -128,7 +128,7 @@ public class IHDELS implements Algorithm<DoubleSolution>
         this.numberLS = this.local_searches.size();
         //Creates SaDE algorithm
         SADEbuilder.setComparator(comparator)
-               .setPenalize_value(penalize_value)
+               .setPenalizeValue(penalize_value)
                .setPopulationSize(population_size);
         algorithm =  SADEbuilder.build();
         
