@@ -19,8 +19,8 @@ public class MOSFactory extends AbstractFactory
     private final static  MTSFactory mtsFactory = new MTSFactory();
     private final static SolisAndWetsFactory solisAndWetsFactory = new SolisAndWetsFactory();
     
-    private final static int FE_MOS = 75;
-    private final static double E_MOS = 0.15;
+    private final static int FE_MOS = 200;
+    private final static double E_MOS = 0.07;
     
     
     @Override

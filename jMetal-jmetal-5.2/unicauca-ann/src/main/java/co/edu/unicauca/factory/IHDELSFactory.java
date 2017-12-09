@@ -20,13 +20,13 @@ public class IHDELSFactory extends AbstractFactory
     private final static MTSFactory mtsFactory = new MTSFactory();
     private final static HillClimbingFactory hcFactory = new HillClimbingFactory();
     
-    private static final int FE_DE_IHDELS = 100;
-    private static final int FE_LS_IHDLES = 100;
+    private static final int FE_DE_IHDELS = 90;
+    private static final int FE_LS_IHDLES = 30;
     private static final int POPULATION_IHDELS= 10;
-    private static final int RESTART_IHDELS = 3;
-    private static final double A_IHDELS = -0.005;
-    private static final double B_IHDELS = 0.005;
-    private static final double THRESHOLD_IHDELS = 0.01;
+    private static final int RESTART_IHDELS = 5;
+    private static final double A_IHDELS = -1;
+    private static final double B_IHDELS = 1;
+    private static final double THRESHOLD_IHDELS = 0.001;
 
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, DoubleProblem problem)

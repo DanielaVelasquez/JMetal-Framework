@@ -42,10 +42,10 @@ public class IHDELSParameterAdjust extends ParametersAdjust
                 
                 fe_de = (int)(this.values[0][this.covering_array.getValue(i, 0)]);
                 fe_ls = (int) (this.values[1][this.covering_array.getValue(i, 1)]);
-                a = this.values[1][this.covering_array.getValue(i, 2)];
-                b = this.values[1][this.covering_array.getValue(i, 3)];
-                restart = (int) (this.values[1][this.covering_array.getValue(i, 4)]);
-                threshold = this.values[1][this.covering_array.getValue(i, 5)];
+                a = this.values[2][this.covering_array.getValue(i, 2)];
+                b = this.values[3][this.covering_array.getValue(i, 3)];
+                restart = (int) (this.values[4][this.covering_array.getValue(i, 4)]);
+                threshold = this.values[5][this.covering_array.getValue(i, 5)];
                 line += (fe_de+" "+fe_ls+" "+a+" "+b+" "+restart+" "+threshold);
 
                 double total_sum = 0;
@@ -112,14 +112,16 @@ public class IHDELSParameterAdjust extends ParametersAdjust
         catch (Exception e) 
         {
             pw.close();
+            System.out.println(e.getMessage());
         }
     }
     
     public static void main(String[] args) throws Exception{
         IHDELSParameterAdjust parameters = new IHDELSParameterAdjust(3, 6, 30);
         parameters.readDataSets("src/resources-params/mts-datasets");
-        parameters.load("src/resources-params/HillClimbing-params");
-        parameters.getCovering_array().load("src/resources-params/HillClimbing-ca");
+        parameters.load("src/resources-params/IHDELS-params");
+        parameters.getCovering_array().load("src/resources-params/IHDELS-ca");
         parameters.run(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+        //parameters.run(0,2);
     }
 }
