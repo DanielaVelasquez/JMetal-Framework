@@ -5,21 +5,12 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.uma.jmetal.algorithm.local_search.LocalSearch;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilder;
-import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbing;
-import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbingBuilder;
 import org.uma.jmetal.algorithm.singleobjective.ihdels.IHDELS;
 import org.uma.jmetal.algorithm.singleobjective.ihdels.IHDELSBuilder;
-import org.uma.jmetal.algorithm.singleobjective.ihdels.LSHillClimbing;
-import org.uma.jmetal.algorithm.singleobjective.ihdels.LSMTS_LS1;
-import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
-import org.uma.jmetal.operator.impl.localsearch.BoundedUniformConvultion;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.FrobeniusComparator;
 
 public class IHDELSParameterAdjust extends ParametersAdjust
 {

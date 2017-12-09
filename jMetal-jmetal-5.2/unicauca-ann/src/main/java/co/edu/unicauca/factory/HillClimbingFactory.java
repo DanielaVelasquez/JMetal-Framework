@@ -16,7 +16,7 @@ public class HillClimbingFactory extends AbstractFactory
 {
     
     private static final double  MEAN_HC = 0.5;
-    private static final double STANDAR_DEVIATION_HC = 0.07;
+    private static final double STANDAR_DEVIATION_HC = 0.35;
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 
