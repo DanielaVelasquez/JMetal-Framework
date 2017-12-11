@@ -1,6 +1,5 @@
 package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +10,6 @@ import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
@@ -35,7 +33,6 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
      */
     private final int populationSize;
     private final int maxEvaluations;
-    private final SolutionListEvaluator<DoubleSolution> evaluator;
     private final Comparator<DoubleSolution> comparator;
 
     private int evaluations;
@@ -76,15 +73,15 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
      */
     public MemeticED(DoubleProblem problem, int maxEvaluations, int populationSize,
             DifferentialEvolutionCrossover crossoverOperator,
-            DifferentialEvolutionSelection selectionOperator, SolutionListEvaluator<DoubleSolution> evaluator, LocalSearchOperator Ls) {
+            DifferentialEvolutionSelection selectionOperator, LocalSearchOperator Ls,
+            Comparator<DoubleSolution> comparator) {
         setProblem(problem);
         this.maxEvaluations = maxEvaluations;
         this.populationSize = populationSize;
         this.crossoverOperator = crossoverOperator;
         this.selectionOperator = selectionOperator;
-        this.evaluator = evaluator;
         this.localSearch = Ls;
-        comparator = new ObjectiveComparator<>(0);
+        this.comparator = comparator;
 
         //Default values
         this.P = 0.2;

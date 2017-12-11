@@ -3,8 +3,6 @@ package co.edu.unicauca.exec.training_testing;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_G;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticED;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
@@ -13,7 +11,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
-import org.uma.jmetal.util.comparator.FrobeniusComparator;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -37,7 +35,7 @@ public class MemeticRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Fertility";
+          problemName = "co.edu.unicauca.problem.training_testing.Banknote";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -59,7 +57,7 @@ public class MemeticRunner
             algorithm = new MemeticEDBuilder(problem)
                         .setMaxEvaluations(3000)
                         .setPopulationSize(10)
-                        .setComparator(new FrobeniusComparator(FrobeniusComparator.Ordering.ASCENDING, FrobeniusComparator.Ordering.ASCENDING, 0))
+                        .setComparator(new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING))
                         .build();
             rnd.setSeed(i);
             //System.out.println("------------------------------");

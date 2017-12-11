@@ -1,15 +1,19 @@
 package co.edu.unicauca.factory;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
+import java.util.Comparator;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
+import org.uma.jmetal.algorithm.singleobjective.differentialevolution.MemeticEDBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 /**
  *Factory to differential evolution algorithms builders, with configuration needed
@@ -39,6 +43,13 @@ public class DifferentialEvolutionFactory extends AbstractFactory
     private final static double CR2_SANSDE = 0.4;
     private final static double F2_SANSDE = 0.4;
     private final static int POPULATION_SANSDE = 10;
+    /**
+     * Default configuration for MemeticDE
+     */
+    private final static double CR_MEMETIC_DE = 0.4;
+    private final static double F_MEMETIC_DE = 0.5;
+    private final static int POPULATION_MEMETIC = 50;
+    private final static Comparator<DoubleSolution> COMPARATOR_MEMETIC = new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING);
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
@@ -59,6 +70,9 @@ public class DifferentialEvolutionFactory extends AbstractFactory
                 break;
             case "DECC_G":
                 builder = this.getDECCG(evaluations, problem, evaluatorType);
+                break;
+            case "MemeticED":
+                builder = this.getMemeticED(evaluations, problem);
                 break;
             default:
                 throw new JMetalException("Algorithm "+name+" not exists");
@@ -132,6 +146,14 @@ public class DifferentialEvolutionFactory extends AbstractFactory
         
         return builder;
     }
-    
+    private AlgorithmBuilder getMemeticED(int evaluations, DoubleProblem problem)
+    {
+        return new MemeticEDBuilder(problem)
+                        .setPopulationSize(POPULATION_MEMETIC)
+                        .setCrossover(new DifferentialEvolutionCrossover(CR_MEMETIC_DE, F_MEMETIC_DE, "current-to-best/1/bin"))
+                        .setSelection(new DifferentialEvolutionSelection())
+                        .setMaxEvaluations(evaluations)
+                        .setComparator(COMPARATOR_MEMETIC);
+    }
     
 }

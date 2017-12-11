@@ -34,7 +34,7 @@ public class Runner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Seeds";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -51,10 +51,10 @@ public class Runner
         
         long initTime = System.currentTimeMillis();
         
-        for(int i = 0; i < 1;i++)
+        for(int i = 0; i < 30;i++)
         {
-            algorithm = AlgorithmFactory.getAlgorithm("IHDELS", AbstractELMEvaluator.EvaluatorType.TT, problem);
-            rnd.setSeed(i);
+            algorithm = AlgorithmFactory.getAlgorithm("Random", AbstractELMEvaluator.EvaluatorType.TT, problem);
+            rnd.setSeed(i+1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;

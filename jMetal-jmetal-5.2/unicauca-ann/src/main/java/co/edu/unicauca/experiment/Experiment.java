@@ -39,6 +39,7 @@ public class Experiment
     {
         Experiment exp = new Experiment();
         exp.correr(Integer.parseInt(args[0]));
+        //exp.correr(1);
     }
     
     public void correr(int computador)
@@ -93,7 +94,7 @@ public class Experiment
                     AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
                     long computingTime = algorithmRunner.getComputingTime();
                     DoubleSolution solution = (DoubleSolution) auxAlg.getResult();
-                    double resultadoExecTrain = (1 - solution.getObjective(0));
+                    double resultadoExecTrain = ( solution.getObjective(0));
                     double resultadoExecTest = p.test(solution);
                     String insertResultado = "INSERT INTO results VALUES(" + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ", " + runId + ", " + semilla + ")";
                     connection.modificacion(insertResultado);

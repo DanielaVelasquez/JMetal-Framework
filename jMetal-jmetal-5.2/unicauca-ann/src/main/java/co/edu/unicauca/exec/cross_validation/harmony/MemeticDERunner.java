@@ -63,7 +63,6 @@ public class MemeticDERunner {
         algorithm = new MemeticEDBuilder((DoubleProblem) problem)
                 .setCrossover(crossover)
                 .setSelection(selection)
-                .setSolutionListEvaluator(evaluator)
                 .setMaxEvaluations(600)
                 .setPopulationSize(50)
                 .setLocalSearch(localSearch)

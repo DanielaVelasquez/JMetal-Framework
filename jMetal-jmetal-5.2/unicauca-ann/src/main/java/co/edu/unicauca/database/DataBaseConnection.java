@@ -21,15 +21,15 @@ public class DataBaseConnection
     public void conectar() 
     {
         //Connect to database
-        String hostName = "sql7003.site4now.net";
+        /*String hostName = "sql7003.site4now.net";
         String dbName = "DB_A2D155_primerExperimento";
         String user = "DB_A2D155_primerExperimento_admin";
         String password = "Experimento123";
-        
-        /*String hostName = "localhost";
-        String dbName = "elm-experimentoRegresion";
-        String user = "elm";
-        String password = "elm";*/
+        */
+        String hostName = "localhost";
+        String dbName = "DB_A2D155_primerExperimento";
+        String user = "iris";
+        String password = "iris";
         
         //String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);        
         //String url = String.format("jdbc:sqlserver://localhost:1433;database=elm-experiment;user=elm;password=elm;");

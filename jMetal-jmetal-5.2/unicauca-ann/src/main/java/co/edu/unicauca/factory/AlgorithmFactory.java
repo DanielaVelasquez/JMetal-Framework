@@ -31,6 +31,8 @@ public class AlgorithmFactory
                 return de.getAlgorithm(name, evaluatorType, problem).build();
             case "SaNSDE":
                 return de.getAlgorithm(name, evaluatorType, problem).build();
+            case "MemeticED":
+                return de.getAlgorithm(name, evaluatorType, problem).build();
             case "MOS":
                 return mos.getAlgorithm(name, evaluatorType, problem).build();
             case "MTS_LS1":

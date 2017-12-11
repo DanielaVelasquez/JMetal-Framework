@@ -2,10 +2,13 @@ package co.edu.unicauca.factory;
 
 import static co.edu.unicauca.factory.AbstractFactory.EVALUATIONS_TT;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
+import java.util.Comparator;
 import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 /**
  *Factory to Random algorithms builders, with configuration needed
@@ -13,7 +16,7 @@ import org.uma.jmetal.util.JMetalException;
  */
 public class RandomFactory extends AbstractFactory
 {
-
+    private final static Comparator<DoubleSolution> COMPARATOR_RANDOM = new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING);
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 
             DoubleProblem problem) 
@@ -35,7 +38,7 @@ public class RandomFactory extends AbstractFactory
     {
         return new RandomSearchBuilder<>(problem)
                         .setMaxEvaluations(evaluations)
-                        .setComparator(COMPARATOR)
+                        .setComparator(COMPARATOR_RANDOM)
                         .setPenalizeValue(PENALIZE_VALUE);
     }
     

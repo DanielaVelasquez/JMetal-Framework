@@ -9,6 +9,7 @@ import org.uma.jmetal.operator.impl.mutation.UniformMutation;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
@@ -19,14 +20,14 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
  *
  * @author Daniel Pusil
  */
-public class MemeticEDBuilder {
+public class MemeticEDBuilder implements AlgorithmBuilder
+{
     
     private DoubleProblem problem;
     private int populationSize;
     private int maxEvaluations;
     private DifferentialEvolutionCrossover crossoverOperator;
     private DifferentialEvolutionSelection selectionOperator;
-    private SolutionListEvaluator<DoubleSolution> evaluator;
     private Comparator<DoubleSolution> comparator;
     private MutationOperator<DoubleSolution> mutationOperator;
     private JMetalRandom rand;
@@ -40,7 +41,6 @@ public class MemeticEDBuilder {
         this.maxEvaluations = 2500;
         this.crossoverOperator = new DifferentialEvolutionCrossover(0.4, 0.5, "current-to-best/1/bin");//Default
         this.selectionOperator = new DifferentialEvolutionSelection();
-        this.evaluator = new SequentialSolutionListEvaluator<>();
         this.comparator = new ObjectiveComparator<DoubleSolution>(0,ObjectiveComparator.Ordering.ASCENDING);
         this.localSearch = new OptSimulatedAnnealing(10, null, comparator, problem);
         this.rand = JMetalRandom.getInstance();
@@ -89,11 +89,7 @@ public class MemeticEDBuilder {
         return this;
     }
     
-    public MemeticEDBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-        this.evaluator = evaluator;
-        
-        return this;
-    }
+    
     
     public MemeticEDBuilder setLocalSearch(LocalSearchOperator ls) {
         this.localSearch = ls;
@@ -102,7 +98,7 @@ public class MemeticEDBuilder {
     
     public MemeticED build() {
         MemeticED m = new MemeticED(problem, maxEvaluations, populationSize, crossoverOperator,
-                selectionOperator, evaluator, localSearch);
+                selectionOperator, localSearch,comparator);
         return m;
     }
 
@@ -127,9 +123,7 @@ public class MemeticEDBuilder {
         return selectionOperator;
     }
     
-    public SolutionListEvaluator<DoubleSolution> getSolutionListEvaluator() {
-        return evaluator;
-    }
+ 
     
     public MemeticEDBuilder setRandom(JMetalRandom rnd) {
         this.rand = rnd;
