@@ -50,7 +50,7 @@ public class RandomSearchRunner
               long computingTime = algorithmRunner.getComputingTime() ;
 
               System.out.println("Total execution time: " + computingTime + "ms");
-              double train = (1-solution.getObjective(0));
+              double train = solution.getObjective(0);
               System.out.println("Objective "+train);
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               double test = p.test(solution);

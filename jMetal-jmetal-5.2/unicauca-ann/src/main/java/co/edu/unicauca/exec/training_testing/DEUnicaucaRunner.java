@@ -5,15 +5,14 @@ import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicauca;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDE;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.FrobeniusComparator;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -37,7 +36,7 @@ public class DEUnicaucaRunner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.AutoPrice";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -64,11 +63,10 @@ public class DEUnicaucaRunner
         
         for(int i = 0; i < 1;i++)
         {
-            algorithm =  new  DEUnicaucaBuilder(problem)
-                         .setPopulationSize(13)
-                         .setMaxEvaluations(3000)
-                    
-                         .build();
+            algorithm = new DEUnicaucaBuilder(problem)
+                        .setPopulationSize(13)
+                        .setMaxEvaluations(3000)
+                        .build();
             rnd.setSeed(1);
             System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -79,7 +77,7 @@ public class DEUnicaucaRunner
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               System.out.println("----->"+p.total);
               System.out.println("Total execution time: " + computingTime + "ms");
-              train = (1-solution.getObjective(0));
+              train = solution.getObjective(0);
               System.out.println("Objective "+train);
               
               test = p.test(solution);

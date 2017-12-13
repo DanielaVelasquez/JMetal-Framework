@@ -146,49 +146,45 @@ public class ELM {
      * output data given, if input weight and/or bias are not defined in the ELM
      * they will be randomly assigned
      */
-    public void train() {
-        
+    public void train() 
+    {        
         trained = false;
         
-            /**
-             * In case the input weights is not defined in the ELM they will be
-             * randomly assigned
-             */
-            if (input_weight == null) {
-                input_weight = MatrixUtil.randomFill(hidden_neurons, input_neurons, MIN_VALUE, MAX_VALUE);
-            }
-            /**
-             * In case the bias of hidden neurosn is not defined in the ELM they
-             * will be randomly assigned
-             */
-            if (bias_hidden_neurons == null) {
-                bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
-            }
+        /**
+         * In case the input weights is not defined in the ELM they will be
+         * randomly assigned
+         */
+        if (input_weight == null) {
+            input_weight = MatrixUtil.randomFill(hidden_neurons, input_neurons, MIN_VALUE, MAX_VALUE);
+        }
+        /**
+         * In case the bias of hidden neurosn is not defined in the ELM they
+         * will be randomly assigned
+         */
+        if (bias_hidden_neurons == null) {
+            bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
+        }
 
-            //Get output matrix from hidden layer
-            DenseMatrix H = calculateH(X);
-            try {
+        //Get output matrix from hidden layer
+        DenseMatrix H = calculateH(X);
+        try 
+        {
+            //MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
+            DenseMatrix pinvH = inverse.calculate(H);
+            DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
+            tabular.transpose(transT);
 
-                DenseMatrix pinvH = inverse.calculate(H);//MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
-                DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
-                tabular.transpose(transT);
+            output_weight = new DenseMatrix(hidden_neurons, output_neurons);
+            pinvH.mult(transT, output_weight);
 
-                output_weight = new DenseMatrix(hidden_neurons, output_neurons);
-                pinvH.mult(transT, output_weight);
-
-                DenseMatrix T = calculate_output(H, number_data);
-                accuracy = evaluate(tabular, T);
-                trained = true;
-            } catch (Exception ex) {
-                if(elm_type == ELM.ELMType.REGRESSION)
-                    accuracy = 100;
-                else
-                    accuracy = 0;
-              //  System.out.println("No converge");
-               // ex.printStackTrace();
-            }
-        
-     //   System.out.println("" + EFOs);
+            DenseMatrix T = calculate_output(H, number_data);
+            accuracy = evaluate(tabular, T);
+            trained = true;
+        } 
+        catch (Exception ex) 
+        {
+            accuracy = 0;
+        }
     }
 
     /**
@@ -248,7 +244,6 @@ public class ELM {
         HTemp.transpose(H);
 
         return H;
-
     }
 
     /**
@@ -297,7 +292,9 @@ public class ELM {
             }
 
             accuracy = 1 - ((double) errors / (double) numCols);
-        } else {
+        } 
+        else 
+        {
             /**
              * Square differences between tabular and output network
              */
@@ -309,11 +306,14 @@ public class ELM {
                 double valueY = tabular.get(0, j);
                 double valueT = TNetwork.get(0, j);
                 aux += Math.pow((valueY - valueT), 2);
+                
                 //Original format for the output network
                 this.T.set(j, valueT);
             }
-
-            accuracy = Math.sqrt(aux / numCols);
+            /*
+             * Best solution closer to one
+             */
+            accuracy = 1 / ( 1 + Math.sqrt(aux / numCols));
         }
 
         return accuracy;
