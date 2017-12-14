@@ -34,7 +34,7 @@ public class Runner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Seeds";
+          problemName = "co.edu.unicauca.problem.training_testing.Chart";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -53,9 +53,9 @@ public class Runner
         
         for(int i = 0; i < 30;i++)
         {
-            algorithm = AlgorithmFactory.getAlgorithm("Random", AbstractELMEvaluator.EvaluatorType.TT, problem);
+            algorithm = AlgorithmFactory.getAlgorithm("IHDELS", AbstractELMEvaluator.EvaluatorType.TT, problem);
             rnd.setSeed(i+1);
-            System.out.println("------------------------------");
+            //System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
                 .execute() ;
 
@@ -65,13 +65,14 @@ public class Runner
              // System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               
-              System.out.println("evaluaciones: "+p.total);
+              //System.out.println("evaluaciones: "+p.total);
               train = (solution.getObjective(0));
-              System.out.println("Train: "+train);
+              //System.out.println("Train: "+train);
               
               test = p.test(solution);
-              
-              System.out.println("Testing: "+test);
+              String output = train+";"+test+";"+computingTime;
+              output.replace(".", ",");
+              System.out.println(output);
              
         }
         

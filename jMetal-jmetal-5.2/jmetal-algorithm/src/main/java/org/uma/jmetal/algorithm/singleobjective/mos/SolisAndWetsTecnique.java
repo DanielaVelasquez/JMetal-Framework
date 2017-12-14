@@ -18,9 +18,6 @@ public class SolisAndWetsTecnique extends Tecnique
         super(builder);
     }
 
-    
-
-    
     @Override
     public Solution evolve(int FE, Solution best, Problem p, Comparator c) {
         

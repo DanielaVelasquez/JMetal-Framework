@@ -58,13 +58,6 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
         comparator = new ObjectiveComparator<>(0,ObjectiveComparator.Ordering.ASCENDING);
         
     }
-     public MTS_LS1 Build()
-     {
-        MTS_LS1 mts = new MTS_LS1(populationSize, problem, comparator, maxEvaluations, penalize_value, bonus_1, bonus_2);
-        if(this.default_population != null)
-            mts.setPopulation(default_population);
-        return mts;
-     }
 
     public double getPenalizeValue() {
         return penalize_value;
@@ -149,7 +142,10 @@ public class MTS_LS1Builder implements AlgorithmBuilder<MTS_LS1>
 
     @Override
     public MTS_LS1 build() {
-        return new MTS_LS1(populationSize, problem, comparator, maxEvaluations, penalize_value, bonus_1, bonus_2);
+        MTS_LS1 mts = new MTS_LS1(populationSize, problem, comparator, maxEvaluations, penalize_value, bonus_1, bonus_2);
+        if(this.default_population != null)
+            mts.setPopulation(default_population);
+        return mts;
     }
 
 }
