@@ -91,7 +91,7 @@ public class DEUnicaucaParameterAdjust extends ParametersAdjust
     }
     
     public static void main(String[] args) throws Exception{
-        DEUnicaucaParameterAdjust parameters = new DEUnicaucaParameterAdjust(5, 4, 30);
+        DEUnicaucaParameterAdjust parameters = new DEUnicaucaParameterAdjust(5, 2, 30);
         parameters.readDataSets("src/resources-params/mts-datasets");
         parameters.load("src/resources-params/de-params");
         parameters.getCovering_array().load("src/resources-params/de-ca");
