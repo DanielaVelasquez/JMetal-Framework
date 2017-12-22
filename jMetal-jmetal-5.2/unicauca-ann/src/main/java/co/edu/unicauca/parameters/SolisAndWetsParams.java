@@ -24,7 +24,7 @@ public class SolisAndWetsParams extends ParamsFinder
     {
        rho =  values[0][configuration[0]];
        sizeNeighborhood = (int) values[1][configuration[1]];
-       builder = factory.getAlgorithm("MOS", type, problem);
+       builder = factory.getAlgorithm("SolisAndWets", type, problem);
        return ((SolisAndWetsBuilder) builder)
                             .setRho(rho)
                             .setSizeNeighborhood(sizeNeighborhood)

@@ -80,7 +80,8 @@ public class Parameters
     {
         try 
         {
-            new Parameters(Integer.parseInt(args[0]));
+            new Parameters(1);
+            //new Parameters(Integer.parseInt(args[0]));
         }
         catch (Exception ex) 
         {

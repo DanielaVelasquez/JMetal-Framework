@@ -25,7 +25,7 @@ public class HillClimbingParams extends ParamsFinder
     {
        mean =  values[0][configuration[0]];
        standarDeviation =  values[1][configuration[1]];
-       builder = factory.getAlgorithm("MOS", type, problem);
+       builder = factory.getAlgorithm("HillClimbing", type, problem);
        return ((HillClimbingBuilder) builder)
                             .setTweak(new BoundedUniformConvultion(mean, standarDeviation))
                             .build();
