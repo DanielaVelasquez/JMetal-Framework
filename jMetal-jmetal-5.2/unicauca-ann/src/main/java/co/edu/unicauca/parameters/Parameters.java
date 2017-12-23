@@ -78,15 +78,20 @@ public class Parameters
     }
     public static void main(String[] args) 
     {
-        try 
+        //int computer = Integer.parseInt(args[0]);
+        while(true)
         {
-            //new Parameters(1);
-            new Parameters(Integer.parseInt(args[0]));
+            try 
+            {
+                new Parameters(1);
+                //new Parameters(computer);
+            }
+            catch (Exception ex) 
+            {
+                Logger.getLogger(Parameters.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        catch (Exception ex) 
-        {
-            Logger.getLogger(Parameters.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
     
 }

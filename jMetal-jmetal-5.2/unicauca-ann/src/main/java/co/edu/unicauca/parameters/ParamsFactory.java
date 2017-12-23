@@ -13,6 +13,7 @@ public class ParamsFactory
     private static SaNSDEParams sansde;
     private static SaDEParams sade;
     private static DEUnicaucaParams de;
+    private static HillClimbingParams hc;
     
     public static Algorithm getAlgorithm(int algorithmId,
                   DataBaseConnection connection,AbstractELMEvaluator.EvaluatorType type,
@@ -35,6 +36,9 @@ public class ParamsFactory
             case "DEUnicauca":
                 de = new DEUnicaucaParams(algorithmId, connection, type, problem);
                 return de.getAlgorithm(configuration);
+            case "HillClimbing":
+                hc = new HillClimbingParams(algorithmId, connection, type, problem);
+                return hc.getAlgorithm(configuration);
             default:
                  throw new JMetalException("Algorithm "+nameAlgorithm+" not exists");
         }
