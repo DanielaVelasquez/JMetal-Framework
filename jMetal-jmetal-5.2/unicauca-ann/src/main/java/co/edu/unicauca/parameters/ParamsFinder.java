@@ -17,6 +17,7 @@ public abstract class ParamsFinder
     protected AbstractFactory factory;
     protected AlgorithmBuilder builder;
     protected DoubleProblem problem;
+    protected int configuration[];
     private DataBaseConnection connection;
     
 
@@ -32,15 +33,20 @@ public abstract class ParamsFinder
         this.getParams();
     }
     
-    public Algorithm getAlgorithm(String configurationString)
+    protected void getConfiguration(String configurationString)
     {
         String split[] = configurationString.split(",");
         sizeConfiguration = split.length;
-        int configuration[] = new int[sizeConfiguration];
+        configuration = new int[sizeConfiguration];
         for(int i = 0; i < sizeConfiguration; i++)
         {
             configuration[i] = Integer.parseInt(split[i]);
         }
+    }
+    
+    public Algorithm getAlgorithm(String configurationString)
+    {
+        this.getConfiguration(configurationString);
         return configureAlgorithm(configuration);
     }
 
