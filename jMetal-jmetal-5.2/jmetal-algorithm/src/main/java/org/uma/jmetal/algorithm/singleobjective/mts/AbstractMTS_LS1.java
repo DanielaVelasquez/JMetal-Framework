@@ -59,7 +59,6 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
      */
     private int evaluations;
     
-    protected List<Boolean> enable;
     /**
      * Determines which individuals in population were improve
      */
@@ -135,13 +134,11 @@ public abstract class AbstractMTS_LS1 <S extends Solution<?>,P extends Problem<S
         }
         
         this.best = getBest(this.population, best);
-        this.enable = new ArrayList<>();
         this.improve = new ArrayList<>();
         this.search_range = new ArrayList<>();
         List<Double> grades = new ArrayList<>();
         for(int i = 0; i < populationSize; i++)
         {
-            enable.add(Boolean.TRUE);
             improve.add(Boolean.TRUE);
             search_range.add(this.buildSearchRange(this.population.get(i)));
             grades.add((double)0);
