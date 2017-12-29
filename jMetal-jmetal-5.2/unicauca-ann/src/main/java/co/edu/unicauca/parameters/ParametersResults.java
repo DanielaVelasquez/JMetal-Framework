@@ -23,8 +23,8 @@ public class ParametersResults
     private void ejecutar() throws Exception
     {
         connection = DataBaseConnection.getInstancia();
-        String algoritmoNombre = "SaDE";
-        String conf = "Configuracion2";
+        String algoritmoNombre = "MOS";
+        String conf = "Configuracion3";
         
         FileReader frDataSet = new FileReader("DataSet");
         BufferedReader bfDataset = new BufferedReader(frDataSet);
