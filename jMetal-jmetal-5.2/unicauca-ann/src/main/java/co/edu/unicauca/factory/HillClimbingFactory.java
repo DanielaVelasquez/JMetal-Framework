@@ -15,8 +15,8 @@ import org.uma.jmetal.util.JMetalException;
 public class HillClimbingFactory extends AbstractFactory
 {
     
-    private static final double  MEAN_HC = 0.5;
-    private static final double STANDAR_DEVIATION_HC = 0.2;
+    private static final double  MEAN_HC = 0.45; //0.5;
+    private static final double STANDAR_DEVIATION_HC = 0.4;//0.2;
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 

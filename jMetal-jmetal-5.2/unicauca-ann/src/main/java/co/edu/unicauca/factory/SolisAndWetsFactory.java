@@ -12,8 +12,8 @@ import org.uma.jmetal.util.JMetalException;
  */
 public class SolisAndWetsFactory extends AbstractFactory
 {
-    private final static double RHO = 0.7;
-    private final static int NEIGHBORHOOD = 8;
+    private final static double RHO = 0.5;//0.7;
+    private final static int NEIGHBORHOOD = 4; //8;
 
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 

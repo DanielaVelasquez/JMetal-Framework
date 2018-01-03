@@ -30,18 +30,18 @@ public class DifferentialEvolutionFactory extends AbstractFactory
     /**
      * Default configuration SaDE
      */
-    private final static double CR1_SADE = 0.3;
-    private final static double F1_SADE = 0.9;
-    private final static double CR2_SADE = 0.9;
+    private final static double CR1_SADE = 0.4;//tt 0.3;
+    private final static double F1_SADE = 0.3;//tt 0.9;
+    private final static double CR2_SADE = 0.7; //tt 0.9;
     private final static double F2_SADE = 0.4;
     private final static int POPULATION_SaDE = 10;
     /**
      * Default configuration SaNSDE
      */
-    private final static double CR1_SANSDE = 0.7;
-    private final static double F1_SANSDE = 0.4;
+    private final static double CR1_SANSDE = 0.4;//0.7;
+    private final static double F1_SANSDE = 0.7;//0.4;
     private final static double CR2_SANSDE = 0.9;
-    private final static double F2_SANSDE = 0.5;
+    private final static double F2_SANSDE = 0.9;//0.5;
     private final static int POPULATION_SANSDE = 10;
     /**
      * Default configuration for MemeticDE
