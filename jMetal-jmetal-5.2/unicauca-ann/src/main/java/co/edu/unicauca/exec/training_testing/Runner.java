@@ -34,7 +34,7 @@ public class Runner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Chart";
+          problemName = "co.edu.unicauca.problem.training_testing.Leaf";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
