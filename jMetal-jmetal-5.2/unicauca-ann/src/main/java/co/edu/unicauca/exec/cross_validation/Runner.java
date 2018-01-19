@@ -1,4 +1,4 @@
-package co.edu.unicauca.exec.training_testing;
+package co.edu.unicauca.exec.cross_validation;
 
 import co.edu.unicauca.factory.AlgorithmFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
@@ -34,7 +34,7 @@ public class Runner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.cross_validation.Iris";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -51,9 +51,9 @@ public class Runner
         
         long initTime = System.currentTimeMillis();
         
-        for(int i = 0; i < 1;i++)
+        for(int i = 0; i < 30;i++)
         {
-            algorithm = AlgorithmFactory.getAlgorithm("IHDELS", AbstractELMEvaluator.EvaluatorType.TT, problem);
+            algorithm = AlgorithmFactory.getAlgorithm("MemeticED", AbstractELMEvaluator.EvaluatorType.CV, problem);
             rnd.setSeed(i+1);
             //System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -66,14 +66,14 @@ public class Runner
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
               //System.out.println("TOtal: "+p.total);
               
-              //System.out.println("evaluaciones: "+p.total);
+              System.out.println("evaluaciones: "+p.total);
               train = (solution.getObjective(0));
               //System.out.println("Train: "+train);
               
               test = p.test(solution);
               String output = train+";"+test+";"+computingTime;
               output.replace(".", ",");
-              System.out.println(test);
+              System.out.println(output);
              
         }
         

@@ -24,8 +24,8 @@ public class IHDELSFactory extends AbstractFactory
     private static final int FE_LS_IHDLES = 90;//30;//60;
     private static final int POPULATION_IHDELS= 10;
     private static final int RESTART_IHDELS = 7;//3;//7;
-    private static final double A_IHDELS = -0.7;//-0.5;
-    private static final double B_IHDELS = 0.5;//1;//1;
+    private static final double A_IHDELS = -1;//-0.7;//-0.5;
+    private static final double B_IHDELS = 1;//0.5;//1;//1999ii9koo;
     private static final double THRESHOLD_IHDELS = 0.001;//0.01;//0.001;
 
     @Override

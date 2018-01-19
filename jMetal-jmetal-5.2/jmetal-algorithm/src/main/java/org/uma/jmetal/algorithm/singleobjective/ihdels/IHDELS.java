@@ -165,19 +165,11 @@ public class IHDELS implements Algorithm<DoubleSolution>
                 this.evaluatePopulation(population);
             }
             
-            lastFitness = this.current_best.getObjective(0);
             LocalSearch ls = this.runLS();
             this.best = getBest(best, current_best);
-            newFitness = current_best.getObjective(0);
-            
-            if(lastFitness != 0)
-                 improvement= Math.abs(lastFitness - newFitness)/lastFitness;
-            else
-                improvement = Math.abs(lastFitness - newFitness);
-            
             
             //Local search is restarted because soution was not improved
-            if(improvement == 0)
+            if(ls.getRatio() == 0)
             {
                 ls.restart();
             }
@@ -191,6 +183,8 @@ public class IHDELS implements Algorithm<DoubleSolution>
                     countLS = 0;
                 }
             }
+            else 
+                countLS = 0;
             
             current_best = (DoubleSolution) this.getBest(best, current_best).copy();
         }
