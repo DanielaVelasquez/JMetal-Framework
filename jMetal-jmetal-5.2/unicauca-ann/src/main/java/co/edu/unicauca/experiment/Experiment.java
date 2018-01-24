@@ -41,7 +41,6 @@ public class Experiment
             connection = DataBaseConnection.getInstancia();
             
             connection.modificacion("EXECUTE startTask @computerName = " + computer + ";");
-            
 
             ResultSet resultado = connection.seleccion("" +
                     "       SELECT name_problem, name_algorithm, seed_executing, run_id_executing, name_type\n" +
@@ -51,6 +50,7 @@ public class Experiment
                     "	INNER JOIN problem ON problem_run = id_problem\n" +
                     "	INNER JOIN type ON type_run = id_type\n" +
                     "	WHERE computer_executing = " + computer + " and executing_executing = 1;"); 
+
 
 
             if(resultado.next())
@@ -79,8 +79,20 @@ public class Experiment
                 DoubleSolution solution = (DoubleSolution) auxAlg.getResult();
                 double resultadoExecTrain = ( solution.getObjective(0));
                 double resultadoExecTest = p.test(solution);
-                String insertResultado = "INSERT INTO results VALUES(" + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ", " + runId + ", " + semilla + ")";
-                connection.modificacion(insertResultado);
+                boolean inserted = false;
+                while(!inserted)
+                {
+                    try 
+                    {
+                        String insertResultado = "INSERT INTO results VALUES(" + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ", " + runId + ", " + semilla + ")";
+                        connection.modificacion(insertResultado);
+                        inserted = true;
+                    } catch (Exception e) 
+                    {
+                        connection.reiniciarConexion();
+                    }
+                }
+                connection.reiniciarConexion();   
             }
             
         }

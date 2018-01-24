@@ -72,12 +72,24 @@ public class Parameters
                 DoubleSolution solution = (DoubleSolution) algorithm.getResult();
                 double train = ( solution.getObjective(0));
                 double test = p.test(solution);
+                boolean inserted = false;
                 
-                String queryInsert = 
-                "INSERT INTO results VALUES("+idTask+", "+test+", "+train+", "+ computingTime+")";
-                connection.modificacion(queryInsert);
+                while(!inserted)
+                {
+                    try {
+                        String queryInsert = 
+                        "INSERT INTO results VALUES("+idTask+", "+test+", "+train+", "+ computingTime+")";
+                        connection.modificacion(queryInsert);
+                        inserted = true;
+                    } catch (Exception e) 
+                    {
+                        connection.reiniciarConexion();
+                    }
+                }
+                
             }
             
+            connection.reiniciarConexion();            
         }
     }
    
