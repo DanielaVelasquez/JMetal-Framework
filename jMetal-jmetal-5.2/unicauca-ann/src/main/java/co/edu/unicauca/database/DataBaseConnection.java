@@ -121,4 +121,18 @@ public class DataBaseConnection
             throw new Exception("Hubo un error ejecutando el query : '" + query + "' mensaje de error: \"" + e.getMessage() + "\"");
         }
     }
+    
+    public void reiniciarConexion()
+    {
+        try
+        {
+            connection.close();
+        }
+        catch(Exception e)            
+        {
+            connection = null;
+        }
+        
+        conectar();
+    }
 }

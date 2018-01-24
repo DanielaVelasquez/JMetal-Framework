@@ -74,6 +74,7 @@ public class Parameters
                 connection.modificacion(queryInsert);
             }
             
+            connection.reiniciarConexion();            
         }
     }
     public static void main(String[] args) 
