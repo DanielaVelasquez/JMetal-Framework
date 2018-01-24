@@ -8,7 +8,7 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.util.AlgorithmBuilder;
 
-public abstract class ParamsFinder 
+public abstract class AbstractMetaHeuristicParametersFinder 
 {
     protected double values[][];
     protected int algorithmId;
@@ -21,7 +21,7 @@ public abstract class ParamsFinder
     private DataBaseConnection connection;
     
 
-    public ParamsFinder(int algorithmId,
+    public AbstractMetaHeuristicParametersFinder(int algorithmId,
                   DataBaseConnection connection,AbstractELMEvaluator.EvaluatorType type,
                   DoubleProblem problem) throws Exception
     {

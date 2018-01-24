@@ -44,6 +44,8 @@ public class IHDELSBuilder implements AlgorithmBuilder<IHDELS>
     
     @Override
     public IHDELS build() {
+        if(local_searches.size() < 2)
+            throw new JMetalException("You need at least two local searches: "+local_searches.size());
         return new IHDELS(maxEvaluations, local_searches, problem, comparator,
                 penalize_value, reStart, population_size, FE_DE, FE_LS, SaDEbuilder,
                 threshold, a, b);
@@ -157,6 +159,12 @@ public class IHDELSBuilder implements AlgorithmBuilder<IHDELS>
         this.local_searches.remove(ls);
         return this;
     }
+    
+    public IHDELSBuilder removeLocalSearches()
+    {
+        this.local_searches.clear();
+        return this;
+    }
 
     public int getMaxEvaluations() {
         return maxEvaluations;
@@ -209,7 +217,5 @@ public class IHDELSBuilder implements AlgorithmBuilder<IHDELS>
     public double getB() {
         return b;
     }
-    
-    
 
 }

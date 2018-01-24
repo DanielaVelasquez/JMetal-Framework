@@ -7,7 +7,7 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 
-public class SolisAndWetsParams extends ParamsFinder
+public class SolisAndWetsParams extends AbstractMetaHeuristicParametersFinder
 {
     private int sizeNeighborhood;
     private double rho;

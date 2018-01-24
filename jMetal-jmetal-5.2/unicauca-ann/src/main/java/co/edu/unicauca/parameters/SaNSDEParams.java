@@ -8,7 +8,7 @@ import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuil
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 
-public class SaNSDEParams extends ParamsFinder
+public class SaNSDEParams extends AbstractMetaHeuristicParametersFinder
 {
     private double cr1 ;
     private double f1 ;

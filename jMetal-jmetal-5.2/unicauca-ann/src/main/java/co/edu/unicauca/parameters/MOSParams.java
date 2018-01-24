@@ -7,7 +7,7 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 
-public class MOSParams extends ParamsFinder
+public class MOSParams extends AbstractMetaHeuristicParametersFinder
 {
     private int FE;
     private double E;

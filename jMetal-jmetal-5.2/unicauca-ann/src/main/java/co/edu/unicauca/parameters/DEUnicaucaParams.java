@@ -8,7 +8,7 @@ import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicauca
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.problem.DoubleProblem;
 
-public class DEUnicaucaParams extends ParamsFinder
+public class DEUnicaucaParams extends AbstractMetaHeuristicParametersFinder
 {
     private double cr ;
     private double f ;
