@@ -8,7 +8,7 @@ import org.uma.jmetal.util.JMetalException;
 
 public class ParamsFactory
 {
-    private static MOSParams mos ;
+    private static MOSParameters mos ;
 
     private static IHDELSParameters ihdels;
     
@@ -19,7 +19,7 @@ public class ParamsFactory
         switch(nameAlgorithm)
         {
             case "MOS":
-                mos = new MOSParams(algorithmId, connection, type, problem);
+                mos = new MOSParameters(algorithmId, connection, type, problem);
                 return mos.getAlgorithm(configuration);
             case "IHDELS":
                 ihdels = new IHDELSParameters(algorithmId, connection, type, problem);

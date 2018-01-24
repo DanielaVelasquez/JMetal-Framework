@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.tecnique.Tecnique;
-import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 
 public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<S>
 {
@@ -21,7 +18,7 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
      * Algorithms to execute inside a MOS algorithm
      * wrapped in its own executer
      */
-    protected List<Tecnique> tecniques;
+    protected List<Technique> techniques;
     /**
      * Problem to solve
      */
@@ -43,12 +40,12 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
      */
     protected int maxEvaluations;
     /**
-     * Number of tecniques
+     * Number of techniques
      */
     protected int n;
     /**
      * Participation ratio (Percentage of individuals of the overall shared population)
-     * that tecnique j can produce at generation i
+     * that technique j can produce at generation i
      */
     protected List participation_ratio;
     /**
@@ -65,9 +62,9 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
      */
     protected Comparator<S> comparator;
     /**
-     * Contains index of tecniques with best quality value
+     * Contains index of techniques with best quality value
      */
-    protected List<Integer> best_tecniques_qualities;
+    protected List<Integer> best_techniques_qualities;
     /**
      * Maximun qualitiy value
      */
@@ -88,9 +85,9 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
     
     
     
-    public AbstractMOS(List<Tecnique> tecniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
+    public AbstractMOS(List<Technique> techniques, Problem<S> problem, int maxEvaluations, int FE, Comparator<S> comparator, double E, double penalize_value) 
     {
-        this.tecniques = tecniques;
+        this.techniques = techniques;
         this.problem = problem;
         this.maxEvaluations = maxEvaluations;
         this.FE = FE;
@@ -102,7 +99,7 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
     @Override
     public void run() {
         this.i = 0;
-        this.n = this.tecniques.size();
+        this.n = this.techniques.size();
         
         this.participation_ratio = distributeParticipationTecniques();
         this.individual = executeTecniques();
@@ -111,7 +108,7 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
         
         while(!isStoppingConditionReached())
         {
-            this.quality_measures = this.updateQualityOf(this.tecniques);
+            this.quality_measures = this.updateQualityOf(this.techniques);
             this.participation_ratio = this.updateParticipationRatios();
             this.individual = this.executeTecniques();
         
@@ -126,14 +123,14 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
         this.evaluations += evaluations;
     }
     /**
-     * Get tecniques with best quality value and store their
-     * indexes in best_tecniques_qualities list and assign
+     * Get techniques with best quality value and store their
+     * indexes in best_techniques_qualities list and assign
      * the maximun quality value found
      */
     protected void findBestQualityTecniques()
     {
-        best_tecniques_qualities = new ArrayList<>();
-        best_tecniques_qualities.add(0);
+        best_techniques_qualities = new ArrayList<>();
+        best_techniques_qualities.add(0);
         quality_max = (double) this.quality_measures.get(0);
         
         for(int k = 1; k < n; k++)
@@ -141,13 +138,13 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
             double value = (double) this.quality_measures.get(k);
             if(value > quality_max)
             {
-                best_tecniques_qualities.clear();
-                best_tecniques_qualities.add(k);
+                best_techniques_qualities.clear();
+                best_techniques_qualities.add(k);
                 quality_max = value;
             }
             else if(value == quality_max)
             {
-                best_tecniques_qualities.add(k);
+                best_techniques_qualities.add(k);
             }
         }
     }
@@ -187,12 +184,12 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
 
     
     /**
-     * Each tecnique produces a subset of individuals according to its participation ratio
+     * Each technique produces a subset of individuals according to its participation ratio
      * @return initial population
      */
     protected abstract  S executeTecniques() ;
     /**
-     * Uniformily distribute participation among tecniques
+     * Uniformily distribute participation among technique
      * @return 
      */
     protected abstract List distributeParticipationTecniques();
@@ -203,11 +200,11 @@ public abstract class AbstractMOS <S extends Solution<?>>  implements Algorithm<
     protected abstract boolean isStoppingConditionReached();
 
     /**
-     * Updte quality of every tecnique 
-     * @param tecniques algorithms to evaluate their quality
-     * @return quality value for every tecnique
+     * Updte quality of every technique 
+     * @param technique algorithms to evaluate their quality
+     * @return quality value for every technique
      */
-    protected abstract List updateQualityOf(List<Tecnique> tecniques);
+    protected abstract List updateQualityOf(List<Technique> techniques);
     /**
      * Update participation ratios from quality values computed before
      * @return participation ratios updated

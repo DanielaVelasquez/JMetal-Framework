@@ -43,8 +43,8 @@ public class MOSFactory extends AbstractFactory
         
         SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique((SolisAndWetsBuilder) solisAndWetsFactory.getAlgorithm("SolisAndWets", AbstractELMEvaluator.EvaluatorType.TT, problem));
         return new MOSBuilder(problem)
-                            .addTecnique(mtsls1_exec)
-                            .addTecnique(sw_exec1)
+                            .addTechnique(mtsls1_exec)
+                            .addTechnique(sw_exec1)
                             .setFE(FE_MOS)
                             .setE(E_MOS)
                             .setMaxEvaluations(evaluations)

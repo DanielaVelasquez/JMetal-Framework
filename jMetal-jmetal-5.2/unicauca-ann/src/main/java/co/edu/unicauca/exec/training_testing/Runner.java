@@ -64,7 +64,7 @@ public class Runner
 
              // System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-              //System.out.println("TOtal: "+p.total);
+              System.out.println("TOtal: "+p.total);
               
               //System.out.println("evaluaciones: "+p.total);
               train = (solution.getObjective(0));

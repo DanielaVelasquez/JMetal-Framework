@@ -3,7 +3,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.tecnique.Tecnique;
+import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -20,8 +20,8 @@ public class MOS extends AbstractMOS<DoubleSolution>
      *-----------------------------------------------------------------------------------------*/
     
     
-    public MOS(List<Tecnique> tecniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
-        super(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
+    public MOS(List<Technique> techniques, Problem<DoubleSolution> problem, int maxEvaluations, int FE, Comparator<DoubleSolution> comparator, double E, double penalize_value) {
+        super(techniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
     }
     @Override
     public String getName() {
@@ -37,7 +37,7 @@ public class MOS extends AbstractMOS<DoubleSolution>
     protected DoubleSolution executeTecniques() {
         int i = 0;
         int total_evaluations = 0;
-        for(Tecnique tecnique: tecniques)
+        for(Technique technique: techniques)
         {
             int evaluations_j = (int) (FE * (double)this.participation_ratio.get(i));
             
@@ -51,7 +51,7 @@ public class MOS extends AbstractMOS<DoubleSolution>
             //If there are not more availables evaluations then this can finish
             if(evaluations_j == 0)
                 break;
-            individual = (DoubleSolution) tecnique.evolve(evaluations_j, individual, this.problem, this.comparator);
+            individual = (DoubleSolution) technique.evolve(evaluations_j, individual, this.problem, this.comparator);
             this.updateProgress(evaluations_j);
             total_evaluations +=evaluations_j;
             i++;
@@ -77,12 +77,12 @@ public class MOS extends AbstractMOS<DoubleSolution>
 
 
     @Override
-    protected List updateQualityOf(List<Tecnique> tecniques) 
+    protected List updateQualityOf(List<Technique> techniques) 
     {
         List<Double> quality = new ArrayList<>();
-        for(Tecnique tecnique: tecniques)
+        for(Technique technique: techniques)
         {
-            quality.add(tecnique.calculateAverageFitnessOffspringPopulationSize());
+            quality.add(technique.calculateAverageFitnessOffspringPopulationSize());
         }
         return quality;
     }
@@ -97,7 +97,7 @@ public class MOS extends AbstractMOS<DoubleSolution>
         for(int k = 0; k < n; k++)
         {
             double actual_pr = (double) this.participation_ratio.get(k);
-            if(this.best_tecniques_qualities.contains(k))
+            if(this.best_techniques_qualities.contains(k))
             {
                 pr.add(actual_pr + etha);
             }
@@ -116,16 +116,16 @@ public class MOS extends AbstractMOS<DoubleSolution>
     }
     
     /**
-     * Represents the decrease in participation for a tecnique
-     * @param tecnique tecnique 
-     * @return the decrease in participation for a tecnique or null if the tecnique was selected as one of the best because of its quality
+     * Represents the decrease in participation for a technique
+     * @param technique technique 
+     * @return the decrease in participation for a technique or null if the technique was selected as one of the best because of its quality
      */
-    private Double calculateDeltha(int tecnique)
+    private Double calculateDeltha(int technique)
     {
-        if(!this.best_tecniques_qualities.contains(tecnique))
+        if(!this.best_techniques_qualities.contains(technique))
         {
-            double quality = (double) this.quality_measures.get(tecnique);
-            double participation = (double) this.participation_ratio.get(tecnique);
+            double quality = (double) this.quality_measures.get(technique);
+            double participation = (double) this.participation_ratio.get(technique);
             if(this.quality_max!= 0)
                 return this.E * (Math.abs(this.quality_max - quality)/(this.quality_max)) * participation;
             else
@@ -136,10 +136,10 @@ public class MOS extends AbstractMOS<DoubleSolution>
     private double calculateEtha()
     {
         double sum = 0;
-        int size = this.best_tecniques_qualities.size();
+        int size = this.best_techniques_qualities.size();
         for(int k = 0; k < n; k++)
         {
-            if(!this.best_tecniques_qualities.contains(k))
+            if(!this.best_techniques_qualities.contains(k))
             {
                 sum += this.calculateDeltha(k);
             }

@@ -1,7 +1,6 @@
-package org.uma.jmetal.algorithm.tecnique;
+package org.uma.jmetal.algorithm.technique;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
@@ -14,7 +13,7 @@ import org.uma.jmetal.util.AlgorithmBuilder;
  * @author Daniela Velásquez Garzón
  * @author David Fernando Sotelo
  */
-public abstract class Tecnique 
+public abstract class Technique 
 {
     /**
      * Atributes needed in order to for the algorithm to run
@@ -29,7 +28,7 @@ public abstract class Tecnique
      */
     protected Algorithm algorithm;
 
-    public Tecnique(AlgorithmBuilder builder) {
+    public Technique(AlgorithmBuilder builder) {
         this.builder = builder;
     }
     

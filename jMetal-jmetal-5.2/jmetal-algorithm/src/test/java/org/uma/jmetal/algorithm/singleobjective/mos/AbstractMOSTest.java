@@ -32,8 +32,8 @@ public class AbstractMOSTest {
         MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem));
         SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem));
         instance  =  new   MOSBuilder(problem)
-                            .addTecnique(mts_exec)
-                            .addTecnique(sw_exec)
+                            .addTechnique(mts_exec)
+                            .addTechnique(sw_exec)
                             .setFE(300)
                             .setMaxEvaluations(3000)
                             .build();
@@ -86,9 +86,9 @@ public class AbstractMOSTest {
          * Quality measures are {0.38, 0.37,0.38}
          * Best quality measures indexes: {0,2}
          */
-        assertEquals(2, instance.best_tecniques_qualities.size());
-        assertEquals(0, instance.best_tecniques_qualities.get(0));
-        assertEquals(2, instance.best_tecniques_qualities.get(1));
+        assertEquals(2, instance.best_techniques_qualities.size());
+        assertEquals(0, instance.best_techniques_qualities.get(0));
+        assertEquals(2, instance.best_techniques_qualities.get(1));
         
         /**
          * Quality measures are {0.38, 0.37,0.38, 0.39}
@@ -99,8 +99,8 @@ public class AbstractMOSTest {
         instance.n = quality_measures.size();
         instance.quality_measures = quality_measures;
         instance.findBestQualityTecniques();
-        assertEquals(1, instance.best_tecniques_qualities.size());
-        assertEquals(3, instance.best_tecniques_qualities.get(0));
+        assertEquals(1, instance.best_techniques_qualities.size());
+        assertEquals(3, instance.best_techniques_qualities.get(0));
         
         
     }

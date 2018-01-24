@@ -6,13 +6,13 @@ import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
-import org.uma.jmetal.algorithm.tecnique.Tecnique;
+import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 
-public class MTSLS1Tecnique extends Tecnique
+public class MTSLS1Tecnique extends Technique
 {
 
     public MTSLS1Tecnique(MTS_LS1Builder builder) {
