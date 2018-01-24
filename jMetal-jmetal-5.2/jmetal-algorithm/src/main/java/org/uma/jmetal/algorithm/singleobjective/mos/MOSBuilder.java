@@ -143,9 +143,9 @@ public class MOSBuilder implements AlgorithmBuilder
         return this;
     }
     
-    public MOSBuilder removeTechniques(Technique t)
+    public MOSBuilder removeTechniques()
     {
-        techniques.add(t);
+        techniques.clear();
         return this;
     }
 }

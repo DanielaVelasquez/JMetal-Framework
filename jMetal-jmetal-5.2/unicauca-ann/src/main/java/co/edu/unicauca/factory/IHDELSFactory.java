@@ -31,6 +31,7 @@ public class IHDELSFactory extends AbstractFactory
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, DoubleProblem problem)
     {
+        this.evaluatorType = evaluatorType;
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
         switch (name)
@@ -46,9 +47,9 @@ public class IHDELSFactory extends AbstractFactory
     
     private AlgorithmBuilder getIHDELS(int evaluations, DoubleProblem problem)
     {
-        LocalSearch hillClimbing = new LSHillClimbing(hcFactory.getAlgorithm("HillClimbing", AbstractELMEvaluator.EvaluatorType.TT, problem));
-        LocalSearch mtsls1 = new LSMTS_LS1(mtsFactory.getAlgorithm("MTS_LS1", AbstractELMEvaluator.EvaluatorType.TT, problem));
-        SaDEBuilder sadeBuilder = (SaDEBuilder) deFactory.getAlgorithm("SaDE", AbstractELMEvaluator.EvaluatorType.TT, problem);
+        LocalSearch hillClimbing = new LSHillClimbing(hcFactory.getAlgorithm("HillClimbing", this.evaluatorType, problem));
+        LocalSearch mtsls1 = new LSMTS_LS1(mtsFactory.getAlgorithm("MTS_LS1", this.evaluatorType, problem));
+        SaDEBuilder sadeBuilder = (SaDEBuilder) deFactory.getAlgorithm("SaDE", this.evaluatorType, problem);
         
         return new IHDELSBuilder(problem)
                     .addLocalSearch(mtsls1)

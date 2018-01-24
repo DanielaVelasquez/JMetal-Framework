@@ -55,6 +55,7 @@ public class DifferentialEvolutionFactory extends AbstractFactory
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
                                   DoubleProblem problem) 
     {
+        this.evaluatorType = evaluatorType;
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
         switch (name)
@@ -69,7 +70,7 @@ public class DifferentialEvolutionFactory extends AbstractFactory
                 builder = this.getSaNSDE(evaluations, problem);
                 break;
             case "DECC_G":
-                builder = this.getDECCG(evaluations, problem, evaluatorType);
+                builder = this.getDECCG(evaluations, problem);
                 break;
             case "MemeticED":
                 builder = this.getMemeticED(evaluations, problem);
@@ -115,8 +116,7 @@ public class DifferentialEvolutionFactory extends AbstractFactory
                         .setComparator(COMPARATOR);
     }
     
-    private AlgorithmBuilder getDECCG(int evaluations, DoubleProblem problem,
-            AbstractELMEvaluator.EvaluatorType evaluatorType)
+    private AlgorithmBuilder getDECCG(int evaluations, DoubleProblem problem)
     {
         DECC_GBuilder builder =  new DECC_GBuilder(problem)
                                      .setDEBuilder(new DEUnicaucaBuilder(problem)
