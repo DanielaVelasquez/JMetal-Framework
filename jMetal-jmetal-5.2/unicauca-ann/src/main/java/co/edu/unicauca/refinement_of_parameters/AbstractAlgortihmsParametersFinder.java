@@ -1,6 +1,6 @@
-package co.edu.unicauca.parameters;
+package co.edu.unicauca.refinement_of_parameters;
 
-import co.edu.unicauca.factory.AbstractFactory;
+import co.edu.unicauca.factory.algorithm.AbstractFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.util.AlgorithmBuilder;

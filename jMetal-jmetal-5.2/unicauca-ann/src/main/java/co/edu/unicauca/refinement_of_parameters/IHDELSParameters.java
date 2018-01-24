@@ -1,8 +1,8 @@
-package co.edu.unicauca.parameters;
+package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
-import co.edu.unicauca.factory.IHDELSFactory;
-import co.edu.unicauca.factory.MTSFactory;
+import co.edu.unicauca.factory.algorithm.IHDELSFactory;
+import co.edu.unicauca.factory.algorithm.MTSFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.local_search.LocalSearch;

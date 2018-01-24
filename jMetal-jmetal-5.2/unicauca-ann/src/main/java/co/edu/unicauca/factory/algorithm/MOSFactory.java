@@ -1,4 +1,4 @@
-package co.edu.unicauca.factory;
+package co.edu.unicauca.factory.algorithm;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;

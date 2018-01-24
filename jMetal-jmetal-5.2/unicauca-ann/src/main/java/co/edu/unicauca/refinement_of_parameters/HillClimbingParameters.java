@@ -1,7 +1,7 @@
-package co.edu.unicauca.parameters;
+package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
-import co.edu.unicauca.factory.HillClimbingFactory;
+import co.edu.unicauca.factory.algorithm.HillClimbingFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbingBuilder;

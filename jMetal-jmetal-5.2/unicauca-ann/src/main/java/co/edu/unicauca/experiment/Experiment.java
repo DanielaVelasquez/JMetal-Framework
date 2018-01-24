@@ -2,7 +2,7 @@ package co.edu.unicauca.experiment;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.exec.experiment.Run;
-import co.edu.unicauca.factory.AlgorithmFactory;
+import co.edu.unicauca.factory.algorithm.AlgorithmFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;

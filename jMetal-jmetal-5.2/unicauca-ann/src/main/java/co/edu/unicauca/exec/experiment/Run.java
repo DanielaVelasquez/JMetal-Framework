@@ -2,7 +2,7 @@ package co.edu.unicauca.exec.experiment;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.experiment.Experiment;
-import co.edu.unicauca.parameters.Parameters;
+import co.edu.unicauca.refinement_of_parameters.Parameters;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.logging.Level;

@@ -1,6 +1,6 @@
-package co.edu.unicauca.parameters;
+package co.edu.unicauca.refinement_of_parameters;
 
-import co.edu.unicauca.factory.DifferentialEvolutionFactory;
+import co.edu.unicauca.factory.algorithm.DifferentialEvolutionFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;

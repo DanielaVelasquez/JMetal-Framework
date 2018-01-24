@@ -1,4 +1,4 @@
-package co.edu.unicauca.parameters.results;
+package co.edu.unicauca.refinement_of_parameters.results;
 
 public class ParamsResult
 {

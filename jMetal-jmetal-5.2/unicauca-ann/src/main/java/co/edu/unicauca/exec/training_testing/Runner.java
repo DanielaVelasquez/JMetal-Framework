@@ -1,6 +1,6 @@
 package co.edu.unicauca.exec.training_testing;
 
-import co.edu.unicauca.factory.AlgorithmFactory;
+import co.edu.unicauca.factory.algorithm.AlgorithmFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;

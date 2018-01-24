@@ -1,6 +1,6 @@
-package co.edu.unicauca.factory;
+package co.edu.unicauca.factory.algorithm;
 
-import static co.edu.unicauca.factory.AbstractFactory.EVALUATIONS_TT;
+import static co.edu.unicauca.factory.algorithm.AbstractFactory.EVALUATIONS_TT;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;

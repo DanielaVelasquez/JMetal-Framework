@@ -1,11 +1,9 @@
-package co.edu.unicauca.parameters;
+package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.exec.experiment.Run;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;

@@ -1,6 +1,6 @@
-package co.edu.unicauca.parameters;
+package co.edu.unicauca.refinement_of_parameters;
 
-import co.edu.unicauca.factory.SolisAndWetsFactory;
+import co.edu.unicauca.factory.algorithm.SolisAndWetsFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
