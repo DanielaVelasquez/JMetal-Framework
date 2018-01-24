@@ -9,12 +9,12 @@ import org.uma.jmetal.operator.impl.localsearch.BoundedUniformConvultion;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.util.AlgorithmBuilder;
 
-public class HillClimbingAlgorithm extends AbstractAlgortihmsParametersFinder
+public class HillClimbingParameters extends AbstractAlgortihmsParametersFinder
 {
     private double probability;
     private double radius;
 
-    public HillClimbingAlgorithm()
+    public HillClimbingParameters()
     {
         factory = new HillClimbingFactory();
     }

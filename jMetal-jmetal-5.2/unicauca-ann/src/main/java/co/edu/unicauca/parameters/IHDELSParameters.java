@@ -32,7 +32,7 @@ public class IHDELSParameters extends AbstractMetaHeuristicParametersFinder
     private SaDEParameters SaDEParameters;
     private SaDEBuilder SaDEBuilder;
     
-    private HillClimbingAlgorithm hillClimbingParameters;
+    private HillClimbingParameters hillClimbingParameters;
     private HillClimbingBuilder hillClimbingBuilder;
     
     public IHDELSParameters( int algorithmId, 
@@ -41,7 +41,7 @@ public class IHDELSParameters extends AbstractMetaHeuristicParametersFinder
         super(algorithmId, connection, type, problem);
         factory = new IHDELSFactory();
         SaDEParameters = new SaDEParameters();
-        hillClimbingParameters = new HillClimbingAlgorithm();
+        hillClimbingParameters = new HillClimbingParameters();
         
     }
 
