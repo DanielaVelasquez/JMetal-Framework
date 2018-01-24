@@ -78,13 +78,13 @@ public class Parameters
     }
     public static void main(String[] args) 
     {
-        int computer = Integer.parseInt(args[0]);
+        //int computer = Integer.parseInt(args[0]);
         while(true)
         {
             try 
             {
-                //new Parameters(1);
-                new Parameters(computer);
+                new Parameters(1);
+                //new Parameters(computer);
             }
             catch (Exception ex) 
             {

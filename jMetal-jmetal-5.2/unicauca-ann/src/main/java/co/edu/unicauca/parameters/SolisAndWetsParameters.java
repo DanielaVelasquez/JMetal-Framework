@@ -23,8 +23,8 @@ public class SolisAndWetsParameters extends AbstractAlgortihmsParametersFinder
                                                 AbstractELMEvaluator.EvaluatorType type, 
                                                 DoubleProblem problem) 
     {
-        rho =  values[index][configuration[index]];
-        sizeNeighborhood = (int) values[index + 1][configuration[index + 1]];
+        sizeNeighborhood =  (int) values[index][configuration[index]];
+        rho =  values[index + 1][configuration[index + 1]];
         builder = factory.getAlgorithm("SolisAndWets", type, problem);
         return ((SolisAndWetsBuilder) builder)
                             .setRho(rho)

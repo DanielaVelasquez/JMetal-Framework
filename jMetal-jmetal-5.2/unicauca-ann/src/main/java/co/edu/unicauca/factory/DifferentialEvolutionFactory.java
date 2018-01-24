@@ -152,7 +152,7 @@ public class DifferentialEvolutionFactory extends AbstractFactory
                         .setPopulationSize(POPULATION_MEMETIC)
                         .setCrossover(new DifferentialEvolutionCrossover(CR_MEMETIC_DE, F_MEMETIC_DE, "current-to-best/1/bin"))
                         .setSelection(new DifferentialEvolutionSelection())
-                        .setMaxEvaluations(evaluations)
+                        .setMaxEvaluations(evaluations - 1)
                         .setComparator(COMPARATOR_MEMETIC);
     }
     
