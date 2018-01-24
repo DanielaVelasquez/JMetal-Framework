@@ -57,7 +57,7 @@ public class Parameters
                 idTask = result.getInt(7);
                 
                 DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(nameProblem);
-                Algorithm algorithm = ParamsFactory.getAlgorithm(algorithmId, connection, type, problem, this.algorithm, valuesConf);
+                Algorithm algorithm = ParametersFactory.getAlgorithm(algorithmId, connection, type, problem, this.algorithm, valuesConf);
                 
                 JMetalRandom rndm = JMetalRandom.getInstance();
                 rndm.setSeed(seed);
