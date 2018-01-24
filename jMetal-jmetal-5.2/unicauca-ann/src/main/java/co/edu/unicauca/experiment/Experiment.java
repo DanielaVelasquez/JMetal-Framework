@@ -99,12 +99,12 @@ public class Experiment
                     String insertResultado = "INSERT INTO results VALUES(" + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ", " + runId + ", " + semilla + ")";
                     connection.modificacion(insertResultado);
                 }
-                connection.reiniciarConexion();
             }
             catch(Exception ex)
             {
                 System.out.println(ex.getMessage());
             }
+            connection.reiniciarConexion();
         }
     } 
 
