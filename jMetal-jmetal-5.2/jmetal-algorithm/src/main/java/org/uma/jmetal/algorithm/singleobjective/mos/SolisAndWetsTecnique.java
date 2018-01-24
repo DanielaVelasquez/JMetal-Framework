@@ -5,13 +5,13 @@ import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuild
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.tecnique.Tecnique;
+import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 
-public class SolisAndWetsTecnique extends Tecnique
+public class SolisAndWetsTecnique extends Technique
 {
 
     public SolisAndWetsTecnique(SolisAndWetsBuilder builder) {

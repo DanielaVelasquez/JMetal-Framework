@@ -26,6 +26,7 @@ public class MOSFactory extends AbstractFactory
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, DoubleProblem problem)
     {
+        this.evaluatorType = evaluatorType;
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
         switch (name)
@@ -39,12 +40,12 @@ public class MOSFactory extends AbstractFactory
     
     private AlgorithmBuilder getMOS(int evaluations, DoubleProblem problem)
     {
-        MTSLS1Tecnique mtsls1_exec = new MTSLS1Tecnique((MTS_LS1Builder) mtsFactory.getAlgorithm("MTS_LS1", AbstractELMEvaluator.EvaluatorType.TT, problem));
+        MTSLS1Tecnique mtsls1_exec = new MTSLS1Tecnique((MTS_LS1Builder) mtsFactory.getAlgorithm("MTS_LS1", this.evaluatorType, problem));
         
-        SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique((SolisAndWetsBuilder) solisAndWetsFactory.getAlgorithm("SolisAndWets", AbstractELMEvaluator.EvaluatorType.TT, problem));
+        SolisAndWetsTecnique sw_exec1 = new SolisAndWetsTecnique((SolisAndWetsBuilder) solisAndWetsFactory.getAlgorithm("SolisAndWets", this.evaluatorType, problem));
         return new MOSBuilder(problem)
-                            .addTecnique(mtsls1_exec)
-                            .addTecnique(sw_exec1)
+                            .addTechnique(mtsls1_exec)
+                            .addTechnique(sw_exec1)
                             .setFE(FE_MOS)
                             .setE(E_MOS)
                             .setMaxEvaluations(evaluations)

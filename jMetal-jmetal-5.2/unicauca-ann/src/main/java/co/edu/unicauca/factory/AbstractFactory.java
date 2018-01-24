@@ -31,6 +31,8 @@ public abstract class AbstractFactory
      */
     protected final static int EVALUATIONS_CV = 300;
     
+    protected AbstractELMEvaluator.EvaluatorType evaluatorType;
+    
     public abstract AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
                                            DoubleProblem problem);
     

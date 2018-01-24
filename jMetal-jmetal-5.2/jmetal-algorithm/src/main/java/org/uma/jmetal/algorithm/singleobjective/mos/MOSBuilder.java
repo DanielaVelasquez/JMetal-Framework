@@ -3,7 +3,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import org.uma.jmetal.algorithm.tecnique.Tecnique;
+import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.AlgorithmBuilder;
@@ -19,7 +19,7 @@ public class MOSBuilder implements AlgorithmBuilder
      * Algorithms to execute inside a MOS algorithm
      * wrapped in its own executer
      */
-    protected List<Tecnique> tecniques;
+    protected List<Technique> techniques;
     /**
      * Algorithm's problem
      */
@@ -59,20 +59,20 @@ public class MOSBuilder implements AlgorithmBuilder
         this.FE = 100;
         this.E = 0.05;
         this.penalize_value = 1;
-        this.tecniques = new ArrayList<>();
+        this.techniques = new ArrayList<>();
     }
     
     public MOS build()
     {
-        if(!tecniques.isEmpty() || tecniques.size() < 2)
+        if(!techniques.isEmpty() || techniques.size() < 2)
         {
-            return new MOS(tecniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
+            return new MOS(techniques, problem, maxEvaluations, FE, comparator, E, penalize_value);
         }
         throw new JMetalException("Should be at least 2 tecniques");
     }
 
-    public List<Tecnique> getTecniques() {
-        return tecniques;
+    public List<Technique> getTechniques() {
+        return techniques;
     }
 
     public DoubleProblem getProblem() {
@@ -135,10 +135,17 @@ public class MOSBuilder implements AlgorithmBuilder
         return this;
     }
     
-    public MOSBuilder addTecnique(Tecnique t)
+    public MOSBuilder addTechnique(Technique t)
     {
-        tecniques.add(t);
+        if(t == null)
+            throw new JMetalException("Tecnique is null");
+        techniques.add(t);
         return this;
     }
     
+    public MOSBuilder removeTechniques()
+    {
+        techniques.clear();
+        return this;
+    }
 }

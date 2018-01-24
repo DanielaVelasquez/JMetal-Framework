@@ -57,7 +57,7 @@ public class IHDELSParameters extends AbstractMetaHeuristicParametersFinder
        builder = factory.getAlgorithm("IHDELS", type, problem);
        
        SaDEBuilder = (SaDEBuilder) SaDEParameters.configureAlgorithm(configuration, 6, values, type, problem);
-       hillClimbingBuilder = (HillClimbingBuilder) hillClimbingParameters.configureAlgorithm(configuration, SaDEParameters.getNumberParameters(), values, type, problem);
+       hillClimbingBuilder = (HillClimbingBuilder) hillClimbingParameters.configureAlgorithm(configuration,6 + SaDEParameters.getNumberParameters(), values, type, problem);
        LocalSearch mtsls1 = new LSMTS_LS1(mtsFactory.getAlgorithm("MTS_LS1", AbstractELMEvaluator.EvaluatorType.TT, problem));
        LocalSearch hillClimbingLS = new LSHillClimbing(hillClimbingBuilder);
        return ((IHDELSBuilder) builder)

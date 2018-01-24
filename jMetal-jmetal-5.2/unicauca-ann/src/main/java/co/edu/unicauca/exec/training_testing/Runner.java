@@ -53,7 +53,7 @@ public class Runner
         
         for(int i = 0; i < 1;i++)
         {
-            algorithm = AlgorithmFactory.getAlgorithm("IHDELS", AbstractELMEvaluator.EvaluatorType.TT, problem);
+            algorithm = AlgorithmFactory.getAlgorithm("DECC_G", AbstractELMEvaluator.EvaluatorType.TT, problem);
             rnd.setSeed(i+1);
             //System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
@@ -64,7 +64,7 @@ public class Runner
 
              // System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-              //System.out.println("TOtal: "+p.total);
+              System.out.println("TOtal: "+p.total);
               
               //System.out.println("evaluaciones: "+p.total);
               train = (solution.getObjective(0));

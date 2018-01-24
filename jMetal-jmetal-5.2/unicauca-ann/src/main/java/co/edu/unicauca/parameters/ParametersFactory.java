@@ -6,11 +6,13 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.util.JMetalException;
 
-public class ParamsFactory
+public class ParametersFactory
 {
-    private static MOSParams mos ;
+    private static MOSParameters mos ;
 
     private static IHDELSParameters ihdels;
+    
+    private static DECC_GParameters decc_g;
     
     public static Algorithm getAlgorithm(int algorithmId,
                   DataBaseConnection connection,AbstractELMEvaluator.EvaluatorType type,
@@ -19,11 +21,14 @@ public class ParamsFactory
         switch(nameAlgorithm)
         {
             case "MOS":
-                mos = new MOSParams(algorithmId, connection, type, problem);
+                mos = new MOSParameters(algorithmId, connection, type, problem);
                 return mos.getAlgorithm(configuration);
             case "IHDELS":
                 ihdels = new IHDELSParameters(algorithmId, connection, type, problem);
                 return ihdels.getAlgorithm(configuration);
+            case "DECC_G":
+                decc_g = new DECC_GParameters(algorithmId, connection, type, problem);
+                return decc_g.getAlgorithm(configuration);
             default:
                  throw new JMetalException("Algorithm "+nameAlgorithm+" not exists");
         }
