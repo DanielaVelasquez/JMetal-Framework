@@ -1,6 +1,7 @@
 package co.edu.unicauca.parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
+import co.edu.unicauca.exec.experiment.Run;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import java.util.logging.Level;
@@ -23,15 +24,18 @@ public class Parameters
     private int seed;
     private int algorithmId;
     private int idTask;
+    private Run run;
     
     
-    public Parameters(int computer) throws Exception
+    public Parameters(Run run, int computer) throws Exception
     {
+        this.run = run;
         connection = DataBaseConnection.getInstancia();
         
-        boolean run = true;
-        while(run)
+        
+        while(run.canRun() && run.isDefiningParameters() && !run.isOver())
         {
+            //System.out.println("Hi, this is from parameters");
             connection.modificacion("EXECUTE requestTask @computerName = " + computer + ";");
             String query = 
             "SELECT nameType, nameProblem, nameAlg, valuesConf, seedTask,algorithmTask, idTask \n"+
@@ -43,9 +47,9 @@ public class Parameters
             "INNER JOIN configuration ON configurationTask = idConf\n"+
             "WHERE numberPC = "+computer+" AND isExecutingPC = 1";
             ResultSet result = connection.seleccion(query);
-            run = result.next();
             
-            if(run)
+            
+            if(result.next())
             {
                 typeName = result.getString(1).trim();
                 type = typeName.equals("cv")?AbstractELMEvaluator.EvaluatorType.CV:AbstractELMEvaluator.EvaluatorType.TT;
@@ -76,22 +80,6 @@ public class Parameters
             
         }
     }
-    public static void main(String[] args) 
-    {
-        //int computer = Integer.parseInt(args[0]);
-        while(true)
-        {
-            try 
-            {
-                new Parameters(1);
-                //new Parameters(computer);
-            }
-            catch (Exception ex) 
-            {
-                Logger.getLogger(Parameters.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-    }
+   
     
 }
