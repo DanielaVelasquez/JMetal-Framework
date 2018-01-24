@@ -109,9 +109,9 @@ public class Run
     {
         try 
         {
-            //int pc = Integer.parseInt(args[0]);
+            int pc = Integer.parseInt(args[0]);
             //-
-            new Run(1);
+            new Run(pc);
         } catch (Exception ex) {
             Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
         }
