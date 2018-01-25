@@ -9,7 +9,7 @@ import org.uma.jmetal.util.JMetalException;
 
 public class FileParametersFactory extends AbstractParametersFactory
 {
-    private static final String SPLIT_SYMBOL = "-";
+    private static final String SPLIT_SYMBOL = ";";
     /**
      * Values of parameters
      */
