@@ -4,11 +4,11 @@ import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.HashMap;
 
 
-public class JMetalParametersFactory extends AbstractParamertersFactory
+public class FileParametersFactory extends AbstractParamertersFactory
 {
     private HashMap<String, Double> values;
     
-    public JMetalParametersFactory()
+    public FileParametersFactory()
     {
         values = new HashMap<>();
         this.loadParameters();
