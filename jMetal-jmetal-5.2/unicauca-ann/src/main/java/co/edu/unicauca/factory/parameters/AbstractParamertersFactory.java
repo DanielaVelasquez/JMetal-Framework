@@ -13,5 +13,5 @@ public abstract class AbstractParamertersFactory
      */
     public abstract double getValue(String parameter, 
                              AbstractELMEvaluator.EvaluatorType evaluatorType,
-                             String algorithmName);
+                             String algorithmName) throws Exception;
 }
