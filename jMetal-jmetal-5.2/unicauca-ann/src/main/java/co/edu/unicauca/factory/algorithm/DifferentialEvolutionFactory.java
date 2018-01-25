@@ -25,45 +25,47 @@ public class DifferentialEvolutionFactory extends AbstractBuilderFactory
     /**
      * Default configuration for DE
      */
-    private final static double CR_DE = 0.7;
-    private final static double F_DE = 0.3;
-    private final static int POPULATION_DE = 10;
+    private double CR_DE;
+    private double F_DE;
+    private int POPULATION_DE;
     /**
      * Default configuration SaDE
      */
-    private final static double CR1_SADE = 0.4;//tt 0.3;
-    private final static double F1_SADE = 0.3;//tt 0.9;
-    private final static double CR2_SADE = 0.7; //tt 0.9;
-    private final static double F2_SADE = 0.4;
-    private final static int POPULATION_SaDE = 10;
+    private double CR1_SADE;
+    private double F1_SADE;
+    private double CR2_SADE;
+    private double F2_SADE;
+    private int POPULATION_SaDE;
     /**
      * Default configuration SaNSDE
      */
-    private final static double CR1_SANSDE = 0.4;//0.7;
-    private final static double F1_SANSDE = 0.7;//0.4;
-    private final static double CR2_SANSDE = 0.9;
-    private final static double F2_SANSDE = 0.9;//0.5;
-    private final static int POPULATION_SANSDE = 10;
+    private double CR1_SANSDE;
+    private double F1_SANSDE;
+    private double CR2_SANSDE;
+    private double F2_SANSDE;
+    private int POPULATION_SANSDE;
     /**
      * Default configuration for MemeticDE
      */
-    private final static double CR_MEMETIC_DE = 0.4;
-    private final static double F_MEMETIC_DE = 0.5;
-    private final static int POPULATION_MEMETIC = 50;
+    private double CR_MEMETIC_DE;
+    private double F_MEMETIC_DE;
+    private int POPULATION_MEMETIC;
     private final static Comparator<DoubleSolution> COMPARATOR_MEMETIC = new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING);
 
     public DifferentialEvolutionFactory(AbstractParametersFactory parametersFactory) 
     {
         super(parametersFactory);
+        
     }
-    
+
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
-                                  DoubleProblem problem) 
+                                  DoubleProblem problem) throws Exception
     {
         this.evaluatorType = evaluatorType;
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
+        this.loadAlgorithmValues(name, evaluatorType);
         switch (name)
         {
             case "DEUnicauca":
@@ -160,6 +162,51 @@ public class DifferentialEvolutionFactory extends AbstractBuilderFactory
                         .setSelection(new DifferentialEvolutionSelection())
                         .setMaxEvaluations(evaluations - 1)
                         .setComparator(COMPARATOR_MEMETIC);
+    }
+
+    @Override
+    protected void loadAlgorithmValues(String name, 
+                                        AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception
+    {
+        switch(name)
+        {
+            case "DEUnicauca":
+                CR_DE = parametersFactory.getValue("CR", evaluatorType, name) ;
+                F_DE = parametersFactory.getValue("F", evaluatorType, name) ;
+                POPULATION_DE = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
+                break;
+            case "SaDE":
+                CR1_SADE = parametersFactory.getValue("CR1", evaluatorType, name) ;
+                F1_SADE = parametersFactory.getValue("F1", evaluatorType, name) ;
+                CR2_SADE = parametersFactory.getValue("CR2", evaluatorType, name) ;
+                F2_SADE = parametersFactory.getValue("F2", evaluatorType, name) ;
+                POPULATION_SaDE = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
+                break;
+            case "SaNSDE":
+                CR1_SANSDE = parametersFactory.getValue("CR1", evaluatorType, name) ;
+                F1_SANSDE = parametersFactory.getValue("F1", evaluatorType, name) ;
+                CR2_SANSDE = parametersFactory.getValue("CR2", evaluatorType, name) ;
+                F2_SANSDE = parametersFactory.getValue("F2", evaluatorType, name) ;
+                POPULATION_SANSDE = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
+                break;
+            case "DECC_G":
+                
+                break;
+            case "MemeticED":
+                CR_MEMETIC_DE = parametersFactory.getValue("CR", evaluatorType, name) ;
+                F_MEMETIC_DE = parametersFactory.getValue("F", evaluatorType, name) ;
+                POPULATION_MEMETIC = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
+                break;
+            default:
+                throw new JMetalException("Algorithm "+name+" not exists");
+        }
+       
+
+   	
+
+   	
+    
+   	
     }
     
 }

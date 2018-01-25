@@ -4,7 +4,6 @@ import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.exec.experiment.Run;
 import co.edu.unicauca.factory.algorithm.AlgorithmFactory;
 import co.edu.unicauca.factory.parameters.DataBaseParametersFactory;
-import co.edu.unicauca.factory.parameters.FileParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;

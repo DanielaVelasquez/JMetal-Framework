@@ -34,7 +34,7 @@ public abstract class AbstractBuilderFactory
     
     protected AbstractELMEvaluator.EvaluatorType evaluatorType;
     
-    protected AbstractParametersFactory parametersFactory;
+    protected final AbstractParametersFactory parametersFactory;
     
     public AbstractBuilderFactory(AbstractParametersFactory parametersFactory)
     {
@@ -42,6 +42,8 @@ public abstract class AbstractBuilderFactory
     }
     
     public abstract AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
-                                           DoubleProblem problem);
+                                           DoubleProblem problem) throws Exception;
     
+    protected abstract void loadAlgorithmValues(String name, 
+                            AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception;
 }

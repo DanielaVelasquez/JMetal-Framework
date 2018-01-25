@@ -48,7 +48,7 @@ public class IHDELSParameters extends AbstractMetaHeuristicParametersFinder
     }
 
     @Override
-    protected Algorithm configureAlgorithm(int[] configuration) 
+    protected Algorithm configureAlgorithm(int[] configuration) throws Exception 
     {
        FE_DE = (int) values[0][configuration[0]];
        FE_LS = (int) values[1][configuration[1]];

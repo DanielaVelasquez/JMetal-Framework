@@ -1,10 +1,8 @@
 package co.edu.unicauca.refinement_of_parameters;
 
-import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.algorithm.HillClimbingFactory;
 import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
-import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbingBuilder;
 import org.uma.jmetal.operator.impl.localsearch.BoundedUniformConvultion;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -26,7 +24,7 @@ public class HillClimbingParameters extends AbstractAlgortihmsParametersFinder
                                                int index, 
                                                double values[][],
                                                AbstractELMEvaluator.EvaluatorType type,
-                                               DoubleProblem problem) 
+                                               DoubleProblem problem) throws Exception 
     {
        probability =  values[index][configuration[index]];
        radius =  values[index + 1][configuration[index + 1]];

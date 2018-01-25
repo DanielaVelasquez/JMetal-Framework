@@ -25,10 +25,11 @@ public class RandomFactory extends AbstractBuilderFactory
     }
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 
-            DoubleProblem problem) 
+            DoubleProblem problem) throws Exception 
     {
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
+        this.loadAlgorithmValues(name, evaluatorType);
         switch(name)
         {
             case "Random":
@@ -46,6 +47,11 @@ public class RandomFactory extends AbstractBuilderFactory
                         .setMaxEvaluations(evaluations)
                         .setComparator(COMPARATOR_RANDOM)
                         .setPenalizeValue(PENALIZE_VALUE);
+    }
+
+    @Override
+    protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception {
+        
     }
     
 }

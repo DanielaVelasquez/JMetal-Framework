@@ -13,8 +13,8 @@ import org.uma.jmetal.util.JMetalException;
  */
 public class SolisAndWetsFactory extends AbstractBuilderFactory
 {
-    private final static double RHO = 0.5;//0.7;
-    private final static int NEIGHBORHOOD = 4; //8;
+    private double RHO ;
+    private int NEIGHBORHOOD ;
 
     public SolisAndWetsFactory(AbstractParametersFactory parametersFactory) {
         super(parametersFactory);
@@ -22,10 +22,11 @@ public class SolisAndWetsFactory extends AbstractBuilderFactory
 
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 
-            DoubleProblem problem)
+            DoubleProblem problem) throws Exception
     {
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
+        this.loadAlgorithmValues(name, evaluatorType);
         switch(name)
         {
             case "SolisAndWets":
@@ -45,6 +46,19 @@ public class SolisAndWetsFactory extends AbstractBuilderFactory
                         .setPenalizeValue(PENALIZE_VALUE)
                         .setMaxEvaluations(evaluations)
                         .setComparator(COMPARATOR);
+    }
+
+    @Override
+    protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception {
+        switch(name)
+        {
+            case "SolisAndWets":
+                RHO = parametersFactory.getValue("RHO", evaluatorType, name) ;
+                NEIGHBORHOOD = (int) parametersFactory.getValue("NEIGHBORHOOD", evaluatorType, name) ;
+                break;
+            default:
+                throw new JMetalException("Algorithm "+name+" not exists");
+        }
     }
     
 }

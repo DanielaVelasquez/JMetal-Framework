@@ -34,7 +34,7 @@ public class AlgorithmFactory
     }
     
     public  Algorithm getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
-                                  DoubleProblem problem)
+                                  DoubleProblem problem) throws Exception
     {
         AlgorithmBuilder builder = null;
         switch(name)

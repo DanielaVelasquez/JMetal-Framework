@@ -20,10 +20,11 @@ public class MTSFactory extends AbstractBuilderFactory
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
-            DoubleProblem problem) 
+            DoubleProblem problem) throws Exception 
     {
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
+        this.loadAlgorithmValues(name, evaluatorType);
         switch(name)
         {
             case "MTS_LS1":
@@ -45,5 +46,10 @@ public class MTSFactory extends AbstractBuilderFactory
                         .setMaxEvaluations(evaluations)
                         .setComparator(COMPARATOR);
      }
+
+    @Override
+    protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception {
+        
+    }
     
 }

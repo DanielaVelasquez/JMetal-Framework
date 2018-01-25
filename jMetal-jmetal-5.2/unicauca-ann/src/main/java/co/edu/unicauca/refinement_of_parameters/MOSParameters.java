@@ -34,7 +34,7 @@ public class MOSParameters extends AbstractMetaHeuristicParametersFinder
     }
 
     @Override
-    protected Algorithm configureAlgorithm(int[] configuration) 
+    protected Algorithm configureAlgorithm(int[] configuration) throws Exception 
     {
        FE = (int) values[0][configuration[0]];
        E = values[1][configuration[1]];

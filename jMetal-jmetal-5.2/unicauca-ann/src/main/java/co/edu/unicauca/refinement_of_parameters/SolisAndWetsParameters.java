@@ -24,7 +24,7 @@ public class SolisAndWetsParameters extends AbstractAlgortihmsParametersFinder
                                                 int index, 
                                                 double[][] values,
                                                 AbstractELMEvaluator.EvaluatorType type, 
-                                                DoubleProblem problem) 
+                                                DoubleProblem problem) throws Exception 
     {
         sizeNeighborhood =  (int) values[index][configuration[index]];
         rho =  values[index + 1][configuration[index + 1]];

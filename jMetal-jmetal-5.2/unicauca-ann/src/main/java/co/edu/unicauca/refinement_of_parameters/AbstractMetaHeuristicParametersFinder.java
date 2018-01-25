@@ -49,7 +49,7 @@ public abstract class AbstractMetaHeuristicParametersFinder
         }
     }
     
-    public Algorithm getAlgorithm(String configurationString)
+    public Algorithm getAlgorithm(String configurationString) throws Exception
     {
         this.getConfiguration(configurationString);
         return configureAlgorithm(configuration);
@@ -85,5 +85,5 @@ public abstract class AbstractMetaHeuristicParametersFinder
         }
         
     }
-    protected abstract Algorithm configureAlgorithm(int configuration[]);
+    protected abstract Algorithm configureAlgorithm(int configuration[]) throws Exception;
 }

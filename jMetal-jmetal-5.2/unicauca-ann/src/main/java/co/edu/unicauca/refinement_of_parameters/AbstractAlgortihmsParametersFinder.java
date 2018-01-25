@@ -22,6 +22,6 @@ public abstract class AbstractAlgortihmsParametersFinder
                                                         int index, 
                                                         double values[][],
                                                         AbstractELMEvaluator.EvaluatorType type,
-                                                        DoubleProblem problem);
+                                                        DoubleProblem problem) throws Exception;
     public abstract int getNumberParameters();
 }

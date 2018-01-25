@@ -16,8 +16,8 @@ import org.uma.jmetal.util.JMetalException;
 public class HillClimbingFactory extends AbstractBuilderFactory
 {
     
-    private static final double  MEAN_HC = 0.45; //0.5;
-    private static final double STANDAR_DEVIATION_HC = 0.4;//0.2;
+    private double PROBABILITY ; 
+    private double RADIUS;
 
     public HillClimbingFactory(AbstractParametersFactory parametersFactory) {
         super(parametersFactory);
@@ -25,10 +25,11 @@ public class HillClimbingFactory extends AbstractBuilderFactory
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 
-            DoubleProblem problem)
+            DoubleProblem problem) throws Exception
     {
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
+        this.loadAlgorithmValues(name, evaluatorType);
         switch (name)
         {
             case "HillClimbing":
@@ -43,10 +44,24 @@ public class HillClimbingFactory extends AbstractBuilderFactory
     private AlgorithmBuilder getHillClimbing(int evaluations, DoubleProblem problem)
     {
         return new HillClimbingBuilder(problem)
-                            .setTweak(new BoundedUniformConvultion(MEAN_HC, STANDAR_DEVIATION_HC))
+                            .setTweak(new BoundedUniformConvultion(PROBABILITY, RADIUS))
                             .setMaxEvaluations(evaluations)
                             .setComparator(COMPARATOR)
                             .setPenalizeValue(PENALIZE_VALUE);
+    }
+
+    @Override
+    protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception 
+    {
+        switch (name)
+        {
+            case "HillClimbing":
+                PROBABILITY  = parametersFactory.getValue("PROBABILITY", evaluatorType, name) ; 
+                RADIUS = parametersFactory.getValue("RADIUS", evaluatorType, name) ;
+                break;
+            default:
+                throw new JMetalException("Algorithm "+name+" not exists");
+        }
     }
     
 }

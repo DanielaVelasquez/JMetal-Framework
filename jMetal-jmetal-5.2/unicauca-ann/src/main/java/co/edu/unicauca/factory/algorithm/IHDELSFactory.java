@@ -21,13 +21,13 @@ public class IHDELSFactory extends AbstractBuilderFactory
     private MTSFactory mtsFactory ;
     private HillClimbingFactory hcFactory ;
     
-    private static final int FE_DE_IHDELS = 30;//90;
-    private static final int FE_LS_IHDLES = 90;//30;//60;
-    private static final int POPULATION_IHDELS= 10;
-    private static final int RESTART_IHDELS = 7;//3;//7;
-    private static final double A_IHDELS = -1;//-0.7;//-0.5;
-    private static final double B_IHDELS = 1;//0.5;//1;//1999ii9koo;
-    private static final double THRESHOLD_IHDELS = 0.001;//0.01;//0.001;
+    private int FE_DE_IHDELS ;
+    private int FE_LS_IHDLES ;
+    private int POPULATION_IHDELS;
+    private int RESTART_IHDELS ;
+    private double A_IHDELS ;
+    private double B_IHDELS ;
+    private double THRESHOLD_IHDELS ;
 
     public IHDELSFactory(AbstractParametersFactory parametersFactory) {
         super(parametersFactory);
@@ -37,11 +37,12 @@ public class IHDELSFactory extends AbstractBuilderFactory
     }
 
     @Override
-    public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, DoubleProblem problem)
+    public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, DoubleProblem problem) throws Exception
     {
         this.evaluatorType = evaluatorType;
         int evaluations = evaluatorType == AbstractELMEvaluator.EvaluatorType.TT?EVALUATIONS_TT:EVALUATIONS_CV;
         AlgorithmBuilder builder = null;
+        this.loadAlgorithmValues(name, evaluatorType);
         switch (name)
         {
             case "IHDELS":
@@ -53,7 +54,7 @@ public class IHDELSFactory extends AbstractBuilderFactory
         return builder;
     }
     
-    private AlgorithmBuilder getIHDELS(int evaluations, DoubleProblem problem)
+    private AlgorithmBuilder getIHDELS(int evaluations, DoubleProblem problem) throws Exception
     {
         LocalSearch hillClimbing = new LSHillClimbing(hcFactory.getAlgorithm("HillClimbing", this.evaluatorType, problem));
         LocalSearch mtsls1 = new LSMTS_LS1(mtsFactory.getAlgorithm("MTS_LS1", this.evaluatorType, problem));
@@ -71,5 +72,24 @@ public class IHDELSFactory extends AbstractBuilderFactory
                     .setSearchDomain(A_IHDELS, B_IHDELS)
                     .setThreshold(THRESHOLD_IHDELS)
                     .setSaDEBuilder(sadeBuilder);
+    }
+
+    @Override
+    protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception
+    {
+        switch (name)
+        {
+            case "IHDELS":
+                FE_DE_IHDELS  = (int) parametersFactory.getValue("FE_DE", evaluatorType, name) ;
+                FE_LS_IHDLES  = (int) parametersFactory.getValue("FE_LS", evaluatorType, name) ;
+                POPULATION_IHDELS = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
+                RESTART_IHDELS  = (int) parametersFactory.getValue("RESTART", evaluatorType, name) ;
+                A_IHDELS  = parametersFactory.getValue("A", evaluatorType, name) ;
+                B_IHDELS  = parametersFactory.getValue("B", evaluatorType, name) ;
+                THRESHOLD_IHDELS  = parametersFactory.getValue("THRESHOLD", evaluatorType, name) ;
+                break;
+            default:
+                throw new JMetalException("Algorithm "+name+" not exists");
+        } 
     }
 }
