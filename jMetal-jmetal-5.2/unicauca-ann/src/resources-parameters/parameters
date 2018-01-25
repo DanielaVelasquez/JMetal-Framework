@@ -20,6 +20,9 @@ FE-cv-MOS-1
 E-cv-MOS-1
 SIZENEIGH-cv-SolisAndWets-1
 RHO-cv-SolisAndWets-1
+CR-cv-MemeticED-1
+F-cv-MemeticED-1
+POPULATION-cv-MemeticED-1
 POPULATION-cv-IHDELS-1
 POPULATION-cv-SaDE-1
 POPULATION-cv-DEUnicauca-1
@@ -48,6 +51,9 @@ FE-tt-MOS-1
 E-tt-MOS-1
 SIZENEIGH-tt-SolisAndWets-1
 RHO-tt-SolisAndWets-1
+CR-tt-MemeticED-1
+F-tt-MemeticED-1
+POPULATION-tt-MemeticED-1
 POPULATION-tt-IHDELS-1
 POPULATION-tt-SaDE-1
 POPULATION-tt-DEUnicauca-1
