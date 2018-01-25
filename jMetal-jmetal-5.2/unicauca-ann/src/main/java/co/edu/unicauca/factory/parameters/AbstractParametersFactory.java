@@ -2,7 +2,7 @@ package co.edu.unicauca.factory.parameters;
 
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 
-public abstract class AbstractParamertersFactory 
+public abstract class AbstractParametersFactory 
 {
     /**
      * Gets the value for a specific parameter

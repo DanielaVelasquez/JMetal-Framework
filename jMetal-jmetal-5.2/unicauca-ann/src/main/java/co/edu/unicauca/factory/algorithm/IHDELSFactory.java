@@ -1,5 +1,6 @@
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.local_search.LocalSearch;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaDEBuilder;
@@ -14,11 +15,11 @@ import org.uma.jmetal.util.JMetalException;
  *Factory to IHDELS algorithms builders, with configuration needed
  * for elm problem. 
  */
-public class IHDELSFactory extends AbstractFactory
+public class IHDELSFactory extends AbstractBuilderFactory
 {
-    private final static DifferentialEvolutionFactory deFactory = new DifferentialEvolutionFactory();
-    private final static MTSFactory mtsFactory = new MTSFactory();
-    private final static HillClimbingFactory hcFactory = new HillClimbingFactory();
+    private DifferentialEvolutionFactory deFactory ;
+    private MTSFactory mtsFactory ;
+    private HillClimbingFactory hcFactory ;
     
     private static final int FE_DE_IHDELS = 30;//90;
     private static final int FE_LS_IHDLES = 90;//30;//60;
@@ -27,6 +28,13 @@ public class IHDELSFactory extends AbstractFactory
     private static final double A_IHDELS = -1;//-0.7;//-0.5;
     private static final double B_IHDELS = 1;//0.5;//1;//1999ii9koo;
     private static final double THRESHOLD_IHDELS = 0.001;//0.01;//0.001;
+
+    public IHDELSFactory(AbstractParametersFactory parametersFactory) {
+        super(parametersFactory);
+        deFactory = new DifferentialEvolutionFactory(parametersFactory);
+        mtsFactory = new MTSFactory(parametersFactory);
+        hcFactory = new HillClimbingFactory(parametersFactory);
+    }
 
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, DoubleProblem problem)

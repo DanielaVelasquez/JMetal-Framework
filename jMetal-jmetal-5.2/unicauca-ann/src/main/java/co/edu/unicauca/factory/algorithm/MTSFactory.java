@@ -1,5 +1,6 @@
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -10,9 +11,13 @@ import org.uma.jmetal.util.JMetalException;
  *Factory to MTS algorithms builders, with configuration needed
  * for elm problem. 
  */
-public class MTSFactory extends AbstractFactory
+public class MTSFactory extends AbstractBuilderFactory
 {
-
+    public MTSFactory(AbstractParametersFactory parametersFactory)
+    {
+        super(parametersFactory);
+    }
+    
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
             DoubleProblem problem) 

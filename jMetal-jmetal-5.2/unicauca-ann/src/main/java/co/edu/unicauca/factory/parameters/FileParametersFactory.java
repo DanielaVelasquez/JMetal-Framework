@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.uma.jmetal.util.JMetalException;
 
 
-public class FileParametersFactory extends AbstractParamertersFactory
+public class FileParametersFactory extends AbstractParametersFactory
 {
     private static final String SPLIT_SYMBOL = "-";
     /**

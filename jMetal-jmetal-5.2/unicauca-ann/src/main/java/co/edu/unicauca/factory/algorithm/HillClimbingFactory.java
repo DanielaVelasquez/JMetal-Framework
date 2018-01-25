@@ -1,6 +1,7 @@
 
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbingBuilder;
 import org.uma.jmetal.operator.impl.localsearch.BoundedUniformConvultion;
@@ -12,11 +13,15 @@ import org.uma.jmetal.util.JMetalException;
  *Factory to hill climbing algorithms builders, with configuration needed
  * for elm problem. 
  */
-public class HillClimbingFactory extends AbstractFactory
+public class HillClimbingFactory extends AbstractBuilderFactory
 {
     
     private static final double  MEAN_HC = 0.45; //0.5;
     private static final double STANDAR_DEVIATION_HC = 0.4;//0.2;
+
+    public HillClimbingFactory(AbstractParametersFactory parametersFactory) {
+        super(parametersFactory);
+    }
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import org.uma.jmetal.util.JMetalException;
 
 
-public class DataBaseParametersFactory extends AbstractParamertersFactory
+public class DataBaseParametersFactory extends AbstractParametersFactory
 {
     private DataBaseConnection connection;
     @Override

@@ -1,6 +1,6 @@
 package co.edu.unicauca.refinement_of_parameters;
 
-import co.edu.unicauca.factory.algorithm.AbstractFactory;
+import co.edu.unicauca.factory.algorithm.AbstractBuilderFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.util.AlgorithmBuilder;
@@ -8,7 +8,7 @@ import org.uma.jmetal.util.AlgorithmBuilder;
 public abstract class AbstractAlgortihmsParametersFinder 
 {
    
-    protected AbstractFactory factory;
+    protected AbstractBuilderFactory factory;
     protected AlgorithmBuilder builder;
     
     public abstract AlgorithmBuilder configureAlgorithm(int configuration[], 

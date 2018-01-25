@@ -1,7 +1,7 @@
 package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
-import co.edu.unicauca.factory.algorithm.AbstractFactory;
+import co.edu.unicauca.factory.algorithm.AbstractBuilderFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -14,7 +14,7 @@ public abstract class AbstractMetaHeuristicParametersFinder
     protected int algorithmId;
     protected int sizeConfiguration;
     protected AbstractELMEvaluator.EvaluatorType type;
-    protected AbstractFactory factory;
+    protected AbstractBuilderFactory factory;
     protected AlgorithmBuilder builder;
     protected DoubleProblem problem;
     protected int configuration[];

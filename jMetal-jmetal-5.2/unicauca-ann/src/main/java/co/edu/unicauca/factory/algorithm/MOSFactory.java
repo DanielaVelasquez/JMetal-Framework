@@ -1,5 +1,6 @@
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
 import org.uma.jmetal.algorithm.singleobjective.mos.MTSLS1Tecnique;
@@ -13,14 +14,20 @@ import org.uma.jmetal.util.AlgorithmBuilder;
  *Factory to MOS algorithms builders, with configuration needed
  * for elm problem. 
  */
-public class MOSFactory extends AbstractFactory
+public class MOSFactory extends AbstractBuilderFactory
 {
     
-    private final static  MTSFactory mtsFactory = new MTSFactory();
-    private final static SolisAndWetsFactory solisAndWetsFactory = new SolisAndWetsFactory();
+    private MTSFactory mtsFactory ;
+    private SolisAndWetsFactory solisAndWetsFactory ;
     
     private final static int FE_MOS = 75;//200;
     private final static double E_MOS = 0.4;//0.4;
+
+    public MOSFactory(AbstractParametersFactory parametersFactory) {
+        super(parametersFactory);
+        mtsFactory = new MTSFactory(parametersFactory);
+        solisAndWetsFactory = new SolisAndWetsFactory(parametersFactory);
+    }
     
     
     @Override

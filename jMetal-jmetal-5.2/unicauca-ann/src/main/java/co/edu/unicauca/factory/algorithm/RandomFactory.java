@@ -1,6 +1,7 @@
 package co.edu.unicauca.factory.algorithm;
 
-import static co.edu.unicauca.factory.algorithm.AbstractFactory.EVALUATIONS_TT;
+import static co.edu.unicauca.factory.algorithm.AbstractBuilderFactory.EVALUATIONS_TT;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.singleobjective.random_search.RandomSearchBuilder;
@@ -14,9 +15,14 @@ import org.uma.jmetal.util.comparator.ObjectiveComparator;
  *Factory to Random algorithms builders, with configuration needed
  * for elm problem. 
  */
-public class RandomFactory extends AbstractFactory
+public class RandomFactory extends AbstractBuilderFactory
 {
     private final static Comparator<DoubleSolution> COMPARATOR_RANDOM = new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING);
+
+    public RandomFactory(AbstractParametersFactory parametersFactory) 
+    {
+        super(parametersFactory);
+    }
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType, 
             DoubleProblem problem) 

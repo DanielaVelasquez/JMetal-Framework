@@ -1,5 +1,6 @@
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
@@ -19,7 +20,7 @@ import org.uma.jmetal.util.comparator.ObjectiveComparator;
  *Factory to differential evolution algorithms builders, with configuration needed
  * for elm problem. 
  */
-public class DifferentialEvolutionFactory extends AbstractFactory
+public class DifferentialEvolutionFactory extends AbstractBuilderFactory
 {
     /**
      * Default configuration for DE
@@ -50,6 +51,11 @@ public class DifferentialEvolutionFactory extends AbstractFactory
     private final static double F_MEMETIC_DE = 0.5;
     private final static int POPULATION_MEMETIC = 50;
     private final static Comparator<DoubleSolution> COMPARATOR_MEMETIC = new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING);
+
+    public DifferentialEvolutionFactory(AbstractParametersFactory parametersFactory) 
+    {
+        super(parametersFactory);
+    }
     
     @Override
     public AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,

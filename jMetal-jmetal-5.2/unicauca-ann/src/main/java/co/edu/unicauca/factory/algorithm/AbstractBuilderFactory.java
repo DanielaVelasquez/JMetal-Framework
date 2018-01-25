@@ -1,5 +1,6 @@
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -11,7 +12,7 @@ import org.uma.jmetal.util.comparator.FrobeniusComparator;
  * Abstract factory to create builder algorithms, with appropiate configuration
  * for elm problems. 
  */
-public abstract class AbstractFactory 
+public abstract class AbstractBuilderFactory 
 {
     /**
      * Default comparator
@@ -32,6 +33,13 @@ public abstract class AbstractFactory
     protected final static int EVALUATIONS_CV = 300;
     
     protected AbstractELMEvaluator.EvaluatorType evaluatorType;
+    
+    protected AbstractParametersFactory parametersFactory;
+    
+    public AbstractBuilderFactory(AbstractParametersFactory parametersFactory)
+    {
+        this.parametersFactory = parametersFactory;
+    }
     
     public abstract AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
                                            DoubleProblem problem);
