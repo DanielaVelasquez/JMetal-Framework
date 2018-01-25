@@ -1,6 +1,8 @@
 package co.edu.unicauca.exec.training_testing;
 
 import co.edu.unicauca.factory.algorithm.AlgorithmFactory;
+import co.edu.unicauca.factory.parameters.DataBaseParametersFactory;
+import co.edu.unicauca.factory.parameters.FileParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
@@ -53,7 +55,8 @@ public class Runner
         
         for(int i = 0; i < 1;i++)
         {
-            algorithm = AlgorithmFactory.getAlgorithm("DECC_G", AbstractELMEvaluator.EvaluatorType.TT, problem);
+            AlgorithmFactory factory = new AlgorithmFactory(new DataBaseParametersFactory());
+            algorithm = factory.getAlgorithm("DECC_G", AbstractELMEvaluator.EvaluatorType.TT, problem);
             rnd.setSeed(i+1);
             //System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

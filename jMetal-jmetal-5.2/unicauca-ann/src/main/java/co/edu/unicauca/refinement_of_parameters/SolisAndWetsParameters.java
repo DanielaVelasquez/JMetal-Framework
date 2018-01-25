@@ -1,6 +1,7 @@
 package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.factory.algorithm.SolisAndWetsFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -11,9 +12,11 @@ public class SolisAndWetsParameters extends AbstractAlgortihmsParametersFinder
     private int sizeNeighborhood;
     private double rho;
 
-    public SolisAndWetsParameters( )
+    public SolisAndWetsParameters(AbstractParametersFactory parametersFactory )
     {
-        factory = new SolisAndWetsFactory();
+        super(parametersFactory);
+        factory = new SolisAndWetsFactory(parametersFactory);
+        
     }
 
     @Override

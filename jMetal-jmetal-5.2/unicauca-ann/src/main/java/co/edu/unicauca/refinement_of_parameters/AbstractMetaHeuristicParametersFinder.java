@@ -2,6 +2,7 @@ package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.algorithm.AbstractBuilderFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -19,17 +20,21 @@ public abstract class AbstractMetaHeuristicParametersFinder
     protected DoubleProblem problem;
     protected int configuration[];
     private DataBaseConnection connection;
-    
+    protected AbstractParametersFactory parametersFactory;
+
+
 
     public AbstractMetaHeuristicParametersFinder(int algorithmId,
                   DataBaseConnection connection,AbstractELMEvaluator.EvaluatorType type,
-                  DoubleProblem problem) throws Exception
+                  DoubleProblem problem,
+                  AbstractParametersFactory parametersFactory) throws Exception
     {
         
         this.algorithmId = algorithmId;
         this.connection = connection;
         this.type = type;
         this.problem = problem;
+        this.parametersFactory = parametersFactory;
         this.getParams();
     }
     

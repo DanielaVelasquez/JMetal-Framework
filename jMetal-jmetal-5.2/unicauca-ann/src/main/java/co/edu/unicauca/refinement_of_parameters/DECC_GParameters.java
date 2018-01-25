@@ -2,6 +2,7 @@ package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.algorithm.DifferentialEvolutionFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DECC_GBuilder;
@@ -23,11 +24,12 @@ public class DECC_GParameters extends AbstractMetaHeuristicParametersFinder
     
     public DECC_GParameters( int algorithmId, 
                DataBaseConnection connection, AbstractELMEvaluator.EvaluatorType type,
-               DoubleProblem problem) throws Exception {
-        super(algorithmId, connection, type, problem);
-        factory = new DifferentialEvolutionFactory();
-        DEParameters = new DEUnicaucaParameters();
-        sansdeParameters = new SaNSDEParameters();
+               DoubleProblem problem,
+               AbstractParametersFactory parametersFactory) throws Exception {
+        super(algorithmId, connection, type, problem,parametersFactory);
+        factory = new DifferentialEvolutionFactory(parametersFactory);
+        DEParameters = new DEUnicaucaParameters(parametersFactory);
+        sansdeParameters = new SaNSDEParameters(parametersFactory);
     }
 
     @Override

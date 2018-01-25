@@ -3,6 +3,8 @@ package co.edu.unicauca.experiment;
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.exec.experiment.Run;
 import co.edu.unicauca.factory.algorithm.AlgorithmFactory;
+import co.edu.unicauca.factory.parameters.DataBaseParametersFactory;
+import co.edu.unicauca.factory.parameters.FileParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -63,7 +65,8 @@ public class Experiment
                 AbstractELMEvaluator.EvaluatorType type = tipo.equals("cv")?AbstractELMEvaluator.EvaluatorType.CV:AbstractELMEvaluator.EvaluatorType.TT;
                 String nombreProblema = "co.edu.unicauca.problem." + (tipo.equals("cv")? "cross_validation":"training_testing") + "." + problema;
                 DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(nombreProblema);
-                Algorithm auxAlg = AlgorithmFactory.getAlgorithm(algoritmo, type, problem);
+                AlgorithmFactory factory = new AlgorithmFactory(new DataBaseParametersFactory());
+                Algorithm auxAlg = factory.getAlgorithm(algoritmo, type, problem);
                 System.out.println("Problema: "+problema+"\n"+
                                    "Algoritmo: "+algoritmo+"\n"+
                                    "Semilla: "+semilla+"\n"+

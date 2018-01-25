@@ -2,6 +2,8 @@ package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.exec.experiment.Run;
+import co.edu.unicauca.factory.parameters.DataBaseParametersFactory;
+import co.edu.unicauca.factory.parameters.FileParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.sql.ResultSet;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -59,7 +61,7 @@ public class Parameters
                 idTask = result.getInt(7);
                 
                 DoubleProblem problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(nameProblem);
-                Algorithm algorithm = ParametersFactory.getAlgorithm(algorithmId, connection, type, problem, this.algorithm, valuesConf);
+                Algorithm algorithm = ParametersFactory.getAlgorithm(algorithmId, connection, type, problem, this.algorithm, valuesConf, new DataBaseParametersFactory());
                 
                 JMetalRandom rndm = JMetalRandom.getInstance();
                 rndm.setSeed(seed);

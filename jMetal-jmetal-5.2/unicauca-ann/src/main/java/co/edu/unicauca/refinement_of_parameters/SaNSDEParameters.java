@@ -1,6 +1,7 @@
 package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.factory.algorithm.DifferentialEvolutionFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.SaNSDEBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
@@ -14,9 +15,10 @@ public class SaNSDEParameters extends AbstractAlgortihmsParametersFinder
     private double cr2 ;
     private double f2 ;
 
-    public SaNSDEParameters()
+    public SaNSDEParameters(AbstractParametersFactory parametersFactory)
     {
-        factory = new DifferentialEvolutionFactory();
+        super(parametersFactory);
+        factory = new DifferentialEvolutionFactory(parametersFactory);
     }
  
 

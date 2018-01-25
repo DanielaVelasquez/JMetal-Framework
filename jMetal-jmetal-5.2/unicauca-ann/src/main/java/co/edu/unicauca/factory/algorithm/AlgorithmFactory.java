@@ -1,5 +1,6 @@
 package co.edu.unicauca.factory.algorithm;
 
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -11,15 +12,28 @@ import org.uma.jmetal.util.JMetalException;
  */
 public class AlgorithmFactory 
 {
-    private final static DifferentialEvolutionFactory de = new DifferentialEvolutionFactory();
-    private final static HillClimbingFactory hc = new HillClimbingFactory();
-    private final static IHDELSFactory ihdels = new IHDELSFactory();
-    private final static MOSFactory mos = new MOSFactory();
-    private final static MTSFactory mts = new MTSFactory();
-    private final static SolisAndWetsFactory sw = new SolisAndWetsFactory();
-    private final static RandomFactory random = new RandomFactory();
+    private DifferentialEvolutionFactory de ;
+    private HillClimbingFactory hc ;
+    private IHDELSFactory ihdels ;
+    private MOSFactory mos ;
+    private MTSFactory mts ;
+    private SolisAndWetsFactory sw ;
+    private RandomFactory random ;
+    private AbstractParametersFactory parametersFactory;
+
     
-    public static Algorithm getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
+    public AlgorithmFactory(AbstractParametersFactory parametersFactory)
+    {
+        de = new DifferentialEvolutionFactory(parametersFactory);
+        hc = new HillClimbingFactory(parametersFactory);
+        ihdels = new IHDELSFactory(parametersFactory);
+        mos = new MOSFactory(parametersFactory);
+        mts = new MTSFactory(parametersFactory);
+        sw = new SolisAndWetsFactory(parametersFactory);
+        random = new RandomFactory(parametersFactory);
+    }
+    
+    public  Algorithm getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
                                   DoubleProblem problem)
     {
         AlgorithmBuilder builder = null;
@@ -51,4 +65,5 @@ public class AlgorithmFactory
                 throw new JMetalException("Algorithm "+name+" not exists");
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package co.edu.unicauca.exec.cross_validation;
 
 import co.edu.unicauca.factory.algorithm.AlgorithmFactory;
+import co.edu.unicauca.factory.parameters.DataBaseParametersFactory;
+import co.edu.unicauca.factory.parameters.FileParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import java.util.Comparator;
 import java.util.List;
@@ -53,7 +55,8 @@ public class Runner
         
         for(int i = 0; i < 30;i++)
         {
-            algorithm = AlgorithmFactory.getAlgorithm("MOS", AbstractELMEvaluator.EvaluatorType.CV, problem);
+            AlgorithmFactory factory = new AlgorithmFactory(new DataBaseParametersFactory());
+            algorithm = factory.getAlgorithm("MOS", AbstractELMEvaluator.EvaluatorType.CV, problem);
             rnd.setSeed(i+1);
             //System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

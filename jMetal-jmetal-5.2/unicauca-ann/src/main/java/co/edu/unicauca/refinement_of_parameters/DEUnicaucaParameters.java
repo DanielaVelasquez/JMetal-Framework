@@ -1,6 +1,7 @@
 package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.factory.algorithm.DifferentialEvolutionFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DEUnicaucaBuilder;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
@@ -12,8 +13,9 @@ public class DEUnicaucaParameters extends AbstractAlgortihmsParametersFinder
     private double cr ;
     private double f ;
 
-    public DEUnicaucaParameters( ) throws Exception {
-        factory = new DifferentialEvolutionFactory();
+    public DEUnicaucaParameters(AbstractParametersFactory parametersFactory ) throws Exception {
+       super(parametersFactory);
+       factory = new DifferentialEvolutionFactory(parametersFactory);
     }
  
 

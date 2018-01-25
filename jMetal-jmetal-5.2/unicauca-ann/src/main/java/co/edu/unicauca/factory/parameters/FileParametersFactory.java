@@ -24,10 +24,12 @@ public class FileParametersFactory extends AbstractParametersFactory
      */
     private String file_name;
     
-    public FileParametersFactory() throws Exception
+    public FileParametersFactory(String path, String file_name) throws Exception
     {
         values = new HashMap<>();
         this.loadParameters();
+        this.path = path;
+        this.file_name = file_name;
     }
     
     private void loadParameters() throws Exception

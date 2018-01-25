@@ -1,6 +1,7 @@
 package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -16,18 +17,19 @@ public class ParametersFactory
     
     public static Algorithm getAlgorithm(int algorithmId,
                   DataBaseConnection connection,AbstractELMEvaluator.EvaluatorType type,
-                  DoubleProblem problem, String nameAlgorithm, String configuration) throws Exception
+                  DoubleProblem problem, String nameAlgorithm, String configuration,
+                  AbstractParametersFactory parametersFactory) throws Exception
     {
         switch(nameAlgorithm)
         {
             case "MOS":
-                mos = new MOSParameters(algorithmId, connection, type, problem);
+                mos = new MOSParameters(algorithmId, connection, type, problem, parametersFactory);
                 return mos.getAlgorithm(configuration);
             case "IHDELS":
-                ihdels = new IHDELSParameters(algorithmId, connection, type, problem);
+                ihdels = new IHDELSParameters(algorithmId, connection, type, problem, parametersFactory);
                 return ihdels.getAlgorithm(configuration);
             case "DECC_G":
-                decc_g = new DECC_GParameters(algorithmId, connection, type, problem);
+                decc_g = new DECC_GParameters(algorithmId, connection, type, problem, parametersFactory);
                 return decc_g.getAlgorithm(configuration);
             default:
                  throw new JMetalException("Algorithm "+nameAlgorithm+" not exists");

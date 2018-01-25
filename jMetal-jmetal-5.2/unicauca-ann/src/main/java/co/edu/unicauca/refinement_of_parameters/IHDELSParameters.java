@@ -3,6 +3,7 @@ package co.edu.unicauca.refinement_of_parameters;
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.algorithm.IHDELSFactory;
 import co.edu.unicauca.factory.algorithm.MTSFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.local_search.LocalSearch;
@@ -15,13 +16,12 @@ import org.uma.jmetal.problem.DoubleProblem;
 
 public class IHDELSParameters extends AbstractMetaHeuristicParametersFinder
 {
-    /**
-     * Constant
-     */
-    private final static MTSFactory mtsFactory = new MTSFactory();
+    
+    
     /**
      * Atributes
      */
+    private MTSFactory mtsFactory;
     private int FE_DE;
     private int FE_LS;
     private double a;
@@ -37,11 +37,13 @@ public class IHDELSParameters extends AbstractMetaHeuristicParametersFinder
     
     public IHDELSParameters( int algorithmId, 
                DataBaseConnection connection, AbstractELMEvaluator.EvaluatorType type,
-               DoubleProblem problem) throws Exception {
-        super(algorithmId, connection, type, problem);
-        factory = new IHDELSFactory();
-        SaDEParameters = new SaDEParameters();
-        hillClimbingParameters = new HillClimbingParameters();
+               DoubleProblem problem,
+               AbstractParametersFactory parametersFactory) throws Exception {
+        super(algorithmId, connection, type, problem, parametersFactory);
+        factory = new IHDELSFactory(parametersFactory);
+        SaDEParameters = new SaDEParameters(parametersFactory);
+        hillClimbingParameters = new HillClimbingParameters(parametersFactory);
+        mtsFactory = new MTSFactory(parametersFactory);
         
     }
 

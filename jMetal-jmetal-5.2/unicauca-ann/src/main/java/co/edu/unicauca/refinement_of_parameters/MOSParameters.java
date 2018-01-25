@@ -3,6 +3,7 @@ package co.edu.unicauca.refinement_of_parameters;
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.algorithm.MOSFactory;
 import co.edu.unicauca.factory.algorithm.MTSFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.mos.MOSBuilder;
@@ -14,7 +15,7 @@ import org.uma.jmetal.problem.DoubleProblem;
 
 public class MOSParameters extends AbstractMetaHeuristicParametersFinder
 {
-    private final static  MTSFactory mtsFactory = new MTSFactory();
+    private MTSFactory mtsFactory ;
     
     private int FE;
     private double E;
@@ -24,10 +25,12 @@ public class MOSParameters extends AbstractMetaHeuristicParametersFinder
 
     public MOSParameters( int algorithmId, 
                DataBaseConnection connection, AbstractELMEvaluator.EvaluatorType type,
-               DoubleProblem problem) throws Exception {
-        super(algorithmId, connection, type, problem);
-        factory = new MOSFactory();
-        solisAndWetsParameters = new SolisAndWetsParameters();
+               DoubleProblem problem,
+               AbstractParametersFactory parametersFactory) throws Exception {
+        super(algorithmId, connection, type, problem, parametersFactory);
+        factory = new MOSFactory(parametersFactory);
+        solisAndWetsParameters = new SolisAndWetsParameters(parametersFactory);
+        mtsFactory = new  MTSFactory(parametersFactory);
     }
 
     @Override

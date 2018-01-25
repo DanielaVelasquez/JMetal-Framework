@@ -2,6 +2,7 @@ package co.edu.unicauca.refinement_of_parameters;
 
 import co.edu.unicauca.database.DataBaseConnection;
 import co.edu.unicauca.factory.algorithm.HillClimbingFactory;
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbingBuilder;
@@ -14,9 +15,10 @@ public class HillClimbingParameters extends AbstractAlgortihmsParametersFinder
     private double probability;
     private double radius;
 
-    public HillClimbingParameters()
+    public HillClimbingParameters(AbstractParametersFactory parametersFactory)
     {
-        factory = new HillClimbingFactory();
+        super(parametersFactory);
+        factory = new HillClimbingFactory(parametersFactory);
     }
 
     @Override
