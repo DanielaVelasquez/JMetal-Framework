@@ -24,7 +24,7 @@ public class DEUnicaucaParameters extends AbstractAlgortihmsParametersFinder
                                                int index, 
                                                double[][] values, 
                                                AbstractELMEvaluator.EvaluatorType type,
-                                               DoubleProblem problem) {
+                                               DoubleProblem problem) throws Exception {
         cr = values[index][configuration[index]];
         f = values[index + 1][configuration[index + 1]];
        

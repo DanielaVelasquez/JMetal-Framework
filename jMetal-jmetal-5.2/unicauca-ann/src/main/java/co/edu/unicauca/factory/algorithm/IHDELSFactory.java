@@ -77,19 +77,14 @@ public class IHDELSFactory extends AbstractBuilderFactory
     @Override
     protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception
     {
-        switch (name)
-        {
-            case "IHDELS":
-                FE_DE_IHDELS  = (int) parametersFactory.getValue("FE_DE", evaluatorType, name) ;
-                FE_LS_IHDLES  = (int) parametersFactory.getValue("FE_LS", evaluatorType, name) ;
-                POPULATION_IHDELS = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
-                RESTART_IHDELS  = (int) parametersFactory.getValue("RESTART", evaluatorType, name) ;
-                A_IHDELS  = parametersFactory.getValue("A", evaluatorType, name) ;
-                B_IHDELS  = parametersFactory.getValue("B", evaluatorType, name) ;
-                THRESHOLD_IHDELS  = parametersFactory.getValue("THRESHOLD", evaluatorType, name) ;
-                break;
-            default:
-                throw new JMetalException("Algorithm "+name+" not exists");
-        } 
+        
+        FE_DE_IHDELS  = (int) parametersFactory.getValue("FE_DE", evaluatorType, "IHDELS") ;
+        FE_LS_IHDLES  = (int) parametersFactory.getValue("FE_LS", evaluatorType, "IHDELS") ;
+        POPULATION_IHDELS = (int) parametersFactory.getValue("POPULATION", evaluatorType, "IHDELS") ;
+        RESTART_IHDELS  = (int) parametersFactory.getValue("RESTART", evaluatorType, "IHDELS") ;
+        A_IHDELS  = parametersFactory.getValue("A", evaluatorType, "IHDELS") ;
+        B_IHDELS  = parametersFactory.getValue("B", evaluatorType, "IHDELS") ;
+        THRESHOLD_IHDELS  = parametersFactory.getValue("THRESHOLD", evaluatorType, "IHDELS") ;
+
     }
 }

@@ -13,6 +13,7 @@ import org.uma.jmetal.util.JMetalException;
  */
 public class MTSFactory extends AbstractBuilderFactory
 {
+    private int POPULATION_MTS_LS1;
     public MTSFactory(AbstractParametersFactory parametersFactory)
     {
         super(parametersFactory);
@@ -39,7 +40,7 @@ public class MTSFactory extends AbstractBuilderFactory
      private AlgorithmBuilder getMTSLS1(int evaluations, DoubleProblem problem)
      {
         return new MTS_LS1Builder(problem)
-                        .setPopulationSize(10)
+                        .setPopulationSize(POPULATION_MTS_LS1)
                         .setBonus1(10)
                         .setBonus2(1)
                         .setPenalizeValue(PENALIZE_VALUE)
@@ -49,7 +50,7 @@ public class MTSFactory extends AbstractBuilderFactory
 
     @Override
     protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception {
-        
+        POPULATION_MTS_LS1 =  (int) parametersFactory.getValue("POPULATION", evaluatorType, "MTS") ;
     }
     
 }

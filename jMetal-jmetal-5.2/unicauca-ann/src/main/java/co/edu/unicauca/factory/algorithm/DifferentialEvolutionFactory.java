@@ -51,6 +51,8 @@ public class DifferentialEvolutionFactory extends AbstractBuilderFactory
     private double F_MEMETIC_DE;
     private int POPULATION_MEMETIC;
     private final static Comparator<DoubleSolution> COMPARATOR_MEMETIC = new ObjectiveComparator<>(0, ObjectiveComparator.Ordering.DESCENDING);
+    
+    private int DECCG_POPULATION; 
 
     public DifferentialEvolutionFactory(AbstractParametersFactory parametersFactory) 
     {
@@ -139,14 +141,14 @@ public class DifferentialEvolutionFactory extends AbstractBuilderFactory
         
         if(evaluatorType == AbstractELMEvaluator.EvaluatorType.CV)
         {
-            builder.setPopulationSize(10)
+            builder.setPopulationSize(DECCG_POPULATION)
                    .setSubcomponets(6)
                    .setFEs(30)
                    .setwFes(40);
         }
         else
         {
-            builder.setPopulationSize(10)
+            builder.setPopulationSize(DECCG_POPULATION)
                    .setSubcomponets(10)
                    .setFEs(70)
                    .setwFes(100);
@@ -168,38 +170,32 @@ public class DifferentialEvolutionFactory extends AbstractBuilderFactory
     protected void loadAlgorithmValues(String name, 
                                         AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception
     {
-        switch(name)
-        {
-            case "DEUnicauca":
-                CR_DE = parametersFactory.getValue("CR", evaluatorType, name) ;
-                F_DE = parametersFactory.getValue("F", evaluatorType, name) ;
-                POPULATION_DE = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
-                break;
-            case "SaDE":
-                CR1_SADE = parametersFactory.getValue("CR1", evaluatorType, name) ;
-                F1_SADE = parametersFactory.getValue("F1", evaluatorType, name) ;
-                CR2_SADE = parametersFactory.getValue("CR2", evaluatorType, name) ;
-                F2_SADE = parametersFactory.getValue("F2", evaluatorType, name) ;
-                POPULATION_SaDE = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
-                break;
-            case "SaNSDE":
-                CR1_SANSDE = parametersFactory.getValue("CR1", evaluatorType, name) ;
-                F1_SANSDE = parametersFactory.getValue("F1", evaluatorType, name) ;
-                CR2_SANSDE = parametersFactory.getValue("CR2", evaluatorType, name) ;
-                F2_SANSDE = parametersFactory.getValue("F2", evaluatorType, name) ;
-                POPULATION_SANSDE = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
-                break;
-            case "DECC_G":
+        
+            
+        CR_DE = parametersFactory.getValue("CR", evaluatorType, "DEUnicauca") ;
+        F_DE = parametersFactory.getValue("F", evaluatorType, "DEUnicauca") ;
+        POPULATION_DE = (int) parametersFactory.getValue("POPULATION", evaluatorType, "DEUnicauca") ;
+
+        CR1_SADE = parametersFactory.getValue("CR1", evaluatorType, "SaDE") ;
+        F1_SADE = parametersFactory.getValue("F1", evaluatorType, "SaDE") ;
+        CR2_SADE = parametersFactory.getValue("CR2", evaluatorType, "SaDE") ;
+        F2_SADE = parametersFactory.getValue("F2", evaluatorType, "SaDE") ;
+        POPULATION_SaDE = (int) parametersFactory.getValue("POPULATION", evaluatorType, "SaDE") ;
+        
+
+        CR1_SANSDE = parametersFactory.getValue("CR1", evaluatorType, "SaNSDE") ;
+        F1_SANSDE = parametersFactory.getValue("F1", evaluatorType, "SaNSDE") ;
+        CR2_SANSDE = parametersFactory.getValue("CR2", evaluatorType, "SaNSDE") ;
+        F2_SANSDE = parametersFactory.getValue("F2", evaluatorType, "SaNSDE") ;
+        POPULATION_SANSDE = (int) parametersFactory.getValue("POPULATION", evaluatorType, "SaNSDE") ;
+        
+
+
+        CR_MEMETIC_DE = parametersFactory.getValue("CR", evaluatorType, "MemeticED") ;
+        F_MEMETIC_DE = parametersFactory.getValue("F", evaluatorType, "MemeticED") ;
+        POPULATION_MEMETIC = (int) parametersFactory.getValue("POPULATION", evaluatorType, "MemeticED") ;
                 
-                break;
-            case "MemeticED":
-                CR_MEMETIC_DE = parametersFactory.getValue("CR", evaluatorType, name) ;
-                F_MEMETIC_DE = parametersFactory.getValue("F", evaluatorType, name) ;
-                POPULATION_MEMETIC = (int) parametersFactory.getValue("POPULATION", evaluatorType, name) ;
-                break;
-            default:
-                throw new JMetalException("Algorithm "+name+" not exists");
-        }
+        DECCG_POPULATION = (int) parametersFactory.getValue("POPULATION", evaluatorType, "DECC_G") ;
        
 
    	

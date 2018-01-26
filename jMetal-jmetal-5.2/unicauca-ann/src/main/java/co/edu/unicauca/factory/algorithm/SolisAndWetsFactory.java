@@ -50,15 +50,12 @@ public class SolisAndWetsFactory extends AbstractBuilderFactory
 
     @Override
     protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception {
-        switch(name)
-        {
-            case "SolisAndWets":
-                RHO = parametersFactory.getValue("RHO", evaluatorType, name) ;
-                NEIGHBORHOOD = (int) parametersFactory.getValue("NEIGHBORHOOD", evaluatorType, name) ;
-                break;
-            default:
-                throw new JMetalException("Algorithm "+name+" not exists");
-        }
+        
+            
+        RHO = parametersFactory.getValue("RHO", evaluatorType, "SolisAndWets") ;
+        NEIGHBORHOOD = (int) parametersFactory.getValue("SIZENEIGH", evaluatorType, "SolisAndWets") ;
+
+        
     }
     
 }
