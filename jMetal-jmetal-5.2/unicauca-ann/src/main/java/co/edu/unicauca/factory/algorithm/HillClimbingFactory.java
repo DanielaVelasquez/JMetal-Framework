@@ -53,15 +53,10 @@ public class HillClimbingFactory extends AbstractBuilderFactory
     @Override
     protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception 
     {
-        switch (name)
-        {
-            case "HillClimbing":
-                PROBABILITY  = parametersFactory.getValue("PROBABILITY", evaluatorType, name) ; 
-                RADIUS = parametersFactory.getValue("RADIUS", evaluatorType, name) ;
-                break;
-            default:
-                throw new JMetalException("Algorithm "+name+" not exists");
-        }
+        
+        PROBABILITY  = parametersFactory.getValue("PROBABILITY", evaluatorType, "HillClimbing") ; 
+        RADIUS = parametersFactory.getValue("RADIUS", evaluatorType, "HillClimbing") ;
+
     }
     
 }

@@ -14,10 +14,10 @@ public class DataBaseParametersFactory extends AbstractParametersFactory
     {
         connection = DataBaseConnection.getInstancia();
         String type = evaluatorType == AbstractELMEvaluator.EvaluatorType.CV?"cv":"tt";
-        String query = "SELECT valor FROM parametros"+
-                       "WHERE nameAlg = '"+algorithmName+"' AND"+
-                       "parametro = '"+parameter+"' AND"+
-                       "tipo = '"+type+"'";
+        String query = "SELECT valor FROM parametros "+
+                       "WHERE nameAlg = '"+algorithmName+"' AND "+
+                       "parametro = '"+parameter+"' AND "+
+                       "tipo = '"+type+"' ";
         ResultSet result = connection.seleccion(query);
         if(result.next())
         {

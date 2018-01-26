@@ -33,7 +33,7 @@ public class DECC_GParameters extends AbstractMetaHeuristicParametersFinder
     }
 
     @Override
-    protected Algorithm configureAlgorithm(int[] configuration) 
+    protected Algorithm configureAlgorithm(int[] configuration) throws Exception 
     {
        builder = factory.getAlgorithm("DECC_G", type, problem);
        DEBuilder = (DEUnicaucaBuilder) DEParameters.configureAlgorithm(configuration, 0, values, type, problem);

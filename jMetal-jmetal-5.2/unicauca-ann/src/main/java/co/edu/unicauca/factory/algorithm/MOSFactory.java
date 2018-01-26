@@ -66,14 +66,9 @@ public class MOSFactory extends AbstractBuilderFactory
 
     @Override
     protected void loadAlgorithmValues(String name, AbstractELMEvaluator.EvaluatorType evaluatorType) throws Exception {
-        switch (name)
-        {
-            case "MOS":
-                FE_MOS  = (int) parametersFactory.getValue("FE", evaluatorType, name) ;
-                E_MOS  = parametersFactory.getValue("E", evaluatorType, name) ;
-                break;
-            default:
-                throw new JMetalException("Algorithm "+name+" not exists");
-        } 
+        
+        FE_MOS  = (int) parametersFactory.getValue("FE", evaluatorType, "MOS") ;
+        E_MOS  = parametersFactory.getValue("E", evaluatorType, "MOS") ;
+
     }
 }
