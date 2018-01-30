@@ -36,7 +36,7 @@ public class Runner
           problemName = args[0] ;
           referenceParetoFront = args[1] ;
         } else {
-          problemName = "co.edu.unicauca.problem.training_testing.Iris";
+          problemName = "co.edu.unicauca.problem.training_testing.Planning";
         }
         problem = (DoubleProblem) ProblemUtils.<DoubleSolution> loadProblem(problemName);
        
@@ -53,7 +53,7 @@ public class Runner
         
         long initTime = System.currentTimeMillis();
         
-        for(int i = 0; i < 1;i++)
+        for(int i = 0; i < 30;i++)
         {
             AlgorithmFactory factory = new AlgorithmFactory(new DataBaseParametersFactory());
             algorithm = factory.getAlgorithm("DECC_G", AbstractELMEvaluator.EvaluatorType.TT, problem);
@@ -67,7 +67,7 @@ public class Runner
 
              // System.out.println("Total execution time: " + computingTime + "ms");
               AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
-              System.out.println("TOtal: "+p.total);
+              //System.out.println("TOtal: "+p.total);
               
               //System.out.println("evaluaciones: "+p.total);
               train = (solution.getObjective(0));
