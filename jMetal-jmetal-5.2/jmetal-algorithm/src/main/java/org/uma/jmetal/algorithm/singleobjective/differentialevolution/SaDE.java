@@ -85,6 +85,12 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
      * Succesful crossover rate used
      */
     private List CRrec;
+    /**
+     * Array to save which mutation strategy generate new individual
+     * true for first strategie
+     * false other wise
+     */     
+    private boolean[] reproValues;   
     
     private JMetalRandom randomGenerator ;
     
@@ -122,6 +128,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
         randomGenerator = JMetalRandom.getInstance();
         this.penalize_value = penalize_value;
         this.CRrec = new ArrayList();
+        reproValues = new boolean[populationSize];
         
         this.initVariables();
     }
@@ -316,17 +323,14 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
             crossoverOperator = updateValuesOf(crossoverOperator, f, cr);
             crossoverOperator.setCurrentSolution(matingPopulation.get(i));
             children = crossoverOperator.execute(parents);
-            ns1++;
-            nf2++;
-         
+            reproValues[i] = true;
           }
           else
           {
             crossoverOperator2 = updateValuesOf(crossoverOperator2, f, cr);
             crossoverOperator2.setCurrentSolution(matingPopulation.get(i));
             children = crossoverOperator2.execute(parents);
-            ns2++;
-            nf1++;
+            reproValues[i] = false;
           }
           //Adds the best children
           offspringPopulation.add(children.get(0));
@@ -334,9 +338,7 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
           CRrec.add(cr);
         }
         //As P, FP and CR are auto adaptative they are re calculated accoring to the current generation 
-        //values and perfomance
-        this.updateP();
-        this.updateCR();
+        //values and perfomance        
         return offspringPopulation;
     }
     
@@ -344,33 +346,69 @@ public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         
         if(best == null)
+        {
             best = getBest(population);
+        }
+        
         List<DoubleSolution> pop = new ArrayList<>();
+        
         for (int i = 0; i < populationSize; i++)
         {
-          DoubleSolution p = population.get(i);
-          DoubleSolution o = offspringPopulation.get(i);
-          DoubleSolution s = this.getBest(p, o);
-          
-          if(!this.inPopulation(pop, s))
-          {
-              pop.add(s);
-              best = this.getBest(best, s);
-          }
-          else
-          {
-              if(s==o)
-              {
-                  pop.add(p);
-                  best = getBest(best, p);
-              }
-              else
-              {
-                  pop.add(o);
-                  best = getBest(best, o);
-              }
-          }
+            DoubleSolution p = population.get(i);
+            DoubleSolution o = offspringPopulation.get(i);
+            DoubleSolution s = this.getBest(p, o);
+            DoubleSolution add;
+            
+            if(!this.inPopulation(pop, s))
+            {
+                add = s;
+            }
+            else
+            {
+                if(s == o)
+                {
+                    add = p;
+                }
+                else
+                {
+                    add = o;
+                }
+            }
+            
+            best = this.getBest(best, add);
+            
+            //for update auto-adaptive parameters
+            if (add == o)
+            {
+                //update p
+                if (reproValues[i])
+                {
+                    ns1++;
+                }
+                else
+                {
+                    ns2++;
+                }
+                
+            }
+            else
+            {
+                //update p
+                if (reproValues[i])
+                {
+                    nf1++;
+                }
+                else
+                {
+                    nf2++;
+                }
+            }
+            
+            pop.add(add);
         }
+        
+        this.updateP();
+        this.updateCR();
         return pop;
     }
     

@@ -297,13 +297,13 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         List<DoubleSolution> pop = new ArrayList<>();
-        DoubleSolution add;
         
         for (int i = 0; i < populationSize; i++)
         {
             DoubleSolution p = population.get(i);
             DoubleSolution o = offspringPopulation.get(i);
             DoubleSolution s = this.getBest(p, o);
+            DoubleSolution add;
             
             if(!this.inPopulation(pop, s))
             {
