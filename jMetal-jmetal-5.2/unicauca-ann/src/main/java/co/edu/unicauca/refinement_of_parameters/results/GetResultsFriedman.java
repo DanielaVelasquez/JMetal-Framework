@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class GetResults 
+public class GetResultsFriedman 
 {
 
     private static HashMap<Integer,String> datasets;
@@ -25,8 +25,11 @@ public class GetResults
     private static int totalDataSets;
     private static String[][] combinations;
     
-    private static String NOMBRE_ARCHIVO = "afinamiento-parametros-resultados/AERROR-clasificacion";
+    private static HashMap<Integer,String> configuracionesVocabulario;
+    private static String NOMBRE_ARCHIVO = "afinamiento-parametros-friedman/AERROR-clasificacion";
+    private static boolean dividir = true;
     private static String ESCRIBIR = "";
+    private static String ESCRIBIR2 = "";
     public static void main(String[] args) throws Exception
     {
        db = DataBaseConnection.getInstancia();
@@ -47,27 +50,72 @@ public class GetResults
        ResultSet result = db.seleccion(query);
        readDataSets();
        combinations = new String[totalCombinations][totalDataSets];
-       
+       ESCRIBIR +="DataSet,";
+       ESCRIBIR2 +="DataSet,";
+       configuracionesVocabulario = new HashMap<>();
+       int j = 0;
        while(result.next())
        {
+           
            String configurationString = result.getString(1);
            int idConfiguration = result.getInt(2);
            getConfiguration(configurationString);
-
+           
+          
+           
            configurationString = "";
            for(int i = 0; i < configuration.length; i++)
            {
                if(i + 1 == configuration.length)
-                configurationString += values[i][configuration[i]]+",";
+                configurationString += values[i][configuration[i]];
                else
                    configurationString += values[i][configuration[i]]+":";
            }
            
-           int i = 0;
-           DecimalFormat df = new DecimalFormat("#.#####");
-           for(Map.Entry<Integer,String> entry:datasets.entrySet())
+           configuracionesVocabulario.put(idConfiguration,configurationString);
+           if(dividir)
            {
-               query = 
+               if(totalCombinations / 2 > j)
+               {
+                   if( j + 1 == totalCombinations / 2)
+                        ESCRIBIR += configurationString;
+                    else
+                        ESCRIBIR += configurationString + ",";
+               }
+               else
+               {
+                   if( j + 1 == totalCombinations)
+                        ESCRIBIR2 += configurationString;
+                    else
+                        ESCRIBIR2 += configurationString + ",";
+               }
+           }
+           else
+           {
+               if( j + 1 == totalCombinations)
+                    ESCRIBIR += configurationString;
+                else
+                    ESCRIBIR += configurationString + ",";
+           }
+           j++;
+           
+       }
+       
+       ESCRIBIR += "\n";
+        
+       ESCRIBIR2 += "\n";
+       DecimalFormat df = new DecimalFormat("#.#####");
+        for(Map.Entry<Integer,String> entry:datasets.entrySet())
+        {
+            int i = 0;
+            ESCRIBIR +=entry.getValue().trim()+",";
+            ESCRIBIR2 +=entry.getValue().trim()+",";
+            
+            for(Map.Entry<Integer,String> conf:configuracionesVocabulario.entrySet())
+            {
+                
+                int idConfiguration = conf.getKey();
+                query = 
                 "SELECT AVG(results.testResults) AS test\n" +
                 "FROM results\n" +
                 "INNER JOIN task ON taskResults = idTask\n" +
@@ -80,20 +128,48 @@ public class GetResults
                 ResultSet resultado = db.seleccion(query);
                 resultado.next();
                 String valor = df.format(resultado.getFloat(1));
-                
+
                String replace = valor.replace(',', '.');
-                if(i + 1 == datasets.size())
-                    configurationString += replace ;
-                else
-                    configurationString += replace +",";
+               if(dividir)
+               {
+                   if(totalCombinations / 2 > i)
+                    {
+                        if(i + 1 == totalCombinations / 2)
+                             ESCRIBIR += replace ;
+                         else
+                             ESCRIBIR += replace +",";
+                    }
+                    else
+                    {
+                        if(i + 1 == configuracionesVocabulario.size())
+                             ESCRIBIR2 += replace ;
+                         else
+                             ESCRIBIR2 += replace +",";
+                    }
+               }
+               else
+               {
+                   if(i + 1 == datasets.size())
+                        ESCRIBIR += replace ;
+                    else
+                        ESCRIBIR += replace +",";
+               }
+               
+                
                 i++;
-           }
-           ESCRIBIR += configurationString+"\n";
-           //System.out.println(configurationString);
+                
+            }
+            
+            ESCRIBIR +="\n";
+            ESCRIBIR2 +="\n";
+        }
+           
+           
            
            //print(combinations);
-       }
-        System.out.println(ESCRIBIR);
+           System.out.println(ESCRIBIR);
+           System.out.println("---------------------");
+        System.out.println(ESCRIBIR2);
         writeFile();
 
     }
@@ -101,16 +177,30 @@ public class GetResults
     {
         BufferedWriter bw = null;
         try {
-            File archivo = new File(NOMBRE_ARCHIVO+".csv");
-            bw = new BufferedWriter(new FileWriter(archivo));
-            bw.write(ESCRIBIR);
+            if(dividir)
+            {
+                File archivo1 = new File(NOMBRE_ARCHIVO+"-p1"+".csv");
+                bw = new BufferedWriter(new FileWriter(archivo1));
+                bw.write(ESCRIBIR);
+                
+                File archivo2 = new File(NOMBRE_ARCHIVO+"-p2"+".csv");
+                bw = new BufferedWriter(new FileWriter(archivo2));
+                bw.write(ESCRIBIR2);
+            }
+            else
+            {
+                File archivo = new File(NOMBRE_ARCHIVO+".csv");
+                bw = new BufferedWriter(new FileWriter(archivo));
+                bw.write(ESCRIBIR);
+            }
+            
         } catch (IOException ex) {
-            Logger.getLogger(GetResults.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GetResultsFriedman.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 bw.close();
             } catch (IOException ex) {
-                Logger.getLogger(GetResults.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GetResultsFriedman.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -118,7 +208,7 @@ public class GetResults
     {
         String query = "SELECT idProblem, nameProblem FROM problem";
         ResultSet result = db.seleccion(query);
-        ESCRIBIR += "Configuracion,";
+        
         ArrayList l = new ArrayList();
         while(result.next())
         {
@@ -126,13 +216,7 @@ public class GetResults
             l.add(result.getString(2).trim());
             //System.out.println(result.getString(2));
         }
-        for(int i = 0; i<l.size();i++)
-        {
-            if(i + 1 == l.size())
-                ESCRIBIR += l.get(i)+"\n";
-            else
-                ESCRIBIR += l.get(i)+",";
-        }
+        
         query = "SELECT COUNT(idProblem)  FROM problem";
         result = db.seleccion(query);
         result.next();

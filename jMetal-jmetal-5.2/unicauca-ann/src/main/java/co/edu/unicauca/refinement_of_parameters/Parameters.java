@@ -32,6 +32,7 @@ public class Parameters
         this.run = run;
         connection = DataBaseConnection.getInstancia();
         
+        int intentos = 0;
         
         while(run.canRun() && run.isDefiningParameters() && !run.isOver())
         {
@@ -79,17 +80,26 @@ public class Parameters
                     try {
                         String queryInsert = 
                         "INSERT INTO results VALUES("+idTask+", "+test+", "+train+", "+ computingTime+")";
-                        connection.modificacion(queryInsert);
                         inserted = true;
+                        connection.modificacion(queryInsert);
                     } catch (Exception e) 
                     {
                         connection.reiniciarConexion();
                     }
                 }
-                
+                intentos = 0;
             }
-            
-            connection.reiniciarConexion();            
+            else
+            {
+                intentos++;
+                if(intentos == 2)
+                {
+                    String query1 = "UPDATE ejecutar SET valor = 0 WHERE propiedad = 'comenzar'";
+                    connection.modificacion(query1);
+                    System.out.println("Acabé");
+                }
+            }
+                       
         }
     }
    

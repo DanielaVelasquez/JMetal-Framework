@@ -35,7 +35,7 @@ public class Experiment
         int semilla;
         int runId;
         String tipo;
-        
+        int intentos = 0;
         while(run.canRun() && run.isExexuting() && !run.isOver())
         {    
             //System.out.println("Hi, this is from experiment");
@@ -87,14 +87,25 @@ public class Experiment
                     try 
                     {
                         String insertResultado = "INSERT INTO results VALUES(" + computingTime + ", " + resultadoExecTrain + ", " + resultadoExecTest + ", " + runId + ", " + semilla + ")";
-                        connection.modificacion(insertResultado);
                         inserted = true;
+                        connection.modificacion(insertResultado);
                     } catch (Exception e) 
                     {
                         connection.reiniciarConexion();
                     }
                 }
-                connection.reiniciarConexion();   
+                   
+                intentos = 0;
+            }
+            else
+            {
+                intentos++;
+                if(intentos == 2)
+                {
+                    String query1 = "UPDATE ejecutar SET valor = 0 WHERE propiedad = 'comenzar'";
+                    connection.modificacion(query1);
+                    System.out.println("Acabé");
+                }
             }
             
         }

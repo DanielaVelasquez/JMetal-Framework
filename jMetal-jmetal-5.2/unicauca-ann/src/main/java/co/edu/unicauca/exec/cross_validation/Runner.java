@@ -56,7 +56,7 @@ public class Runner
         for(int i = 0; i < 30;i++)
         {
             AlgorithmFactory factory = new AlgorithmFactory(new DataBaseParametersFactory());
-            algorithm = factory.getAlgorithm("MOS", AbstractELMEvaluator.EvaluatorType.CV, problem);
+            algorithm = factory.getAlgorithm("MemeticED", AbstractELMEvaluator.EvaluatorType.CV, problem);
             rnd.setSeed(i+1);
             //System.out.println("------------------------------");
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

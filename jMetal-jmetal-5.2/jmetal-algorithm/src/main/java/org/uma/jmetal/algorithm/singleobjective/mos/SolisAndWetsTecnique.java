@@ -2,9 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.mos;
 
 import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWets;
 import org.uma.jmetal.algorithm.singleobjective.solis_and_wets.SolisAndWetsBuilder;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;

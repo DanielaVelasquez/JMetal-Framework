@@ -50,7 +50,10 @@ public class MOS extends AbstractMOS<DoubleSolution>
             
             //If there are not more availables evaluations then this can finish
             if(evaluations_j == 0)
-                break;
+            {
+                i++;
+                continue;
+            }
             individual = (DoubleSolution) technique.evolve(evaluations_j, individual, this.problem, this.comparator);
             this.updateProgress(evaluations_j);
             total_evaluations +=evaluations_j;

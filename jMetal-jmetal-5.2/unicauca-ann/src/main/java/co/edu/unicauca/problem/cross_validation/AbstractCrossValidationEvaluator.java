@@ -121,6 +121,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
             }
         }
+        
     }
 
     @Override
@@ -141,7 +142,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
         return (double) (accuracy / (double) number_folders);
     }
-
     @Override
     public double test(DoubleSolution solution) {
         super.getInputWeightsBiasFrom(solution);

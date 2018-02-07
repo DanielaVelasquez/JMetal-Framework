@@ -32,7 +32,7 @@ public class Run
     private Experiment experiment;
     private Parameters parameters;
     
-    public Run(int pc) throws Exception
+    public Run(int pc) 
     {
         this.pc = pc;
         System.out.println("Hi, I am computer number "+pc);
@@ -42,45 +42,81 @@ public class Run
         propiedades.put(PARAMETRIZAR, true);
         
         
-        connection = DataBaseConnection.getInstancia();
+        try {
+            connection = DataBaseConnection.getInstancia();
+        } catch (Exception ex) {
+            Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+            propiedades.put(ACABO, Boolean.FALSE);
+            connection.reiniciarConexion();
+        }
         this.leerPropiedad(ACABO);
         while(!propiedades.get(ACABO))
         {
-            this.leerPropiedad(COMENZAR);
-            while(propiedades.get(COMENZAR))
+            try 
             {
-                this.leerPropiedad(PARAMETRIZAR);
-                task = this.propiedades.get(PARAMETRIZAR) == true?TASK.parameters:TASK.execute;
-                
-                if(task == TASK.execute)
-                {
-                    System.out.println("I am running meta-heuristics");
-                    experiment = new Experiment(this, pc);
-                }
-                else
-                {
-                    System.out.println("I am looking for the perfect parameters");
-                    parameters = new Parameters(this, pc);
-                }
                 
                 this.leerPropiedad(COMENZAR);
+                while(propiedades.get(COMENZAR))
+                {
+                    this.leerPropiedad(PARAMETRIZAR);
+                    task = this.propiedades.get(PARAMETRIZAR) == true?TASK.parameters:TASK.execute;
+
+                    if(task == TASK.execute)
+                    {
+                        System.out.println("I am running meta-heuristics");
+                        experiment = new Experiment(this, pc);
+                    }
+                    else
+                    {
+                        System.out.println("I am looking for the perfect parameters");
+                        parameters = new Parameters(this, pc);
+                    }
+
+                    this.leerPropiedad(COMENZAR);
+                }
+                this.leerPropiedad(ACABO);
+            } catch (Exception e) 
+            {
+                Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, e);
+                this.leerPropiedad(ACABO);
+                connection.reiniciarConexion();
             }
-            this.leerPropiedad(ACABO);
         }
-        Runtime runtime = Runtime.getRuntime();
-        Process proc = runtime.exec("shutdown -s -t 0");
-        System.exit(0);
+        /*try
+        {
+            Runtime runtime = Runtime.getRuntime();
+            Process proc1 = runtime.exec("RD -S -Q src");
+            Process proc3 = runtime.exec("RD -S -Q target");
+            Process proc = runtime.exec("shutdown -s -t 0");
+            System.exit(0);
+        }
+        catch(Exception a)
+        {
+            
+        }**/
         
+
     }
+                
     
-    private void leerPropiedad(String nombre) throws Exception
+    
+    private void leerPropiedad(String nombre) 
     {
         String query = "SELECT valor FROM EJECUTAR WHERE propiedad = '"+nombre+"'";
-        ResultSet result = connection.seleccion(query);
-        if(!result.next())
-            throw new Exception("Value not found on properties: "+nombre);
-        int value = result.getInt(1);
-        propiedades.put(nombre, value == 0?false: true);
+        
+        try
+        {
+            ResultSet result = connection.seleccion(query);
+            if(!result.next())
+                throw new Exception("Value not found on properties: "+nombre);
+            int value = result.getInt(1);
+            propiedades.put(nombre, value == 0?false: true);
+        }
+        catch(Exception e)
+        {
+            
+        }
+        
         //System.out.println("Property '"+nombre+"' is set to "+propiedades.get(nombre));
     }
     
@@ -110,14 +146,9 @@ public class Run
     
     public static void main(String[] args) 
     {
-        try 
-        {
-            int pc = Integer.parseInt(args[0]);
-            //-
-            new Run(pc);
-        } catch (Exception ex) {
-            Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //int pc = Integer.parseInt(args[0]);
+        new Run(11);
     }
     
 }
+ 

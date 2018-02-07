@@ -2,136 +2,90 @@
 package co.edu.unicauca.refinement_of_parameters.results;
 
 import co.edu.unicauca.database.DataBaseConnection;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
-public class GetResults 
+public class GetResultsFromConfiguration 
 {
 
     private static HashMap<Integer,String> datasets;
     private static DataBaseConnection db;
     private static double[][] values;
     private static int configuration[];
+    private static ArrayList<String> search = new  ArrayList();
     private static int totalDataSets;
-    private static String[][] combinations;
-    
-    private static String NOMBRE_ARCHIVO = "afinamiento-parametros-resultados/AERROR-clasificacion";
-    private static String ESCRIBIR = "";
     public static void main(String[] args) throws Exception
     {
        db = DataBaseConnection.getInstancia();
        datasets = new HashMap<>();
        String algorithm = "MOS";
-       String type = "tt";
-       NOMBRE_ARCHIVO += "-"+algorithm.toLowerCase();
-       NOMBRE_ARCHIVO += "-"+type;
+       String type = "cv";
+       loadSearch();
        int id = getIdAlgorithm(algorithm);
        loadValues(id);
        //print(values);
        int ca = getCoveringArray(id);
-       String query = "SELECT COUNT(*) from configuration WHERE coveringArrayConf = "+ ca;
-       ResultSet r = db.seleccion(query);
-       r.next();
-       int totalCombinations = r.getInt(1);
-       query = "SELECT valuesConf, idConf FROM configuration WHERE coveringArrayConf = "+ ca;
+
+       String query = "SELECT valuesConf, idConf FROM configuration WHERE coveringArrayConf = "+ ca;
        ResultSet result = db.seleccion(query);
        readDataSets();
-       combinations = new String[totalCombinations][totalDataSets];
        
+       HashMap<String,String> vocabulario = new HashMap<>();
        while(result.next())
        {
-           String configurationString = result.getString(1);
+           String configurationString = result.getString(1).trim();
            int idConfiguration = result.getInt(2);
            getConfiguration(configurationString);
-
-           configurationString = "";
+           String v  = "";
            for(int i = 0; i < configuration.length; i++)
            {
                if(i + 1 == configuration.length)
-                configurationString += values[i][configuration[i]]+",";
+                   v += values[i][configuration[i]]+"";
                else
-                   configurationString += values[i][configuration[i]]+":";
+                 v += values[i][configuration[i]]+":";
            }
-           
-           int i = 0;
-           DecimalFormat df = new DecimalFormat("#.#####");
-           for(Map.Entry<Integer,String> entry:datasets.entrySet())
-           {
-               query = 
-                "SELECT AVG(results.testResults) AS test\n" +
-                "FROM results\n" +
-                "INNER JOIN task ON taskResults = idTask\n" +
-                "INNER JOIN problem ON problemTask = idProblem\n" +
-                "INNER JOIN algorithm ON algorithmTask = idAlg\n" +
-                "INNER JOIN configuration ON idConf = configurationTask\n" +
-                "INNER JOIN type ON idType = typeTask\n"+
-                "WHERE idConf = " + idConfiguration + " AND algorithm.nameAlg = '" + algorithm + "' AND problem.nameProblem = '" + entry.getValue() + "'  AND type.nameType = '"+type+"'\n" ;
-                //"GROUP BY algorithmTask, problemTask, nameProblem, nameAlg\n";
-                ResultSet resultado = db.seleccion(query);
-                resultado.next();
-                String valor = df.format(resultado.getFloat(1));
-                
-               String replace = valor.replace(',', '.');
-                if(i + 1 == datasets.size())
-                    configurationString += replace ;
-                else
-                    configurationString += replace +",";
-                i++;
-           }
-           ESCRIBIR += configurationString+"\n";
-           //System.out.println(configurationString);
-           
-           //print(combinations);
+           vocabulario.put(v,configurationString);
        }
-        System.out.println(ESCRIBIR);
-        writeFile();
+       
+       for(String a:search)
+       {
+           String v = vocabulario.get(a);
+           query = "SELECT problem.nameProblem AS DataSet, AVG(results.testResults) AS test\n" +
+                    "FROM results\n" +
+                    "INNER JOIN task ON taskResults = idTask\n" +
+                    "INNER JOIN problem ON problemTask = idProblem\n" +
+                    "INNER JOIN algorithm ON algorithmTask = idAlg\n" +
+                    "INNER JOIN configuration ON idConf = configurationTask\n" +
+                    "INNER JOIN type ON idType  = typeTask\n" +
+                    "WHERE valuesConf = '"+v+"' and nameType = '"+type+"'\n" +
+                    "GROUP BY  algorithmTask, problemTask, nameProblem, nameAlg, valuesConf, idConf, nameType\n" +
+                    "ORDER BY nameProblem, valuesConf";
+           ResultSet r = db.seleccion(query);
+           while(r.next())
+           {
+               System.out.printf("%s",r.getString(1));
+               System.out.printf("%6.4f",r.getDouble(2));
+               System.out.println("");
+//System.out.println(r.getString(1)+""+r.getString(2).replace(".", ","));
+           }
+       }
+       
 
     }
-    private static void writeFile()
+    private static void loadSearch()
     {
-        BufferedWriter bw = null;
-        try {
-            File archivo = new File(NOMBRE_ARCHIVO+".csv");
-            bw = new BufferedWriter(new FileWriter(archivo));
-            bw.write(ESCRIBIR);
-        } catch (IOException ex) {
-            Logger.getLogger(GetResults.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                bw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(GetResults.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        search.add("100.0:0.3:4.0:0.5");
     }
     private static void readDataSets() throws Exception
     {
         String query = "SELECT idProblem, nameProblem FROM problem";
         ResultSet result = db.seleccion(query);
-        ESCRIBIR += "Configuracion,";
-        ArrayList l = new ArrayList();
         while(result.next())
         {
             datasets.put(result.getInt(1), result.getString(2));
-            l.add(result.getString(2).trim());
             //System.out.println(result.getString(2));
-        }
-        for(int i = 0; i<l.size();i++)
-        {
-            if(i + 1 == l.size())
-                ESCRIBIR += l.get(i)+"\n";
-            else
-                ESCRIBIR += l.get(i)+",";
         }
         query = "SELECT COUNT(idProblem)  FROM problem";
         result = db.seleccion(query);
