@@ -24,77 +24,94 @@ public class GetResults
     private static int configuration[];
     private static int totalDataSets;
     private static String[][] combinations;
-    
-    private static String NOMBRE_ARCHIVO = "afinamiento-parametros-resultados/AERROR-clasificacion";
+    private static ArrayList<String> algoritmos = new ArrayList();
+    private static ArrayList<String> tipos = new ArrayList();
+    private static String NOMBRE_ARCHIVO = "afinamiento-parametros-resultados/regresion";
     private static String ESCRIBIR = "";
+    private static void cargar()
+    {
+        algoritmos.add("MOS");
+        algoritmos.add("IHDELS");
+        algoritmos.add("DECC_G");
+            tipos.add("cv");
+        tipos.add("tt");
+    }
     public static void main(String[] args) throws Exception
     {
        db = DataBaseConnection.getInstancia();
        datasets = new HashMap<>();
-       String algorithm = "MOS";
-       String type = "tt";
-       NOMBRE_ARCHIVO += "-"+algorithm.toLowerCase();
-       NOMBRE_ARCHIVO += "-"+type;
-       int id = getIdAlgorithm(algorithm);
-       loadValues(id);
-       //print(values);
-       int ca = getCoveringArray(id);
-       String query = "SELECT COUNT(*) from configuration WHERE coveringArrayConf = "+ ca;
-       ResultSet r = db.seleccion(query);
-       r.next();
-       int totalCombinations = r.getInt(1);
-       query = "SELECT valuesConf, idConf FROM configuration WHERE coveringArrayConf = "+ ca;
-       ResultSet result = db.seleccion(query);
-       readDataSets();
-       combinations = new String[totalCombinations][totalDataSets];
+       cargar();
        
-       while(result.next())
+       for(String algorithm: algoritmos)
        {
-           String configurationString = result.getString(1);
-           int idConfiguration = result.getInt(2);
-           getConfiguration(configurationString);
+           for(String type:tipos)
+           {
+                NOMBRE_ARCHIVO = "afinamiento-parametros-resultados/clasificacion";
+                NOMBRE_ARCHIVO += "-"+algorithm.toLowerCase();
+                NOMBRE_ARCHIVO += "-"+type;
+                int id = getIdAlgorithm(algorithm);
+                loadValues(id);
+                //print(values);
+                int ca = getCoveringArray(id);
+                String query = "SELECT COUNT(*) from configuration WHERE coveringArrayConf = "+ ca;
+                ResultSet r = db.seleccion(query);
+                r.next();
+                int totalCombinations = r.getInt(1);
+                query = "SELECT valuesConf, idConf FROM configuration WHERE coveringArrayConf = "+ ca;
+                ResultSet result = db.seleccion(query);
+                readDataSets();
+                combinations = new String[totalCombinations][totalDataSets];
 
-           configurationString = "";
-           for(int i = 0; i < configuration.length; i++)
-           {
-               if(i + 1 == configuration.length)
-                configurationString += values[i][configuration[i]]+",";
-               else
-                   configurationString += values[i][configuration[i]]+":";
+                while(result.next())
+                {
+                    String configurationString = result.getString(1);
+                    int idConfiguration = result.getInt(2);
+                    getConfiguration(configurationString);
+
+                    configurationString = "";
+                    for(int i = 0; i < configuration.length; i++)
+                    {
+                        if(i + 1 == configuration.length)
+                         configurationString += values[i][configuration[i]]+",";
+                        else
+                            configurationString += values[i][configuration[i]]+":";
+                    }
+
+                    int i = 0;
+                    DecimalFormat df = new DecimalFormat("#.#####");
+                    for(Map.Entry<Integer,String> entry:datasets.entrySet())
+                    {
+                        query = 
+                         "SELECT AVG(results.testResults) AS test\n" +
+                         "FROM results\n" +
+                         "INNER JOIN task ON taskResults = idTask\n" +
+                         "INNER JOIN problem ON problemTask = idProblem\n" +
+                         "INNER JOIN algorithm ON algorithmTask = idAlg\n" +
+                         "INNER JOIN configuration ON idConf = configurationTask\n" +
+                         "INNER JOIN type ON idType = typeTask\n"+
+                         "WHERE idConf = " + idConfiguration + " AND algorithm.nameAlg = '" + algorithm + "' AND problem.nameProblem = '" + entry.getValue() + "'  AND type.nameType = '"+type+"'\n" ;
+                         //"GROUP BY algorithmTask, problemTask, nameProblem, nameAlg\n";
+                         ResultSet resultado = db.seleccion(query);
+                         resultado.next();
+                         String valor = df.format(resultado.getFloat(1));
+
+                        String replace = valor.replace(',', '.');
+                         if(i + 1 == datasets.size())
+                             configurationString += replace ;
+                         else
+                             configurationString += replace +",";
+                         i++;
+                    }
+                    ESCRIBIR += configurationString+"\n";
+                    //System.out.println(configurationString);
+
+                    //print(combinations);
+                }
+                 //System.out.println(ESCRIBIR);
+                 writeFile();
            }
-           
-           int i = 0;
-           DecimalFormat df = new DecimalFormat("#.#####");
-           for(Map.Entry<Integer,String> entry:datasets.entrySet())
-           {
-               query = 
-                "SELECT AVG(results.testResults) AS test\n" +
-                "FROM results\n" +
-                "INNER JOIN task ON taskResults = idTask\n" +
-                "INNER JOIN problem ON problemTask = idProblem\n" +
-                "INNER JOIN algorithm ON algorithmTask = idAlg\n" +
-                "INNER JOIN configuration ON idConf = configurationTask\n" +
-                "INNER JOIN type ON idType = typeTask\n"+
-                "WHERE idConf = " + idConfiguration + " AND algorithm.nameAlg = '" + algorithm + "' AND problem.nameProblem = '" + entry.getValue() + "'  AND type.nameType = '"+type+"'\n" ;
-                //"GROUP BY algorithmTask, problemTask, nameProblem, nameAlg\n";
-                ResultSet resultado = db.seleccion(query);
-                resultado.next();
-                String valor = df.format(resultado.getFloat(1));
-                
-               String replace = valor.replace(',', '.');
-                if(i + 1 == datasets.size())
-                    configurationString += replace ;
-                else
-                    configurationString += replace +",";
-                i++;
-           }
-           ESCRIBIR += configurationString+"\n";
-           //System.out.println(configurationString);
-           
-           //print(combinations);
-       }
-        System.out.println(ESCRIBIR);
-        writeFile();
+       } 
+       
 
     }
     private static void writeFile()

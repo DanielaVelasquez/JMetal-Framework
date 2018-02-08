@@ -27,7 +27,7 @@ public class DataBaseConnection
         String password = "Experimento123";*/
         
         String hostName = "localhost";
-        String dbName = "mos-regresion-conf1";
+        String dbName = "clasificacion";
         String user = "iris";
         String password = "iris";
         
