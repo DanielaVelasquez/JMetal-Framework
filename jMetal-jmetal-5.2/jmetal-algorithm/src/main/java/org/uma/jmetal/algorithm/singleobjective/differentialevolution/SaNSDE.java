@@ -127,6 +127,18 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * Value to penalize a solution which doesn't reach to be evaluated
      */
     private double penalize_value;
+    /**
+     * Array to save which mutation strategy generate new individual
+     * true for first strategie
+     * false other wise
+     */     
+    private boolean[] reproValues;    
+    /**
+     * Array to save which distribution generate new value of scale factor
+     * true for normal distribution
+     * false for Cauchy distribution
+     */     
+    private boolean[] scaleFactorValues;
     
     private final JMetalRandom randomGenerator;
     
@@ -164,6 +176,8 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
         this.CRrec = new ArrayList();
         this.frec = new ArrayList();
         this.sum_frec = 0;
+        this.reproValues = new boolean[populationSize];
+        this.scaleFactorValues = new boolean[populationSize];
         
         this.initVariables();
     }    
@@ -250,7 +264,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 
             List<DoubleSolution> children;
             //Calculates a scale factor and crossover rate for i-th indivual
-            double f = this.calculateF();
+            double f = this.calculateF(i);
             double cr = this.calculateCR();
 
             if(u < p)
@@ -258,16 +272,14 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
                 crossoverOperator = updateValuesOf(crossoverOperator, f, cr);
                 crossoverOperator.setCurrentSolution(matingPopulation.get(i));
                 children = crossoverOperator.execute(parents);
-                ns1++;
-                nf2++;
+                reproValues[i] = true;
             }
             else
             {
                 crossoverOperator2 = updateValuesOf(crossoverOperator2, f, cr);
                 crossoverOperator2.setCurrentSolution(matingPopulation.get(i));
                 children = crossoverOperator2.execute(parents);
-                ns2++;
-                nf1++;
+                reproValues[i] = false;
             }
             //Adds the best children
             offspringPopulation.add(children.get(0));
@@ -278,11 +290,7 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             //Adds the crossover rate value used
             CRrec.add(cr);
         }
-        //As P, FP and CR are auto adaptative they are re calculated accoring to the current generation 
-        //values and perfomance
-        this.updateP();
-        this.updateFP();
-        this.updateCR();
+        
         return offspringPopulation;
     }
     
@@ -295,23 +303,79 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
             DoubleSolution p = population.get(i);
             DoubleSolution o = offspringPopulation.get(i);
             DoubleSolution s = this.getBest(p, o);
+            DoubleSolution add;
             
             if(!this.inPopulation(pop, s))
             {
-                pop.add(s);
+                add = s;
             }
             else
             {
                 if(s == o)
                 {
-                    pop.add(p);
+                    add = p;
                 }
                 else
                 {
-                    pop.add(o);
+                    add = o;
                 }
             }
+            
+            //for update auto-adaptive parameters
+            if (add == o)
+            {
+                //update p
+                if (reproValues[i])
+                {
+                    ns1++;
+                }
+                else
+                {
+                    ns2++;
+                }
+                
+                //update fp
+                if (scaleFactorValues[i])
+                {
+                    fp_ns1++;
+                }
+                else
+                {
+                    fp_ns2++;
+                }
+                
+            }
+            else
+            {
+                //update p
+                if (reproValues[i])
+                {
+                    nf1++;
+                }
+                else
+                {
+                    nf2++;
+                }
+                
+                //update fp
+                if (scaleFactorValues[i])
+                {
+                    fp_nf1++;
+                }
+                else
+                {
+                    fp_nf2++;
+                }
+            }
+            
+            pop.add(add);
         }
+        
+        //As P, FP and CR are auto adaptative they are re calculated accoring to the current generation 
+        //values and perfomance
+        this.updateP();
+        this.updateFP();
+        this.updateCR();
         
         return pop;
     }
@@ -405,21 +469,19 @@ public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
      * distribution
      * @return scale factor value for i-th indiviual
      */
-    private double calculateF()
+    private double calculateF(int position)
     {
         double u = randomGenerator.nextDouble(0, 1);
         RandomDistribution distributionRnd = RandomDistribution.getInstance();
         
         if(u < fp)
         {
-            fp_ns1++;
-            fp_nf2++;
+            scaleFactorValues[position] = true;
             return distributionRnd.nextGaussian(MEAN, STANDAR_DEVIATION);
         }
         else
         {
-            fp_ns2++;
-            fp_nf1++;
+            scaleFactorValues[position] = false;
             return distributionRnd.nextCauchy(X0, Y_F);
         }
     }

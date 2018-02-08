@@ -21,10 +21,12 @@ public class DataBaseConnection
     public void conectar() 
     {
         //Connect to database
+
         /*String hostName = "sql5037.site4now.net";
         String dbName = "DB_A33FAA_elm123";
         String user = " DB_A33FAA_elm123_admin";
         String password = "Experimento123";*/
+
         
         String hostName = "localhost";
         String dbName = "clasificacion";
