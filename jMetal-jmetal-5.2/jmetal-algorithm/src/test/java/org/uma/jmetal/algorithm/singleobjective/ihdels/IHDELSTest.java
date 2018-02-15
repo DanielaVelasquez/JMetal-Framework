@@ -12,6 +12,8 @@ import static org.mockito.Mockito.mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.uma.jmetal.algorithm.local_search.LocalSearch;
+import org.uma.jmetal.algorithm.singleobjective.hill_climbing.HillClimbingBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
@@ -36,6 +38,8 @@ public class IHDELSTest
         
         instance = new IHDELSBuilder(problem)
                     .setPenalize_value(penalize_value)
+                    .addLocalSearch(new LSMTS_LS1(new MTS_LS1Builder(problem)))
+                    .addLocalSearch(new LSHillClimbing(new HillClimbingBuilder(problem)))
                     .build();
         Mockito.when(problem.getNumberOfObjectives()).thenReturn(1);
     }
