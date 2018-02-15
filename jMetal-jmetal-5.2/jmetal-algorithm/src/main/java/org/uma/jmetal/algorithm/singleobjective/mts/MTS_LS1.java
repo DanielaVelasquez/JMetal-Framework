@@ -12,6 +12,15 @@ import org.uma.jmetal.util.Util;
 
 public class MTS_LS1 extends AbstractMTS_LS1<DoubleSolution, DoubleProblem>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * http://ieeexplore.ieee.org/document/4631210/ ****
+     * L. Tseng and C. Chen, “Multiple Trajectory Search for Large 
+     * Scale Global Optimization,” 2008 IEEE World Congress on
+     * Computational Intelligence, pp 3052-3059, 2008. 
+     * -------------------------------------------------------------------------
+     */
     
     /**-----------------------------------------------------------------------------------------
      * Methods

@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1;
 import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
 import org.uma.jmetal.algorithm.technique.Technique;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;

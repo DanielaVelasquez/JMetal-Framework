@@ -2,7 +2,6 @@ package org.uma.jmetal.algorithm.singleobjective.differentialevolution;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.uma.jmetal.algorithm.impl.AbstractDifferentialEvolution;
@@ -16,6 +15,16 @@ import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 public class SaDE extends AbstractDifferentialEvolution<DoubleSolution>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * http://ieeexplore.ieee.org/document/1554904/ ****
+     * A. K. Qin and P. N. Suganthan, “Self-adaptive Differential Evolution
+     * Algorithm for Numerical Optimization,” 2005 IEEE Congress on 
+     * Evolutionary Computation, 2005.
+     * -------------------------------------------------------------------------
+     */    
+    
     /**-------------------------------------------------------------------------z----------------
      * Constants
      *-----------------------------------------------------------------------------------------*/

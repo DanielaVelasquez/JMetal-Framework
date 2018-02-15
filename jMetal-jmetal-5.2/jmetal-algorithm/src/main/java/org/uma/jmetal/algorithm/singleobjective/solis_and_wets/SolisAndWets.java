@@ -10,6 +10,15 @@ import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 public class SolisAndWets implements Algorithm<DoubleSolution>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * https://www.math.ucdavis.edu/~rjbw/mypage/Miscellaneous_files/randSearch.pdf ****
+     * F. Solis and R. Wets, “Minimization by Random Search Techniques,”
+     * Mathematics of Operations Research., vol. 6, pp. 19-30, 1981.
+     * -------------------------------------------------------------------------
+     */
+    
     /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/

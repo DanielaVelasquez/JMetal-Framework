@@ -5,8 +5,6 @@ import co.edu.unicauca.elm.ELM;
 import co.edu.unicauca.elm.util.ELMUtil;
 import co.edu.unicauca.elm_function.ELMFunction;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
-import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
-import co.edu.unicauca.moore_penrose.impl.RidgeRegressionTheory;
 import co.edu.unicauca.problem.AbstractELMEvaluator;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -20,8 +18,6 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
      * Atributes
      * -----------------------------------------------------------------------------------------
      */
-    private final int DEFAULT_NUMBER_OF_HIDDEN_NEURONS = 50;//for study comparative
-    private final AbstractMoorePenroseMethod DEFAULT_INVERSE = new MultiplicationMethod(null);
 
     /**
      * -----------------------------------------------------------------------------------------
@@ -42,19 +38,14 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
      */
     public TrainingTestingEvaluator(int hidden_neurons, DataSet training_data_set, DataSet testing_data_set, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, String name, int maxEvaluations) {
         super(AbstractELMEvaluator.EvaluatorType.TT, name, training_data_set, testing_data_set);
-        
-        hidden_neurons = DEFAULT_NUMBER_OF_HIDDEN_NEURONS;
-        inverse = DEFAULT_INVERSE;
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse);
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
-
         super.loadInitalConfiguration();
     }
 
     @Override
     public double train() {
-        total += 1;
         super.elm.train();
         return elm.getAccuracy();
     }
@@ -70,10 +61,6 @@ public abstract class TrainingTestingEvaluator extends AbstractELMEvaluator {
         elm.test();
         this.elm.setX(training_data_set.getX());
         this.elm.setY(training_data_set.getY());
-        
-        if (elm.getElm_type() == ELM.ELMType.CLASSIFICATION) {
-            return elm.getAccuracy();
-        }
         return elm.getAccuracy();
     }
 

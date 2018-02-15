@@ -15,6 +15,16 @@ import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
 public class SaNSDE extends AbstractDifferentialEvolution<DoubleSolution>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * http://ieeexplore.ieee.org/document/4630935/ ****
+     * Z. Yang, K. Tang and X. Yao, “Self-adaptive Differential Evolution with 
+     * Neighborhood Search,” 2008 IEEE Congress on Evolutionary 
+     * Computation, 2008.
+     * -------------------------------------------------------------------------
+     */
+    
     /**------------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/

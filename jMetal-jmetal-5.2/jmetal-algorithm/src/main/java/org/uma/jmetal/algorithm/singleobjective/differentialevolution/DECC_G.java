@@ -16,6 +16,16 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class DECC_G implements Algorithm
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * https://www.sciencedirect.com/science/article/pii/S002002550800073X ****
+     * Z. Yang, k. Tang and X. Yao, “Large scale evolutionary optimization 
+     * using cooperative coevolution,” Information Sciences., vol. 178, 
+     * pp. 2985-2999, 2008.
+     * -------------------------------------------------------------------------
+     */
+    
     /**-----------------------------------------------------------------------------------------
      * Constants
      *-----------------------------------------------------------------------------------------*/

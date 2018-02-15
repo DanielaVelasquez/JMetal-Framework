@@ -5,17 +5,24 @@ import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 
 @SuppressWarnings("serial")
 public class DEUnicauca extends AbstractDifferentialEvolution<DoubleSolution> {
+  
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * https://link.springer.com/article/10.1023/A:1008202821328 ****
+     * R. Storn and K. Price, “Differential Evolution – A Simple and Efficient
+     * Heuristic for global Optimization over Continuous Spaces,”
+     * Journal of Global Optimization, vol. 11, pp. 341-359, 1997.
+     * -------------------------------------------------------------------------
+     */
+    
   private int populationSize;
   private int maxEvaluations;
   private Comparator<DoubleSolution> comparator;

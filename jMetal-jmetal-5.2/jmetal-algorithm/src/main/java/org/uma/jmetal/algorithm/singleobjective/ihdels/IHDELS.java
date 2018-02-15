@@ -13,6 +13,16 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 public class IHDELS implements Algorithm<DoubleSolution>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * http://simd.albacete.org/actascaepia15/papers/00251.pdf ****
+     * D. Molina and F. Herrera, “Hibridación iterativa de DE con búsqueda 
+     * local con reinicio para problemas de alta dimensionalidad,” 
+     * Actas de la XVI Conferencia CAEPIA., 2015.
+     * -------------------------------------------------------------------------
+     */
+    
     /**-----------------------------------------------------------------------------------------
      * Atributes
      *-----------------------------------------------------------------------------------------*/

@@ -5,7 +5,6 @@ import co.edu.unicauca.elm.ELM;
 import co.edu.unicauca.elm.util.ELMUtil;
 import co.edu.unicauca.elm_function.ELMFunction;
 import co.edu.unicauca.moore_penrose.AbstractMoorePenroseMethod;
-import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
 import java.util.ArrayList;
 import java.util.List;
 import no.uib.cipr.matrix.DenseMatrix;
@@ -28,11 +27,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
     /**
      * Number of folders
      */
-    private int number_folders;
-    private final int DEFAULT_NUMBER_OF_FOLDERS = 10;//for a study comparative
-    private final int DEFAULT_NUMBER_OF_HIDDEN_NEURONS = 50;//for study comparative
-    private final AbstractMoorePenroseMethod DEFAULT_INVERSE = new MultiplicationMethod(null);
-
+    private int number_folders;   
     /**
      * Data sets for training ELM
      */
@@ -62,19 +57,13 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
      * function
      */
     public AbstractCrossValidationEvaluator(EvaluatorType type, String name, DataSet training_data_set, DataSet testing_data_set, int number_folders, int hidden_neurons, ELMFunction activation_function, AbstractMoorePenroseMethod inverse, int maxEvaluations) {
-        /*EL contructor deberia recibir Una Red ELM abstracta y no los componentes*/
-        super(type, name, training_data_set, testing_data_set);
-        /*Quitar esta liena para experimento no controlados*/
-        hidden_neurons = DEFAULT_NUMBER_OF_HIDDEN_NEURONS;
-        this.number_folders = DEFAULT_NUMBER_OF_FOLDERS;
-        inverse = DEFAULT_INVERSE;
-
+        
+        super(type, name, training_data_set, testing_data_set);        
+        this.number_folders = number_folders;
         super.elm = new ELM(ELMUtil.getELMType(training_data_set), hidden_neurons, activation_function, training_data_set.getNumber_classes(), inverse);
         int input_neuron = training_data_set.getX().numRows();
         super.elm.setInputNeurons(input_neuron);
-
         makeFolders();
-
         super.loadInitalConfiguration();
     }
 
@@ -82,7 +71,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         training_folders = new ArrayList<>();
         testing_folders = new ArrayList<>();
         int trainig_size = super.training_data_set.getX().numColumns();
-
         int number_variables = training_data_set.getX().numRows();
         int number_data = training_data_set.getX().numColumns();
         int number_clases = training_data_set.getNumber_classes();
@@ -126,7 +114,6 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
     @Override
     public double train() {
-        total += number_folders;
         double accuracy = 0.0;
         for (int i = 0; i < number_folders; i++) {
             DataSet training = training_folders.get(i);
@@ -142,6 +129,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
 
         return (double) (accuracy / (double) number_folders);
     }
+    
     @Override
     public double test(DoubleSolution solution) {
         super.getInputWeightsBiasFrom(solution);
@@ -152,12 +140,7 @@ public abstract class AbstractCrossValidationEvaluator extends AbstractELMEvalua
         elm.train();
         elm.setX(testing_data_set.getX());
         elm.setY(testing_data_set.getY());
-        elm.test();
-        
-        if (elm.getElm_type() == ELM.ELMType.CLASSIFICATION) {
-            return elm.getAccuracy();
-        }
-        
+        elm.test();        
         return elm.getAccuracy();
     }
 }

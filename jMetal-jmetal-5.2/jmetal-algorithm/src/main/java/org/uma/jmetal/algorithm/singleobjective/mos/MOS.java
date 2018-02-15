@@ -10,6 +10,15 @@ import org.uma.jmetal.solution.DoubleSolution;
 
 public class MOS extends AbstractMOS<DoubleSolution>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * http://ieeexplore.ieee.org/document/6256611/ ****
+     * A. LaTorre, S. Muelas and J. Peña, “Multiple Offspring Sampling 
+     * In Large Scale Global Optimization,” 2012 IEEE World Congress on
+     * Computational Intelligence, 2012. 
+     * -------------------------------------------------------------------------
+     */
 
     /**-----------------------------------------------------------------------------------------
      * Atributes

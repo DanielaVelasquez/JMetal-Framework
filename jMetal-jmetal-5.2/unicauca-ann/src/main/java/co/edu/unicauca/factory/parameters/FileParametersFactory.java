@@ -27,9 +27,9 @@ public class FileParametersFactory extends AbstractParametersFactory
     public FileParametersFactory(String path, String file_name) throws Exception
     {
         values = new HashMap<>();
-        this.loadParameters();
         this.path = path;
         this.file_name = file_name;
+        this.loadParameters();
     }
     
     private void loadParameters() throws Exception

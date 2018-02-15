@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.uma.jmetal.algorithm.singleobjective.mts.MultipleTrajectorySearchBuilder;
+import org.uma.jmetal.algorithm.singleobjective.mts.MTS_LS1Builder;
 import org.uma.jmetal.problem.DoubleProblem;
 /**
  *
@@ -29,7 +29,7 @@ public class AbstractMOSTest {
         String problemName = "co.edu.unicauca.problem.training_testing.Iris";
         DoubleProblem problem = null;
         
-        MTSTecnique mts_exec = new MTSTecnique(new MultipleTrajectorySearchBuilder(problem));
+        MTSLS1Tecnique mts_exec = new MTSLS1Tecnique(new MTS_LS1Builder(problem));
         SolisAndWetsTecnique sw_exec = new SolisAndWetsTecnique(new SolisAndWetsBuilder(problem));
         instance  =  new   MOSBuilder(problem)
                             .addTechnique(mts_exec)

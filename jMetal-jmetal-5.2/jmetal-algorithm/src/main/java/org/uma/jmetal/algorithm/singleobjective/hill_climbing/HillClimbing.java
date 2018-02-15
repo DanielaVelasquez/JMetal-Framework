@@ -9,6 +9,12 @@ import org.uma.jmetal.solution.Solution;
 
 public class HillClimbing  implements Algorithm<Solution>
 {
+    /**
+     * ------------------------------------------------------------------------
+     * Based on
+     * S. Luke, “Essentials of Metaheuristics Second Edition,” 2015
+     * -------------------------------------------------------------------------
+     */
     
     /**-----------------------------------------------------------------------------------------
      * Atributes

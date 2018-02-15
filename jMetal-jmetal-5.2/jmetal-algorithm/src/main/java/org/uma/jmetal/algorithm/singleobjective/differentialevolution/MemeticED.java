@@ -13,10 +13,6 @@ import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.impl.RandomDistribution;
 
-/**
- *
- * @author Daniel Pusil <danielpusil@unicauca.edu.co>
- */
 public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     /**
@@ -35,23 +31,19 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     private final Comparator<DoubleSolution> comparator;
 
     private int evaluations;
-
-    /*Parametros variables*/
     public double CR;
     public double F;
-    /*Inicializar constante*/
     public double CRm;
     public double CRmSigma;
-
     public double Fm;
     public double FmSigma;
 
     public List<DoubleSolution> archiveLst;
-    public ArrayList CRlst;//historical 
+    public ArrayList CRlst;
     public ArrayList Flst;
 
     private final double C;
-    private final double P;//Porcentaje de mejores 100p%
+    private final double P;
 
     int generationCounter = 0;
 
@@ -61,14 +53,13 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     /**
      * Constructor
-     *
      * @param problem Problem to solve
      * @param maxEvaluations Maximum number of evaluations to perform
      * @param populationSize
      * @param crossoverOperator
      * @param selectionOperator
-     * @param evaluator
      * @param Ls, Local Optimizer
+     * @param comparator
      */
     public MemeticED(DoubleProblem problem, int maxEvaluations, int populationSize,
             DifferentialEvolutionCrossover crossoverOperator,
@@ -84,7 +75,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
         //Default values
         this.P = 0.2;
-        this.C = 1.0 / 10;//Why this value?? in MA-elm
+        this.C = 1.0 / 10;
         this.CRm = 0.9;
         this.CRmSigma = 0.1;
         this.Fm = 0.5;
@@ -124,7 +115,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     @Override
     protected List<DoubleSolution> evaluatePopulation(List<DoubleSolution> population) {
-        for (int i = 0; i < population.size(); i++) {//Corregir
+        for (int i = 0; i < population.size(); i++) {
             try {
                 getProblem().evaluate(population.get(i));
                 updateProgress();
@@ -153,7 +144,6 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
             setPopulation(localOptimization(getPopulation()));
             generationCounter++;
         }
-
     }
 
     @Override
@@ -176,13 +166,9 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
             if (evaluationTemp <= maxEvaluations) {
                 selectionOperator.setIndex(i);
                 List<DoubleSolution> parents = selectionOperator.execute(matingPopulation);//Con esto puede ser el mismo el padre->SOLO NESECITO UNO
-                //crossoverOperator.setCurrentSolution(matingPopulation.get(i));
-
-                //List<DoubleSolution> children = crossoverOperator.execute(parents);
-                DoubleSolution children = Mutation(i, parents);
-                //  DoubleSolution childrenvp=CruzarPadre(i, children);
+                DoubleSolution children = mutation(i, parents);
                 offspringPopulation.add(children);
-                evaluationTemp++; //Para generar todos los indivios, sino solo los que puede evaluar
+                evaluationTemp++;
             } else {
                 break;
             }
@@ -194,13 +180,13 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
         return offspringPopulation;
     }
 
-    //Revisar si esta Maximizando
+    
     @Override
     protected List<DoubleSolution> replacement(List<DoubleSolution> population, List<DoubleSolution> offspringPopulation) {
         List<DoubleSolution> pop = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
             if (i < offspringPopulation.size()) {
-                if (comparator.compare(offspringPopulation.get(i), population.get(i)) < 0) {//TO minimizer
+                if (comparator.compare(offspringPopulation.get(i), population.get(i)) < 0) {
                     pop.add(offspringPopulation.get(i));
 
                 } else {
@@ -209,7 +195,6 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
             } else {
                 pop.add(population.get(i));
             }
-
         }
         Collections.sort(pop, comparator);
         generationCounter++;
@@ -219,7 +204,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     public List<DoubleSolution> localOptimization(List<DoubleSolution> solutions) {
         List<DoubleSolution> pop = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            if (!isStoppingConditionReached() && (maxEvaluations - evaluations) > 70) {//70 numero de optimizaciones locales
+            if (!isStoppingConditionReached() && (maxEvaluations - evaluations) > 70) {
                 DoubleSolution S = (DoubleSolution) localSearch.execute(solutions.get(i));
                 pop.add(S);
                 evaluations += localSearch.getEvaluations();
@@ -246,12 +231,10 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     @Override
     public String getDescription() {
-        return "Memetic Differential Evolution Algorithm with Simulete A";
+        return "Memetic Differential Evolution Algorithm with Simulated A";
     }
 
-    /*######################################################These methods must be adjusted to Jmetal (Temp0ral implementation)#######################*/
-    // pertubacion del vector solucion v1
-    protected DoubleSolution Mutation(int current, List<DoubleSolution> vSeleccionados) {
+    protected DoubleSolution mutation(int current, List<DoubleSolution> vSeleccionados) {
         DoubleSolution wi = getProblem().createSolution();
 
         DoubleSolution pBestSolution = getBestfrom100p(P);
@@ -263,7 +246,6 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
                     + F * (vSeleccionados.get(0).getVariableValue(i) - PUA.getVariableValue(i));
 
             wi.setVariableValue(i, value);
-            //Bounds Control
             if (wi.getVariableValue(i) < wi.getLowerBound(i)) {
                 wi.setVariableValue(i, wi.getLowerBound(i));
             }
@@ -275,8 +257,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     }
 
     /*=========================Crossover=========================================*/
-    ////cruce con vector padre por selección de cada miembro según tasa de cruce
-    protected DoubleSolution CruzarPadre(int i, DoubleSolution vPerturbado) {
+    protected DoubleSolution fatherCrossover(int i, DoubleSolution vPerturbado) {
         int rndb = randomGenerator.nextInt(0, vPerturbado.getNumberOfVariables() - 1);
 
         for (int d = 0; d < vPerturbado.getNumberOfVariables(); d++) {
@@ -326,7 +307,6 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     /**
      * Generate CR according to a normal distribution with mean CRm,and sigma
      * "CRsigma" and std 0.1 (scale parameter)
-     *
      * @param CRm initialite at 0.9
      * @param CRsigma initiaize at 0.1 (std)
      * @return CR
@@ -334,10 +314,8 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     public double getCR(double CRm, double CRsigma) {
 
         RandomDistribution distributionRnd = RandomDistribution.getInstance();
-
-        //   If CR > 1, set CR = 1. If CR < 0, set CR = 0.
         double cr = CRm + CRsigma * distributionRnd.nextGaussian(); //->>>>* randGen.nextGaussian();
-        if (cr < 0) {//truncated to [0 1]
+        if (cr < 0) {
             cr = 0.0;
         } else {
             if (cr > 1) {
@@ -350,30 +328,24 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     /**
      * Generate F according to a cauchy distribution with location parameter Fm,
      * and Fsigma scale parameter
-     *
      * @param uF initialite a 0.5
      * @param Fsigma
      * @return F According to a cauchy distribution
      */
     public double getF(double uF, double Fsigma) {
-        /*
-         this function generate F  according to a cauchy distribution with location parameter "Fm" and scale parameter "Fsigma"
-         If F > 1, set F = 1. If F <= 0, regenerate F*/
-        // Cauchy dt = new Cauchy(uF, Fsigma);
+        
         double f = 0.0;
         while (f == 0.0) {
-            //f = dt.cdf(randGen.ran1()); //Probability density function  ->in M-ElM use Different  (quantile function) 
             f = randCauchy(uF, Fsigma);
         }
         if (f > 1) {
             f = 1.0;
         }
-        return f;// new F
+        return f;
     }
 
     /**
      * xr2 from P U A
-     *
      * @param P Current population
      * @param A archiveLst population
      * @return
@@ -391,7 +363,7 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
 
     public double updateCrm(double CRm, int currentGen) {
         if (currentGen > 1) {
-            CRm = (1.0 - C) * CRm + C * Media(CRlst);
+            CRm = (1.0 - C) * CRm + C * media(CRlst);
         }
         return CRm;
     }
@@ -411,43 +383,40 @@ public class MemeticED extends AbstractDifferentialEvolution<DoubleSolution> {
     }
 
     /**
-     *
      * Lehmer mean
-     *
      * @param lst need be Doubles
      * @return Lehmer mean
      */
     public double mediaLehmermean(ArrayList lst) {
 
-        double sumCuadrado = 0.0;
-        double sum = 0.0;
-        for (Object cuadrado : lst) {
-            double tmp = (double) cuadrado;
-            sumCuadrado += tmp * tmp;
+        double addSquare = 0.0;
+        double add = 0.0;
+        for (Object square : lst) {
+            double tmp = (double) square;
+            addSquare += tmp * tmp;
 
         }
         for (Object sumaN : lst) {
-            sum += (double) sumaN;
+            add += (double) sumaN;
         }
         double media = 0.0;
-        if (sum != 0 && sumCuadrado != 0) {
-            media = sumCuadrado / sum;
+        if (add != 0 && addSquare != 0) {
+            media = addSquare / add;
         }
         return media;
     }
 
-    public double Media(ArrayList lst) {
-        double suma = 0.0;
+    public double media(ArrayList lst) {
+        double add = 0.0;
         for (Object numb : lst) {
-            suma += (double) numb;
+            add += (double) numb;
         }
         if (!lst.isEmpty()) {
-            suma = suma / lst.size();
+            add = add / lst.size();
         }
-        return suma;
+        return add;
     }
-
-    //Como dice MA_ELM ,LA TEORIA ES DIFERENTE
+    
     public double randCauchy(double mu, double delta) {//% Cauchy distribution: cauchypdf = @(x, mu, delta) 1/pi*delta./((x-mu).^2+delta^2) -->MA-ELM
         double val = mu + delta * Math.tan(Math.PI * (randomGenerator.nextDouble() - 0.5));
         return val;
