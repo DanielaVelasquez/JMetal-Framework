@@ -34,7 +34,7 @@ public class Runner
         
         for(int i = 0; i < EXECUTIONS;i++)
         {
-            AlgorithmFactory factory = new AlgorithmFactory(new FileParametersFactory("src/resources-parameters", "parameters"));
+            AlgorithmFactory factory = new AlgorithmFactory(new FileParametersFactory("src/resources-parameters", "parametersClasification"));
             algorithm = factory.getAlgorithm("IHDELS", AbstractELMEvaluator.EvaluatorType.CV, problem);
             rnd.setSeed(i+1);            
             AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute();
