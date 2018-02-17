@@ -47,8 +47,9 @@ public class Run
             AbstractELMEvaluator p = (AbstractELMEvaluator)problem;
             double train = (solution.getObjective(0));
             double test = p.test(solution);
-            System.out.printf(" %d) Training: %6.2f   Testing: %6.2f   Computing Time: %d", i+1, train, test, computingTime);
+            System.out.printf(" %d) Training: %6.2f   Testing: %6.2f   Computing Time: %d \n", i+1, train, test, computingTime);
         }
+        System.out.println("");
     } 
     
     private static void readConfigurationExecution()

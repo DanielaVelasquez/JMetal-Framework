@@ -192,8 +192,8 @@ public class DEUnicaucaTest {
         
         List<DoubleSolution> result = instance.replacement(population, offspring);
         
-        assertEquals(result.get(0), a);
-        assertEquals(result.get(1), e);
+        assertEquals(result.get(0), d);
+        assertEquals(result.get(1), b);
         assertEquals(result.get(2), c);
     }
     

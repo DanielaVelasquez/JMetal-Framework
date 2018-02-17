@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2018-02-15T13:32:32</date>
-  <millis>1518719552767</millis>
+  <date>2018-02-15T14:24:21</date>
+  <millis>1518722661125</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2018-02-15T13:32:32</date>
-  <millis>1518719552810</millis>
+  <date>2018-02-15T14:24:21</date>
+  <millis>1518722661182</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>SEVERE</level>
@@ -23,7 +23,7 @@
   <thread>1</thread>
   <message>Class.forName() did not recognized the name of the class</message>
   <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.Vertebral(2C)</message>
+    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.9834</message>
     <frame>
       <class>java.net.URLClassLoader</class>
       <method>findClass</method>
@@ -37,7 +37,7 @@
     <frame>
       <class>sun.misc.Launcher$AppClassLoader</class>
       <method>loadClass</method>
-      <line>338</line>
+      <line>335</line>
     </frame>
     <frame>
       <class>java.lang.ClassLoader</class>
@@ -61,7 +61,7 @@
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
       <method>readDataSet</method>
-      <line>120</line>
+      <line>122</line>
     </frame>
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
@@ -76,8 +76,8 @@
   </exception>
 </record>
 <record>
-  <date>2018-02-15T13:32:41</date>
-  <millis>1518719561060</millis>
+  <date>2018-02-15T14:24:40</date>
+  <millis>1518722680127</millis>
   <sequence>2</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>SEVERE</level>
@@ -86,7 +86,7 @@
   <thread>1</thread>
   <message>Class.forName() did not recognized the name of the class</message>
   <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.Vertebral(2c)</message>
+    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.ajksdlñfj</message>
     <frame>
       <class>java.net.URLClassLoader</class>
       <method>findClass</method>
@@ -100,7 +100,7 @@
     <frame>
       <class>sun.misc.Launcher$AppClassLoader</class>
       <method>loadClass</method>
-      <line>338</line>
+      <line>335</line>
     </frame>
     <frame>
       <class>java.lang.ClassLoader</class>
@@ -124,7 +124,7 @@
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
       <method>readDataSet</method>
-      <line>120</line>
+      <line>122</line>
     </frame>
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
@@ -139,8 +139,8 @@
   </exception>
 </record>
 <record>
-  <date>2018-02-15T13:32:46</date>
-  <millis>1518719566682</millis>
+  <date>2018-02-15T14:24:41</date>
+  <millis>1518722681659</millis>
   <sequence>3</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>SEVERE</level>
@@ -149,7 +149,7 @@
   <thread>1</thread>
   <message>Class.forName() did not recognized the name of the class</message>
   <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.vertebral(2c)</message>
+    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.08324</message>
     <frame>
       <class>java.net.URLClassLoader</class>
       <method>findClass</method>
@@ -163,7 +163,7 @@
     <frame>
       <class>sun.misc.Launcher$AppClassLoader</class>
       <method>loadClass</method>
-      <line>338</line>
+      <line>335</line>
     </frame>
     <frame>
       <class>java.lang.ClassLoader</class>
@@ -187,7 +187,7 @@
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
       <method>readDataSet</method>
-      <line>120</line>
+      <line>122</line>
     </frame>
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
