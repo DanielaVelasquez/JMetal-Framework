@@ -79,7 +79,6 @@ public class NGHS
         return NCHV;
     }
 
-    /*SOBRE ESCRIBIR LA ACTUALIZACION DE MEMORIA ARMONICA*/
     /**
      * Update harmony memory
      *
@@ -88,17 +87,17 @@ public class NGHS
      *
      */
     @Override
-    public List<DoubleSolution> updateHarmonicMemory(DoubleSolution NewHarmony) {
-        for (DoubleSolution sol : getHarmonicMemory()) {
+    public List<DoubleSolution> updateHarmonyMemory(DoubleSolution NewHarmony) {
+        for (DoubleSolution sol : getHarmonyMemory()) {
             if (getComparator().compare(sol, NewHarmony) == 0) {
-                return getHarmonicMemory();
+                return getHarmonyMemory();
             }
         }
-        getHarmonicMemory().remove(getWorstIndexHM());
-        getHarmonicMemory().add((DoubleSolution) NewHarmony.copy());
+        getHarmonyMemory().remove(getWorstIndexHM());
+        getHarmonyMemory().add((DoubleSolution) NewHarmony.copy());
         updateWorstIndex();
         updateBestIndex();
-        return getHarmonicMemory();
+        return getHarmonyMemory();
     }
 
     /*------------------------------------Own methods--------------------------*/
@@ -107,8 +106,8 @@ public class NGHS
     }
 
     public double xR(int varIndex) {
-        double xR = 2 * getHarmonicMemory().get(getBestIndexHM()).getVariableValue(varIndex)
-                - getHarmonicMemory().get(getWorstIndexHM()).getVariableValue(varIndex);
+        double xR = 2 * getHarmonyMemory().get(getBestIndexHM()).getVariableValue(varIndex)
+                - getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex);
         if (xR < NCHV.getLowerBound(varIndex)) {
             xR = NCHV.getLowerBound(varIndex);
         } else {
@@ -120,8 +119,8 @@ public class NGHS
     }
 
     public void positionUpdate(int varIndex, double xR) {
-        double pos = getHarmonicMemory().get(getWorstIndexHM()).getVariableValue(varIndex)
-                + (randomGenerator.nextDouble() * (xR - getHarmonicMemory().get(getWorstIndexHM()).getVariableValue(varIndex)));
+        double pos = getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex)
+                + (randomGenerator.nextDouble() * (xR - getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex)));
         if (pos < NCHV.getLowerBound(varIndex)) {//el control de los limites es necesario, Aunque en el paper originar no lo consideren
             pos = NCHV.getLowerBound(varIndex);
         } else {

@@ -1,12 +1,10 @@
 package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
 
-import java.util.Collections;
 import java.util.Comparator;
 import org.uma.jmetal.algorithm.impl.AbstractHarmonySearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.comparator.FitnessNorma2Comparator;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -29,7 +27,7 @@ public final class IHS extends
     /**
      * Parametters ------------
      */
-    public double HMCR;//Harmonic memory Consideration Rate
+    public double HMCR;//Harmony memory Consideration Rate
     public double parMin;//pitch adjusting rate minimum
     public double parMax;//pitch adjusting rate minimum
     public double BWMin;//Bandwidth minimum
@@ -107,7 +105,7 @@ public final class IHS extends
     /*---------------------------------- own methods----------------------------*/
     public void memoryConsideration(int varIndex) {
         int rand = randomGenerator.nextInt(0, getHMS() - 1);
-        NCHV.setVariableValue(varIndex, getHarmonicMemory().get(rand).getVariableValue(varIndex));
+        NCHV.setVariableValue(varIndex, getHarmonyMemory().get(rand).getVariableValue(varIndex));
     }
 
     public void randomSelection(int varIndex) {

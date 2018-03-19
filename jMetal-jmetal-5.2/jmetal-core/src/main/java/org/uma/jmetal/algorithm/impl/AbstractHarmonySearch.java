@@ -18,7 +18,7 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
      * Parameters
      */
     public S NCHV;
-    private List<S> HarmonicMemory;
+    private List<S> HarmonyMemory;
     private Problem<S> problem;
     private int HMS;
     private int evaluations = 0;
@@ -41,7 +41,7 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
         return evaluations >= maxEvaluations;
     }
 
-    public List<S> createInitialHarmonicMemory() {
+    public List<S> createInitialHarmonyMemory() {
         NCHV = problem.createSolution();//just to reserve memory
         List<S> population = new ArrayList<>(getHMS());
         for (int i = 0; i < getHMS(); i++) {
@@ -51,13 +51,13 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
         return population;
     }
 
-    public List<S> evaluateHarmonicMemory() {
-        return evaluator.evaluate(HarmonicMemory, getProblem());
+    public List<S> evaluateHarmonyMemory() {
+        return evaluator.evaluate(HarmonyMemory, getProblem());
     }
 
-    public S evaluateHarmony(S harmonic) {
-        getProblem().evaluate(harmonic);
-        return harmonic;
+    public S evaluateHarmony(S harmony) {
+        getProblem().evaluate(harmony);
+        return harmony;
     }
 
     /**
@@ -67,21 +67,21 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
      * @return new HARMONY MEMORY
      *
      */
-    public List<S> updateHarmonicMemory(S NewHarmony) {
-        for (S tmp : getHarmonicMemory()) {
+    public List<S> updateHarmonyMemory(S NewHarmony) {
+        for (S tmp : getHarmonyMemory()) {
             if (comparator.compare(tmp, NewHarmony) == 0) {
-                return getHarmonicMemory();
+                return getHarmonyMemory();
             }
         }
-        if (comparator.compare(getHarmonicMemory().get(getWorstIndexHM()), NewHarmony) > 0) {
+        if (comparator.compare(getHarmonyMemory().get(getWorstIndexHM()), NewHarmony) > 0) {
             reemplaceWorstH(NewHarmony);
         }
-        return getHarmonicMemory();
+        return getHarmonyMemory();
     }
 
     public void reemplaceWorstH(S NewHarmony) {
-        getHarmonicMemory().remove(getWorstIndexHM());
-        getHarmonicMemory().add((S) NewHarmony.copy());
+        getHarmonyMemory().remove(getWorstIndexHM());
+        getHarmonyMemory().add((S) NewHarmony.copy());
         updateWorstIndex();
         updateBestIndex();
     }
@@ -89,7 +89,7 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
     public void updateWorstIndex() {
         setWorstIndexHM(0);
         for (int i = 0; i < getHMS(); i++) {
-            if (comparator.compare(getHarmonicMemory().get(getWorstIndexHM()), getHarmonicMemory().get(i)) == -1) {//Minimize
+            if (comparator.compare(getHarmonyMemory().get(getWorstIndexHM()), getHarmonyMemory().get(i)) == -1) {//Minimize
                 setWorstIndexHM(i);
             }
         }
@@ -98,7 +98,7 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
     public void updateBestIndex() {
         setBestIndexHM(0);
         for (int i = 0; i < getHMS(); i++) {
-            if (comparator.compare(getHarmonicMemory().get(getBestIndexHM()), getHarmonicMemory().get(i)) == 1) {//minimize 
+            if (comparator.compare(getHarmonyMemory().get(getBestIndexHM()), getHarmonyMemory().get(i)) == 1) {//minimize 
                 setBestIndexHM(i);
             }
         }
@@ -119,8 +119,8 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
     @Override
     public void run() {
 
-        HarmonicMemory = createInitialHarmonicMemory();
-        HarmonicMemory = evaluateHarmonicMemory();
+        HarmonyMemory = createInitialHarmonyMemory();
+        HarmonyMemory = evaluateHarmonyMemory();
         updateWorstIndex();
         updateBestIndex();
         initProgress();
@@ -128,14 +128,14 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
             NCHV = improviceNewHarmony();
             NCHV = evaluateHarmony(NCHV);
             updateProgress();
-            HarmonicMemory = updateHarmonicMemory(NCHV);
+            HarmonyMemory = updateHarmonyMemory(NCHV);
         }
     }
 
     @Override
     public Result getResult() {
       
-        return (Result) getHarmonicMemory().get(bestIndexHM);
+        return (Result) getHarmonyMemory().get(bestIndexHM);
 
     }
 
@@ -155,12 +155,12 @@ public abstract class AbstractHarmonySearch<S extends Solution<?>, Result>
         this.worstIndexHM = worstIndexHM;
     }
 
-    public List<S> getHarmonicMemory() {
-        return HarmonicMemory;
+    public List<S> getHarmonyMemory() {
+        return HarmonyMemory;
     }
 
-    public void setHarmonicMemory(List<S> HM) {
-        this.HarmonicMemory = HM;
+    public void setHarmonyMemory(List<S> HM) {
+        this.HarmonyMemory = HM;
     }
 
     public void setProblem(Problem<S> problem) {

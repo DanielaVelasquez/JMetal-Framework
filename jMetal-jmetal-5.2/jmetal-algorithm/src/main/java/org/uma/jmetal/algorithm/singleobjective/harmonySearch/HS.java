@@ -35,10 +35,10 @@ public class HS
      * @param problem
      * @param maxEvaluations ,Maximum number of evaluations of the objective
      * function
-     * @param hms ,Harmonic memory size
+     * @param hms ,Harmony memory size
      * @param PAR, Pitch Adjuting Rate
      * @param BW ,Bandwidth
-     * @param HMCR, Harmonic Memory Consideration Rate
+     * @param HMCR, Harmony Memory Consideration Rate
      * @param evaluator
      */
     public HS(DoubleProblem problem, int maxEvaluations, int hms,
@@ -96,7 +96,7 @@ public class HS
      */
     public void memoryConsideration(int varIndex) {
         int rand = randomGenerator.nextInt(0, getHMS() - 1);
-        NCHV.setVariableValue(varIndex, getHarmonicMemory().get(rand).getVariableValue(varIndex));
+        NCHV.setVariableValue(varIndex, getHarmonyMemory().get(rand).getVariableValue(varIndex));
     }
 
     public void pitchAdjustment(int varIndex) {

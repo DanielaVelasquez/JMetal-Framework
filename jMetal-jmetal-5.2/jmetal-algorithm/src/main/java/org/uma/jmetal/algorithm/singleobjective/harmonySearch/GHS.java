@@ -5,7 +5,6 @@ import org.uma.jmetal.algorithm.impl.AbstractHarmonySearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.comparator.FitnessNorma2Comparator;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -24,7 +23,7 @@ public class GHS
     /**
      * Parameters
      */
-    public double HMCR;//Harmonic memory Consideration Rate
+    public double HMCR;//Harmony memory Consideration Rate
     public double parMin;//pitch adjuting rate minimum
     public double parMax;//pitch adjuting rate maximum
     private JMetalRandom randomGenerator;
@@ -99,12 +98,12 @@ public class GHS
      */
     public void goTotheGlobalBest(int varIndex) {
         int columnRand = randomGenerator.nextInt(0, getProblem().getNumberOfVariables() - 1);//
-        NCHV.setVariableValue(varIndex, getHarmonicMemory().get(getBestIndexHM()).getVariableValue(columnRand));
+        NCHV.setVariableValue(varIndex, getHarmonyMemory().get(getBestIndexHM()).getVariableValue(columnRand));
     }
 
     public void memoryConsideration(int varIndex) {
         int rand = randomGenerator.nextInt(0, getHMS() - 1);
-        NCHV.setVariableValue(varIndex, getHarmonicMemory().get(rand).getVariableValue(varIndex));
+        NCHV.setVariableValue(varIndex, getHarmonyMemory().get(rand).getVariableValue(varIndex));
     }
 
     public void randomSelection(int varIndex) {
