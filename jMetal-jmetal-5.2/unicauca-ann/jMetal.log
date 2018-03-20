@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2018-02-15T14:24:21</date>
-  <millis>1518722661125</millis>
+  <date>2018-03-19T19:47:40</date>
+  <millis>1521506860335</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2018-02-15T14:24:21</date>
-  <millis>1518722661182</millis>
+  <date>2018-03-19T19:47:40</date>
+  <millis>1521506860419</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>SEVERE</level>
@@ -23,7 +23,7 @@
   <thread>1</thread>
   <message>Class.forName() did not recognized the name of the class</message>
   <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.9834</message>
+    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.Iri</message>
     <frame>
       <class>java.net.URLClassLoader</class>
       <method>findClass</method>
@@ -61,144 +61,62 @@
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
       <method>readDataSet</method>
-      <line>122</line>
+      <line>113</line>
     </frame>
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
       <method>readConfigurationExecution</method>
-      <line>59</line>
+      <line>54</line>
     </frame>
     <frame>
       <class>co.edu.unicauca.exec.Run</class>
       <method>main</method>
-      <line>36</line>
+      <line>33</line>
     </frame>
   </exception>
 </record>
 <record>
-  <date>2018-02-15T14:24:40</date>
-  <millis>1518722680127</millis>
+  <date>2018-03-19T19:47:45</date>
+  <millis>1521506865944</millis>
   <sequence>2</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>SEVERE</level>
-  <class>org.uma.jmetal.util.JMetalException</class>
-  <method>&lt;init&gt;</method>
-  <thread>1</thread>
-  <message>Class.forName() did not recognized the name of the class</message>
-  <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.ajksdlñfj</message>
-    <frame>
-      <class>java.net.URLClassLoader</class>
-      <method>findClass</method>
-      <line>381</line>
-    </frame>
-    <frame>
-      <class>java.lang.ClassLoader</class>
-      <method>loadClass</method>
-      <line>424</line>
-    </frame>
-    <frame>
-      <class>sun.misc.Launcher$AppClassLoader</class>
-      <method>loadClass</method>
-      <line>335</line>
-    </frame>
-    <frame>
-      <class>java.lang.ClassLoader</class>
-      <method>loadClass</method>
-      <line>357</line>
-    </frame>
-    <frame>
-      <class>java.lang.Class</class>
-      <method>forName0</method>
-    </frame>
-    <frame>
-      <class>java.lang.Class</class>
-      <method>forName</method>
-      <line>264</line>
-    </frame>
-    <frame>
-      <class>org.uma.jmetal.util.ProblemUtils</class>
-      <method>loadProblem</method>
-      <line>23</line>
-    </frame>
-    <frame>
-      <class>co.edu.unicauca.exec.Run</class>
-      <method>readDataSet</method>
-      <line>122</line>
-    </frame>
-    <frame>
-      <class>co.edu.unicauca.exec.Run</class>
-      <method>readConfigurationExecution</method>
-      <line>59</line>
-    </frame>
-    <frame>
-      <class>co.edu.unicauca.exec.Run</class>
-      <method>main</method>
-      <line>36</line>
-    </frame>
-  </exception>
+  <logger>com.github.fommil.netlib.BLAS</logger>
+  <level>WARNING</level>
+  <class>com.github.fommil.netlib.BLAS</class>
+  <method>&lt;clinit&gt;</method>
+  <thread>11</thread>
+  <message>Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS</message>
 </record>
 <record>
-  <date>2018-02-15T14:24:41</date>
-  <millis>1518722681659</millis>
+  <date>2018-03-19T19:47:47</date>
+  <millis>1521506867065</millis>
   <sequence>3</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>SEVERE</level>
-  <class>org.uma.jmetal.util.JMetalException</class>
-  <method>&lt;init&gt;</method>
-  <thread>1</thread>
-  <message>Class.forName() did not recognized the name of the class</message>
-  <exception>
-    <message>java.lang.ClassNotFoundException: co.edu.unicauca.problem.cross_validation.08324</message>
-    <frame>
-      <class>java.net.URLClassLoader</class>
-      <method>findClass</method>
-      <line>381</line>
-    </frame>
-    <frame>
-      <class>java.lang.ClassLoader</class>
-      <method>loadClass</method>
-      <line>424</line>
-    </frame>
-    <frame>
-      <class>sun.misc.Launcher$AppClassLoader</class>
-      <method>loadClass</method>
-      <line>335</line>
-    </frame>
-    <frame>
-      <class>java.lang.ClassLoader</class>
-      <method>loadClass</method>
-      <line>357</line>
-    </frame>
-    <frame>
-      <class>java.lang.Class</class>
-      <method>forName0</method>
-    </frame>
-    <frame>
-      <class>java.lang.Class</class>
-      <method>forName</method>
-      <line>264</line>
-    </frame>
-    <frame>
-      <class>org.uma.jmetal.util.ProblemUtils</class>
-      <method>loadProblem</method>
-      <line>23</line>
-    </frame>
-    <frame>
-      <class>co.edu.unicauca.exec.Run</class>
-      <method>readDataSet</method>
-      <line>122</line>
-    </frame>
-    <frame>
-      <class>co.edu.unicauca.exec.Run</class>
-      <method>readConfigurationExecution</method>
-      <line>59</line>
-    </frame>
-    <frame>
-      <class>co.edu.unicauca.exec.Run</class>
-      <method>main</method>
-      <line>36</line>
-    </frame>
-  </exception>
+  <logger>com.github.fommil.jni.JniLoader</logger>
+  <level>INFO</level>
+  <class>com.github.fommil.jni.JniLoader</class>
+  <method>liberalLoad</method>
+  <thread>11</thread>
+  <message>successfully loaded C:\Users\Daniel\AppData\Local\Temp\jniloader5971280112330389898netlib-native_ref-win-x86_64.dll</message>
+</record>
+<record>
+  <date>2018-03-19T19:47:47</date>
+  <millis>1521506867658</millis>
+  <sequence>4</sequence>
+  <logger>com.github.fommil.netlib.LAPACK</logger>
+  <level>WARNING</level>
+  <class>com.github.fommil.netlib.LAPACK</class>
+  <method>&lt;clinit&gt;</method>
+  <thread>11</thread>
+  <message>Failed to load implementation from: com.github.fommil.netlib.NativeSystemLAPACK</message>
+</record>
+<record>
+  <date>2018-03-19T19:47:47</date>
+  <millis>1521506867717</millis>
+  <sequence>5</sequence>
+  <logger>com.github.fommil.jni.JniLoader</logger>
+  <level>INFO</level>
+  <class>com.github.fommil.jni.JniLoader</class>
+  <method>load</method>
+  <thread>11</thread>
+  <message>already loaded netlib-native_ref-win-x86_64.dll</message>
 </record>
 </log>

@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
 
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
@@ -9,7 +10,7 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class GHSBuilder {
+public class GHSBuilder implements AlgorithmBuilder<GHS> {
 
     private DoubleProblem problem;
     private int maxEvaluations;//Maximum number of evaluations of the objective function
@@ -36,6 +37,7 @@ public class GHSBuilder {
         this.evaluator = new SequentialSolutionListEvaluator<>();
     }
 
+    @Override
     public GHS build() {
         GHS hs = new GHS(problem, maxEvaluations, HMS, HMCR, PARMIN, PARMAX, evaluator);
         return hs;

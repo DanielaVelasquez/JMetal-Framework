@@ -40,7 +40,6 @@ public abstract class AbstractBuilderFactory
     {
         this.parametersFactory = parametersFactory;
     }
-    
     public abstract AlgorithmBuilder getAlgorithm(String name, AbstractELMEvaluator.EvaluatorType evaluatorType,
                                            DoubleProblem problem) throws Exception;
     

@@ -38,7 +38,7 @@ public class FitnessNorma2Comparator<S extends Solution<?>> implements Comparato
         if (fitness1 > fitness2) {
             return 1;
         }
-        if (solution1.getAttribute("norm2") != null && solution2.getAttribute("norm2") != null) {
+        if (solution1.getAttribute("B") != null && solution2.getAttribute("B") != null) {
             return compareNorma(solution1, solution2);
         }
 
@@ -46,13 +46,13 @@ public class FitnessNorma2Comparator<S extends Solution<?>> implements Comparato
     }
 
     private int compareNorma(S solution1, S solution2) {
-        double norm2Solution1 = (double) solution1.getAttribute("norm2");
-        double norm2Solution2 = (double) solution2.getAttribute("norm2");
-        if (norm2Solution1 < norm2Solution2) {
+        double BSolution1 = (double) solution1.getAttribute("B");
+        double BSolution2 = (double) solution2.getAttribute("B");
+        if (BSolution1 < BSolution2) {
             return -1;
         }
 
-        if (norm2Solution1 > norm2Solution2) {
+        if (BSolution1 > BSolution2) {
             return 1;
         }
         return 0;

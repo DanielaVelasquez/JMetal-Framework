@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
 
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
@@ -9,7 +10,7 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class NGHSBuilder {
+public class NGHSBuilder implements AlgorithmBuilder<NGHS>{
 
     private DoubleProblem problem;
     private int maxEvaluations;
@@ -24,6 +25,7 @@ public class NGHSBuilder {
         this.evaluator = new SequentialSolutionListEvaluator<>();
     }
 
+    @Override
     public NGHS build() {
         NGHS hs = new NGHS(problem, maxEvaluations, HMS, PM, evaluator);
         return hs;

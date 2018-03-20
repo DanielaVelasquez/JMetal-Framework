@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
 
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.AlgorithmBuilder;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
@@ -9,7 +10,8 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class HSBuilder {
+public class HSBuilder
+        implements AlgorithmBuilder<HS> {
 
     /**
      * Parameters
@@ -35,6 +37,7 @@ public class HSBuilder {
     /**
      * @return HarmonySearch algorithm
      */
+    @Override
     public HS build() {
         return new HS(problem, maxEvaluations, HMS, HMCR, PAR, BW, evaluator);
     }

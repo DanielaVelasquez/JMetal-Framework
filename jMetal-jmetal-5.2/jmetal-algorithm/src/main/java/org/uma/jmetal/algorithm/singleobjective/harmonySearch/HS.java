@@ -53,7 +53,7 @@ public class HS
         setComparator(comparator);
         this.PAR = PAR;
         this.BW = BW;
-        this.HMCR = HMCR;  
+        this.HMCR = HMCR;
         if (randomGenerator == null) {
             randomGenerator = JMetalRandom.getInstance();
         }
