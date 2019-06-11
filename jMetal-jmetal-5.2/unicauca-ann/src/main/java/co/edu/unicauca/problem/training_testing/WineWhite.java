@@ -7,7 +7,11 @@ import java.io.IOException;
 
 public class WineWhite extends TrainingTestingEvaluator {
 
-    public WineWhite() throws IOException {
-        super(50, new DataSet("src/resources-elm", "wine(white).train", 11), new DataSet("src/resources-elm", "wine(white).test", 11), new Sigmoid(), new MultiplicationMethod(null), "Wine(White)", 3000);
-    }
+	private static final long serialVersionUID = 1L;
+
+	public WineWhite() throws IOException {
+		super(50, new DataSet("src/resources-elm", "wine(white).train", 11),
+				new DataSet("src/resources-elm", "wine(white).test", 11), new Sigmoid(), new MultiplicationMethod(null),
+				"Wine(White)", 3000);
+	}
 }

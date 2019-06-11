@@ -6,8 +6,10 @@ import co.edu.unicauca.moore_penrose.impl.MultiplicationMethod;
 import java.io.IOException;
 
 public class Pen extends TrainingTestingEvaluator {
+	private static final long serialVersionUID = 1L;
 
-    public Pen() throws IOException {
-        super(50, new DataSet("src/resources-elm", "pen.train", 16), new DataSet("src/resources-elm", "pen.test", 16), new Sigmoid(), new MultiplicationMethod(null), "Pen", 3000);
-    }
+	public Pen() throws IOException {
+		super(50, new DataSet("src/resources-elm", "pen.train", 16), new DataSet("src/resources-elm", "pen.test", 16),
+				new Sigmoid(), new MultiplicationMethod(null), "Pen", 3000);
+	}
 }

@@ -7,7 +7,11 @@ import java.io.IOException;
 
 public class SPECTF extends TrainingTestingEvaluator {
 
-    public SPECTF() throws IOException {
-        super(50, new DataSet("src/resources-elm", "SPECTF.train", 44), new DataSet("src/resources-elm", "SPECTF.test", 44), new Sigmoid(), new MultiplicationMethod(null), "SPECTF", 3000);
-    }
+	private static final long serialVersionUID = 1L;
+
+	public SPECTF() throws IOException {
+		super(50, new DataSet("src/resources-elm", "SPECTF.train", 44),
+				new DataSet("src/resources-elm", "SPECTF.test", 44), new Sigmoid(), new MultiplicationMethod(null),
+				"SPECTF", 3000);
+	}
 }

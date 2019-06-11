@@ -7,7 +7,10 @@ import java.io.IOException;
 
 public class Wilt extends TrainingTestingEvaluator {
 
-    public Wilt() throws IOException {
-        super(50, new DataSet("src/resources-elm", "wilt.train", 5), new DataSet("src/resources-elm", "wilt.test", 5), new Sigmoid(), new MultiplicationMethod(null), "Wilt", 3000);
-    }
+	private static final long serialVersionUID = 1L;
+
+	public Wilt() throws IOException {
+		super(50, new DataSet("src/resources-elm", "wilt.train", 5), new DataSet("src/resources-elm", "wilt.test", 5),
+				new Sigmoid(), new MultiplicationMethod(null), "Wilt", 3000);
+	}
 }
