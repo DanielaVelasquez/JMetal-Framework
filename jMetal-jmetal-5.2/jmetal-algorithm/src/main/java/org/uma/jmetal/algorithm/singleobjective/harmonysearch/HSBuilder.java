@@ -10,96 +10,94 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class HSBuilder
-        implements AlgorithmBuilder<HS> {
+public class HSBuilder implements AlgorithmBuilder<HS> {
 
-    /**
-     * Parameters
-     */
-    private DoubleProblem problem;
-    private int maxEvaluations;
-    private int HMS;//Harmonic memory Size
-    private double PAR;//pitch adjusting rate
-    private double BW;//Bandwidth
-    private double HMCR;//Harmonic memory Consideration Rate
-    private SolutionListEvaluator<DoubleSolution> evaluator;
+	/**
+	 * Parameters
+	 */
+	private DoubleProblem problem;
+	private int maxEvaluations;
+	private int hms;// Harmonic memory Size
+	private double par;// pitch adjusting rate
+	private double bw;// Bandwidth
+	private double hmcr;// Harmonic memory Consideration Rate
+	private SolutionListEvaluator<DoubleSolution> evaluator;
 
-    public HSBuilder(DoubleProblem problem) {
-        this.problem = problem;
-        this.HMS = 10;
-        this.maxEvaluations = 0;
-        this.PAR = 0.4;
-        this.BW = 0.1;
-        this.HMCR = 0.8;
-        this.evaluator = new SequentialSolutionListEvaluator<>();
-    }
+	public HSBuilder(DoubleProblem problem) {
+		this.problem = problem;
+		this.hms = 10;
+		this.maxEvaluations = 0;
+		this.par = 0.4;
+		this.bw = 0.1;
+		this.hmcr = 0.8;
+		this.evaluator = new SequentialSolutionListEvaluator<>();
+	}
 
-    /**
-     * @return HarmonySearch algorithm
-     */
-    @Override
-    public HS build() {
-        return new HS(problem, maxEvaluations, HMS, HMCR, PAR, BW, evaluator);
-    }
+	/**
+	 * @return HarmonySearch algorithm
+	 */
+	@Override
+	public HS build() {
+		return new HS(problem, maxEvaluations, hms, hmcr, par, bw, evaluator);
+	}
 
-    /*---------Set and get---------------*/
-    public int getHMS() {
-        return HMS;
-    }
+	/*---------Set and get---------------*/
+	public int getHMS() {
+		return hms;
+	}
 
-    public HSBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-        this.evaluator = evaluator;
-        return this;
-    }
+	public HSBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
+		this.evaluator = evaluator;
+		return this;
+	}
 
-    public HSBuilder setHMS(int HMS) {
-        this.HMS = HMS;
-        return this;
-    }
+	public HSBuilder setHMS(int hms) {
+		this.hms = hms;
+		return this;
+	}
 
-    public double getPAR() {
-        return PAR;
-    }
+	public double getPAR() {
+		return par;
+	}
 
-    public HSBuilder setPAR(double PAR) {
-        this.PAR = PAR;
-        return this;
-    }
+	public HSBuilder setPAR(double par) {
+		this.par = par;
+		return this;
+	}
 
-    public double getBW() {
-        return BW;
-    }
+	public double getBW() {
+		return bw;
+	}
 
-    public HSBuilder setBW(double BW) {
-        this.BW = BW;
-        return this;
-    }
+	public HSBuilder setBW(double bw) {
+		this.bw = bw;
+		return this;
+	}
 
-    public double getHMCR() {
-        return HMCR;
-    }
+	public double getHMCR() {
+		return hmcr;
+	}
 
-    public HSBuilder setHMCR(double HMCR) {
-        this.HMCR = HMCR;
-        return this;
-    }
+	public HSBuilder setHMCR(double hmcr) {
+		this.hmcr = hmcr;
+		return this;
+	}
 
-    public DoubleProblem getProblem() {
-        return problem;
-    }
+	public DoubleProblem getProblem() {
+		return problem;
+	}
 
-    public HSBuilder setProblem(DoubleProblem problem) {
-        this.problem = problem;
-        return this;
-    }
+	public HSBuilder setProblem(DoubleProblem problem) {
+		this.problem = problem;
+		return this;
+	}
 
-    public int getMaxEvaluations() {
-        return maxEvaluations;
-    }
+	public int getMaxEvaluations() {
+		return maxEvaluations;
+	}
 
-    public HSBuilder setMaxEvaluations(int maxEvaluations) {
-        this.maxEvaluations = maxEvaluations;
-        return this;
-    }
-
+	public HSBuilder setMaxEvaluations(int maxEvaluations) {
+		this.maxEvaluations = maxEvaluations;
+		return this;
+	}
 }
