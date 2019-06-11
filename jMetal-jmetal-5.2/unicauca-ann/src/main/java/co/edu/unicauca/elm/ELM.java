@@ -12,413 +12,404 @@ import no.uib.cipr.matrix.Matrix;
  */
 public class ELM {
 
-    /**
-     * -----------------------------------------------------------------------------------------
-     * Constants
-     * -----------------------------------------------------------------------------------------
-     */
-    /**
-     * Minimum value allowed in ELM's weight
-     */
-    private static final double MIN_VALUE = -1;
-    /**
-     * Max value allowed in ELM's weight
-     */
-    private static final double MAX_VALUE = 1;
+	/**
+	 * -----------------------------------------------------------------------------------------
+	 * Constants
+	 * -----------------------------------------------------------------------------------------
+	 */
+	/**
+	 * Minimum value allowed in ELM's weight
+	 */
+	private static final double MIN_VALUE = -1;
+	/**
+	 * Max value allowed in ELM's weight
+	 */
+	private static final double MAX_VALUE = 1;
 
-    /**
-     * -----------------------------------------------------------------------------------------
-     * Enums
-     * -----------------------------------------------------------------------------------------
-     */
-    /**
-     * ELM Type for classification and regression
-     */
-    public enum ELMType {
+	/**
+	 * -----------------------------------------------------------------------------------------
+	 * Enums
+	 * -----------------------------------------------------------------------------------------
+	 */
+	/**
+	 * ELM Type for classification and regression
+	 */
+	public enum ELMType {
 
-        REGRESSION,
-        CLASSIFICATION
-    }
-    /**
-     * -----------------------------------------------------------------------------------------
-     * Atributes
-     * -----------------------------------------------------------------------------------------
-     */
+		REGRESSION, CLASSIFICATION
+	}
 
-    /**
-     * Activation Function
-     */
-    private ELMFunction function;
-    /**
-     * ELM accuracy while training or training it contains accuracy of the last
-     * activity performed
-     */
-    private double accuracy;
-    /**
-     * ELM type (Regression or Classification)
-     */
-    private ELMType elm_type;
-    /**
-     * Number of input neurons
-     */
-    private int input_neurons;
-    /**
-     * Number of hidden neurons assigned to the ELM
-     */
-    private int hidden_neurons;
-    /**
-     * Number of output neurons
-     */
-    private int output_neurons;
-    /**
-     * Number of data
-     */
-    private int number_data;
-    /**
-     * Bias of hidden neurons
-     */
-    private DenseVector bias_hidden_neurons;
-    /**
-     * Matrix input weight - Weights between input layer and the hidden layer
-     * w_ij is the weight between neuron i (in input layer) and neuron j (in the
-     * hidden layer)
-     */
-    private DenseMatrix input_weight;
-    /**
-     * Matrix output weight - Weights between the hidden layer and output layer
-     * b_jk represents the weight between the neuron j (in the hidden layer) and
-     * neuron k (in output layer)
-     */
-    private DenseMatrix output_weight;
-    /**
-     * Input data, where every column is a data set row
-     */
-    private DenseMatrix X;
-    /**
-     * Output training/testing data
-     */
-    private DenseVector Y;
-    /**
-     * Tabular output data, represt the output data as a tabular matrix with -1
-     * and 1 values
-     */
-    private DenseMatrix tabular;
-    /**
-     * Output vector of the network
-     */
-    private DenseVector T;
-    /**
-     * Method calculates moore-penrose pseudoinverse
-     */
-    private AbstractMoorePenroseMethod inverse;
-    
-    private boolean trained;
+	/**
+	 * -----------------------------------------------------------------------------------------
+	 * Atributes
+	 * -----------------------------------------------------------------------------------------
+	 */
 
-    /**
-     * -----------------------------------------------------------------------------------------
-     * Methods
-     * -----------------------------------------------------------------------------------------
-     */
-    /**
-     * Construct an ELM
-     *
-     * @param elm_type Elm type - classification or regression
-     * @param hidden_neurons Number of hidden neurons assigned to the ELM
-     * @param activation_function Type of activation function - Type of
-     * activation function: 'sig' for Sigmoidal function 'sin' for Sine function
-     * 'hardlim' for Hardlim function 'tribas' for Triangular basis function
-     * 'radbas' for Radial basis function
-     * @param classes number of classes
-     * @param inverse Method for calculation of moore penrose inverse
-     */
-    public ELM(ELMType elm_type, int hidden_neurons, ELMFunction activation_function, int classes, AbstractMoorePenroseMethod inverse) {
-        this.elm_type = elm_type;
-        this.hidden_neurons = hidden_neurons;
-        this.function = activation_function;
-        this.output_neurons = classes;
-        this.accuracy = 0;
-        this.number_data = 0;
-        this.inverse = inverse;
-    }
+	/**
+	 * Activation Function
+	 */
+	private ELMFunction function;
+	/**
+	 * ELM accuracy while training or training it contains accuracy of the last
+	 * activity performed
+	 */
+	private double accuracy;
+	/**
+	 * ELM type (Regression or Classification)
+	 */
+	private ELMType elmType;
+	/**
+	 * Number of input neurons
+	 */
+	private int inputNeurons;
+	/**
+	 * Number of hidden neurons assigned to the ELM
+	 */
+	private int hiddenNeurons;
+	/**
+	 * Number of output neurons
+	 */
+	private int outputNeurons;
+	/**
+	 * Number of data
+	 */
+	private int numberData;
+	/**
+	 * Bias of hidden neurons
+	 */
+	private DenseVector biasHiddenNeurons;
+	/**
+	 * Matrix input weight - Weights between input layer and the hidden layer w_ij
+	 * is the weight between neuron i (in input layer) and neuron j (in the hidden
+	 * layer)
+	 */
+	private DenseMatrix inputWeight;
+	/**
+	 * Matrix output weight - Weights between the hidden layer and output layer b_jk
+	 * represents the weight between the neuron j (in the hidden layer) and neuron k
+	 * (in output layer)
+	 */
+	private DenseMatrix outputWeight;
+	/**
+	 * Input data, where every column is a data set row
+	 */
+	private DenseMatrix xMatriz;
+	/**
+	 * Output training/testing data
+	 */
+	private DenseVector yMatriz;
+	/**
+	 * Tabular output data, represt the output data as a tabular matrix with -1 and
+	 * 1 values
+	 */
+	private DenseMatrix tabular;
+	/**
+	 * Output vector of the network
+	 */
+	private DenseVector tVector;
+	/**
+	 * Method calculates moore-penrose pseudoinverse
+	 */
+	private AbstractMoorePenroseMethod inverse;
 
-    /**
-     * Train an artificial neural network using ELM algorithm with the input and
-     * output data given, if input weight and/or bias are not defined in the ELM
-     * they will be randomly assigned
-     */
-    public void train() 
-    {        
-        trained = false;
-        
-        /**
-         * In case the input weights is not defined in the ELM they will be
-         * randomly assigned
-         */
-        if (input_weight == null) {
-            input_weight = MatrixUtil.randomFill(hidden_neurons, input_neurons, MIN_VALUE, MAX_VALUE);
-        }
-        /**
-         * In case the bias of hidden neurosn is not defined in the ELM they
-         * will be randomly assigned
-         */
-        if (bias_hidden_neurons == null) {
-            bias_hidden_neurons = MatrixUtil.randomFill(hidden_neurons, MIN_VALUE, MAX_VALUE);
-        }
+	private boolean trained;
 
-        //Get output matrix from hidden layer
-        DenseMatrix H = calculateH(X);
-        try 
-        {
-            //MultiplicationMethod.getMoorePenroseInverse(0.000001, H);
-            DenseMatrix pinvH = inverse.calculate(H);
-            DenseMatrix transT = new DenseMatrix(number_data, output_neurons);
-            tabular.transpose(transT);
+	/**
+	 * -----------------------------------------------------------------------------------------
+	 * Methods
+	 * -----------------------------------------------------------------------------------------
+	 */
+	/**
+	 * Construct an ELM
+	 *
+	 * @param elmType            Elm type - classification or regression
+	 * @param hiddenNeurons      Number of hidden neurons assigned to the ELM
+	 * @param activationFunction Type of activation function - Type of activation
+	 *                           function: 'sig' for Sigmoidal function 'sin' for
+	 *                           Sine function 'hardlim' for Hardlim function
+	 *                           'tribas' for Triangular basis function 'radbas' for
+	 *                           Radial basis function
+	 * @param classes            number of classes
+	 * @param inverse            Method for calculation of moore penrose inverse
+	 */
+	public ELM(ELMType elmType, int hiddenNeurons, ELMFunction activationFunction, int classes,
+			AbstractMoorePenroseMethod inverse) {
+		this.elmType = elmType;
+		this.hiddenNeurons = hiddenNeurons;
+		this.function = activationFunction;
+		this.outputNeurons = classes;
+		this.accuracy = 0;
+		this.numberData = 0;
+		this.inverse = inverse;
+	}
 
-            output_weight = new DenseMatrix(hidden_neurons, output_neurons);
-            pinvH.mult(transT, output_weight);
+	/**
+	 * Train an artificial neural network using ELM algorithm with the input and
+	 * output data given, if input weight and/or bias are not defined in the ELM
+	 * they will be randomly assigned
+	 */
+	public void train() {
+		trained = false;
 
-            DenseMatrix T = calculate_output(H, number_data);
-            accuracy = evaluate(tabular, T);
-            trained = true;
-        } 
-        catch (Exception ex) 
-        {
-            accuracy = 0;
-        }
-    }
+		/**
+		 * In case the input weights is not defined in the ELM they will be randomly
+		 * assigned
+		 */
+		if (inputWeight == null) {
+			inputWeight = MatrixUtil.randomFill(hiddenNeurons, inputNeurons, MIN_VALUE, MAX_VALUE);
+		}
+		/**
+		 * In case the bias of hidden neurosn is not defined in the ELM they will be
+		 * randomly assigned
+		 */
+		if (biasHiddenNeurons == null) {
+			biasHiddenNeurons = MatrixUtil.randomFill(hiddenNeurons, MIN_VALUE, MAX_VALUE);
+		}
 
-    /**
-     * Test the artificial neural network with the input and output data given
-     */
-    public void test() {
-        //Get output matrix from hidden layer
-        if(trained)
-        {
-            DenseMatrix H = calculateH(X);
-            DenseMatrix T = calculate_output(H, number_data);
-            accuracy = evaluate(tabular, T);
-        }
-        else
-        {
-            accuracy = 0;
-        }
-    }
+		// Get output matrix from hidden layer
+		DenseMatrix hMatrizLocal = calculateH(xMatriz);
+		try {
+			// MultiplicationMethod.getMoorePenroseInverse(0.000001, H)
+			DenseMatrix pinvH = inverse.calculate(hMatrizLocal);
+			DenseMatrix transT = new DenseMatrix(numberData, outputNeurons);
+			tabular.transpose(transT);
 
-    /**
-     * Calculate the matrix's output
-     */
-    private DenseMatrix calculate_output(DenseMatrix H, int numData) {
-        DenseMatrix TTemp = new DenseMatrix(numData, output_neurons);
-        H.mult(output_weight, TTemp);
-        DenseMatrix T = new DenseMatrix(output_neurons, numData);
-        TTemp.transpose(T);
-        return T;
-    }
+			outputWeight = new DenseMatrix(hiddenNeurons, outputNeurons);
+			pinvH.mult(transT, outputWeight);
 
-    /**
-     * Calculate the output matrix of the hidden layer
-     *
-     * @return the output matrix of the hidden layer
-     */
-    private DenseMatrix calculateH(DenseMatrix X) {
-        int numData = X.numColumns();
-        DenseMatrix tempH = new DenseMatrix(hidden_neurons, numData);
-        input_weight.mult(X, tempH);
+			DenseMatrix tMatrizLocal = calculateOutput(hMatrizLocal, numberData);
+			accuracy = evaluate(tabular, tMatrizLocal);
+			trained = true;
+		} catch (Exception ex) {
+			accuracy = 0;
+		}
+	}
 
-        DenseMatrix bias_matrix = new DenseMatrix(hidden_neurons, numData);
-        for (int i = 0; i < hidden_neurons; i++) {
-            for (int j = 0; j < numData; j++) {
-                bias_matrix.set(i, j, bias_hidden_neurons.get(i));
-            }
-        }
+	/**
+	 * Test the artificial neural network with the input and output data given
+	 */
+	public void test() {
+		// Get output matrix from hidden layer
+		if (trained) {
+			DenseMatrix hMatrixLocal = calculateH(xMatriz);
+			DenseMatrix tMatrixLocal = calculateOutput(hMatrixLocal, numberData);
+			accuracy = evaluate(tabular, tMatrixLocal);
+		} else {
+			accuracy = 0;
+		}
+	}
 
-        tempH.add(bias_matrix);
+	/**
+	 * Calculate the matrix's output
+	 */
+	private DenseMatrix calculateOutput(DenseMatrix hMatrix, int numData) {
+		DenseMatrix tTempMatriz = new DenseMatrix(numData, outputNeurons);
+		hMatrix.mult(outputWeight, tTempMatriz);
+		DenseMatrix tTemp = new DenseMatrix(outputNeurons, numData);
+		tTempMatriz.transpose(tTemp);
+		return tTemp;
+	}
 
-        DenseMatrix HTemp = new DenseMatrix(hidden_neurons, numData);
-        for (int i = 0; i < hidden_neurons; i++) {
-            for (int j = 0; j < numData; j++) {
-                HTemp.set(i, j, function.evaluate(tempH.get(i, j)));
-            }
-        }
-        DenseMatrix H = new DenseMatrix(numData, hidden_neurons);
-        HTemp.transpose(H);
+	/**
+	 * Calculate the output matrix of the hidden layer
+	 *
+	 * @return the output matrix of the hidden layer
+	 */
+	private DenseMatrix calculateH(DenseMatrix xMatrix) {
+		int numData = xMatrix.numColumns();
+		DenseMatrix tempH = new DenseMatrix(hiddenNeurons, numData);
+		inputWeight.mult(xMatrix, tempH);
 
-        return H;
-    }
+		DenseMatrix biasMatrix = new DenseMatrix(hiddenNeurons, numData);
+		for (int i = 0; i < hiddenNeurons; i++) {
+			for (int j = 0; j < numData; j++) {
+				biasMatrix.set(i, j, biasHiddenNeurons.get(i));
+			}
+		}
 
-    /**
-     * Contrast the output of the neural network (T) and a tabular output (Y)
-     * besides creates the output network with the original format
-     *
-     * @param tabular tabular matrix
-     * @param TNetwork output from the network
-     * @return ELM's accuracy
-     */
-    private double evaluate(DenseMatrix tabular, DenseMatrix TNetwork) {
-        double accuracy = 0;
-        if (elm_type == ELMType.CLASSIFICATION) {
-            int numCols = tabular.numColumns();
-            int errors = 0;
-            this.T = new DenseVector(numCols);
-            /**
-             * Finds the index where the biggest value is in every T column and
-             * tabular column, if the indexes aren't the same, an error is
-             * counted
-             */
-            for (int j = 0; j < numCols; j++) {
-                double maxY = tabular.get(0, j);
-                int indexY = 0;
+		tempH.add(biasMatrix);
 
-                double maxT = TNetwork.get(0, j);
-                int indexT = 0;
+		DenseMatrix hTemp = new DenseMatrix(hiddenNeurons, numData);
+		for (int i = 0; i < hiddenNeurons; i++) {
+			for (int j = 0; j < numData; j++) {
+				hTemp.set(i, j, function.evaluate(tempH.get(i, j)));
+			}
+		}
+		DenseMatrix hMatriz = new DenseMatrix(numData, hiddenNeurons);
+		hTemp.transpose(hMatriz);
 
-                for (int i = 1; i < output_neurons; i++) {
-                    if (tabular.get(i, j) > maxY) {
-                        maxY = tabular.get(i, j);
-                        indexY = i;
-                    }
+		return hMatriz;
+	}
 
-                    if (TNetwork.get(i, j) > maxT) {
-                        maxT = TNetwork.get(i, j);
-                        indexT = i;
-                    }
-                }
+	/**
+	 * Contrast the output of the neural network (T) and a tabular output (Y)
+	 * besides creates the output network with the original format
+	 *
+	 * @param tabular  tabular matrix
+	 * @param TNetwork output from the network
+	 * @return ELM's accuracy
+	 */
+	private double evaluate(DenseMatrix tabular, DenseMatrix TNetwork) {
+		double accuracyAcum = 0;
+		if (elmType == ELMType.CLASSIFICATION) {
+			int numCols = tabular.numColumns();
+			int errors = 0;
+			this.tVector = new DenseVector(numCols);
+			/**
+			 * Finds the index where the biggest value is in every T column and tabular
+			 * column, if the indexes aren't the same, an error is counted
+			 */
+			for (int j = 0; j < numCols; j++) {
+				double maxY = tabular.get(0, j);
+				int indexY = 0;
 
-                if (indexY != indexT) {
-                    errors++;
-                }
-                //Original format for the output network
-                T.set(j, indexT);
-            }
+				double maxT = TNetwork.get(0, j);
+				int indexT = 0;
 
-            accuracy = 1 - ((double) errors / (double) numCols);
-        } 
-        else 
-        {
-            /**
-             * Square differences between tabular and output network
-             */
-            int numCols = tabular.numColumns();
-            this.T = new DenseVector(numCols);
-            double aux = 0;
+				for (int i = 1; i < outputNeurons; i++) {
+					if (tabular.get(i, j) > maxY) {
+						maxY = tabular.get(i, j);
+						indexY = i;
+					}
 
-            for (int j = 0; j < numCols; j++) {
-                double valueY = tabular.get(0, j);
-                double valueT = TNetwork.get(0, j);
-                aux += Math.pow((valueY - valueT), 2);
-                
-                //Original format for the output network
-                this.T.set(j, valueT);
-            }
-            /*
-             * Best solution closer to one
-             */
-            accuracy = 1 / ( 1 + Math.sqrt(aux / numCols));
-        }
+					if (TNetwork.get(i, j) > maxT) {
+						maxT = TNetwork.get(i, j);
+						indexT = i;
+					}
+				}
 
-        return accuracy;
-    }
+				if (indexY != indexT) {
+					errors++;
+				}
+				// Original format for the output network
+				tVector.set(j, indexT);
+			}
 
-    /**
-     * Creates tabular from a output vector
-     *
-     * @param y output vector
-     * @return tabular matrix (fill with 1 and -1)
-     */
-    private DenseMatrix tabularOutput(DenseVector y) {
-        DenseMatrix Y;
-        if (elm_type == ELMType.CLASSIFICATION) {
-            int n = y.size();
-            Y = new DenseMatrix(output_neurons, n);
+			accuracyAcum = 1 - ((double) errors / (double) numCols);
+		} else {
+			/**
+			 * Square differences between tabular and output network
+			 */
+			int numCols = tabular.numColumns();
+			this.tVector = new DenseVector(numCols);
+			double aux = 0;
 
-            for (int j = 0; j < n; j++) {
-                for (int i = 0; i < output_neurons; i++) {
-                    if (i == y.get(j)) {
-                        Y.set(i, j, 1);
-                    } else {
-                        Y.set(i, j, -1);
-                    }
-                }
-            }
-        } else {
-            output_neurons = 1;
-            Y = new DenseMatrix(1, y.size());
-            for (int i = 0; i < y.size(); i++) {
-                Y.set(0, i, y.get(i));
-            }
-        }
-        return Y;
-    }
+			for (int j = 0; j < numCols; j++) {
+				double valueY = tabular.get(0, j);
+				double valueT = TNetwork.get(0, j);
+				aux += Math.pow((valueY - valueT), 2);
 
-    public DenseMatrix getInputWeight() {
-        return input_weight;
-    }
+				// Original format for the output network
+				this.tVector.set(j, valueT);
+			}
+			/*
+			 * Best solution closer to one
+			 */
+			accuracyAcum = 1 / (1 + Math.sqrt(aux / numCols));
+		}
 
-    public void setInputWeight(DenseMatrix input_weight) {
-        this.input_weight = input_weight;
-        this.input_neurons = this.input_weight.numColumns();
-    }
+		return accuracyAcum;
+	}
 
-    public void setY(DenseVector Y) {
-        this.Y = Y;
-        this.tabular = tabularOutput(Y);
-    }
+	/**
+	 * Creates tabular from a output vector
+	 *
+	 * @param y output vector
+	 * @return tabular matrix (fill with 1 and -1)
+	 */
+	private DenseMatrix tabularOutput(DenseVector y) {
+		DenseMatrix yMatrisLocal;
+		if (elmType == ELMType.CLASSIFICATION) {
+			int n = y.size();
+			yMatrisLocal = new DenseMatrix(outputNeurons, n);
 
-    public DenseVector getBiasHiddenNeurons() {
-        return bias_hidden_neurons;
-    }
+			for (int j = 0; j < n; j++) {
+				for (int i = 0; i < outputNeurons; i++) {
+					if (i == y.get(j)) {
+						yMatrisLocal.set(i, j, 1);
+					} else {
+						yMatrisLocal.set(i, j, -1);
+					}
+				}
+			}
+		} else {
+			outputNeurons = 1;
+			yMatrisLocal = new DenseMatrix(1, y.size());
+			for (int i = 0; i < y.size(); i++) {
+				yMatrisLocal.set(0, i, y.get(i));
+			}
+		}
+		return yMatrisLocal;
+	}
 
-    public void setBiasHiddenNeurons(DenseVector bias_hidden_neurons) {
-        this.bias_hidden_neurons = bias_hidden_neurons;
-    }
+	public DenseMatrix getInputWeight() {
+		return inputWeight;
+	}
 
-    public void setX(DenseMatrix X) {
-        this.X = X;
-        this.number_data = this.X.numColumns();
-        this.input_neurons = this.X.numRows();
-    }
+	public void setInputWeight(DenseMatrix inputWeight) {
+		this.inputWeight = inputWeight;
+		this.inputNeurons = this.inputWeight.numColumns();
+	}
 
-    public DenseMatrix getX() {
-        return X;
-    }
+	public void setY(DenseVector yMatrix) {
+		this.yMatriz = yMatrix;
+		this.tabular = tabularOutput(yMatrix);
+	}
 
-    /**
-     * Returns networks´s output
-     *
-     * @return networks´s output
-     */
-    public DenseVector getOutputNetwork() {
-        return T;
-    }
+	public DenseVector getBiasHiddenNeurons() {
+		return biasHiddenNeurons;
+	}
 
-    public double getOuputWightNorm() {
-        if(output_weight !=null)
-            return output_weight.norm(Matrix.Norm.Frobenius);
-        return Double.MAX_VALUE;
-    }
+	public void setBiasHiddenNeurons(DenseVector biasHiddenNeurons) {
+		this.biasHiddenNeurons = biasHiddenNeurons;
+	}
 
-    public double getAccuracy() {
-        return accuracy;
-    }
+	public void setX(DenseMatrix xMatrix) {
+		this.xMatriz = xMatrix;
+		this.numberData = this.xMatriz.numColumns();
+		this.inputNeurons = this.xMatriz.numRows();
+	}
 
-    public int getInputNeurons() {
-        return input_neurons;
-    }
+	public DenseMatrix getX() {
+		return xMatriz;
+	}
 
-    public int getHiddenNeurons() {
-        return hidden_neurons;
-    }
+	/**
+	 * Returns networks´s output
+	 *
+	 * @return networks´s output
+	 */
+	public DenseVector getOutputNetwork() {
+		return tVector;
+	}
 
-    public ELMType getElm_type() {
-        return elm_type;
-    }
+	public double getOuputWightNorm() {
+		if (outputWeight != null)
+			return outputWeight.norm(Matrix.Norm.Frobenius);
+		return Double.MAX_VALUE;
+	}
 
-    public void setElm_type(ELMType elm_type) {
-        this.elm_type = elm_type;
-    }
+	public double getAccuracy() {
+		return accuracy;
+	}
 
-    public void setInputNeurons(int input_neurons) {
-        this.input_neurons = input_neurons;
-    }
+	public int getInputNeurons() {
+		return inputNeurons;
+	}
 
+	public int getHiddenNeurons() {
+		return hiddenNeurons;
+	}
+
+	public ELMType getElmType() {
+		return elmType;
+	}
+
+	public void setElmType(ELMType elmType) {
+		this.elmType = elmType;
+	}
+
+	public void setInputNeurons(int inputNeurons) {
+		this.inputNeurons = inputNeurons;
+	}
 }
