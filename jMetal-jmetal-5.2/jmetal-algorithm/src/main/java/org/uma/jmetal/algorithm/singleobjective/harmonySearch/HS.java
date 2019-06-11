@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
 
 import java.util.Comparator;
+
 import org.uma.jmetal.algorithm.impl.AbstractHarmonySearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -12,132 +13,135 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class HS
-        extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
+public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 
-    /**
-     * Harmony Search (HS) Based on
-     * http://www.sciencedirect.com/science/article/pii/S0045782504004682 L. G.
-     * A. Geem ZW, Kim JH, “A new heuristic optimization algorithm: Harmony
-     * search. Simulation,” Geem ZW, Kim JH, Loganathan GV. A. 2001.
-     * https://sites.google.com/a/hydroteq.com/www/
-     */
-    /**
-     * Parameters
-     */
-    private double PAR;//pitch adjusting rate
-    private double BW;//Bandwidth
-    private double HMCR;//Harmony memory Consideration Rate
-    private JMetalRandom randomGenerator;
+	/**
+	 * Harmony Search (HS) Based on
+	 * http://www.sciencedirect.com/science/article/pii/S0045782504004682 L. G. A.
+	 * Geem ZW, Kim JH, “A new heuristic optimization algorithm: Harmony search.
+	 * Simulation,” Geem ZW, Kim JH, Loganathan GV. A. 2001.
+	 * https://sites.google.com/a/hydroteq.com/www/
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     * @param problem
-     * @param maxEvaluations ,Maximum number of evaluations of the objective
-     * function
-     * @param hms ,Harmony memory size
-     * @param PAR, Pitch Adjuting Rate
-     * @param BW ,Bandwidth
-     * @param HMCR, Harmony Memory Consideration Rate
-     * @param evaluator
-     */
-    public HS(DoubleProblem problem, int maxEvaluations, int hms,
-            double HMCR, double PAR, double BW, SolutionListEvaluator<DoubleSolution> evaluator) {
+	/**
+	 * Parameters
+	 */
+	private double PAR;// pitch adjusting rate
+	private double BW;// Bandwidth
+	private double HMCR;// Harmony memory Consideration Rate
+	private JMetalRandom randomGenerator;
 
-        setProblem(problem);
-        setHMS(hms);
-        setEvaluations(0);
-        setMaxEvaluations(maxEvaluations);
-        setEvaluator(evaluator);
-        Comparator<DoubleSolution> comparator = new FitnessNorma2Comparator<>();
-        setComparator(comparator);
-        this.PAR = PAR;
-        this.BW = BW;
-        this.HMCR = HMCR;
-        if (randomGenerator == null) {
-            randomGenerator = JMetalRandom.getInstance();
-        }
+	/**
+	 *
+	 * @param problem
+	 * @param maxEvaluations ,Maximum number of evaluations of the objective
+	 *                       function
+	 * @param hms            ,Harmony memory size
+	 * @param                PAR, Pitch Adjuting Rate
+	 * @param BW             ,Bandwidth
+	 * @param                HMCR, Harmony Memory Consideration Rate
+	 * @param evaluator
+	 */
+	public HS(DoubleProblem problem, int maxEvaluations, int hms, double HMCR, double PAR, double BW,
+			SolutionListEvaluator<DoubleSolution> evaluator) {
 
-    }
+		setProblem(problem);
+		setHMS(hms);
+		setEvaluations(0);
+		setMaxEvaluations(maxEvaluations);
+		setEvaluator(evaluator);
+		Comparator<DoubleSolution> comparator = new FitnessNorma2Comparator<>();
+		setComparator(comparator);
+		this.PAR = PAR;
+		this.BW = BW;
+		this.HMCR = HMCR;
+		if (randomGenerator == null) {
+			randomGenerator = JMetalRandom.getInstance();
+		}
 
-    @Override
-    public String getName() {
-        return "HS";
-    }
+	}
 
-    @Override
-    public String getDescription() {
-        return " Harmony Search " + " HMS " + getHMS() + " HMCR: " + HMCR + " PAR : " + PAR + " BW: " + BW + "\n Evaluations " + super.getEvaluations();
-    }
+	@Override
+	public String getName() {
+		return "HS";
+	}
 
-    /**
-     * @return newSolution ,is a solution MUST BE CLONE IF IT IS BETTER THAN THE
-     * WORST OF THE HARMONIC MEMORY
-     */
-    @Override
-    public DoubleSolution improviceNewHarmony() {
-        for (int i = 0; i < getProblem().getNumberOfVariables(); i++) {
-            if (randomGenerator.nextDouble() < HMCR) {
-                memoryConsideration(i);
-                if (randomGenerator.nextDouble() < PAR) {
-                    pitchAdjustment(i);
-                }
-            } else {
-                randomSelection(i);
-            }
-        }
-        return NCHV;
-    }
+	@Override
+	public String getDescription() {
+		return " Harmony Search " + " HMS " + getHMS() + " HMCR: " + HMCR + " PAR : " + PAR + " BW: " + BW
+				+ "\n Evaluations " + super.getEvaluations();
+	}
 
-    /* -----------Own methods-------------*/
-    /**
-     *
-     * @param varIndex
-     */
-    public void memoryConsideration(int varIndex) {
-        int rand = randomGenerator.nextInt(0, getHMS() - 1);
-        NCHV.setVariableValue(varIndex, getHarmonyMemory().get(rand).getVariableValue(varIndex));
-    }
+	/**
+	 * @return newSolution ,is a solution MUST BE CLONE IF IT IS BETTER THAN THE
+	 *         WORST OF THE HARMONIC MEMORY
+	 */
+	@Override
+	public DoubleSolution improviceNewHarmony() {
+		for (int i = 0; i < getProblem().getNumberOfVariables(); i++) {
+			if (randomGenerator.nextDouble() < HMCR) {
+				memoryConsideration(i);
+				if (randomGenerator.nextDouble() < PAR) {
+					pitchAdjustment(i);
+				}
+			} else {
+				randomSelection(i);
+			}
+		}
+		return NCHV;
+	}
 
-    public void pitchAdjustment(int varIndex) {
-        double temp = NCHV.getVariableValue(varIndex);
+	/* -----------Own methods------------- */
+	/**
+	 *
+	 * @param varIndex
+	 */
+	public void memoryConsideration(int varIndex) {
+		int rand = randomGenerator.nextInt(0, getHMS() - 1);
+		NCHV.setVariableValue(varIndex, getHarmonyMemory().get(rand).getVariableValue(varIndex));
+	}
 
-        double rand = randomGenerator.nextDouble();//random(0,1)
-        if (rand <= 0.5) {
-            temp -= randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * BW;
-        } else {
-            temp += randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * BW;
-        }
-        NCHV.setVariableValue(varIndex, temp);
+	public void pitchAdjustment(int varIndex) {
+		double temp = NCHV.getVariableValue(varIndex);
 
-        /**
-         * Limit control
-         */
-        if (NCHV.getVariableValue(varIndex) > NCHV.getUpperBound(varIndex)) {
-            NCHV.setVariableValue(varIndex, NCHV.getUpperBound(varIndex));
-        } else {
-            if (NCHV.getVariableValue(varIndex) < NCHV.getLowerBound(varIndex)) {
-                NCHV.setVariableValue(varIndex, NCHV.getLowerBound(varIndex));
-            }
-        }
+		double rand = randomGenerator.nextDouble();// random(0,1)
+		if (rand <= 0.5) {
+			temp -= randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * BW;
+		} else {
+			temp += randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * BW;
+		}
+		NCHV.setVariableValue(varIndex, temp);
 
-    }
+		/**
+		 * Limit control
+		 */
+		if (NCHV.getVariableValue(varIndex) > NCHV.getUpperBound(varIndex)) {
+			NCHV.setVariableValue(varIndex, NCHV.getUpperBound(varIndex));
+		} else {
+			if (NCHV.getVariableValue(varIndex) < NCHV.getLowerBound(varIndex)) {
+				NCHV.setVariableValue(varIndex, NCHV.getLowerBound(varIndex));
+			}
+		}
 
-    /* -------------------------Set And Get ----------------------------------*/
-    public void randomSelection(int varIndex) {
-        NCHV.setVariableValue(varIndex, randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)));
-    }
+	}
 
-    public void setPAR(double PAR) {
-        this.PAR = PAR;
-    }
+	/* -------------------------Set And Get ---------------------------------- */
+	public void randomSelection(int varIndex) {
+		NCHV.setVariableValue(varIndex,
+				randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)));
+	}
 
-    public void setHMCR(double HMCR) {
-        this.HMCR = HMCR;
-    }
+	public void setPAR(double PAR) {
+		this.PAR = PAR;
+	}
 
-    public void setBW(double BW) {
-        this.BW = BW;
-    }
+	public void setHMCR(double HMCR) {
+		this.HMCR = HMCR;
+	}
+
+	public void setBW(double BW) {
+		this.BW = BW;
+	}
 
 }
