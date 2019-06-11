@@ -1,12 +1,15 @@
 package co.edu.unicauca.factory.algorithm;
 
-import static co.edu.unicauca.factory.algorithm.AbstractBuilderFactory.EVALUATIONS_TT;
-import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
-import co.edu.unicauca.problem.AbstractELMEvaluator;
+import org.uma.jmetal.algorithm.singleobjective.harmonysearch.GHSBuilder;
+import org.uma.jmetal.algorithm.singleobjective.harmonysearch.HSBuilder;
+import org.uma.jmetal.algorithm.singleobjective.harmonysearch.IHSBuilder;
+import org.uma.jmetal.algorithm.singleobjective.harmonysearch.NGHSBuilder;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.util.AlgorithmBuilder;
-import org.uma.jmetal.algorithm.singleobjective.harmonySearch.*;
 import org.uma.jmetal.util.JMetalException;
+
+import co.edu.unicauca.factory.parameters.AbstractParametersFactory;
+import co.edu.unicauca.problem.AbstractELMEvaluator;
 
 /**
  *

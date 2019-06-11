@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
+package org.uma.jmetal.algorithm.singleobjective.harmonysearch;
 
 import java.util.Comparator;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
+package org.uma.jmetal.algorithm.singleobjective.harmonysearch;
 
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;

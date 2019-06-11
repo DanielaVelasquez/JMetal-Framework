@@ -1,4 +1,4 @@
-package org.uma.jmetal.algorithm.singleobjective.harmonySearch;
+package org.uma.jmetal.algorithm.singleobjective.harmonysearch;
 
 import java.util.Comparator;
 
@@ -27,9 +27,9 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	/**
 	 * Parameters
 	 */
-	private double PAR;// pitch adjusting rate
-	private double BW;// Bandwidth
-	private double HMCR;// Harmony memory Consideration Rate
+	private double par;// pitch adjusting rate
+	private double bw;// Bandwidth
+	private double hmcr;// Harmony memory Consideration Rate
 	private JMetalRandom randomGenerator;
 
 	/**
@@ -38,12 +38,12 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	 * @param maxEvaluations ,Maximum number of evaluations of the objective
 	 *                       function
 	 * @param hms            ,Harmony memory size
-	 * @param                PAR, Pitch Adjuting Rate
-	 * @param BW             ,Bandwidth
-	 * @param                HMCR, Harmony Memory Consideration Rate
+	 * @param                par, Pitch Adjuting Rate
+	 * @param bw             ,Bandwidth
+	 * @param                hmcr, Harmony Memory Consideration Rate
 	 * @param evaluator
 	 */
-	public HS(DoubleProblem problem, int maxEvaluations, int hms, double HMCR, double PAR, double BW,
+	public HS(DoubleProblem problem, int maxEvaluations, int hms, double hmcr, double par, double bw,
 			SolutionListEvaluator<DoubleSolution> evaluator) {
 
 		setProblem(problem);
@@ -53,9 +53,9 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 		setEvaluator(evaluator);
 		Comparator<DoubleSolution> comparator = new FitnessNorma2Comparator<>();
 		setComparator(comparator);
-		this.PAR = PAR;
-		this.BW = BW;
-		this.HMCR = HMCR;
+		this.par = par;
+		this.bw = bw;
+		this.hmcr = hmcr;
 		if (randomGenerator == null) {
 			randomGenerator = JMetalRandom.getInstance();
 		}
@@ -69,8 +69,9 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 
 	@Override
 	public String getDescription() {
-		return " Harmony Search " + " HMS " + getHMS() + " HMCR: " + HMCR + " PAR: " + PAR + " BW: " + BW
-				+ "\n Evaluations " + super.getEvaluations();
+		return new StringBuilder().append(" Harmony Search ").append(" HMS ").append(getHMS()).append(" hmcr: ")
+				.append(hmcr).append(" par: ").append(par).append(" bw: ").append(bw).append("\n Evaluations ")
+				.append(super.getEvaluations()).toString();
 	}
 
 	/**
@@ -80,9 +81,9 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	@Override
 	public DoubleSolution improviceNewHarmony() {
 		for (int i = 0; i < getProblem().getNumberOfVariables(); i++) {
-			if (randomGenerator.nextDouble() < HMCR) {
+			if (randomGenerator.nextDouble() < hmcr) {
 				memoryConsideration(i);
-				if (randomGenerator.nextDouble() < PAR) {
+				if (randomGenerator.nextDouble() < par) {
 					pitchAdjustment(i);
 				}
 			} else {
@@ -107,9 +108,9 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 
 		double rand = randomGenerator.nextDouble();// random(0,1)
 		if (rand <= 0.5) {
-			temp -= randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * BW;
+			temp -= randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * bw;
 		} else {
-			temp += randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * BW;
+			temp += randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)) * bw;
 		}
 		NCHV.setVariableValue(varIndex, temp);
 
@@ -132,16 +133,15 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 				randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)));
 	}
 
-	public void setPAR(double PAR) {
-		this.PAR = PAR;
+	public void setPAR(double par) {
+		this.par = par;
 	}
 
-	public void setHMCR(double HMCR) {
-		this.HMCR = HMCR;
+	public void setHMCR(double hmcr) {
+		this.hmcr = hmcr;
 	}
 
-	public void setBW(double BW) {
-		this.BW = BW;
+	public void setBW(double bw) {
+		this.bw = bw;
 	}
-
 }
