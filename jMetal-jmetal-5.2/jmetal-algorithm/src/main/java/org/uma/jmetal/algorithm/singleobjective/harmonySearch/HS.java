@@ -69,7 +69,7 @@ public class HS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 
 	@Override
 	public String getDescription() {
-		return " Harmony Search " + " HMS " + getHMS() + " HMCR: " + HMCR + " PAR : " + PAR + " BW: " + BW
+		return " Harmony Search " + " HMS " + getHMS() + " HMCR: " + HMCR + " PAR: " + PAR + " BW: " + BW
 				+ "\n Evaluations " + super.getEvaluations();
 	}
 
