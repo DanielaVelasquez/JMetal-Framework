@@ -2,6 +2,7 @@ package org.uma.jmetal.algorithm.singleobjective.harmonysearch;
 
 import java.util.Comparator;
 import java.util.List;
+
 import org.uma.jmetal.algorithm.impl.AbstractHarmonySearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -13,121 +14,121 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class NGHS
-        extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
+public class NGHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
+	/**
+	 * -------------------------------------------------------------------------
+	 * Based on "A novel global harmony search algorithm for task assignment
+	 * problem" http://www.sciencedirect.com/science/article/pii/S0164121210001470
+	 * -------------------------------------------------------------------------
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * Parameters
+	 */
+	private final double pm;// Probability of mutation
+	private JMetalRandom randomGenerator;
 
-    /**
-     * -------------------------------------------------------------------------
-     * Based on "A novel global harmony search algorithm for task assignment
-     * problem"
-     * http://www.sciencedirect.com/science/article/pii/S0164121210001470
-     * -------------------------------------------------------------------------
-     */
-    /**
-     * Parameters
-     */
-    private final double PM;//Probability of mutation
-    private JMetalRandom randomGenerator;
+	/**
+	 *
+	 * @param problem
+	 * @param maxEvaluations
+	 * @param hms
+	 * @param pm
+	 * @param evaluator
+	 */
+	public NGHS(DoubleProblem problem, int maxEvaluations, int hms, double pm,
+			SolutionListEvaluator<DoubleSolution> evaluator) {
 
-    /**
-     *
-     * @param problem
-     * @param maxEvaluations
-     * @param hms
-     * @param PM
-     * @param evaluator
-     */
-    public NGHS(DoubleProblem problem, int maxEvaluations, int hms,
-            double PM, SolutionListEvaluator<DoubleSolution> evaluator) {
+		setProblem(problem);
+		setMaxEvaluations(maxEvaluations);
+		setHMS(hms);
+		setEvaluations(0);
+		setEvaluator(evaluator);
+		Comparator<DoubleSolution> comparator = new FitnessNorma2Comparator<>();
+		setComparator(comparator);
 
-        setProblem(problem);
-        setMaxEvaluations(maxEvaluations);
-        setHMS(hms);
-        setEvaluations(0);
-        setEvaluator(evaluator);
-        Comparator<DoubleSolution> comparator = new FitnessNorma2Comparator<>();
-        setComparator(comparator);
+		this.pm = pm;
+		if (randomGenerator == null) {
+			randomGenerator = JMetalRandom.getInstance();
+		}
+	}
 
-        this.PM = PM;
-        if (randomGenerator == null) {
-            randomGenerator = JMetalRandom.getInstance();
-        }
-    }
+	@Override
+	public String getName() {
+		return "NovelGHS";
+	}
 
-    @Override
-    public String getName() {
-        return "NovelGHS";
-    }
+	@Override
+	public String getDescription() {
+		return new StringBuilder().append("Novel Global Best Harmony Search ").append(" HMS: ").append(getHMS())
+				.append(" pm: ").append(pm).append(" \nEvaluations : ").append(getEvaluations()).toString();
+	}
 
-    @Override
-    public String getDescription() {
-        return "Novel Global Best Harmony Search " + " HMS: " + getHMS() + " PM: " + PM + " \nEvaluations : " + getEvaluations();
-    }
+	@Override
+	public DoubleSolution improviceNewHarmony() {
+		for (int i = 0; i < getProblem().getNumberOfVariables(); i++) {
+			double xR = xR(i);
+			positionUpdate(i, xR);
+			double al = randomGenerator.nextDouble();
+			if (al < pm) {
+				randomSelection(i);
+			}
 
-    @Override
-    public DoubleSolution improviceNewHarmony() {
-        for (int i = 0; i < getProblem().getNumberOfVariables(); i++) {
-            double xR = xR(i);
-            positionUpdate(i, xR);
-            double al = randomGenerator.nextDouble();
-            if (al < PM) {
-                randomSelection(i);
-            }
+		}
+		return NCHV;
+	}
 
-        }
-        return NCHV;
-    }
+	/**
+	 * Update harmony memory
+	 *
+	 * @param NewHarmony to be considerate
+	 * @return new HARMONY MEMORY
+	 *
+	 */
+	@Override
+	public List<DoubleSolution> updateHarmonyMemory(DoubleSolution newHarmony) {
+		for (DoubleSolution sol : getHarmonyMemory()) {
+			if (getComparator().compare(sol, newHarmony) == 0) {
+				return getHarmonyMemory();
+			}
+		}
+		getHarmonyMemory().remove(getWorstIndexHM());
+		getHarmonyMemory().add((DoubleSolution) newHarmony.copy());
+		updateWorstIndex();
+		updateBestIndex();
+		return getHarmonyMemory();
+	}
 
-    /**
-     * Update harmony memory
-     *
-     * @param NewHarmony to be considerate
-     * @return new HARMONY MEMORY
-     *
-     */
-    @Override
-    public List<DoubleSolution> updateHarmonyMemory(DoubleSolution NewHarmony) {
-        for (DoubleSolution sol : getHarmonyMemory()) {
-            if (getComparator().compare(sol, NewHarmony) == 0) {
-                return getHarmonyMemory();
-            }
-        }
-        getHarmonyMemory().remove(getWorstIndexHM());
-        getHarmonyMemory().add((DoubleSolution) NewHarmony.copy());
-        updateWorstIndex();
-        updateBestIndex();
-        return getHarmonyMemory();
-    }
+	/*------------------------------------Own methods--------------------------*/
+	public void randomSelection(int varIndex) {
+		NCHV.setVariableValue(varIndex,
+				randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)));
+	}
 
-    /*------------------------------------Own methods--------------------------*/
-    public void randomSelection(int varIndex) {
-        NCHV.setVariableValue(varIndex, randomGenerator.nextDouble(NCHV.getLowerBound(varIndex), NCHV.getUpperBound(varIndex)));
-    }
+	public double xR(int varIndex) {
+		double xR = 2 * getHarmonyMemory().get(getBestIndexHM()).getVariableValue(varIndex)
+				- getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex);
+		if (xR < NCHV.getLowerBound(varIndex)) {
+			xR = NCHV.getLowerBound(varIndex);
+		} else {
+			if (xR > NCHV.getUpperBound(varIndex)) {
+				xR = NCHV.getUpperBound(varIndex);
+			}
+		}
+		return xR;
+	}
 
-    public double xR(int varIndex) {
-        double xR = 2 * getHarmonyMemory().get(getBestIndexHM()).getVariableValue(varIndex)
-                - getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex);
-        if (xR < NCHV.getLowerBound(varIndex)) {
-            xR = NCHV.getLowerBound(varIndex);
-        } else {
-            if (xR > NCHV.getUpperBound(varIndex)) {
-                xR = NCHV.getUpperBound(varIndex);
-            }
-        }
-        return xR;
-    }
-
-    public void positionUpdate(int varIndex, double xR) {
-        double pos = getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex)
-                + (randomGenerator.nextDouble() * (xR - getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex)));
-        if (pos < NCHV.getLowerBound(varIndex)) {//el control de los limites es necesario, Aunque en el paper originar no lo consideren
-            pos = NCHV.getLowerBound(varIndex);
-        } else {
-            if (pos > NCHV.getUpperBound(varIndex)) {
-                pos = NCHV.getUpperBound(varIndex);
-            }
-        }
-        NCHV.setVariableValue(varIndex, pos);
-    }
-
+	public void positionUpdate(int varIndex, double xR) {
+		double pos = getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex)
+				+ (randomGenerator.nextDouble()
+						* (xR - getHarmonyMemory().get(getWorstIndexHM()).getVariableValue(varIndex)));
+		if (pos < NCHV.getLowerBound(varIndex)) {
+			pos = NCHV.getLowerBound(varIndex);
+		} else {
+			if (pos > NCHV.getUpperBound(varIndex)) {
+				pos = NCHV.getUpperBound(varIndex);
+			}
+		}
+		NCHV.setVariableValue(varIndex, pos);
+	}
 }

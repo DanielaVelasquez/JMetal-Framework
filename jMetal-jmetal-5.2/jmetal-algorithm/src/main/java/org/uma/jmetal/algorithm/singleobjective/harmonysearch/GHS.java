@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm.singleobjective.harmonysearch;
 
 import java.util.Comparator;
+
 import org.uma.jmetal.algorithm.impl.AbstractHarmonySearch;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -19,12 +20,13 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	 * G.H. Omran and M. Mahdavi, “Global-best harmony search,” Appl. Math. Comput.,
 	 * vol. 198, no. 2, pp. 643–656, 2008.
 	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Parameters
 	 */
-	public double HMCR;// Harmony memory Consideration Rate
-	public double parMin;// pitch adjuting rate minimum
-	public double parMax;// pitch adjuting rate maximum
+	private double hmcr;// Harmony memory Consideration Rate
+	private double parMin;// pitch adjuting rate minimum
+	private double parMax;// pitch adjuting rate maximum
 	private JMetalRandom randomGenerator;
 
 	/**
@@ -34,10 +36,10 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	 * @param hms
 	 * @param PARMIN
 	 * @param PARMAX
-	 * @param HMCR
+	 * @param hmcr
 	 * @param evaluator
 	 */
-	public GHS(DoubleProblem problem, int maxEvaluations, int hms, double HMCR, double PARMIN, double PARMAX,
+	public GHS(DoubleProblem problem, int maxEvaluations, int hms, double hmcr, double parMin, double parMax,
 			SolutionListEvaluator<DoubleSolution> evaluator) {
 		setProblem(problem);
 		setHMS(hms);
@@ -47,9 +49,9 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 		Comparator<DoubleSolution> comparator = new FitnessNorma2Comparator<>();
 		setComparator(comparator);
 
-		this.parMin = PARMIN;
-		this.parMax = PARMAX;
-		this.HMCR = HMCR;
+		this.parMin = parMin;
+		this.parMax = parMax;
+		this.hmcr = hmcr;
 		if (randomGenerator == null) {
 			randomGenerator = JMetalRandom.getInstance();
 		}
@@ -62,16 +64,17 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 
 	@Override
 	public String getDescription() {
-		return "Global Best Harmony Search" + " HMS " + super.getHMS() + " HMCR " + this.HMCR + " ParMin: "
-				+ this.parMin + " ParMax " + this.parMax + "\n EFOS: " + getEvaluations();
+		return new StringBuilder().append("Global Best Harmony Search").append(" HMS ").append(super.getHMS())
+				.append(" hmcr ").append(this.hmcr).append(" ParMin: ").append(this.parMin).append(" ParMax ")
+				.append(this.parMax).append("\n EFOS: ").append(getEvaluations()).toString();
 	}
 
 	@Override
 	public DoubleSolution improviceNewHarmony() {
 		for (int i = 0; i < getProblem().getNumberOfVariables(); i++) {
-			if (randomGenerator.nextDouble() < HMCR) {
+			if (randomGenerator.nextDouble() < hmcr) {
 				memoryConsideration(i);
-				if (randomGenerator.nextDouble() < PAR(getEvaluations())) {
+				if (randomGenerator.nextDouble() < par(getEvaluations())) {
 					goTotheGlobalBest(i);
 				}
 			} else {
@@ -87,9 +90,8 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	 * @param t current iteration (Generation)
 	 * @return parAjust, the new value of PAR
 	 */
-	public double PAR(int t) {
-		double paradjust = parMin + (((parMax - parMin) / getMaxEvaluations()) * t);
-		return paradjust;
+	public double par(int t) {
+		return parMin + (((parMax - parMin) / getMaxEvaluations()) * t);
 	}
 
 	/**
@@ -112,11 +114,11 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 
 	/*---------------------------Set and Get-----------------------*/
 	public double getHMCR() {
-		return HMCR;
+		return hmcr;
 	}
 
-	public void setHMCR(double HMCR) {
-		this.HMCR = HMCR;
+	public void setHMCR(double hmcr) {
+		this.hmcr = hmcr;
 	}
 
 	public double getParMin() {
@@ -134,5 +136,4 @@ public class GHS extends AbstractHarmonySearch<DoubleSolution, DoubleSolution> {
 	public void setParMax(double parMax) {
 		this.parMax = parMax;
 	}
-
 }

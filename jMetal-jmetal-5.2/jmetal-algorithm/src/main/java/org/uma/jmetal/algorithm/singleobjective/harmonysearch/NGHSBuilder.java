@@ -10,76 +10,73 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
  *
  * @author Daniel Pusil <danielpusil@unicauca.edu.co>
  */
-public class NGHSBuilder implements AlgorithmBuilder<NGHS>{
+public class NGHSBuilder implements AlgorithmBuilder<NGHS> {
 
-    private DoubleProblem problem;
-    private int maxEvaluations;
-    private int HMS;//Harmonic memory Size
-    private double PM;
-    private SolutionListEvaluator<DoubleSolution> evaluator;
+	private DoubleProblem problem;
+	private int maxEvaluations;
+	private int hms;// Harmonic memory Size
+	private double pm;
+	private SolutionListEvaluator<DoubleSolution> evaluator;
 
-    public NGHSBuilder(DoubleProblem problem) {
-        this.problem = problem;
-        this.HMS = 10;
-        this.maxEvaluations = 25000;
-        this.evaluator = new SequentialSolutionListEvaluator<>();
-    }
+	public NGHSBuilder(DoubleProblem problem) {
+		this.problem = problem;
+		this.hms = 10;
+		this.maxEvaluations = 25000;
+		this.evaluator = new SequentialSolutionListEvaluator<>();
+	}
 
-    @Override
-    public NGHS build() {
-        NGHS hs = new NGHS(problem, maxEvaluations, HMS, PM, evaluator);
-        return hs;
-    }
+	@Override
+	public NGHS build() {
+		return new NGHS(problem, maxEvaluations, hms, pm, evaluator);
+	}
 
-    public int getHMS() {
-        return HMS;
-    }
+	public int getHMS() {
+		return hms;
+	}
 
-    public NGHSBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-        this.evaluator = evaluator;
-        return this;
-    }
+	public NGHSBuilder setSolutionListEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
+		this.evaluator = evaluator;
+		return this;
+	}
 
-    public NGHSBuilder setHMS(int HMS) {
-        this.HMS = HMS;
-        return this;
-    }
+	public NGHSBuilder setHMS(int hms) {
+		this.hms = hms;
+		return this;
+	}
 
-    public double getPM() {
-        return PM;
-    }
+	public double getPM() {
+		return pm;
+	}
 
-    public NGHSBuilder setPM(double PM) {
-        this.PM = PM;
-        return this;
-    }
+	public NGHSBuilder setPM(double pm) {
+		this.pm = pm;
+		return this;
+	}
 
-    public DoubleProblem getProblem() {
-        return problem;
-    }
+	public DoubleProblem getProblem() {
+		return problem;
+	}
 
-    public NGHSBuilder setProblem(DoubleProblem problem) {
-        this.problem = problem;
-        return this;
-    }
+	public NGHSBuilder setProblem(DoubleProblem problem) {
+		this.problem = problem;
+		return this;
+	}
 
-    public int getMaxEvaluations() {
-        return maxEvaluations;
-    }
+	public int getMaxEvaluations() {
+		return maxEvaluations;
+	}
 
-    public NGHSBuilder setMaxEvaluations(int maxEvaluations) {
-        this.maxEvaluations = maxEvaluations;
-        return this;
-    }
+	public NGHSBuilder setMaxEvaluations(int maxEvaluations) {
+		this.maxEvaluations = maxEvaluations;
+		return this;
+	}
 
-    public SolutionListEvaluator<DoubleSolution> getEvaluator() {
-        return evaluator;
-    }
+	public SolutionListEvaluator<DoubleSolution> getEvaluator() {
+		return evaluator;
+	}
 
-    public NGHSBuilder setEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
-        this.evaluator = evaluator;
-        return this;
-
-    }
-
+	public NGHSBuilder setEvaluator(SolutionListEvaluator<DoubleSolution> evaluator) {
+		this.evaluator = evaluator;
+		return this;
+	}
 }
