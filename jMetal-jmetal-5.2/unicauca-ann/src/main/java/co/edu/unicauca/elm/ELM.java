@@ -246,10 +246,10 @@ public class ELM {
 	 * besides creates the output network with the original format
 	 *
 	 * @param tabular  tabular matrix
-	 * @param TNetwork output from the network
+	 * @param tNetwork output from the network
 	 * @return ELM's accuracy
 	 */
-	private double evaluate(DenseMatrix tabular, DenseMatrix TNetwork) {
+	private double evaluate(DenseMatrix tabular, DenseMatrix tNetwork) {
 		double accuracyAcum = 0;
 		if (elmType == ELMType.CLASSIFICATION) {
 			int numCols = tabular.numColumns();
@@ -263,7 +263,7 @@ public class ELM {
 				double maxY = tabular.get(0, j);
 				int indexY = 0;
 
-				double maxT = TNetwork.get(0, j);
+				double maxT = tNetwork.get(0, j);
 				int indexT = 0;
 
 				for (int i = 1; i < outputNeurons; i++) {
@@ -272,8 +272,8 @@ public class ELM {
 						indexY = i;
 					}
 
-					if (TNetwork.get(i, j) > maxT) {
-						maxT = TNetwork.get(i, j);
+					if (tNetwork.get(i, j) > maxT) {
+						maxT = tNetwork.get(i, j);
 						indexT = i;
 					}
 				}
@@ -287,28 +287,31 @@ public class ELM {
 
 			accuracyAcum = 1 - ((double) errors / (double) numCols);
 		} else {
-			/**
-			 * Square differences between tabular and output network
-			 */
-			int numCols = tabular.numColumns();
-			this.tVector = new DenseVector(numCols);
-			double aux = 0;
-
-			for (int j = 0; j < numCols; j++) {
-				double valueY = tabular.get(0, j);
-				double valueT = TNetwork.get(0, j);
-				aux += Math.pow((valueY - valueT), 2);
-
-				// Original format for the output network
-				this.tVector.set(j, valueT);
-			}
-			/*
-			 * Best solution closer to one
-			 */
-			accuracyAcum = 1 / (1 + Math.sqrt(aux / numCols));
+			accuracyAcum = elmRegression(tNetwork);
 		}
-
 		return accuracyAcum;
+	}
+
+	public double elmRegression(DenseMatrix tNetwork) {
+		/**
+		 * Square differences between tabular and output network
+		 */
+		int numCols = tabular.numColumns();
+		this.tVector = new DenseVector(numCols);
+		double aux = 0;
+
+		for (int j = 0; j < numCols; j++) {
+			double valueY = tabular.get(0, j);
+			double valueT = tNetwork.get(0, j);
+			aux += Math.pow((valueY - valueT), 2);
+
+			// Original format for the output network
+			this.tVector.set(j, valueT);
+		}
+		/*
+		 * Best solution closer to one
+		 */
+		return 1 / (1 + Math.sqrt(aux / numCols));
 	}
 
 	/**
